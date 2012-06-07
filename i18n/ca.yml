@@ -1,0 +1,8 @@
+cms_admin_menu:
+  cms_menu: Gestió de continguts
+  contenttype_management: Tipus de contigut
+  content_management: Continguts
+  taxonomy_management: Vocabularis  
+  build_site_menu: Construir site
+  block_management: Blocs
+  view_management: Vistes
