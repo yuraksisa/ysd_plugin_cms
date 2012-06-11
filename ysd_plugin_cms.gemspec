@@ -9,6 +9,6 @@ Gem::Specification.new do |s|
   s.summary = "CMS integration in huasi"
   
   s.add_runtime_dependency "ysd_core_plugins"
-  s.add_runtime_dependency "ysd_md_content"
+  s.add_runtime_dependency "ysd_md_cms"
   
 end

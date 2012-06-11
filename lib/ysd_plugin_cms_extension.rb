@@ -125,6 +125,18 @@ module Huasi
     # ========= Page Building ============
     
     #
+    # It gets the style sheets defined in the module
+    #
+    # @param [Context]
+    #
+    # @return [Array]
+    #   An array which contains the css resources used by the module
+    #
+    def page_style(context={})
+      ['/cms/css/cms.css']     
+    end
+        
+    #
     # page preprocess
     #
     # @param [Context]
@@ -153,7 +165,7 @@ module Huasi
         
       end
       
-      puts "page_preprocess : #{result.to_json}"
+      #puts "page_preprocess : #{result.to_json}"
       
       result
         
@@ -195,8 +207,6 @@ module Huasi
     #   The representation of the block
     #
     def block_view(context, block_name)
-    
-      puts "entering block_view"
       
       result = render_view_as_block(context, block_name) || ''
       
@@ -228,7 +238,7 @@ module Huasi
         
       view_name = block_name.sub(/view_/,'')
       
-      puts "block name : #{block_name} view : #{view_name}"
+      #puts "block name : #{block_name} view : #{view_name}"
        
       app = context[:app]
     
@@ -236,7 +246,7 @@ module Huasi
         ContentManagerSystem::View.get(view_name)
       end
       
-      puts "view : #{view.to_json}"
+      #puts "view : #{view.to_json}"
             
       ViewRenders.new(view, app).render if view # Gets the view representation  
                    
