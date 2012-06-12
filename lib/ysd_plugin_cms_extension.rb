@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'ysd-plugins_viewlistener' unless defined?Plugins::ViewListener
 
 #
@@ -6,6 +7,31 @@ require 'ysd-plugins_viewlistener' unless defined?Plugins::ViewListener
 module Huasi
 
   class CMSExtension < Plugins::ViewListener
+
+    # ========= Installation =================
+
+    # 
+    # Install the plugin
+    #
+    def install(context={})
+            
+        SystemConfiguration::Variable.first_or_create({:name => 'content_album_name'}, 
+                                                      {:value => 'contents', :description => 'album name', :module => :cms}) 
+                                                      
+        SystemConfiguration::Variable.first_or_create({:name => 'content_album_photo_width'}, 
+                                                      {:value => '200', :description => 'photo width', :module => :cms})
+                                                      
+        SystemConfiguration::Variable.first_or_create({:name => 'content_album_photo_height'},
+                                                      {:value => '600', :description => 'photo height', :module => :cms})
+                                                      
+        ContentManagerSystem::ContentType.first_or_create({:id => 'page'},
+                                                           {:name => 'Pagina', :description => 'Representa una página web. Es una forma sencilla de gestionar información que no suele cambiar como la página acerca de o condiciones. Suelen mostrarse en el menú.'})
+                                                                  
+        ContentManagerSystem::ContentType.first_or_create({:id => 'story'},
+                                                          {:name => 'Articulo', :description => 'Tiene una estructura similar a la página y permite crear y mostrar contenido que informa a los visitantes del sitio. Notas de prensa, anuncios o entradas informales de blog son creadas como páginas.'})
+    
+    end
+
     
     # ========= Menu =====================
     
@@ -150,11 +176,9 @@ module Huasi
     
       result = {}
 
-      # Blocks : Each hold in its region as key of the result hash
+      # Retrieve the theme blocks which are positionated in the page
       
-      blocks = DataMapper.repository(app.settings.cms_views_repository) do
-        ContentManagerSystem::Block.all(:region.not => nil)
-      end
+      blocks = ContentManagerSystem::Block.all(:region.not => nil, :theme => Themes::ThemeManager.instance.selected_theme.name)
       
       blocks.each do |block|
       
@@ -171,9 +195,7 @@ module Huasi
         
     end
 
-    # ========= CMS Hooks ================
-   
-    # --------- BLOCKS -------------------
+    # ========= Blocks ===================
     
     # Retrieve all the blocks defined in this module 
     # 
@@ -226,7 +248,7 @@ module Huasi
       end
       
       views.map do |view|
-        {:name => "view_#{view.view_name}", :module_name => :cms, :theme => app.settings.theme}
+        {:name => "view_#{view.view_name}", :module_name => :cms, :theme => Themes::ThemeManager.instance.selected_theme.name}
       end    
     
     end
