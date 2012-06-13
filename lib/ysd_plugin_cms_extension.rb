@@ -19,10 +19,10 @@ module Huasi
                                                       {:value => 'contents', :description => 'album name', :module => :cms}) 
                                                       
         SystemConfiguration::Variable.first_or_create({:name => 'content_album_photo_width'}, 
-                                                      {:value => '200', :description => 'photo width', :module => :cms})
+                                                      {:value => '600', :description => 'photo width', :module => :cms})
                                                       
         SystemConfiguration::Variable.first_or_create({:name => 'content_album_photo_height'},
-                                                      {:value => '600', :description => 'photo height', :module => :cms})
+                                                      {:value => '200', :description => 'photo height', :module => :cms})
                                                       
         ContentManagerSystem::ContentType.first_or_create({:id => 'page'},
                                                            {:name => 'Pagina', :description => 'Representa una página web. Es una forma sencilla de gestionar información que no suele cambiar como la página acerca de o condiciones. Suelen mostrarse en el menú.'})
