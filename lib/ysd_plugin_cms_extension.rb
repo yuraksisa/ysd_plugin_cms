@@ -233,6 +233,34 @@ module Huasi
       result = render_view_as_block(context, block_name) || ''
       
     end
+    
+    # ============ Content ===================
+    
+    #
+    # Adds an action in the content action block
+    #
+    #
+    def content_action(context={}, content=nil)
+    
+      app = context[:app]
+            
+      puts "content : #{content.inspect} user : #{app.user.inspect} can write: #{content.can_write?(app.user)}"
+      
+      result = if content #and content.can_write?(app.user)      
+
+                 edit_content_url = "/content-management/edit/#{content.key}"
+      
+                 if app and app.respond_to?(:request) and app.request.respond_to?(:path_info)
+                   edit_content_url << "?destination=#{app.request.path_info}"
+                 end
+                 
+                 app.render_content_action_button({:link => edit_content_url, :text => 'Edit'})
+                 
+               else
+                 ""
+               end
+    
+    end
 
     # ============ Helpers methods ===========
     
