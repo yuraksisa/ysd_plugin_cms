@@ -185,7 +185,8 @@ module Huasi
         key = block.region.to_sym
        
         result.store(key, []) if not result.has_key?(key)       
-        result[key].push(block)
+        
+        result[key].push(block) if block.can_be_shown?(app.user, app.request.path_info) # Add the block only if can be shown
         
       end
       
