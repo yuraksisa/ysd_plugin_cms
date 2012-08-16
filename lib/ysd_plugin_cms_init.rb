@@ -10,8 +10,8 @@ Plugins::SinatraAppPlugin.register :cms do
    hooker       Huasi::CMSExtension
    sinatra_helper    Sinatra::ContentManagerHelpers
    sinatra_extension Sinatra::CMSExtension # Add translations for the integration in the system
+   sinatra_extension Sinatra::YSD::ContentManagement   
    sinatra_extension Sinatra::YSD::CMS     # The content management middleware
-   sinatra_extension Sinatra::YSD::ContentManagement
    sinatra_extension Sinatra::YSD::ContentTypeManagement
    sinatra_extension Sinatra::YSD::TaxonomyManagement
    sinatra_extension Sinatra::YSD::TermManagement

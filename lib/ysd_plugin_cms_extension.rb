@@ -56,18 +56,24 @@ module Huasi
                                   :description => 'Manages the content types: creation and update of content types.',
                                   :module => 'cms',
                                   :weight => 6}},
+                    {:path => '/cms/newcontent',
+                     :options => {:title => app.t.cms_admin_menu.content_new,
+                                  :link_route => "/content/new",
+                                  :description => 'Creates a new content.',
+                                  :module => 'cms',
+                                  :weight => 5}},                                  
                     {:path => '/cms/contents',
                      :options => {:title => app.t.cms_admin_menu.content_management,
-                                  :link_route => "/content-management",
-                                  :description => 'Manages the contents: creation and update of contents.',
+                                  :link_route => "/contents",
+                                  :description => 'Contents explorer.',
                                   :module => 'cms',
-                                  :weight => 5}},
+                                  :weight => 4}},
                     {:path => '/cms/taxonomies',             
                      :options => {:title => app.t.cms_admin_menu.taxonomy_management,
                                   :link_route => "/taxonomy-management",
                                   :description => 'Manages the taxonomies: creation and update of taxonomies.',
                                   :module => 'cms',
-                                  :weight => 4}},
+                                  :weight => 3}},
                     {:path => '/sbm',
                      :options => {:title => app.t.cms_admin_menu.build_site_menu,
                                   :description => 'Site building',
@@ -109,6 +115,25 @@ module Huasi
                  :description => 'Manages the contents: creation and update of contents.',
                  :fit => 1,
                  :module => :cms},
+                {:path => '/content/new',
+                 :regular_expression => /^\/content\/new/, 
+                 :title => 'New content', 
+                 :description => 'Create a new content: Choose the content type.',
+                 :fit => 2,
+                 :module => :cms},
+                {:path => '/content/new/:content_type',
+                 :parent_path => "/content/new",
+                 :regular_expression => /^\/content\/new\/.+/, 
+                 :title => 'New content', 
+                 :description => 'Create a new content: Complete data.',
+                 :fit => 1,
+                 :module => :cms},                 
+                {:path => '/content/edit/:content_id',
+                 :regular_expression => /^\/content\/edit\/.+/, 
+                 :title => 'Edit content', 
+                 :description => 'Edit a content',
+                 :fit => 1,
+                 :module => :cms},                 
                 {:path => '/taxonomy-management',
                  :regular_expression => /^\/taxonomy-management/, 
                  :title => 'Taxonomy', 
@@ -235,34 +260,6 @@ module Huasi
       
     end
     
-    # ============ Content ===================
-    
-    #
-    # Adds an action in the content action block
-    #
-    #
-    def content_action(context={}, content=nil)
-    
-      app = context[:app]
-            
-      puts "content : #{content.inspect} user : #{app.user.inspect} can write: #{content.can_write?(app.user)}"
-      
-      result = if content #and content.can_write?(app.user)      
-
-                 edit_content_url = "/content-management/edit/#{content.key}"
-      
-                 if app and app.respond_to?(:request) and app.request.respond_to?(:path_info)
-                   edit_content_url << "?destination=#{app.request.path_info}"
-                 end
-                 
-                 app.render_content_action_button({:link => edit_content_url, :text => 'Edit'})
-                 
-               else
-                 ""
-               end
-    
-    end
-
     # ============ Helpers methods ===========
     
     # Retrive the views as a blocks

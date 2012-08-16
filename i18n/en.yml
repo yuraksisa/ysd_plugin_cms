@@ -1,7 +1,8 @@
 cms_admin_menu:
   cms_menu: Content Management
   contenttype_management: Content type
-  content_management: Content
+  content_new: New content  
+  content_management: Admin content
   taxonomy_management: Taxonomies
   build_site_menu: Build site
   block_management: Blocks
