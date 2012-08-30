@@ -7,3 +7,5 @@ cms_admin_menu:
   build_site_menu: Build site
   block_management: Blocks
   view_management: Views
+entity:
+  term: Taxonomy terms (vocabularies)

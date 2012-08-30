@@ -32,6 +32,21 @@ module Huasi
     
     end
 
+    # ========= Entities =================
+    
+    #
+    # Return the entities which support aspects
+    #
+    # @return [Array] of ::Model::EntityInfo
+    #
+    def entities(context={})
+       
+      app = context[:app] 
+       
+      [::Model::EntityInfo.new(:term, app.t.entity.term, ContentManagerSystem::Term)]
+    
+    end
+ 
     
     # ========= Menu =====================
     
