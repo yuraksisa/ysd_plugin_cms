@@ -9,8 +9,8 @@ Plugins::SinatraAppPlugin.register :cms do
    version=     '0.1'
    hooker       Huasi::CMSExtension
    sinatra_helper    Sinatra::ContentManagerHelpers
+   sinatra_extension Sinatra::YSD::ContentManagement              # Content management (/content/new)
    sinatra_extension Sinatra::YSD::CMS                            # Main sinatra application
-   sinatra_extension Sinatra::YSD::ContentManagement              # Content management
    sinatra_extension Sinatra::YSD::ContentTypeManagement          # Content type management
    sinatra_extension Sinatra::YSD::TaxonomyManagement
    sinatra_extension Sinatra::YSD::TermManagement
