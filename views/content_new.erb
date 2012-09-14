@@ -1,0 +1,79 @@
+<%= include('entity-management') %>
+
+<!-- Renders the element description -->
+<script type="text/tmpl" id="elements_description">
+
+  <p>Choose the content type you want to create.</p>
+
+</script>
+
+<!-- Renders the elements container -->
+<script type="text/tmpl" id="elements_container_template">
+
+  <table id="elements_table" class="table">
+     <thead class="table-header">
+       <tr>
+         <th class="table-header-title" scope="col" style="width:30%">Name</th>
+         <th class="table-header-title" scope="col" style="width:50%">Description</th>
+       </tr>
+     </thead>
+     <tbody id="elements_tbody" class="table-tbody">             
+     </tbody>
+  </table>
+
+</script>
+
+<!-- Renders one element in the elements list view -->
+        
+<script type="text/tmpl" id="elements_list_template">
+
+    <tr class="table-row" rel="<%%= index %>" id="element_row_<%%=index%>">
+      <td class="table-cell"><a href="/content/new/<%%= entity.id %>"><%%= entity.name %></a></td>
+      <td class="table-cell"><%%= entity.description %></td>
+    </tr>
+
+</script>
+
+<!-- Renders one element in the element view (full detailed) -->
+
+<script type="text/tmpl" id="element_template">
+
+</script>
+
+<!-- Renders the form to edit an element -->
+
+<script type="text/tmpl" id="element_template_form">
+
+</script>
+
+
+<script type="text/javascript">
+ 
+  function NewContentHook() {
+ 	   
+    this.entityKey = function(entity) {
+      return entity.id;
+    }
+  
+    this.onRenderEntities = function(entities) {
+    
+      $('.new-entity-button').hide();
+      $('.edit-entity-button').hide();
+      $('.page-navigation').hide();
+      	
+    }  
+  	
+  };
+  
+  var urls = { 
+  	           query_url  : '/accepted-content-types'
+  	         };
+
+  var newContentHook = new NewContentHook();
+  var newContentManager = new EntityManagement(urls, 'content', 20, newContentHook,
+                                               {url_base: '/content/new', action: 'list'});
+ 
+  $('.entity-title').html('New content');
+  
+  
+</script>

@@ -1,3 +1,12 @@
+contents:
+  description: <p>Aquesta pàgina proporciona una interface per crear i modificar els contiguts de la seva web.</p>
+content:
+  by: per
+  published: publicat
+  categories: categories
+view_styles:
+  teaser: Teaser (resum estàndar)
+  fields: Selecció de camps del model 
 cms_admin_menu:
   cms_menu: Gestió de continguts
   contenttype_management: Tipus de contigut
@@ -9,3 +18,13 @@ cms_admin_menu:
   view_management: Vistes
 entity:
   term: Termes de vocabulari
+  content: Continguts
+entity_fields:
+    content:
+      title: Títol
+      path: Path
+      alias: Alias
+      summary: Resum 
+      type: Tipus de contigut
+      creation_date: Data de creació
+      creation_user: Usuari creador

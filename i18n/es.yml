@@ -1,3 +1,12 @@
+contents:
+  description: <p>Esta pagina proporciona una interfaz para crear y modificar los contenidos de su sitio web.</p>
+content:
+  by: por
+  published: publicado
+  categories: categorías
+view_styles:
+  teaser: Teaser (resumen estándar)
+  fields: Selección de campos del modelo
 cms_admin_menu:
   cms_menu: Gestión de contenidos
   contenttype_management: Tipos de contenido
@@ -9,3 +18,13 @@ cms_admin_menu:
   view_management: Vistas
 entity:
   term: Términos de taxonomía (vocabulario)
+  content: Contenidos
+entity_fields:
+    content:
+      title: Título
+      path: Path
+      alias: Alias
+      summary: Resumen 
+      type: Tipo de contenido
+      creation_date: Fecha de creación
+      creation_user: Usuario creador

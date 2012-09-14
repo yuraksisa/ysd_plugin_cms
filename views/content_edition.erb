@@ -1,0 +1,330 @@
+<%= include('entity-management') %>
+
+<!-- Renders the element description -->
+<script type="text/tmpl" id="elements_description">
+
+</script>
+
+<!-- Renders the elements container -->
+<script type="text/tmpl" id="elements_container_template">
+
+</script>
+
+<!-- Renders one element in the elements list view -->
+        
+<script type="text/tmpl" id="elements_list_template">
+
+</script>
+
+<!-- Renders one element in the element view (full detailed) -->
+
+<script type="text/tmpl" id="element_template">
+
+     <div class="element_template" style="overflow:hidden">
+       <div class="entity-field"><span class="entity-fieldlabel">Title</span> <span class="entity-fieldvalue"><a href="<%%='/content/'+entity.key%>"><%%=entity.title %></a></span> </div>
+       <div class="entity-field"><span class="entity-fieldlabel">Type</span> <span class="entity-fieldvalue"><%%= entity.type %></span> </div>
+       <div class="entity-field"><span class="entity-fieldlabel">Categories</span> <span class="entity-fieldvalue"><%%= self.model.entityHooks[0].formatCategories(entity) %></span></div>
+       <div class="entity-field"><span class="entity-fieldlabel">Alias</span> <span class="entity-fieldvalue"><%%= entity.alias %></span> </div>
+              
+       <div id="tabs_template">
+         
+         <ul>
+           <li><a href="#content_template">Content</a></li>
+           <%= element_template_tab %>
+           <li><a href="#audit_template">Audit</a></li>
+           <li><a href="#meta_template">Meta</a></li>
+         </ul>      
+         
+         <div id="content_template">
+           <div> <%%= entity.body %> </div>
+         </div>
+         
+         <%= element_template %>
+         
+         <div id="audit_template">
+           <div class="entity-field"><span class="entity-fieldlabel">Creation date</span> <span class="entity-fieldvalue"><%%if (!isNaN(new Date(entity.creation_date))) { %> <%%=new Date(entity.creation_date).toString('dd.MM.yyyy HH:mm')%> <%% } %></span> </div>
+           <div class="entity-field"><span class="entity-fieldlabel">Creation user</span> <span class="entity-fieldvalue"><%%= entity.creation_user %></span> </div>
+           <div class="entity-field"><span class="entity-fieldlabel">Last update</span> <span class="entity-fieldvalue"><%%if (!isNaN(new Date(entity.last_update))) { %> <%%=new Date(entity.last_update).toString('dd.MM.yyyy HH:mm')%> <%% } %></span> </div>         
+           <div class="entity-field"><span class="entity-fieldlabel">Last update user</span> <span class="entity-fieldvalue"><%%= entity.last_update_user %></span> </div>
+         </div>
+         
+         <div id="meta_template">
+           <div class="entity-field"><span class="entity-fieldlabel">Subtitle</span> <span class="entity-fieldvalue"><%%= entity.subtitle %></span> </div>
+           <div class="entity-field"><span class="entity-fieldlabel">Description</span> <span class="entity-fieldvalue"><%%= entity.description %></span> </div>
+           <div class="entity-field"><span class="entity-fieldlabel">Summary</span> <span class="entity-fieldvalue"><%%= entity.summary %></span> </div>
+           <div class="entity-field"><span class="entity-fieldlabel">Keywords</span> <span class="entity-fieldvalue"><%%= entity.keywords %></span> </div>
+           <div class="entity-field"><span class="entity-fieldlabel">Language</span> <span class="entity-fieldvalue"><%%= entity.language %></span> </div>                                                     
+           <div class="entity-field"><span class="entity-fieldlabel">Author</span> <span class="entity-fieldvalue"><%%= entity.author %></span> </div>
+         </div>
+                         
+     </div>
+
+     <div class="element_template_actions">
+       <div class="element_template_actions_buttons">
+         <%= element_action %>
+       </div>
+     </div>
+
+   </div>
+   
+</script>
+
+<!-- Renders the form to edit an element -->
+
+<script type="text/tmpl" id="element_template_form">
+              
+     <form name="element" method="POST">
+        
+        <div class="top-navigation-bar navigation-bar">
+             <h2 class="form-title"><%= title %></h2>
+             <div class="navigation-bar-nav-buttons">
+             </div>
+        </div>        
+
+        <div class="form-fields">
+        
+          <%% if (entity) { %>
+          <input type="hidden" id="key" value="<%%=entity.key%>"/>
+          <%% } %>
+                
+          <div class="formrow">
+            <label for="title" class="fieldtitle">Title <span class="mandatoryfield">*</span></label>
+            <input type="text" maxlength="120" id="title" name="title" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.title %>" <%% } %>/>
+            <div class="fielddescription">The content title.</div>
+          </div>
+        
+          <div class="formrow">
+            <label for="type" class="fieldtitle">Type</label>
+            <div><%= content_type %></div>
+            <input type="hidden" id="type" name="type" value="<%= content_type %>"/>
+            <div class="fielddescription">The type of the content.</div>
+          </div>
+
+          <div class="formrow">
+            <label class="fieldtitle">Categories</label>
+            <div class="entity-block fieldcontrol" id="taxonomies">            
+            </div>
+            <div class="fielddescription">Categories permit you to tag or categorize the content.</div>
+          </div>
+          
+          <div class="formrow">
+            <label for="body" class="fieldtitle">Content <span class="mandatoryfield">*</span></label>
+            <textarea rows="20" id="body" name="body" class="fieldcontrol texteditor"><%% if (entity) {%><%%=entity.body %><%% } %></textarea>
+            <div class="fielddescription">The body of the content</div>
+          </div>
+
+          <div class="formrow">
+            <label for="key" class="fieldtitle">Alias</label>
+            <input type="text" maxlength="40" id="clear_id" name="clear_id" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.alias %>" <%% } %> />
+            <div class="fielddescription">An optional URL, human readable, which can be used to access the content.</div>
+          </div>
+
+          <div id="tabs">
+          
+            <ul>
+              <%= element_form_tab %>
+              <li><a href="#meta_form">Meta</a></li>
+            </ul>
+                       
+            <%= element_form %>
+            
+            <div id="meta_form">
+              <div class="formrow">
+                <label for="subtitle" class="fieldtitle">Subtitle</label>
+                <input type="text" maxlength="80" id="subtitle" name="subtitle" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.subtitle%>" <%% } %>/>
+                <div class="fielddescription">The subtitle of the content</div>
+              </div>
+              <div class="formrow">
+                <label for="description" class="fieldtitle">Description</label>
+                <textarea rows="4" id="description" name="description" class="fieldcontrol"><%% if(entity) {%><%%=entity.description %> <%% } %></textarea>
+                <div class="fielddescription">The content description. It's used as a metatag when the page is rendered.</div>
+              </div>
+              <div class="formrow">
+                <label for="summary" class="fieldtitle">Summary</label>
+                <textarea rows="4" id="summary" name="summary" class="fieldcontrol"><%% if (entity) {%><%%=entity.summary %> <%% } %></textarea>
+                <div class="fielddescription">The content summary. It's used in when render a set of contents in one page.</div>
+              </div>
+              <div class="formrow">
+                <label for="keywords" class="fieldtitle">Keywords</label>
+                <textarea rows="3" id="keywords" name="keywords" class="fieldcontrol"><%% if (entity) {%><%%=entity.keywords %> <%% } %></textarea>
+                <div class="fielddescription">Meta keywords</div>
+              </div>
+              <div class="formrow">
+                <label for="language" class="fieldtitle">Language</label>
+                <input type="text" maxlength="3" id="language" name="language" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.language %>"<%% } %>/>
+                <div class="fielddescription">The language in which the content has been written.</div>
+              </div>
+            </div>  
+                     
+          </div>
+                        
+        </div>
+                       
+        <div class="bottom-navigation-bar navigation-bar">
+             <div class="navigation-bar-nav-buttons">
+                <input type="button" class="cancel-entity-button action-button entity-management-button" value="Cancel"/>
+                <%% if (entity) { %>
+                  <input type="button" class="update-entity-button action-button entity-management-button" value="Update"/>
+                <%% } 
+                   else { %>
+                  <input type="button" class="create-entity-button action-button entity-management-button" value="Create"/>
+                <%% } %>
+             </div>
+        </div>
+     
+     </form>
+     
+
+</script>
+
+<%= element_form_extension %>
+<%= element_extension %>
+<%= element_action_extension %>
+
+<script type="text/javascript">
+ 
+  var contentsHook = {
+ 	   
+ 	entity: null,   
+ 	   
+    entityKey : function(entity) {
+      return entity.key;
+    },
+
+    onEdit : function(entity) {
+      this.entity = entity;
+      $('#title').focus();
+      this.configForm(); 
+      this.buildCategories(entity.type); 	              
+    },
+  
+    onNew : function() {
+      this.entity = null;
+  	  $('#title').focus();
+  	  this.configForm();
+  	  this.buildCategories('<%=content_type%>');
+    },
+    
+    onRenderEntities : function(entities) {
+    
+      $('.new-entity-button').hide();
+      $('.edit-entity-button').hide();
+      $('.page-navigation').hide();
+      	
+    },    
+    
+    onRender : function(entity) {
+      this.entity = entity;
+  	  $('#tabs_template').tabs();	
+  	},
+  	
+  	adaptFormData : function(data) {
+  	
+  	  var send = {};
+  	  
+  	  for (idx in data) {
+  	  
+  	    if (idx != 'categories_info') {
+  	      send[idx] = data[idx]	
+  	    }
+  	  	
+  	  }
+  	  
+  	  var categories = [];  	  
+  	  for (idx in data.categories_by_taxonomy) {
+  	    var category = data.categories_by_taxonomy[idx];
+  	    for (idx_category in category) {
+  	      category[idx_category] = new Number(category[idx_category]).valueOf();	
+  	      categories.push(category[idx_category]);   	
+  	    }  	    	
+  	  }
+  	  
+  	  send.categories = categories;
+
+  	  return send;
+  		
+  	},
+    
+    /* ------- Internal function --------- */
+    
+    configForm : function() {
+      
+      $('#tabs').tabs();
+      
+    },
+  	  	  	
+  	buildCategories : function(contentType) {
+  	
+      var taxonomies = document.getElementById('taxonomies');
+      while (taxonomies.hasChildNodes())
+      {
+  	    taxonomies.removeChild(taxonomies.firstChild);	
+      }
+  	
+	  var self = this;
+  	  
+  	  $.getJSON('/taxonomy-content-type/'+contentType,
+  	        function success_handler(data) {
+  	          for (idx in data) {
+  	            self.buildCategory(data[idx].taxonomy_id);       	
+  	          }
+  	        });
+  		
+  	},
+  	
+  	buildCategory : function(taxonomy_id) {
+  	  
+  	  var selectName = 'categories_by_taxonomy['+taxonomy_id+'][]';      
+      var container = document.getElementById('taxonomies');
+      
+      var select = document.createElement('select');
+      select.setAttribute('id',selectName);
+      select.setAttribute('name', selectName);
+      select.setAttribute('class', 'fieldcontrol');
+      select.setAttribute('size', 10);
+      select.setAttribute('multiple', true);
+      container.appendChild(select);
+      
+      var dataSource = new YsdForms.RemoteDataSource('/terms/'+taxonomy_id,null,[YsdForms.HierachyListAdapter]);
+      var value = null;
+      if (this.entity && this.entity.categories_by_taxonomy && this.entity.categories_by_taxonomy[taxonomy_id]) {
+        value = this.entity.categories_by_taxonomy[taxonomy_id]; 
+      }
+      var termsSelect = new YsdForms.SelectHierarchicalSelector(selectName, dataSource, value, true);
+  	  
+  	},
+  	
+  	formatCategories : function(entity) {
+  	    	
+      var categories = [];
+      for (index in entity.categories_info) { 
+         categories.push(entity.categories_info[index].description);
+      }	    	
+      
+      return categories;	
+  		
+  	}
+  	
+  };
+
+  var urls = { query_url  : '/contents',
+    	       create_url : '/content',
+  	           update_url : '/content',
+  	           delete_url : '/content',
+  	           get_url    : '/content'
+  	         };
+  
+  var hooks = [contentsHook];
+  
+  // Add the complement hooks
+  if (typeof YSD.entityManagement.complementHooks != 'undefined') {
+    hooks = hooks.concat(YSD.entityManagement.complementHooks.complements);
+  }
+     	           
+  var contentsManager = new EntityManagement(urls, 'content', <%=settings.contents_page_size%>, hooks,
+                                             {url_base: '<%= url_base %>', action: '<%= action %>', id: '<%= id %>'});
+ 
+  $('.entity-title').html('<%= title %>');
+  
+  
+</script>

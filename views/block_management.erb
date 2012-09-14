@@ -1,0 +1,278 @@
+<%= include('entity-management') %>
+
+<!-- Renders the element description -->
+<script type="text/tmpl" id="elements_description">
+
+ <p>Esta página proporciona una interfaz para conocer los bloques disponibles, asignarlos a una región y controlar 
+    el orden de los bloques dentro de las regiones.</p>
+
+</script>
+
+<!-- Renders the elements container -->
+<script type="text/tmpl" id="elements_container_template">
+
+  <table id="elements_table" class="table">
+     <thead class="table-header">
+       <tr>
+         <th class="table-header-title" scope="col" style="width:30%">Block</th>
+         <th class="table-header-title" scope="col" style="width:30%">Module</th>
+         <th class="table-header-title" scope="col" style="width:20%">Region</th>
+         <th class="table-header-title" scope="col" style="width:20%">Title</th>
+       </tr>
+     </thead>
+     <tbody id="elements_tbody" class="table-tbody">             
+     </tbody>
+  </table>
+
+</script>
+
+<!-- Renders one element in the elements list view -->
+        
+<script type="text/tmpl" id="elements_list_template">
+
+    <tr class="table-row element-navigation-detail" rel="<%%= index %>" id="element_row_<%%=index%>">
+      <td class="table-cell"><%%= entity.name %></td>
+      <td class="table-cell"><%%= entity.module_name %></td>
+      <td class="table-cell"><%%= entity.region %></td> 
+      <td class="table-cell"><%%= entity.title %></td>
+    </tr>
+
+</script>
+
+<!-- Renders one element in the element view (full detailed) -->
+
+<script type="text/tmpl" id="element_template">
+
+     <div class="element_template" style="overflow:hidden">
+       <div class="entity-field"><div class="entity-fieldlabel">Name</div> <div class="entity-fieldvalue"><%%=entity.name%></div> </div>
+       <div class="entity-field"><div class="entity-fieldlabel">Module</div> <div class="entity-fieldvalue"><%%=entity.module_name%></div> </div>
+       <div class="entity-field"><div class="entity-fieldlabel">Region</div> <div class="entity-fieldvalue"><%%=entity.region%></div> </div>
+       <div class="entity-field"><div class="entity-fieldlabel">Title</div> <div class="entity-fieldvalue"><%%=entity.title%></div> </div>
+       <div class="entity-field"><div class="entity-fieldlabel">Weight</div> <div class="entity-fieldvalue"><%%=entity.weight%></div> </div>
+     </div>
+     <div class="entity-block">
+       <h2 class="entity-block-title">Block preview</h2>
+       <form name="view-preview">
+         <input type="button" name="send-block-preview" id="send-block-preview" value="Preview"/>
+       </form>
+       <div id="block-preview-result">
+       </div>  
+     </div>
+
+
+</script>
+
+<!-- Renders the form to edit an element -->
+
+<script type="text/tmpl" id="element_template_form">
+              
+     <form name="element">
+        
+        <div class="top-navigation-bar navigation-bar">
+             <h2 class="form-title">Block</h2>
+             <div class="navigation-bar-nav-buttons">
+             </div>
+        </div>        
+
+        <input type="hidden" id="id" name="id" <%% if (entity) { %> value="<%%=entity.id%>" <%% } %>/>
+
+        <div class="form-fields">
+                
+          <div class="formrow">
+            <label for="name" class="fieldtitle">Name</label>
+            <input type="text" maxlength="32" id="name" name="name" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.name%>" <%% } %> />
+          </div>
+
+          <div class="formrow">
+            <label for="module_name" class="fieldtitle">Module</label>
+            <input type="text" maxlength="64" id="module_name" name="module_name" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.module_name%>" <%% } %> />
+          </div>
+
+          <div class="formrow">
+            <label for="theme" class="fieldtitle">Theme</label>
+            <input type="text" maxlength="64" id="theme" name="theme" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.theme%>" <%% } %> />
+          </div>
+
+          <div class="formrow">
+            <label for="region" class="fieldtitle">Region</label>
+            <select name="region" id="region" class="fieldcontrol"></select>
+          </div>
+
+          <div class="formrow">
+            <label for="weight" class="fieldtitle">Weight</label>
+            <select name="weight" id="weight" class="fieldcontrol"></select>
+          </div>
+
+          <div class="formrow">
+            <label for="name" class="fieldtitle">Title</label>
+            <input type="text" maxlength="64" id="title" name="title" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.title%>" <%% } %> />
+          </div>          
+          
+          <fieldset class="fieldcontrol">
+            <legend>Show the block to the following users</legend>
+            <div class="formrow">
+              <input type="checkbox" name="show_block_on_anonymous_user" id="show_block_on_anonymous_user" value="true" <%% if (entity && entity.show_block_on_anonymous_user) { %> checked="true" <%% } %>>Anonymous user (not connected)</input>
+              <div id="user_groups">
+              </div>
+            </div> 
+          </fieldset>  
+          
+          <fieldset class="fieldcontrol">
+            <legend>Show the block on the following pages</legend>
+            <div class="formrow">
+              <div>
+                <input type="radio" name="show_block_on_page" value="1" <%% if (entity && entity.show_block_on_page == 1) { %> checked="true" <%% } %>>
+                  Show the block on all pages but</input>
+              </div>
+              <div>
+                <input type="radio" name="show_block_on_page" value="2" <%% if (entity && entity.show_block_on_page == 2) { %> checked="true" <%% } %>>
+                  Show the block only on the listed pages</input>
+              </div>
+            </div>                
+            <div class="formrow">
+              <textarea id="show_block_on_page_list" name="show_block_on_page_list" class="fieldcontrol"></textarea>
+              <div class="fielddescription">Type one entry per line in the form of a regular expression which matches the URL to apply</div>
+            </div>
+        </div>
+        
+        <div class="bottom-navigation-bar navigation-bar">
+             <div class="navigation-bar-nav-buttons">
+                <input type="button" class="cancel-entity-button action-button entity-management-button" value="Cancel"/>
+                <%% if (entity) { %>
+                  <input type="submit" class="update-entity-button action-button entity-management-button" value="Update"/>
+                <%% } 
+                   else { %>
+                  <input type="submit" class="create-entity-button action-button entity-management-button" value="Create"/>
+                <%% } %>
+             </div>
+        </div>
+     
+     </form>
+     
+
+</script>
+
+
+<script type="text/javascript">
+ 
+  function BlockHook() {
+ 	   
+    this.entityKey = function(entity) {
+      return entity.view_name;
+    }
+
+    this.onEdit = function(entity) {    	
+      $('#module_name').attr('readonly', true);
+      $('#theme').attr('readonly', true);
+      $('#name').focus();  	
+      this.configForm(entity);
+    };
+  
+    this.onNew = function() {
+      $('#module_name').attr('readonly', true);
+      $('#theme').attr('readonly', true);
+  	  $('#name').focus();
+  	  this.configForm(null);
+    }
+     
+    this.onRender = function(entity) {
+      
+      var self = this;	
+      $('#send-block-preview').bind('click', 
+                                    function event(event) { 
+                                      self.preview(entity); 
+                                    });
+      	
+    }     
+
+
+    this.adaptFormData = function(data) { // Adapt the form data before it's sent to backend
+  	
+  	  // Convert the list of user groups in the proper data structure
+  	  var block_usergroups_list = [];
+  	  var block_usergroup = null;
+  	  var bug = data.block_usergroups;
+  	
+  	  for (index in bug) {
+  	
+  	    block_usergroup = { 
+  	    	'usergroup' : {
+  	  	       'group' : bug[index]	
+  	  	     }
+  	    };
+  	  
+  	    if (data.id != null) {
+  	      block_usergroup.block = {
+  	        'id' : data.id	
+  	      };
+  	    }
+  	
+  	    block_usergroups_list.push(block_usergroup);  		
+  	  }
+  	
+  	  // update the object
+  	  data.block_usergroups = block_usergroups_list;
+  	  data.show_block_on_anonymous_user = (typeof $('#show_block_on_anonymous_user').attr('checked') == 'undefined')?false:true;
+  	  //data.show_block_on_page = $('#show_block_on_page').val();	
+  	
+  	  return data;
+    };
+
+    
+    /* ---------------------- */
+        
+    this.configForm = function(entity) {
+    
+         // Configure weights
+         var weights = [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10];
+         var weightDataSource = new YsdForms.MemoryDataSource(weights);
+         var weightValue = (entity && entity.weight)?entity.weight:0;
+         var selectWeight = new YsdForms.SelectSelector('weight', weightDataSource, weightValue);
+         
+         // Configure the regions
+         var regions = [null,<%= Themes::ThemeManager.instance.selected_theme.regions.map do |e| "'#{e}'" end.join(',') %>];
+         var regionsDataSource = new YsdForms.MemoryDataSource(regions);
+         var regionValue = (entity && entity.region)?entity.region:null;
+         var selectRegion = new YsdForms.SelectSelector('region', regionsDataSource, regionValue);        
+     	
+     	 // Configure the user groups
+         var ugDataSource = new YsdForms.RemoteDataSource('/usergroups',{id:'group', description:'name'});         
+         var ugValue = [];
+         if (entity && entity.block_usergroups) {
+           for (index in entity.block_usergroups) {
+           	  ugValue.push( entity.block_usergroups[index].usergroup.group);
+           }
+         }         
+         var ugSelector = new YsdForms.ListSelector('user_groups', 'block_usergroups', ugDataSource, ugValue );     	 
+
+    }
+    
+    this.preview = function(entity) { /* preview the block */
+
+      var block = entity;	
+      var url = '/block/preview/'+block.id;
+      
+      $.get(url, 
+      	    function (data) {
+      	      $('#block-preview-result').html(data);	
+      	    });
+      
+    }
+    
+  	
+  };
+  
+  var urls = { query_url  : '/blocks',
+    	       create_url : '/block',
+  	           update_url : '/block',
+  	           delete_url : '/block',
+  	           get_url    : '/block'
+  	         };
+
+  var blockHook = new BlockHook();
+  var blocksManager = new EntityManagement(urls, 'block', 12, blockHook);
+ 
+  $('.entity-title').html('Blocks');
+  
+  
+</script>

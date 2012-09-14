@@ -47,6 +47,26 @@ module Huasi
     
     end
  
+    # ========= Views ====================
+    
+    #
+    # Return the view models available
+    #
+    def view_models(context={})
+    
+      app = context[:app]
+      
+      [::Model::ViewEntityInfo.new(:content, app.t.entity.content, ContentManagerSystem::Content, :view_template_contents,
+         [::Model::ViewEntityFieldInfo.new(:title, app.t.entity_fields.content.title, :string),
+          ::Model::ViewEntityFieldInfo.new(:path, app.t.entity_fieldscontent.path, :string),
+          ::Model::ViewEntityFieldInfo.new(:alias, app.t.entity_fields.content.alias, :string),
+          ::Model::ViewEntityFieldInfo.new(:summary, app.t.entity_fields.content.summary, :string),
+          ::Model::ViewEntityFieldInfo.new(:type, app.t.entity_fields.content.type, :string),
+          ::Model::ViewEntityFieldInfo.new(:creation_date, app.t.entity_fields.content.creation_date, :date),
+          ::Model::ViewEntityFieldInfo.new(:creation_user, app.t.entity_fields.content.creation_user, :string)])]
+    
+    end
+    
     
     # ========= Menu =====================
     

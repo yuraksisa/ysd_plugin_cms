@@ -1,0 +1,204 @@
+<%= include('entity-management') %>
+
+<!-- Renders the element description -->
+<script type="text/tmpl" id="elements_description">
+
+    <p>Puede definir los <em>términos</em> que pertenecen a la taxonomía, de forma que pueda clasificar los contenidos utilizando estos términos.</p>
+
+</script>
+
+<!-- Renders the elements container -->
+<script type="text/tmpl" id="elements_container_template">
+
+  <table id="elements_table" class="table">
+     <thead class="table-header">
+       <tr>
+         <th class="table-header-title" scope="col" style="width:50%">Description</th>
+         <th class="table-header-title" scope="col" style="width:25%">Weight</th>
+       </tr>
+     </thead>
+     <tbody id="elements_tbody" class="table-tbody">             
+     </tbody>
+  </table>
+
+</script>
+
+<!-- Renders one element in the elements list view -->
+        
+<script type="text/tmpl" id="elements_list_template">
+
+    <tr class="table-row element-navigation-detail" rel="<%%= index %>" id="element_row_<%%=index%>">
+      <td class="table-cell">
+        <%% for (var i=0;i<entity.level;i++) { %>
+        <span class="indentation"></span> 
+        <%% } %>
+        <%%= entity.description %>
+      </td>
+      <td class="table-cell"><%%= entity.weight %></td>
+    </tr>
+
+</script>
+
+<!-- Renders one element in the element view (full detailed) -->
+
+<script type="text/tmpl" id="element_template">
+
+     <div class="element_template" style="overflow:hidden">
+       <div class="entity-field"><div class="entity-fieldlabel">Description</div> <div class="entity-fieldvalue"><%%= entity.description %></div> </div>
+       <div class="entity-field"><div class="entity-fieldlabel">Weight</div> <div class="entity-fieldvalue"><%%= entity.weight %></div> </div>
+     </div>
+     
+     <% if defined?element_template and element_template.to_s.strip.length > 0 %>
+       <div id="tabs_template">
+         <ul>
+           <%= element_template_tab if defined?element_template_tab %>
+         </ul>
+         <%= element_template if defined?element_template %>
+       </div>
+     <% end %>
+          
+     <div class="element_template_actions">
+       <div class="element_template_actions_buttons">
+         <%= element_action if defined?element_action %>       
+         <%= call_hook(:term_element_action) %>
+       </div>
+     </div>
+
+</script>
+
+<!-- Renders the form to edit an element -->
+
+<script type="text/tmpl" id="element_template_form">
+              
+     <form name="element">
+        
+        <div class="top-navigation-bar navigation-bar">
+             <h2 class="form-title">Terms on <%%= self.model.configuration.parentId %></h2>
+             <div class="navigation-bar-nav-buttons">
+             </div>
+        </div>        
+
+        <div class="form-fields">
+        
+          <%% if (entity) { %>
+          <input type="hidden" id="id" name="id" value="<%%= entity.id %>"/>
+          <%% } %>
+          <%% if (!entity) {%>
+          <input type="hidden" id="taxonomy[id]" name="taxonomy[id]" value="<%%= self.model.configuration.parentId %>"/>
+          <%% } %>
+          
+          <div class="formrow">
+            <label for="name" class="fieldtitle">Description <span class="mandatoryfield">*</span></label>
+            <input type="text" maxlength="256" id="description" name="description" class="fieldcontrol" <%% if (entity) { %> value="<%%= entity.description %>" <%% } %> />
+          </div>
+
+          <div class="formrow">
+            <label for="weight" class="fieldtitle">Weight</label>
+            <select name="weight" id="weight" class="fieldcontrol"></select>
+          </div>
+                
+          <div class="formrow">
+            <label for="parent" class="fieldtitle">Parent term</label>
+            <select name="parent[id]" id="parent[id]" class="fieldcontrol" size="10"></select>
+          </div>      
+          
+          <% if defined?element_form and element_form.to_s.strip.length > 0 %>
+            <div id="tabs">
+              <ul>
+                <%= element_form_tab if defined?element_form_tab %>
+              </ul>
+              <%= element_form if defined?element_form %>
+            </div>
+          <% end %>
+                
+        </div>
+        
+        <div class="bottom-navigation-bar navigation-bar">
+             <div class="navigation-bar-nav-buttons">
+                <input type="button" class="cancel-entity-button action-button entity-management-button" value="Cancel"/>
+                <%% if (entity) { %>
+                  <input type="submit" class="update-entity-button action-button entity-management-button" value="Update"/>
+                <%% } 
+                   else { %>
+                  <input type="submit" class="create-entity-button action-button entity-management-button" value="Create"/>
+                <%% } %>
+             </div>
+        </div>
+     
+     </form>
+     
+
+</script>
+
+<%= element_form_extension if defined?element_form_extension %>
+<%= element_extension if defined?element_extension %>
+<%= element_action_extension if defined?element_action_extension %>
+
+<%= call_hook(:term_element_action_extension) %>
+
+<script type="text/javascript">
+ 
+  function TermHook() {
+ 	   
+    this.entityKey = function(entity) {
+      return entity.id;
+    }
+
+    this.onRender = function(entity) {
+  	  $('#tabs_template').tabs();	
+  	}
+
+    this.onEdit = function(entity) {
+      $('#id').attr('readonly', true);
+      $('#description').focus();  	
+      this.configForm(entity);
+    };
+  
+    this.onNew = function() {
+      $('#id').attr('readonly', true);	
+  	  $('#description').focus();
+  	  this.configForm(null);
+    };
+             
+    this.configForm = function(entity) {
+    
+         $('#tabs').tabs();
+    
+         // Configure weights
+         var weights = [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10];
+         var weightDataSource = new YsdForms.MemoryDataSource(weights);
+         var weightValue = (entity && entity.weight)?entity.weight:0;
+         var selectWeight = new YsdForms.SelectSelector('weight', weightDataSource, weightValue);
+         
+         // Configure parents
+         var parentsDataSource = new YsdForms.RemoteDataSource('/terms-parent-candidate/'+termsManager.model.configuration.parentId,null,[YsdForms.HierachyListAdapter]);
+         var parentValue = (entity && entity.parent_id)?entity.parent_id:null;
+         var parentTerms = new YsdForms.SelectHierarchicalSelector('parent[id]', parentsDataSource, parentValue, true);
+    	
+    }
+                             
+  	
+  };
+    
+  var urls = { 
+  	          query_url  : '/terms',
+    	      create_url : '/term',
+  	          update_url : '/term',
+  	          delete_url : '/term',
+  	          get_url    : '/term'
+  	         };
+      
+  var termHook = new TermHook();
+  
+  var termHooks = [termHook];
+  
+  // Add the complement hooks
+  if (typeof YSD.entityManagement.complementHooks != 'undefined') {
+    termHooks = termHooks.concat(YSD.entityManagement.complementHooks.complements);
+  }  
+  
+  var termsManager = new TreeEntityManagement(urls, 'term', 12, termHooks, {parent_filtered:true});
+  
+  $('.entity-title').html('Terms on ' + termsManager.model.configuration.parentId);
+   
+</script>

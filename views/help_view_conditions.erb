@@ -1,0 +1,20 @@
+<h3>Fields</h3>
+<pre>
+ '
+</pre>
+
+<h3>Simple query (one condition)</h3>
+<p>To create a simple query condition, just define a </p>
+<pre>
+  '{"field":"field_name", "operator":"operator", "value":"value"}'
+</pre>
+
+<p>Example</p>
+<p>If we want to retrieve contents which type is 'news', the following condition can be defined:</p>
+<pre>
+  {'field':'type',
+   'operator':'$eq',
+   'value':'news'}
+</pre>
+
+<h3>Complex query (multiples conditions)</h3>

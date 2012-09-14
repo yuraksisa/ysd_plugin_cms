@@ -1,0 +1,102 @@
+<%= include('entity-management') %>
+
+<!-- Renders the element description -->
+<script type="text/tmpl" id="elements_description">
+
+ <%= t.contents.description %>
+
+</script>
+
+<!-- Renders the elements container -->
+<script type="text/tmpl" id="elements_container_template">
+
+  <table id="elements_table" class="table">
+     <thead class="table-header">
+       <tr>
+         <th class="table-header-title" scope="col" style="width:25%">Title</th>
+         <th class="table-header-title" scope="col" style="width:20%">Type</th>
+         <th class="table-header-title" scope="col" style="width:15%">Author</th>
+         <th class="table-header-title" scope="col" style="width:20%">Creation Date</th>
+       </tr>
+     </thead>
+     <tbody id="elements_tbody" class="table-tbody">             
+     </tbody>
+  </table>
+
+</script>
+
+<!-- Renders one element in the elements list view -->
+        
+<script type="text/tmpl" id="elements_list_template">
+
+    <tr class="table-row" rel="<%%= index %>" id="element_row_<%%=index%>">
+      <td class="table-cell"><a href="<%%='/content/'+entity.key%>"><%%=entity.title %></a></td>
+      <td class="table-cell" rel="<%%= index %>"><%%= entity.type %></td>
+      <td class="table-cell" rel="<%%= index %>"><%%= entity.creation_user %></td>
+      <td class="table-cell" rel="<%%= index %>"><%%if (!isNaN(new Date(entity.creation_date))) { %> <%%=new Date(entity.creation_date).toString('dd.MM.yyyy HH:mm')%> <%% } %></td>    
+    </tr>
+
+</script>
+
+<!-- Renders one element in the element view (full detailed) -->
+
+<script type="text/tmpl" id="element_template">
+   
+</script>
+
+<!-- Renders the form to edit an element -->
+
+<script type="text/tmpl" id="element_template_form">
+              
+</script>
+
+<script type="text/javascript">
+ 
+  var contentsHook = {
+ 	   
+ 	entity: null,   
+ 	   
+    entityKey : function(entity) {
+      return entity.key;
+    },
+
+    onRenderEntities : function(entities) {
+    
+      $('.new-entity-button').hide();
+      $('.edit-entity-button').hide();
+      	
+    }, 
+     	
+  	formatCategories : function(entity) {
+  	    	
+      var categories = [];
+      for (index in entity.categories_info) { 
+         categories.push(entity.categories_info[index].description);
+      }	    	
+      
+      return categories;	
+  		
+  	}
+  	
+  };
+
+  var urls = { query_url  : '/contents',
+    	       create_url : '/content',
+  	           update_url : '/content',
+  	           delete_url : '/content',
+  	           get_url    : '/content'
+  	         };
+  
+  var hooks = [contentsHook];
+  
+  // Add the complement hooks
+  if (typeof YSD.entityManagement.complementHooks != 'undefined') {
+    hooks = hooks.concat(YSD.entityManagement.complementHooks.complements);
+  }
+     	           
+  var contentsManager = new EntityManagement(urls, 'content', <%=settings.contents_page_size%>, hooks);
+ 
+  $('.entity-title').html('Contents');
+  
+  
+</script>

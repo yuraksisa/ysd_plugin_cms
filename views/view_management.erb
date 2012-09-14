@@ -1,0 +1,358 @@
+<%= include('entity-management') %>
+
+<!-- Renders the element description -->
+<script type="text/tmpl" id="elements_description">
+
+    <p>Las vistas permiten definir consultas sobre el modelo de datos para presentarlas en forma de <em>bloques</em> o <em>páginas</em>.</p>
+    <p>Para visualizarla como una <em>página</em>, utilice la URL <strong>/nombre_vista</strong>. Para visualizarla como un <em>bloque</em>, configúrela en la gestión de bloques.</p>
+
+</script>
+
+<!-- Renders the elements container -->
+<script type="text/tmpl" id="elements_container_template">
+
+  <table id="elements_table" class="table">
+     <thead class="table-header">
+       <tr>
+         <th class="table-header-title" scope="col" style="width:15%">View</th>
+         <th class="table-header-title" scope="col" style="width:50%">Description</th>
+         <th class="table-header-title" scope="col" style="width:15%">Style</th>
+       </tr>
+     </thead>
+     <tbody id="elements_tbody" class="table-tbody">             
+     </tbody>
+  </table>
+
+</script>
+
+<!-- Renders one element in the elements list view -->
+        
+<script type="text/tmpl" id="elements_list_template">
+
+    <tr class="table-row element-navigation-detail" rel="<%%= index %>" id="element_row_<%%=index%>">
+      <td class="table-cell"><%%= entity.view_name %></td>
+      <td class="table-cell"><%%= entity.description %></td>
+      <td class="table-cell"><%%= entity.style %></td>
+    </tr>
+
+</script>
+
+<!-- Renders one element in the element view (full detailed) -->
+
+<script type="text/tmpl" id="element_template">
+
+     <div class="element_template" style="overflow:hidden">
+       <div class="entity-field"><div class="entity-fieldlabel">Name</div> <div class="entity-fieldvalue"><span class="entity-id"><%%= entity.view_name %></span></div> </div>
+       <div class="entity-field"><div class="entity-fieldlabel">Description</div> <div class="entity-fieldvalue"><%%= entity.description %></div> </div>
+       <div class="entity-field"><div class="entity-fieldlabel">Model</div><div class="entity-fieldvalue"><%%=entity.model_name%></div></div>
+       <div class="entity-field"><div class="entity-fieldlabel">Style</div><div class="entity-fieldvalue"><%%=entity.style%></div></div>
+              
+       <div class="entity-field"><div class="entity-fieldlabel">Query fields</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.query_fields)%></code></div>
+       <div class="entity-field"><div class="entity-fieldlabel">Query conditions</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.query_conditions)%></code></div>
+       <div class="entity-field"><div class="entity-fieldlabel">Query order</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.query_order)%></code></div>       
+       
+       <div class="entity-field"><div class="entity-fieldlabel">Render</div> <div class="entity-fieldvalue"><%%= entity.render %></div> </div>
+       <div class="entity-field"><div class="entity-fieldlabel">Limit</div> <div class="entity-fieldvalue"><%%= entity.view_limit %></div> </div>
+       <div class="entity-field"><div class="entity-fieldlabel">Pagination</div> <div class="entity-fieldvalue"><%%= entity.pagination %></div> </div>
+       <div class="entity-field"><div class="entity-fieldlabel">Page size</div> <div class="entity-fieldvalue"><%%= entity.page_size %></div> </div>
+
+     </div>
+     <div class="entity-block">
+       <h2 class="entity-block-title">View preview</h2>
+       <form name="view-preview">
+         <label for="arguments">Arguments</label>
+         <input type="text" name="arguments" id="arguments" maxlength="80" size="80"/>
+         <input type="button" name="send-view-preview" id="send-view-preview" value="Preview"/>
+       </form>
+       <div id="view-preview-result">
+       </div>  
+     </div>
+
+</script>
+
+<!-- Renders the form to edit an element -->
+
+<script type="text/tmpl" id="element_template_form">
+              
+     <form name="element">
+        
+        <div class="top-navigation-bar navigation-bar">
+             <h2 class="form-title">View</h2>
+             <div class="navigation-bar-nav-buttons">
+             </div>
+        </div>        
+
+        <div class="form-fields">
+        
+          <div class="formrow">
+            <label for="view_name" class="fieldtitle">Name <span class="mandatoryfield">*</span></label>
+            <input type="text" maxlength="32" id="view_name" name="view_name" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.view_name%>" <%% } %> />
+            <div class="fielddescription">The view name. It must be unique because it identifies each of the views.</div>
+          </div>
+
+          <div class="formrow">
+            <label for="description" class="fieldtitle">Description</label>
+            <textarea name="description" id="description" class="fieldcontrol"><%% if (entity) { %><%%=entity.description%><%% } %></textarea>
+            <div class="fielddescription">The view description.</div>
+          </div>
+          <p style="text-align:right"> <span id="description_length"></span> <%= t.available_chars %> </p>
+
+         <div class="formrow">
+            <label for="model_name" class="fieldtitle">Model</label>
+            <select id="model_name" name="model_name" class="fieldcontrol"></select>
+            <div class="fielddescription">The model. The type of data that is retrieved by this view. For example: contents, comments, users, taxonomies</div> 
+          </div>
+
+          <div class="formrow">
+            <label for="style" class="fieldtitle">Style</label>
+            <select name="style" id="style" class="fieldcontrol"></select>
+            <div class="fielddescription">The style of the view.</div>
+          </div>
+          
+          <div id="view_fields" class="formrow">
+            <label for="query_fields" class="fieldtitle">Fields</label>
+            <textarea id="query_fields" name="query_fields" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.query_fields)%><%% } %></textarea>  
+            <div class="fielddescription">The model's fields which are shown in the view.</div>
+          </div>
+            
+          <fieldset>
+            <legend>Query</legend>
+            <div class="formrow">
+                <label for="query_conditions" class="fieldtitle">Conditions</label>
+                <textarea id="query_conditions" name="query_conditions" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.query_conditions)%><%% } %></textarea>
+                <div class="fielddescription">The conditions which match the items shown in the view.</div>
+            </div>
+            <div class="formrow">
+                <label for="query_order" class="fieldtitle">Order</label>
+                <textarea id="query_order" name="query_order" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.query_order)%><%% } %></textarea>
+                <div class="fielddescription">The order in which the model's items will be showed.</div>  
+            </div>                    
+          </fieldset>
+                   
+          <fieldset>
+            <legend>Basic options</legend>
+            <div class="formrow">
+              <label for="render" class="fieldtitle">Render</label>
+              <select name="render" id="render" class="fieldcontrol"></select>
+              <div class="fielddescription">The render which will be used to show the view elements.</div>
+            </div>
+            <div class="formrow">
+               <label for="query_limit" class="fieldtitle">Limit</label>
+               <input type="text" maxlength="3" id="view_limit" name="view_limit" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.view_limit%>" <%% } else { %> value="0" <%% } %> />
+               <div class="fielddescription">The number of results to show in the view. Type 0 if you do not want any limit.</div> 
+            </div>
+            <div class="formrow">
+              <label for="pagination" class="fieldtitle">Pagination</label>
+              <select name="pagination" id="pagination" class="fieldcontrol"></select>
+              <div class="fielddescription">If you want to create a pager to navigate</div>
+            </div>
+            <div class="formrow">
+               <label for="page_size" class="fieldtitle">Page size</label>
+               <input type="text" maxlength="3" id="page_size" name="page_size" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.page_size%>" <%% } else { %> value="0" <%% } %> />
+               <div class="fielddescription">The number of results to show in the view. Type 0 if you do not want any limit.</div> 
+            </div>            
+          </fieldset>
+          
+          <div class="formrow">
+            <label for="type" class="fieldtitle">Repository</label>
+            <input type="text" maxlength="32" id="data_repository" name="data_repository" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.data_repository%>" <%% } %> />
+            <div class="fielddescription">The repository to query from.</div>
+          </div>
+                
+        </div>
+        
+        <div class="bottom-navigation-bar navigation-bar">
+             <div class="navigation-bar-nav-buttons">
+                <input type="button" class="cancel-entity-button action-button entity-management-button" value="Cancel"/>
+                <%% if (entity) { %>
+                  <input type="submit" class="update-entity-button action-button entity-management-button" value="Update"/>
+                <%% } 
+                   else { %>
+                  <input type="submit" class="create-entity-button action-button entity-management-button" value="Create"/>
+                <%% } %>
+             </div>
+        </div>
+     
+     </form>
+     
+
+</script>
+
+
+<script type="text/javascript">
+ 
+  function ViewHook() {
+ 	   
+ 	this.entity = null;
+ 	   
+    this.entityKey = function(entity) {
+      return entity.view_name;
+    }
+
+    this.onEdit = function(entity) {
+      this.entity = entity;	
+      $('#view_name').attr('readonly', true);
+      $('#model_name').focus();  	
+      this.configForm(entity);
+      this.buildViewRenders(entity.style);
+    };
+  
+    this.onNew = function() {
+      this.entity = null;
+      $('#model_name').val('content');
+      $('#data_repository').val('default');
+  	  $('#view_name').focus();
+  	  this.configForm(null);
+    }
+    
+    this.onRender = function(entity) {
+      this.entity = entity;
+      var self = this;	
+      $('#send-view-preview').bind('click', 
+           function event(event) {
+      	     self.preview(entity, $('#arguments').val()); 
+      	   });
+      	
+    }
+        
+  	this.adaptFormData = function(data) {
+  	
+  	  var send = {};
+  	  
+  	  for (idx in data) {
+
+        var value = null;
+        
+        if (idx == 'query_fields' && data.viewStyle == 'teaser') {
+          value = null	
+        }
+        else
+        if (idx == 'query_fields' || idx == 'query_conditions' || idx == 'query_order') {
+          value = (data[idx] == '' || data[idx] == 'null')?null:JSON.parse(data[idx]);
+        }
+        else {
+          value = data[idx];	
+        }
+        
+	    send[idx] = value;	
+  	  	
+  	  }
+ 
+  	  return send;
+  		
+  	}
+        
+    this.configForm = function(entity) {
+        
+         // Configure the models
+         var dataSourceModel = new YsdForms.RemoteDataSource('/view-models',{'id':'view_entity_model','description':'view_entity_description'});
+         var valueModel = (entity && entity.model_name)?entity.model_name:null; 
+         var selectorModel = new YsdForms.SelectSelector('model_name', dataSourceModel, valueModel, false );             
+
+         // Configure the styles
+         var dataSourceStyles = new YsdForms.RemoteDataSource('/view-styles',{'id':'id','description':'description'});
+         var valueStyles = (entity && entity.style)?entity.style:null; 
+         var selectorStyles = new YsdForms.SelectSelector('style', dataSourceStyles, valueStyles, false );             
+
+         // Configure pagination
+         var pagination = [true, false];
+         var paginationDataSource = new YsdForms.MemoryDataSource(pagination);
+         var paginationValue = (entity && entity.pagination)?entity.pagination:false;
+         var selectPagination = new YsdForms.SelectSelector('pagination', paginationDataSource, paginationValue);
+
+         var self = this;
+
+         if (this.entity == null) {
+           dataSourceStyles.addListener('data_available', function(event) {
+      	     if (event.data && event.data.length > 0) {
+      	       self.buildViewRenders(event.data[0].style);
+      	     }
+           });
+         }
+
+         $('#style').change(function(event) { 
+      	   self.changeViewStyle(event);
+      	   });
+      	   
+      	 $('#pagination').change(function(event) {
+      	   self.changePagination(event);
+      	 });
+         
+         // Limit the text area length
+         YsdForms.limit_text_area_content_size(document.getElementById('description'), 256, 
+            function (content_remain) {
+              document.getElementById('description_length').innerHTML = '<strong>' + content_remain + '</strong>';
+            }
+         );    
+    	
+    }
+    
+  	this.changeViewStyle = function(event) {
+  	
+  	  var viewStyle = $('#style option:selected').val();
+  	  this.buildViewRenders(viewStyle);
+  	  
+  	  if (viewStyle == 'teaser') {
+  	    $('#view_fields').hide();	
+  	  }
+  	  else {
+  	  	$('#view_fields').show();
+  	  }
+  		
+  	}
+  	
+  	this.changePagination = function(event) {
+  	
+  	  var pagination = $('#pagination option:selected').val();	
+  
+  	  if (pagination) {
+  	    $('#page_size').show();	
+  	  }
+  	  else {
+  	  	$('#page_size').hide();
+  	  }  
+  		
+  	}
+    
+  	this.buildViewRenders = function(viewStyle) {
+
+      // Configure the renders
+      var dataSourceRenders = new YsdForms.RemoteDataSource('/view-renders/'+viewStyle,{'id':'id','description':'description'});
+      var valueRenders = (this.entity && this.entity.render)?this.entity.render:null; 
+      var selectorRenders = new YsdForms.SelectSelector('render', dataSourceRenders, valueRenders, false );             
+  		
+  	}
+    
+    this.preview = function(entity, args) { /* preview the view */
+
+      var view = entity;	
+      var url = '/view/preview/'+view.view_name;
+      
+      if (args.length > 0) {
+        url += '/' + args;
+      }
+      
+      $.get(url, 
+      	    function (data) {
+      	      $('#view-preview-result').html(data);	
+      	    });
+      
+    }
+  	
+  };
+  
+  var urls = { 
+  	      query_url  : '/views',
+    	  create_url : '/view',
+  	      update_url : '/view',
+  	      delete_url : '/view',
+  	      get_url    : '/view'
+  	     };
+  
+  var viewHook = new ViewHook();  
+  var viewsManager = new EntityManagement(urls, 'view', 12, viewHook);
+ 
+  $('.entity-title').html('Views');
+  
+  
+</script>

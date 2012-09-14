@@ -1,3 +1,12 @@
+contents:
+  description: <p>This pages supplies an interface to create and to modify your web site contents.</p>
+content:
+  by: by
+  published: published
+  categories: categories
+view_styles:
+  teaser: Teaser (standard summary)
+  fields: Model fields selection
 cms_admin_menu:
   cms_menu: Content Management
   contenttype_management: Content type
@@ -9,3 +18,13 @@ cms_admin_menu:
   view_management: Views
 entity:
   term: Taxonomy terms (vocabularies)
+  content: Contents
+entity_fields:
+    content:
+      title: Title
+      path: Path
+      alias: Alias
+      summary: Summary
+      type: Content type
+      creation_date: Creation date
+      creation_user: Creation user
