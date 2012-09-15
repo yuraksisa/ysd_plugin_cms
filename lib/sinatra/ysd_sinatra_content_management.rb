@@ -57,7 +57,7 @@ module Sinatra
           locals.store(:action, 'new')
           locals.store(:id, nil)
           locals.store(:content_type, params[:content_type])
-          locals.store(:title, 'New content')
+          locals.store(:title, "New content (#{params[:content_type]})")
                     
           load_page :content_edition, :locals => locals
         

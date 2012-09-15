@@ -92,15 +92,8 @@
             <input type="text" maxlength="120" id="title" name="title" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.title %>" <%% } %>/>
             <div class="fielddescription">The content title.</div>
           </div>
-        
-          <div class="formrow">
-            <label for="type" class="fieldtitle">Type</label>
-            <div><%= content_type %></div>
-            <input type="hidden" id="type" name="type" value="<%= content_type %>"/>
-            <div class="fielddescription">The type of the content.</div>
-          </div>
 
-          <div class="formrow">
+          <div id="content_taxonomies" class="formrow">
             <label class="fieldtitle">Categories</label>
             <div class="entity-block fieldcontrol" id="taxonomies">            
             </div>
@@ -265,9 +258,17 @@
   	  
   	  $.getJSON('/taxonomy-content-type/'+contentType,
   	        function success_handler(data) {
-  	          for (idx in data) {
-  	            self.buildCategory(data[idx].taxonomy_id);       	
+  	        	
+  	          if (data.length == 0) {
+  	            $('#content_taxonomies').hide();	
   	          }
+  	          else {
+  	            for (idx in data) {
+  	              self.buildCategory(data[idx].taxonomy_id);       	
+  	            }
+  	          	$('#content_taxonomies').show();
+  	          }	
+
   	        });
   		
   	},
