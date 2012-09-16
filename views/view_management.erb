@@ -47,9 +47,10 @@
        <div class="entity-field"><div class="entity-fieldlabel">Model</div><div class="entity-fieldvalue"><%%=entity.model_name%></div></div>
        <div class="entity-field"><div class="entity-fieldlabel">Style</div><div class="entity-fieldvalue"><%%=entity.style%></div></div>
               
-       <div class="entity-field"><div class="entity-fieldlabel">Query fields</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.query_fields)%></code></div>
-       <div class="entity-field"><div class="entity-fieldlabel">Query conditions</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.query_conditions)%></code></div>
-       <div class="entity-field"><div class="entity-fieldlabel">Query order</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.query_order)%></code></div>       
+       <div class="entity-field"><div class="entity-fieldlabel">Fields</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.query_fields)%></code></div>
+       <div class="entity-field"><div class="entity-fieldlabel">Conditions</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.query_conditions)%></code></div>
+       <div class="entity-field"><div class="entity-fieldlabel">Order</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.query_order)%></code></div>       
+       <div class="entity-field"><div class="entity-fieldlabel">Arguments</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.query_arguments)%></code></div>       
        
        <div class="entity-field"><div class="entity-fieldlabel">Render</div> <div class="entity-fieldvalue"><%%= entity.render %></div> </div>
        <div class="entity-field"><div class="entity-fieldlabel">Limit</div> <div class="entity-fieldvalue"><%%= entity.view_limit %></div> </div>
@@ -126,6 +127,11 @@
                 <label for="query_order" class="fieldtitle">Order</label>
                 <textarea id="query_order" name="query_order" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.query_order)%><%% } %></textarea>
                 <div class="fielddescription">The order in which the model's items will be showed.</div>  
+            </div>                    
+            <div class="formrow">
+                <label for="query_arguments" class="fieldtitle">Arguments</label>
+                <textarea id="query_arguments" name="query_arguments" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.query_arguments)%><%% } %></textarea>
+                <div class="fielddescription">The query arguments (retrieved from the url).</div>  
             </div>                    
           </fieldset>
                    
@@ -224,11 +230,14 @@
         var value = null;
         
         if (idx == 'query_fields' && data.viewStyle == 'teaser') {
-          value = null	
+          value = {};	
         }
         else
-        if (idx == 'query_fields' || idx == 'query_conditions' || idx == 'query_order') {
-          value = (data[idx] == '' || data[idx] == 'null')?null:JSON.parse(data[idx]);
+        if (idx == 'query_fields' || idx == 'query_arguments') {
+          value = (data[idx] == '' || data[idx] == 'null')?[]:JSON.parse(data[idx]);
+        }
+        else if (idx == 'query_order') {
+          value = (data[idx] == '' || data[idx] == 'null')?{}:JSON.parse(data[idx]);        
         }
         else {
           value = data[idx];	
@@ -291,14 +300,7 @@
   	
   	  var viewStyle = $('#style option:selected').val();
   	  this.buildViewRenders(viewStyle);
-  	  
-  	  if (viewStyle == 'teaser') {
-  	    $('#view_fields').hide();	
-  	  }
-  	  else {
-  	  	$('#view_fields').show();
-  	  }
-  		
+  	    		
   	}
   	
   	this.changePagination = function(event) {
@@ -319,7 +321,14 @@
       // Configure the renders
       var dataSourceRenders = new YsdForms.RemoteDataSource('/view-renders/'+viewStyle,{'id':'id','description':'description'});
       var valueRenders = (this.entity && this.entity.render)?this.entity.render:null; 
-      var selectorRenders = new YsdForms.SelectSelector('render', dataSourceRenders, valueRenders, false );             
+      var selectorRenders = new YsdForms.SelectSelector('render', dataSourceRenders, valueRenders, false );     
+      
+  	  if (viewStyle == 'teaser') {
+  	    $('#view_fields').hide();	
+  	  }
+  	  else {
+  	  	$('#view_fields').show();
+  	  }              
   		
   	}
     

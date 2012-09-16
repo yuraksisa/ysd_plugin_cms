@@ -1,9 +1,48 @@
+<h2>Creating a view</h2>
+
+
 <h3>Fields</h3>
+<p>If the style of the view is <strong>fields</strong>, you must define the view fields using an array in JSON notation.</p>
+
+<p>The following properties can be used to define the view fields:</p>
+<ul>
+  <li>field: The field name (String)</li>
+  <li>link: If you want to render a link to any resource (String).</li>
+  <li>image: If the field name maps to an image (boolean). In this case an image will be rendered</li>
+  <li>link_class: The link css class to include in the link render (String). </li>
+  <li>image_class: The image css class to include in the image render (String). </li>
+</ul> 
+
+<p>
+
+<p>Now, we show some examples</p>
+
+<h4>Example 1: Simple field render</h4>
+<p>Rendering the title of the content</p>
 <pre>
- '
+ [{"field":"title"}]
 </pre>
 
-<h3>Simple query (one condition)</h3>
+<h4>Example 2: Link field render to an static url</h4>
+<p>Rendering a link to the internal url '/content/mycontent' using the content title</p>
+<pre>
+ [{"field":"title", "link":"/content/mycontent"}]
+</pre>
+
+<h4>Example 3: Rendering two fields, the title and the image</h4>
+<pre>
+ [{"field":"title"},{"field":"photo_url_full","image":"true"}]
+</pre>
+
+<h4>Example 4: Rendering one field link and showing an image</h4>
+<pre>
+ [{"field":"photo_url_tiny", "image":"true", "link":"#{element.path}"}]
+
+<h3>Conditions</h3>
+
+ --- USING arguments %1 %2
+
+<h4>Simple query (one condition)</h3>
 <p>To create a simple query condition, just define a </p>
 <pre>
   '{"field":"field_name", "operator":"operator", "value":"value"}'
@@ -17,4 +56,8 @@
    'value':'news'}
 </pre>
 
-<h3>Complex query (multiples conditions)</h3>
+<h4>Complex query (multiples conditions)</h4>
+
+<h3>Order</h3>
+
+[{"field":"creation_date","order":"desc"}]

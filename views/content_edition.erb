@@ -84,8 +84,10 @@
         <div class="form-fields">
         
           <%% if (entity) { %>
-          <input type="hidden" id="key" value="<%%=entity.key%>"/>
+          <input type="hidden" id="key" name="key" value="<%%=entity.key%>"/>
           <%% } %>
+
+          <input type="hidden" id="type" name="type" value="<%= content_type %>"/>
                 
           <div class="formrow">
             <label for="title" class="fieldtitle">Title <span class="mandatoryfield">*</span></label>
