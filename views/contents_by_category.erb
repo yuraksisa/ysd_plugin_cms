@@ -1,5 +1,5 @@
 <% contents.each do |content| %>
 
-  <%= ContentRenders.new(content, self, 'teaser').render %>
+  <%= CMSRenders::ContentRender.new(content, self, 'teaser').render %>
 
 <% end %>
