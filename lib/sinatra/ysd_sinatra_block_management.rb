@@ -29,12 +29,9 @@ module Sinatra
             block = DataMapper.repository(settings.cms_views_repository) do
               ContentManagerSystem::Block.get(params['block_id'])
             end
-          
-            puts "block: #{block.to_json}"
-          
+                    
             if block
-              puts "invoking : #{block.module_name} 'block_view' #{block.name}"
-              BlockRenders.new(block, self).render if block
+              CMSRenders::BlockRender.new(block, self).render if block
             end
         
           end

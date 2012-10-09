@@ -57,13 +57,18 @@ module Huasi
       app = context[:app]
       
       [::Model::ViewEntityInfo.new(:content, app.t.entity.content, ContentManagerSystem::Content, :view_template_contents,
-         [::Model::ViewEntityFieldInfo.new(:title, app.t.entity_fields.content.title, :string),
+         [::Model::ViewEntityFieldInfo.new(:_id, app.t.entity_fields.content.id, :string),
+          ::Model::ViewEntityFieldInfo.new(:title, app.t.entity_fields.content.title, :string),
           ::Model::ViewEntityFieldInfo.new(:path, app.t.entity_fieldscontent.path, :string),
           ::Model::ViewEntityFieldInfo.new(:alias, app.t.entity_fields.content.alias, :string),
           ::Model::ViewEntityFieldInfo.new(:summary, app.t.entity_fields.content.summary, :string),
           ::Model::ViewEntityFieldInfo.new(:type, app.t.entity_fields.content.type, :string),
           ::Model::ViewEntityFieldInfo.new(:creation_date, app.t.entity_fields.content.creation_date, :date),
-          ::Model::ViewEntityFieldInfo.new(:creation_user, app.t.entity_fields.content.creation_user, :string)])]
+          ::Model::ViewEntityFieldInfo.new(:creation_user, app.t.entity_fields.content.creation_user, :string)]),
+       ::Model::ViewEntityInfo.new(:term, app.t.entity.term, ContentManagerSystem::Term, :view_template_terms,
+         [::Model::ViewEntityFieldInfo.new(:id, app.t.entity_fields.term.id, :serial),
+          ::Model::ViewEntityFieldInfo.new(:description, app.t.entity_fields.term.description, :string)])
+       ]
     
     end
     
@@ -233,7 +238,7 @@ module Huasi
     def page_preprocess(context={})
     
       app = context[:app]
-    
+            
       result = {}
 
       # Retrieve the theme blocks which are positionated in the page
@@ -241,13 +246,11 @@ module Huasi
       blocks = ContentManagerSystem::Block.all(:region.not => nil, :theme => Themes::ThemeManager.instance.selected_theme.name)
       
       blocks.each do |block|
-      
+        
         key = block.region.to_sym
-       
         result.store(key, []) if not result.has_key?(key)       
-        
         result[key].push(block) if block.can_be_shown?(app.user, app.request.path_info) # Add the block only if can be shown
-        
+              
       end
       
       #puts "page_preprocess : #{result.to_json}"
@@ -331,7 +334,7 @@ module Huasi
       
       #puts "view : #{view.to_json}"
             
-      ViewRenders.new(view, app).render if view # Gets the view representation  
+      ::CMSRenders::ViewRender.new(view, app).render if view # Gets the view representation  
                    
     end
 

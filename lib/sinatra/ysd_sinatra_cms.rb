@@ -13,11 +13,29 @@ module Sinatra
         # Configuration 
         app.set :cms_views_repository, :default
         app.set :cms_author_url, '' # It represents the author url
+        
+        #
+        # Load a content (by its alias)
+        #
+        app.get /^[^.]*$/ do
+          
+          puts "checking : #{request.path_info}"
+          
+          unless content = ContentManagerSystem::Content.first(:conditions => Conditions::Comparison.new(:alias,'$eq',request.path_info))
+             pass
+          end
+          
+          puts "content : #{content.inspect}"
+          
+          context = {:app => self}
+          page(content)
+          
+        end
                       
         #  
-        # Load a content
+        # Load a content by its id
         # 
-        app.get '/content/:page' do
+        app.get '/content/:id' do
             
            if not request.accept?'text/html'
              pass
@@ -25,8 +43,8 @@ module Sinatra
            
            # Gets the content
            
-           content = ContentManagerSystem::Content.get(File.join(session[:locale], params[:page])) ||
-                     ContentManagerSystem::Content.get(params[:page])
+           content = ContentManagerSystem::Content.get(File.join(session[:locale], params[:id])) ||
+                     ContentManagerSystem::Content.get(params[:id])
   
            # Get extra data from extensions
            context = {:app => self}          
@@ -43,10 +61,10 @@ module Sinatra
         #
         # Load a content without layout (for printing ...)
         #       
-        app.get '/content/:page/nolayout' do
+        app.get '/content/:id/nolayout' do
  
-           content = ContentManagerSystem::Content.get(File.join(session[:locale], params[:page])) ||
-                     ContentManagerSystem::Content.get(params[:page])
+           content = ContentManagerSystem::Content.get(File.join(session[:locale], params[:id])) ||
+                     ContentManagerSystem::Content.get(params[:id])
            
            if content           
              page content, :layout => false             
@@ -56,19 +74,7 @@ module Sinatra
         
         end
         
-        #        
-        # Show contents which belongs to an specific term
-        #
-        app.get "/contents/category/:term_id" do
-        
-           contents = ContentManagerSystem::Content.find_by_term(params['term_id'])
-           
-           puts "contents : #{contents.inspect}"
-                       
-           load_page("contents_by_category", :locals => {:contents => contents}) 
-                  
-        end
-     
+
         #
         # Serves static content from the extension
         #

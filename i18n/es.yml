@@ -21,6 +21,7 @@ entity:
   content: Contenidos
 entity_fields:
     content:
+      id: Id    
       title: Título
       path: Path
       alias: Alias
@@ -28,3 +29,5 @@ entity_fields:
       type: Tipo de contenido
       creation_date: Fecha de creación
       creation_user: Usuario creador
+    term:
+      description: Descripció

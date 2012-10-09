@@ -38,8 +38,6 @@ module Sinatra
         # Create a new content
         app.post "/content" do
         
-          puts "Creating content"
-          
           request.body.rewind
           content_request = JSON.parse(URI.unescape(request.body.read))
           
@@ -54,9 +52,7 @@ module Sinatra
         
         # Updates a content
         app.put "/content" do
-        
-          puts "Updating content"
-        
+                
           request.body.rewind
           content_request = JSON.parse(URI.unescape(request.body.read))
           
@@ -66,8 +62,8 @@ module Sinatra
           content = ContentManagerSystem::Content.get(key)
           content.attributes=(content_request)
           
-          puts "updating content : #{content}"
-          
+          puts "content request #{content_request['event_data_start']} #{content_request['event_data_start'].class.name}"
+             
           content.update
           
           # Return          

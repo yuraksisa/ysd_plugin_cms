@@ -46,12 +46,13 @@
        <div class="entity-field"><div class="entity-fieldlabel">Description</div> <div class="entity-fieldvalue"><%%= entity.description %></div> </div>
        <div class="entity-field"><div class="entity-fieldlabel">Model</div><div class="entity-fieldvalue"><%%=entity.model_name%></div></div>
        <div class="entity-field"><div class="entity-fieldlabel">Style</div><div class="entity-fieldvalue"><%%=entity.style%></div></div>
+       <div class="entity-field"><div class="entity-fieldlabel">Title</div><div class="entity-fieldvalue"><%%=entity.title%></div></div>
               
        <div class="entity-field"><div class="entity-fieldlabel">Fields</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.query_fields)%></code></div>
        <div class="entity-field"><div class="entity-fieldlabel">Conditions</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.query_conditions)%></code></div>
        <div class="entity-field"><div class="entity-fieldlabel">Order</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.query_order)%></code></div>       
        <div class="entity-field"><div class="entity-fieldlabel">Arguments</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.query_arguments)%></code></div>       
-       
+       <div class="entity-field"><div class="entity-fieldlabel">URL</div> <div class="entity-fieldvalue"><a href="/<%%=entity.url%>" target="_blank"><%%= entity.url %></a></div> </div>
        <div class="entity-field"><div class="entity-fieldlabel">Render</div> <div class="entity-fieldvalue"><%%= entity.render %></div> </div>
        <div class="entity-field"><div class="entity-fieldlabel">Limit</div> <div class="entity-fieldvalue"><%%= entity.view_limit %></div> </div>
        <div class="entity-field"><div class="entity-fieldlabel">Pagination</div> <div class="entity-fieldvalue"><%%= entity.pagination %></div> </div>
@@ -137,6 +138,16 @@
                    
           <fieldset>
             <legend>Basic options</legend>
+            <div class="formrow">
+              <label for="title" class="fieldtitle">Title</label>
+              <input type="text" maxlength="80" id="title" name="title" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.title%>" <%% } %> />
+              <div class="fielddescription">The view title. It will be shown in the view rendering.</div>
+            </div>
+            <div class="formrow">
+              <label for="url" class="fieldtitle">URL</label>
+              <input type="text" maxlength="256" id="url" name="url" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.url%>" <%% } %> />
+              <div class="fielddescription">The view url. How the view will be accessible as a page.</div>
+            </div>
             <div class="formrow">
               <label for="render" class="fieldtitle">Render</label>
               <select name="render" id="render" class="fieldcontrol"></select>
@@ -341,11 +352,15 @@
         url += '/' + args;
       }
       
-      $.get(url, 
-      	    function (data) {
-      	      $('#view-preview-result').html(data);	
-      	    });
-      
+      $.ajax({url: url,
+              success: function(data, textStatus, jqXHR) { 
+      	        $('#view-preview-result').html(data);	
+      	      },
+      	      error: function(data, textStatus, jqXHR) {
+      	      	viewsManager.view.notify_user('Error retrieving data', 'Server error retrieving data');
+      	      }
+      });
+      	     
     }
   	
   };

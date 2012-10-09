@@ -130,7 +130,7 @@
               </div>
             </div>                
             <div class="formrow">
-              <textarea id="show_block_on_page_list" name="show_block_on_page_list" class="fieldcontrol"></textarea>
+              <textarea id="show_block_on_page_list" name="show_block_on_page_list" class="fieldcontrol"><%% if (entity) {%><%%= entity.show_block_on_page_list%><%% } %></textarea>
               <div class="fielddescription">Type one entry per line in the form of a regular expression which matches the URL to apply</div>
             </div>
         </div>
