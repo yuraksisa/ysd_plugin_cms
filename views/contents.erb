@@ -17,6 +17,7 @@
          <th class="table-header-title" scope="col" style="width:20%">Type</th>
          <th class="table-header-title" scope="col" style="width:15%">Author</th>
          <th class="table-header-title" scope="col" style="width:20%">Creation Date</th>
+         <th class="table-header-title" scope="col" style="width:20%">Actions</th>
        </tr>
      </thead>
      <tbody id="elements_tbody" class="table-tbody">             
@@ -33,7 +34,8 @@
       <td class="table-cell"><a href="<%%='/content/'+entity.key%>"><%%=entity.title %></a></td>
       <td class="table-cell" rel="<%%= index %>"><%%= entity.type %></td>
       <td class="table-cell" rel="<%%= index %>"><%%= entity.creation_user %></td>
-      <td class="table-cell" rel="<%%= index %>"><%%if (!isNaN(new Date(entity.creation_date))) { %> <%%=new Date(entity.creation_date).toString('dd.MM.yyyy HH:mm')%> <%% } %></td>    
+      <td class="table-cell" rel="<%%= index %>"><%%= self.formatDate(entity.creation_date) %></td>    
+      <td class="table-cell" rel="<%%= index %>"><a href="<%%='/mcontent/'+entity.key%>">manage</a>&nbsp;<a href="<%%='/mcontent/edit/'+entity.key%>">edit</a></td>
     </tr>
 
 </script>
@@ -52,6 +54,8 @@
 
 <script type="text/javascript">
  
+require(["YSDEntityManagement","jquery"], function(YSDEntityManagement, $) {
+ 
   var contentsHook = {
  	   
  	entity: null,   
@@ -66,7 +70,7 @@
       $('.edit-entity-button').hide();
       	
     }, 
-     	
+     	     	
   	formatCategories : function(entity) {
   	    	
       var categories = [];
@@ -90,13 +94,16 @@
   var hooks = [contentsHook];
   
   // Add the complement hooks
+  /*
   if (typeof YSD.entityManagement.complementHooks != 'undefined') {
     hooks = hooks.concat(YSD.entityManagement.complementHooks.complements);
   }
+  */
      	           
-  var contentsManager = new EntityManagement(urls, 'content', <%=settings.contents_page_size%>, hooks);
+  var contentsManager = new YSDEntityManagement(urls, 'content', <%=settings.contents_page_size%>, hooks);
  
   $('.entity-title').html('Contents');
   
+});
   
 </script>

@@ -1,0 +1,59 @@
+  <div class="content_data_block">
+     <h3 class="content_data_block_title"><%= t.comments.title%></h3>
+     <div class="content_data_row">
+       <div id="comments-container">
+       </div>
+     </div>
+  </div>
+
+  <!-- Renders the comments -->
+
+  <script type="text/tmpl" id="comments_script">
+   
+       <div id="comments_holder">
+       </div>   
+        
+       <div id="comment_form_container">
+  
+         <form id="comment_form" name="comment_form">
+           <div class="formrow">
+             <textarea id="message" name="message" rows="10" placeholder="<%= t.comments.message%>" class="texteditor"></textarea>
+           </div>
+           <p style="text-align:right"> <span id="message_length"></span> <%= t.available_chars %> </p>
+           
+           <div class="formrow-botonera">
+             <input type="button" id="post" name="post" value="<%= t.comments.post %>" class="post-button action-button entity-management-button"/>   
+           </div>  
+           
+           <input type="hidden" name="comment_set[id]" id="comment_set[id]" value="<%= comment_set.id %>"/>
+           <input type="hidden" name="comment_set[reference]" id="comment_set[reference]" value="<%= comment_set.reference %>"/>
+                    
+         </form> 
+    
+       </div>
+  
+       <div id="comment_footer">
+       </div>
+
+  </script>
+
+  <!-- Renders a comment -->
+
+  <script type="text/tmpl" id="comment_script">
+
+    <div class="comment">
+      <div class="comment_header">
+         <span class="comment_sender"><%%= self.format_sender_url(comment)%></span> 
+         <span class="comment_date"><%%= self.format_message_date_time(comment) %></span>
+      </div>
+      <div class="comment_body">
+         <%%= self.format_message(comment) %>
+      </div>
+      <div class="conversation_item_footer">
+      </div>
+    </div>
+  
+  </script>
+
+
+

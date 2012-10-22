@@ -1,0 +1,36 @@
+    <div id="<%="view_#{view.view_name}"%>" class="view">
+       <table class="view_table">
+         <thead>  
+           <tr class="view_table_header_row">
+             <% view.view_fields.each do |view_field| %>
+               <th class="view_table_header_cell" scope="col"><%= view_field.field %></th>
+             <% end %>
+           </tr>
+         </thead>
+         <tbody>
+           <% view_data.each do |element| %>
+           <tr class="view_table_body_row">
+             <% view.view_fields.each do |view_field| %>
+             <td class="view_table_body_cell <%= view_field.class if view_field.class.to_s.strip.length > 0 %>">
+                <% if view_field.link %>
+                  <a href="<%=view_field.evaluate_link(element)%>" <%if view_field.link_class.to_s.strip.length > 0%>class="<%= view_field.link_class%>"<%end%>>
+                <% end %>
+                <% if view_field.image %>
+                   <img src="<%=element.attribute_get(view_field.field)%>" <%if view_field.image_class.to_s.strip.length > 0%>class="<%= view_field.image_class%>"<%end%>/>
+                <% else %>
+                    <% if element.attribute_get(view_field.field).kind_of?(Time) %>
+                      <%= element.attribute_get(view_field.field).strftime('%d.%m.%y') %>
+                    <% else %>
+                      <%= element.attribute_get(view_field.field) %>
+                    <% end %>
+                <% end %>
+                <% if view_field.link %>
+                  </a>
+                <% end %>
+             </td>
+             <% end %>
+           </tr>
+           <% end %>
+         </tbody>
+       </table>
+     </div>

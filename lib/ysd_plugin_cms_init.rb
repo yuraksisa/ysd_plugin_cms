@@ -9,6 +9,7 @@ Plugins::SinatraAppPlugin.register :cms do
    version=     '0.1'
    hooker       Huasi::CMSExtension
    sinatra_helper    Sinatra::ContentManagerHelpers
+   sinatra_helper    Sinatra::YSD::ContentBuilderHelper           # Content Builder helper
    sinatra_extension Sinatra::YSD::ContentManagement              # Content management (/content/new)
    sinatra_extension Sinatra::YSD::CMS                            # Main sinatra application
    sinatra_extension Sinatra::YSD::ContentTypeManagement          # Content type management
@@ -22,4 +23,5 @@ Plugins::SinatraAppPlugin.register :cms do
    sinatra_extension Sinatra::YSD::TermManagementRESTApi
    sinatra_extension Sinatra::YSD::ViewManagementRESTApi
    sinatra_extension Sinatra::YSD::BlockManagementRESTApi   
+   sinatra_extension Sinatra::YSD::CommentRESTApi 
 end

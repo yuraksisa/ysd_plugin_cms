@@ -1,4 +1,3 @@
-# encoding: UTF-8
 require 'ysd-plugins_viewlistener' unless defined?Plugins::ViewListener
 
 #
@@ -30,6 +29,23 @@ module Huasi
         ContentManagerSystem::ContentType.first_or_create({:id => 'story'},
                                                           {:name => 'Articulo', :description => 'Tiene una estructura similar a la página y permite crear y mostrar contenido que informa a los visitantes del sitio. Notas de prensa, anuncios o entradas informales de blog son creadas como páginas.'})
     
+    end
+
+ 
+    # ========= Aspects ==================
+    
+    #
+    # Retrieve an array of the aspects defined in the plugin
+    #
+    def aspects(context={})
+      
+      app = context[:app]
+      
+      aspects = []
+      aspects << ::Plugins::Aspect.new(:comments, app.t.aspect.comments, [:entity], CommentAspectDelegate.new)
+                                
+      return aspects
+       
     end
 
     # ========= Entities =================
@@ -98,13 +114,13 @@ module Huasi
                                   :weight => 6}},
                     {:path => '/cms/newcontent',
                      :options => {:title => app.t.cms_admin_menu.content_new,
-                                  :link_route => "/content/new",
+                                  :link_route => "/mcontent/new",
                                   :description => 'Creates a new content.',
                                   :module => 'cms',
                                   :weight => 5}},                                  
                     {:path => '/cms/contents',
                      :options => {:title => app.t.cms_admin_menu.content_management,
-                                  :link_route => "/contents",
+                                  :link_route => "/mcontents",
                                   :description => 'Contents explorer.',
                                   :module => 'cms',
                                   :weight => 4}},
@@ -149,31 +165,38 @@ module Huasi
                  :description => 'Manages the content types: creation and update of content types.',
                  :fit => 1,
                  :module => :cms},
-                {:path => '/content-management',
-                 :regular_expression => /^\/content-management/, 
+                {:path => '/mcontents',
+                 :regular_expression => /^\/mcontents/, 
                  :title => 'Content', 
                  :description => 'Manages the contents: creation and update of contents.',
                  :fit => 1,
                  :module => :cms},
-                {:path => '/content/new',
-                 :regular_expression => /^\/content\/new/, 
+                {:path => '/mcontent/new',
+                 :regular_expression => /^\/mcontent\/new/, 
                  :title => 'New content', 
                  :description => 'Create a new content: Choose the content type.',
                  :fit => 2,
                  :module => :cms},
-                {:path => '/content/new/:content_type',
-                 :parent_path => "/content/new",
-                 :regular_expression => /^\/content\/new\/.+/, 
+                {:path => '/mcontent/new/:content_type',
+                 :parent_path => "/mcontent/new",
+                 :regular_expression => /^\/mcontent\/new\/.+/, 
                  :title => 'New content', 
                  :description => 'Create a new content: Complete data.',
                  :fit => 1,
                  :module => :cms},                 
-                {:path => '/content/edit/:content_id',
-                 :regular_expression => /^\/content\/edit\/.+/, 
+                {:path => '/mcontent/edit/:content_id',
+                 :regular_expression => /^\/mcontent\/edit\/.+/, 
                  :title => 'Edit content', 
                  :description => 'Edit a content',
                  :fit => 1,
                  :module => :cms},                 
+                {:path => '/mcontent/:content_id',
+                 :parent_path => '/mcontents',
+                 :regular_expression => /^\/mcontent\/.+/, 
+                 :title => 'View content', 
+                 :description => 'View a content',
+                 :fit => 1,
+                 :module => :cms}, 
                 {:path => '/taxonomy-management',
                  :regular_expression => /^\/taxonomy-management/, 
                  :title => 'Taxonomy', 
@@ -223,9 +246,9 @@ module Huasi
     # @return [Array]
     #   An array which contains the css resources used by the module
     #
-    def page_style(context={})
-      ['/cms/css/cms.css']     
-    end
+    #def page_style(context={})
+    #  ['/cms/css/cms.css']     
+    #end
         
     #
     # page preprocess
@@ -296,6 +319,34 @@ module Huasi
       
       result = render_view_as_block(context, block_name) || ''
       
+    end
+    
+    # ============ Gallery aspect integration =============
+    
+    #
+    # Get the template to integrate
+    #
+    def album_aspect_action_extension(context, aspect_model)
+    
+      app = context[:app]
+      
+      puts "llego a album_aspect_action_extension #{aspect_model.inspect}" 
+      
+      template_path = if aspect_model.kind_of?(::ContentManagerSystem::ContentType)
+                        File.join(File.dirname(__FILE__), '..', 'views', "content-album-action-extension.erb")
+                      else
+                        nil
+                      end
+      
+      puts "album_aspect_action_extension #{template_path}"
+      
+      result = if template_path
+                 template = Tilt.new(template_path)
+                 template.render(app)  
+               else
+                 ''
+               end
+          
     end
     
     # ============ Helpers methods ===========

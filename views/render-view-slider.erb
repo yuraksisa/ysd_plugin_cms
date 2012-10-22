@@ -1,0 +1,9 @@
+    <div id="<%="view_#{view.view_name}"%>" class="view slider-wrapper theme-default">
+      <div id="<%="slider_#{view.view_name}"%>" class="nivoSlider">
+        <% view_data.each do |element_rendered| %>
+          <%= element_rendered %>
+        <% end%>
+      </div>
+    </div>
+    
+    <%= slider("#slider_#{view.view_name}") %>

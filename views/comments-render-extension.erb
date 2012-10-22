@@ -1,0 +1,17 @@
+<script type="text/javascript">
+  require(['jquery', 'YSDCommentsManager','ysdhtmleditor'], function($, YSDCommentsManager, htmlEditor) {
+    $(document).ready(function() {
+  	
+      var commentSetId = null;
+  	
+  	  <% if comment_set and comment_set.id %>
+        commentSetId = <%= comment_set.id %>;
+      <% end %>
+    
+      var commentsManager = new YSDCommentsManager(commentSetId);
+      htmlEditor('.texteditor');
+
+    });
+  });
+  
+</script>

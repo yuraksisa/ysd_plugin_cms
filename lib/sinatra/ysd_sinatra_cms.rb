@@ -19,13 +19,9 @@ module Sinatra
         #
         app.get /^[^.]*$/ do
           
-          puts "checking : #{request.path_info}"
-          
           unless content = ContentManagerSystem::Content.first(:conditions => Conditions::Comparison.new(:alias,'$eq',request.path_info))
              pass
           end
-          
-          puts "content : #{content.inspect}"
           
           context = {:app => self}
           page(content)

@@ -1,0 +1,27 @@
+<script type="text/javascript">
+
+   ContentAlbumPlugin = function() {
+
+     this.onRender = function(entity) {
+     
+       var self = this;
+       
+       $('#manage_gallery').bind('click', 
+             function event(event) {
+               window.location.href = '/mcontent-mphotos/' + entity.key;	
+             });
+     	
+     }
+
+   }
+   
+          
+   if (typeof YSD.entityManagement.complementHooks != 'undefined') {
+	
+     var contentAlbumPlugin = new ContentAlbumPlugin();
+    
+     YSD.entityManagement.complementHooks.register(contentAlbumPlugin);	
+   
+   }          
+       
+</script>

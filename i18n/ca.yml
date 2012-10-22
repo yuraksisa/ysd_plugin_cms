@@ -31,3 +31,9 @@ entity_fields:
       creation_user: Usuari creador
     term:
       description: Descripció
+comments:
+  title: Comentaris
+  message: Escriu el comentari
+  post: Publicar
+aspect:
+  comments: Comentaris. (acceptar comentaris)

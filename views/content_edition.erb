@@ -42,9 +42,9 @@
          <%= element_template %>
          
          <div id="audit_template">
-           <div class="entity-field"><span class="entity-fieldlabel">Creation date</span> <span class="entity-fieldvalue"><%%if (!isNaN(new Date(entity.creation_date))) { %> <%%=new Date(entity.creation_date).toString('dd.MM.yyyy HH:mm')%> <%% } %></span> </div>
+           <div class="entity-field"><span class="entity-fieldlabel">Creation date</span> <span class="entity-fieldvalue"><%%= self.formatDate(entity.creation_date) %></span> </div>
            <div class="entity-field"><span class="entity-fieldlabel">Creation user</span> <span class="entity-fieldvalue"><%%= entity.creation_user %></span> </div>
-           <div class="entity-field"><span class="entity-fieldlabel">Last update</span> <span class="entity-fieldvalue"><%%if (!isNaN(new Date(entity.last_update))) { %> <%%=new Date(entity.last_update).toString('dd.MM.yyyy HH:mm')%> <%% } %></span> </div>         
+           <div class="entity-field"><span class="entity-fieldlabel">Last update</span> <span class="entity-fieldvalue"><%%= self.formatDate(entity.last_update) %></span> </div>         
            <div class="entity-field"><span class="entity-fieldlabel">Last update user</span> <span class="entity-fieldvalue"><%%= entity.last_update_user %></span> </div>
          </div>
          
@@ -59,11 +59,13 @@
                          
      </div>
 
+     <% if element_action.strip.length > 0 %>
      <div class="element_template_actions">
        <div class="element_template_actions_buttons">
          <%= element_action %>
        </div>
      </div>
+     <% end %>
 
    </div>
    
@@ -177,7 +179,9 @@
 <%= element_action_extension %>
 
 <script type="text/javascript">
- 
+
+require(["YSDEntityManagement","YSDRemoteDataSource", "YSDHierachyListAdapter", "YSDSelectHierarchicalSelector", "jquery"], function(EntityManagement, YSDRemoteDataSource, YSDHierachyListAdapter, YSDSelectHierarchicalSelector,  $) {
+	
   var contentsHook = {
  	   
  	entity: null,   
@@ -210,6 +214,9 @@
     
     onRender : function(entity) {
       this.entity = entity;
+      $('.new-entity-button').hide();
+      $('.page-navigation').hide();
+      $('.navigation-bar-nav-buttons').hide();
   	  $('#tabs_template').tabs();	
   	},
   	
@@ -288,12 +295,12 @@
       select.setAttribute('multiple', true);
       container.appendChild(select);
       
-      var dataSource = new YsdForms.RemoteDataSource('/terms/'+taxonomy_id,null,[YsdForms.HierachyListAdapter]);
+      var dataSource = new YSDRemoteDataSource('/terms/'+taxonomy_id,null,[YSDHierachyListAdapter]);
       var value = null;
       if (this.entity && this.entity.categories_by_taxonomy && this.entity.categories_by_taxonomy[taxonomy_id]) {
         value = this.entity.categories_by_taxonomy[taxonomy_id]; 
       }
-      var termsSelect = new YsdForms.SelectHierarchicalSelector(selectName, dataSource, value, true);
+      var termsSelect = new YSDSelectHierarchicalSelector(selectName, dataSource, value, true);
   	  
   	},
   	
@@ -329,5 +336,6 @@
  
   $('.entity-title').html('<%= title %>');
   
+});
   
 </script>
