@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'ysd-plugins_viewlistener' unless defined?Plugins::ViewListener
 
 #
