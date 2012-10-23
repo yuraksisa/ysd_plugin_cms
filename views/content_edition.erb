@@ -180,7 +180,7 @@
 
 <script type="text/javascript">
 
-require(["YSDEntityManagement","YSDRemoteDataSource", "YSDHierachyListAdapter", "YSDSelectHierarchicalSelector", "jquery"], function(EntityManagement, YSDRemoteDataSource, YSDHierachyListAdapter, YSDSelectHierarchicalSelector,  $) {
+require(["YSDEntityManagement", "YSDEntityManagementComplementHooks", "YSDRemoteDataSource", "YSDHierachyListAdapter", "YSDSelectHierarchicalSelector", "jquery"], function(EntityManagement, EntityManagementComplementHooks, YSDRemoteDataSource, YSDHierachyListAdapter, YSDSelectHierarchicalSelector,  $) {
 	
   var contentsHook = {
  	   
@@ -327,9 +327,7 @@ require(["YSDEntityManagement","YSDRemoteDataSource", "YSDHierachyListAdapter", 
   var hooks = [contentsHook];
   
   // Add the complement hooks
-  if (typeof YSD.entityManagement.complementHooks != 'undefined') {
-    hooks = hooks.concat(YSD.entityManagement.complementHooks.complements);
-  }
+  hooks = hooks.concat(EntityManagementComplementHooks.complements);
      	           
   var contentsManager = new EntityManagement(urls, 'content', <%=settings.contents_page_size%>, hooks,
                                              {url_base: '<%= url_base %>', action: '<%= action %>', id: '<%= id %>'});

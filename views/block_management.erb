@@ -154,6 +154,8 @@
 
 
 <script type="text/javascript">
+
+require(['jquery','YSDEntityManagement', 'YSDMemoryDataSource', 'YSDRemoteDataSource', 'YSDSelectSelector', 'YSDListSelector'], function($, EntityManagement, MemoryDataSource, RemoteDataSource, SelectSelector, ListSelector) {
  
   function BlockHook() {
  	   
@@ -225,25 +227,25 @@
     
          // Configure weights
          var weights = [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10];
-         var weightDataSource = new YsdForms.MemoryDataSource(weights);
+         var weightDataSource = new MemoryDataSource(weights);
          var weightValue = (entity && entity.weight)?entity.weight:0;
-         var selectWeight = new YsdForms.SelectSelector('weight', weightDataSource, weightValue);
+         var selectWeight = new SelectSelector('weight', weightDataSource, weightValue);
          
          // Configure the regions
          var regions = [null,<%= Themes::ThemeManager.instance.selected_theme.regions.map do |e| "'#{e}'" end.join(',') %>];
-         var regionsDataSource = new YsdForms.MemoryDataSource(regions);
+         var regionsDataSource = new MemoryDataSource(regions);
          var regionValue = (entity && entity.region)?entity.region:null;
-         var selectRegion = new YsdForms.SelectSelector('region', regionsDataSource, regionValue);        
+         var selectRegion = new SelectSelector('region', regionsDataSource, regionValue);        
      	
      	 // Configure the user groups
-         var ugDataSource = new YsdForms.RemoteDataSource('/usergroups',{id:'group', description:'name'});         
+         var ugDataSource = new RemoteDataSource('/usergroups',{id:'group', description:'name'});         
          var ugValue = [];
          if (entity && entity.block_usergroups) {
            for (index in entity.block_usergroups) {
            	  ugValue.push( entity.block_usergroups[index].usergroup.group);
            }
          }         
-         var ugSelector = new YsdForms.ListSelector('user_groups', 'block_usergroups', ugDataSource, ugValue );     	 
+         var ugSelector = new ListSelector('user_groups', 'block_usergroups', ugDataSource, ugValue );     	 
 
     }
     
@@ -273,6 +275,7 @@
   var blocksManager = new EntityManagement(urls, 'block', 12, blockHook);
  
   $('.entity-title').html('Blocks');
-  
+
+});
   
 </script>

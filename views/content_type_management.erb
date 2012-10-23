@@ -107,6 +107,8 @@
 
 <script type="text/javascript">
  
+ require(['jquery', 'YSDEntityManagement', 'YSDRemoteDataSource', 'YSDListSelector'], function($, EntityManagement, RemoteDataSource, ListSelector) {
+ 
   function ContentTypeHook() {
  	   
     this.entityKey = function(entity) {
@@ -160,7 +162,7 @@
     this.configForm = function(entity) {
 
          // Configure the available types
-         var dataSource = new YsdForms.RemoteDataSource('/aspects/entity');
+         var dataSource = new RemoteDataSource('/aspects/entity');
          var value = [];
          if (entity && entity.aspects) {
            for (var index=0; index < entity.aspects.length; index++) {
@@ -168,10 +170,10 @@
            }
          }
          
-         var selector = new YsdForms.ListSelector('content_type_aspects', 'aspects', dataSource, value );
+         var selector = new ListSelector('content_type_aspects', 'aspects', dataSource, value );
         
          // Limit the text area length
-         YsdForms.limit_text_area_content_size(document.getElementById('description'), 256, 
+         YSDForms.limit_text_area_content_size(document.getElementById('description'), 256, 
             function (content_remain) {
               document.getElementById('description_length').innerHTML = '<strong>' + content_remain + '</strong>';
             }
@@ -204,6 +206,7 @@
   var contentsTypeManager = new EntityManagement(urls, 'content type', 12, contentTypeHook);
  
   $('.entity-title').html('Content Type');
-  
+ 
+ });
   
 </script>

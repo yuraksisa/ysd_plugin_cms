@@ -198,6 +198,9 @@
 
 <script type="text/javascript">
  
+ require(['jquery','YSDEntityManagement','YSDRemoteDataSource','YSDSelectSelector', 'YSDMemoryDataSource', 'YSDForms'],
+         function($, EntityManagement, RemoteDataSource, SelectSelector, MemoryDataSource, YSDForms) {
+ 
   function ViewHook() {
  	   
  	this.entity = null;
@@ -265,20 +268,20 @@
     this.configForm = function(entity) {
         
          // Configure the models
-         var dataSourceModel = new YsdForms.RemoteDataSource('/view-models',{'id':'view_entity_model','description':'view_entity_description'});
+         var dataSourceModel = new RemoteDataSource('/view-models',{'id':'view_entity_model','description':'view_entity_description'});
          var valueModel = (entity && entity.model_name)?entity.model_name:null; 
-         var selectorModel = new YsdForms.SelectSelector('model_name', dataSourceModel, valueModel, false );             
+         var selectorModel = new SelectSelector('model_name', dataSourceModel, valueModel, false );             
 
          // Configure the styles
-         var dataSourceStyles = new YsdForms.RemoteDataSource('/view-styles',{'id':'id','description':'description'});
+         var dataSourceStyles = new RemoteDataSource('/view-styles',{'id':'id','description':'description'});
          var valueStyles = (entity && entity.style)?entity.style:null; 
-         var selectorStyles = new YsdForms.SelectSelector('style', dataSourceStyles, valueStyles, false );             
+         var selectorStyles = new SelectSelector('style', dataSourceStyles, valueStyles, false );             
 
          // Configure pagination
          var pagination = [true, false];
-         var paginationDataSource = new YsdForms.MemoryDataSource(pagination);
+         var paginationDataSource = new MemoryDataSource(pagination);
          var paginationValue = (entity && entity.pagination)?entity.pagination:false;
-         var selectPagination = new YsdForms.SelectSelector('pagination', paginationDataSource, paginationValue);
+         var selectPagination = new SelectSelector('pagination', paginationDataSource, paginationValue);
 
          var self = this;
 
@@ -299,7 +302,7 @@
       	 });
          
          // Limit the text area length
-         YsdForms.limit_text_area_content_size(document.getElementById('description'), 256, 
+         YSDForms.limit_text_area_content_size(document.getElementById('description'), 256, 
             function (content_remain) {
               document.getElementById('description_length').innerHTML = '<strong>' + content_remain + '</strong>';
             }
@@ -330,9 +333,9 @@
   	this.buildViewRenders = function(viewStyle) {
 
       // Configure the renders
-      var dataSourceRenders = new YsdForms.RemoteDataSource('/view-renders/'+viewStyle,{'id':'id','description':'description'});
+      var dataSourceRenders = new RemoteDataSource('/view-renders/'+viewStyle,{'id':'id','description':'description'});
       var valueRenders = (this.entity && this.entity.render)?this.entity.render:null; 
-      var selectorRenders = new YsdForms.SelectSelector('render', dataSourceRenders, valueRenders, false );     
+      var selectorRenders = new SelectSelector('render', dataSourceRenders, valueRenders, false );     
       
   	  if (viewStyle == 'teaser') {
   	    $('#view_fields').hide();	
@@ -378,5 +381,5 @@
  
   $('.entity-title').html('Views');
   
-  
+});
 </script>

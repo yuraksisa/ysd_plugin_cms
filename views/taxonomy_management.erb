@@ -111,6 +111,9 @@
 
 <script type="text/javascript">
  
+ require(['jquery', 'YSDRemoteDataSource', 'YSDListSelector', 'YSDForms'],
+         function($, RemoteDataSource, ListSelector, YSDForms) {
+ 
   function TaxonomyHook() {
  	   
     this.entityKey = function(entity) {
@@ -172,7 +175,7 @@
     this.configForm = function(entity) {
     
          // Configure the available types
-         var dataSource = new YsdForms.RemoteDataSource('/content-types',{id:'id', description:'name'});
+         var dataSource = new RemoteDataSource('/content-types',{id:'id', description:'name'});
          var value = [];
          if (entity && entity.taxonomy_content_types) {
            for (index in entity.taxonomy_content_types) {
@@ -180,10 +183,10 @@
            }
          }
          
-         var selector = new YsdForms.ListSelector('content_types', 'taxonomy_content_types', dataSource, value );
+         var selector = new ListSelector('content_types', 'taxonomy_content_types', dataSource, value );
          
          // Limit the text area length
-         YsdForms.limit_text_area_content_size(document.getElementById('description'), 256, 
+         YSDForms.limit_text_area_content_size(document.getElementById('description'), 256, 
             function (content_remain) {
               document.getElementById('description_length').innerHTML = '<strong>' + content_remain + '</strong>';
             }
@@ -207,5 +210,5 @@
  
   $('.entity-title').html('Taxonomies');
   
-  
+ });
 </script>

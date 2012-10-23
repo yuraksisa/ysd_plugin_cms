@@ -138,6 +138,9 @@
 
 <script type="text/javascript">
  
+ require(['jquery', 'YSDTreeEntityManagement', 'YSDEntityManagementComplementHooks', 'YSDMemoryDataSource', 'YSDSelectSelector', 'YSDRemoteDataSource', 'YSDHierachyListAdapter', 'YSDSelectHierarchicalSelector' ], 
+         function($, TreeEntityManagement, EntityManagementComplementHooks, MemoryDataSource, SelectSelector, RemoteDataSource, HierachyListAdapter, SelectHierarchicalSelector ) {
+ 
   function TermHook() {
  	   
     this.entityKey = function(entity) {
@@ -166,14 +169,14 @@
     
          // Configure weights
          var weights = [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10];
-         var weightDataSource = new YsdForms.MemoryDataSource(weights);
+         var weightDataSource = new MemoryDataSource(weights);
          var weightValue = (entity && entity.weight)?entity.weight:0;
-         var selectWeight = new YsdForms.SelectSelector('weight', weightDataSource, weightValue);
+         var selectWeight = new SelectSelector('weight', weightDataSource, weightValue);
          
          // Configure parents
-         var parentsDataSource = new YsdForms.RemoteDataSource('/terms-parent-candidate/'+termsManager.model.configuration.parentId,null,[YsdForms.HierachyListAdapter]);
+         var parentsDataSource = new RemoteDataSource('/terms-parent-candidate/'+termsManager.model.configuration.parentId,null,[HierachyListAdapter]);
          var parentValue = (entity && entity.parent_id)?entity.parent_id:null;
-         var parentTerms = new YsdForms.SelectHierarchicalSelector('parent[id]', parentsDataSource, parentValue, true);
+         var parentTerms = new SelectHierarchicalSelector('parent[id]', parentsDataSource, parentValue, true);
     	
     }
                              
@@ -193,12 +196,12 @@
   var termHooks = [termHook];
   
   // Add the complement hooks
-  if (typeof YSD.entityManagement.complementHooks != 'undefined') {
-    termHooks = termHooks.concat(YSD.entityManagement.complementHooks.complements);
-  }  
+  termHooks = termHooks.concat(EntityManagementComplementHooks.complements);
   
   var termsManager = new TreeEntityManagement(urls, 'term', 12, termHooks, {parent_filtered:true});
   
   $('.entity-title').html('Terms on ' + termsManager.model.configuration.parentId);
-   
+
+});
+
 </script>
