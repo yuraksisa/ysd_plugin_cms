@@ -12,11 +12,15 @@ Plugins::SinatraAppPlugin.register :cms do
    sinatra_helper    Sinatra::YSD::ContentBuilderHelper           # Content Builder helper
    sinatra_extension Sinatra::YSD::ContentManagement              # Content management (/content/new)
    sinatra_extension Sinatra::YSD::CMS                            # Main sinatra application
+   sinatra_extension Sinatra::YSD::Site                           # Site extension (homepage and direct resources)
+   sinatra_extension Sinatra::YSD::Pages                          # Pages serving (/page/*)
    sinatra_extension Sinatra::YSD::ContentTypeManagement          # Content type management
    sinatra_extension Sinatra::YSD::TaxonomyManagement
    sinatra_extension Sinatra::YSD::TermManagement
    sinatra_extension Sinatra::YSD::ViewManagement
    sinatra_extension Sinatra::YSD::BlockManagement
+   sinatra_extension Sinatra::YSD::MenuManagement
+   sinatra_extension Sinatra::YSD::MenuItemManagement   
    sinatra_extension Sinatra::YSD::ContentManagementRESTApi
    sinatra_extension Sinatra::YSD::ContentTypeManagementRESTApi
    sinatra_extension Sinatra::YSD::TaxonomyManagementRESTApi
@@ -24,4 +28,6 @@ Plugins::SinatraAppPlugin.register :cms do
    sinatra_extension Sinatra::YSD::ViewManagementRESTApi
    sinatra_extension Sinatra::YSD::BlockManagementRESTApi   
    sinatra_extension Sinatra::YSD::CommentRESTApi 
+   sinatra_extension Sinatra::YSD::MenuManagementRESTApi
+   sinatra_extension Sinatra::YSD::MenuItemManagementRESTApi   
 end

@@ -1,0 +1,157 @@
+<%= include('entity-management') %>
+
+<!-- Renders the element description -->
+<script type="text/tmpl" id="elements_description">
+
+    <p>Esta página muestra los menús. Un <strong>menú</strong> es una herramienta para navegar por el sitio web. Los menús se organizan siguiendo el principio de los árboles, esto quiere decir que un menú puede tener menús hijos y menús padres.</p>
+    <p>Puede utilizar <em>bloques</em> para activar los menus.</p> 
+
+</script>
+
+<!-- Renders the elements container -->
+<script type="text/tmpl" id="elements_container_template">
+
+  <table id="elements_table" class="table">
+     <thead class="table-header">
+       <tr>
+         <th class="table-header-title" scope="col" style="width:20%">Name</th>
+         <th class="table-header-title" scope="col" style="width:20%">Title</th>
+         <th class="table-header-title" scope="col" style="width:20%">Description</th>
+         <th class="table-header-title" scope="col"></th>
+         <th class="table-header-title" scope="col"></th>
+       </tr>
+     </thead>
+     <tbody id="elements_tbody" class="table-tbody">             
+     </tbody>
+  </table>
+
+</script>
+
+<!-- Renders one element in the elements list view -->
+        
+<script type="text/tmpl" id="elements_list_template">
+
+    <tr class="table-row" rel="<%%= index %>" id="element_row_<%%=index%>">
+      <td class="table-cell element-navigation-detail" rel="<%%= index %>"><%%= entity.name %></td>
+      <td class="table-cell element-navigation-detail" rel="<%%= index %>"><%%= entity.title %></td>
+      <td class="table-cell element-navigation-detail" rel="<%%= index %>"><%%= entity.description %></td>
+      <td class="table-cell"><a href="/menu-item-management/<%%=entity.name%>">List of menu items</a></td>
+      <td class="table-cell"><a href="/menu-item-management/<%%=entity.name%>/new">Add menu item</a></td>
+    </tr>
+
+</script>
+
+<!-- Renders one element in the element view (full detailed) -->
+
+<script type="text/tmpl" id="element_template">
+
+     <div class="element_template" style="overflow:hidden">
+       <div class="entity-field"><div class="entity-fieldlabel">Name</div> <div class="entity-fieldvalue"><span class="entity-id"><%%= entity.name %></span></div> </div>
+       <div class="entity-field"><div class="entity-fieldlabel">Title</div> <div class="entity-fieldvalue"><%%= entity.title %></div></div>
+       <div class="entity-field"><div class="entity-fieldlabel">Description</div> <div class="entity-fieldvalue"><%%= entity.description %></div> </div>
+     </div>
+
+</script>
+
+<!-- Renders the form to edit an element -->
+
+<script type="text/tmpl" id="element_template_form">
+              
+     <form name="element">
+        
+        <div class="top-navigation-bar navigation-bar">
+             <h2 class="form-title">Menu</h2>
+             <div class="navigation-bar-nav-buttons">
+             </div>
+        </div>        
+
+        <div class="form-fields">
+        
+          <div class="formrow">
+            <label for="name" class="fieldtitle">Name <span class="mandatoryfield">*</span></label>
+            <input type="text" maxlength="32" id="name" name="name" class="fieldcontrol" <%% if (entity) { %> value="<%%= entity.name %>" <%% } %> />
+            <div class="fielddescription">The menu name. Each menu has its unique name which allows to identify it.</div>
+          </div>
+
+          <div class="formrow">
+            <label for="title" class="fieldtitle">Title</label>
+            <input type="text" maxlength="80" id="title" name="title" class="fieldcontrol" <%% if (entity) { %> value="<%%= entity.title %>" <%% } %> />
+            <div class="fielddescription">The menu title.</div>
+          </div>
+
+          <div class="formrow">
+            <label for="description" class="fieldtitle">Description</label>
+            <textarea name="description" id="description" class="fieldcontrol"><%% if (entity) { %> <%%= entity.description %> <%% } %></textarea>
+            <div class="fielddescription">Explain what does the menu represents.</div>
+          </div>
+          <p style="text-align:right"> <span id="description_length"></span> <%= t.available_chars %> </p>
+                
+        </div>
+        
+        <div class="bottom-navigation-bar navigation-bar">
+             <div class="navigation-bar-nav-buttons">
+                <input type="button" class="cancel-entity-button action-button entity-management-button" value="Cancel"/>
+                <%% if (entity) { %>
+                  <input type="submit" class="update-entity-button action-button entity-management-button" value="Update"/>
+                <%% } 
+                   else { %>
+                  <input type="submit" class="create-entity-button action-button entity-management-button" value="Create"/>
+                <%% } %>
+             </div>
+        </div>
+     
+     </form>
+     
+
+</script>
+
+
+<script type="text/javascript">
+ 
+  function MenuHook() {
+ 	   
+    this.entityKey = function(entity) {
+      return entity.name;
+    }
+
+    this.onNew = function() {
+  	  $('#name').focus();
+  	  this.configForm(null);
+    };
+    
+    this.onEdit = function(entity) {
+      $('#name').attr('readonly', true);
+      $('#title').focus();  	
+      this.configForm(entity);
+    };
+  
+        
+    this.configForm = function(entity) {
+             
+      // Limit the text area length
+      YsdForms.limit_text_area_content_size(document.getElementById('description'), 256, 
+          function (content_remain) {
+            document.getElementById('description_length').innerHTML = '<strong>' + content_remain + '</strong>';
+          }
+       );    
+    	
+    }
+        
+  	
+  };
+    
+  var urls = { 
+  	           query_url  : '/menus',
+    	       create_url : '/menu',
+  	           update_url : '/menu',
+  	           delete_url : '/menu',
+  	           get_url    : '/menu'
+  	         };
+  
+  var menuHook = new MenuHook();
+  var menusManager = new EntityManagement(urls, 'menu', 12, menuHook);
+ 
+  $('.entity-title').html('Menus');
+  
+  
+</script>

@@ -1,12 +1,6 @@
-contents:
-  description: <p>Esta pagina proporciona una interfaz para crear y modificar los contenidos de su sitio web.</p>
-content:
-  by: por
-  published: publicado
-  categories: categorías
-view_styles:
-  teaser: Teaser (resumen estándar)
-  fields: Selección de campos del modelo
+#
+# Menus
+#
 cms_admin_menu:
   cms_menu: Gestión de contenidos
   contenttype_management: Tipos de contenido
@@ -16,6 +10,54 @@ cms_admin_menu:
   build_site_menu: Construir sitio
   block_management: Bloques
   view_management: Vistas
+site_admin_menu:
+  admin_menu: Admin
+  menu_management: Menus
+#
+# Content management
+#  
+contents:
+  description: <p>Esta pagina proporciona una interfaz para crear y modificar los contenidos de su sitio web.</p>
+#
+# Content render
+#
+content:
+  by: por
+  published: publicado
+  categories: categorías
+#
+# Content Type management
+#  
+content_type_management:
+  title: Tipo de contenido
+  description: >
+               <p>Todos los contenidos que existen en un sitio son de uno de los tipos definidos a continuación. 
+               El <em>tipo de contenido</em> le permite configurar el comportamiento del contenido como por ejemplo 
+               si acepta comentarios o la información que contiene, o los vocabularios cuyos términos pueden pueden
+               utilizarse para etiquetarlo.</p>
+  form:
+    id:
+      label: Id
+      required: El Id es obligatorio
+    name:
+      label: Nombre
+      required: El nombre del tipo de contenido es obligatorio
+    description:
+      label: Descripción
+    aspects:
+      label: Aspectos
+    usergroups:
+      label: Quien puede crear contenidos de este tipo
+    aspect_aspect:
+      label: Aspecto
+    aspect_weight:
+      label: Peso
+#
+# Views management
+#  
+view_styles:
+  teaser: Teaser (resumen estándar)
+  fields: Selección de campos del modelo
 entity:
   term: Términos de taxonomía (vocabulario)
   content: Contenidos
@@ -31,9 +73,15 @@ entity_fields:
       creation_user: Usuario creador
     term:
       description: Descripció
+#
+# Comments
+#        
 comments:
   title: Comentarios
   message: Escribe el comentario
   post: Publicar
+#
+# Aspects
+#    
 aspect:
   comments: Comentarios. (aceptar comentarios)

@@ -101,6 +101,17 @@ module Sinatra
         #
         app.delete "/content-type" do
         
+          request.body.rewind
+          content_type_request = JSON.parse(URI.unescape(request.body.read))
+
+          # Delete the content type
+          the_content_type = ContentManagerSystem::ContentType.get(content_type_request['id'])
+          the_content_type.destroy
+
+          status 200
+          content_type :json
+          true.to_json
+
         end
       
         #
@@ -113,9 +124,7 @@ module Sinatra
           # TODO check that the content type exists and the aspect is set for it
               
           c_type = ::ContentManagerSystem::ContentType.get(params['content_type'])
-          puts "content type : #{c_type.inspect}"
           c_type_aspect = c_type.aspect(params['aspect'])
-          puts "content type aspect : #{c_type_aspect.inspect}"
           aspect = c_type_aspect.get_aspect(context)
           
           aspect_configuration = {}
@@ -123,9 +132,7 @@ module Sinatra
              aspect_configuration.store(aspect_config_attr.id, 
                                         c_type_aspect.get_aspect_attribute_value(aspect_config_attr.id))
           end
-          
-          puts "aspect configuration : #{aspect_configuration.inspect}"
-          
+                    
           status 200
           content_type :json
           aspect_configuration.to_json

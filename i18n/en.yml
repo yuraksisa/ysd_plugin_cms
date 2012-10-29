@@ -1,12 +1,6 @@
-contents:
-  description: <p>This pages supplies an interface to create and to modify your web site contents.</p>
-content:
-  by: by
-  published: published
-  categories: categories
-view_styles:
-  teaser: Teaser (standard summary)
-  fields: Model fields selection
+#
+# Menus
+#
 cms_admin_menu:
   cms_menu: Content Management
   contenttype_management: Content type
@@ -16,6 +10,53 @@ cms_admin_menu:
   build_site_menu: Build site
   block_management: Blocks
   view_management: Views
+site_admin_menu:
+  admin_menu: Admin
+  menu_management: Menus
+#
+# Content management
+#
+contents:
+  description: <p>This pages supplies an interface to create and to modify your web site contents.</p>
+#
+# Content render
+#  
+content:
+  by: by
+  published: published
+  categories: categories
+#
+# Content Type management
+#
+content_type_management:
+  title: Contents type
+  description: >
+               <p>The site contents belong to one of the types defined here.</p>
+               <p>The <em>content type</em> allows to configure the content behaviour. For example, if it accepts comments or
+               the vocabularies which can be used to tag them.</p>
+  form:
+    id:
+      label: Id
+      required: The content type Id is required
+    name:
+      label: Name
+      required: The content type Name is required
+    description:
+      label: Description
+    aspects:
+      label: Aspects
+    usergroups:
+      label: Who can create contents of this type 
+    aspect_aspect:
+      label: Aspect
+    aspect_weight:
+      label: Weight       
+#
+# Views management
+#  
+view_styles:
+  teaser: Teaser (standard summary)
+  fields: Model fields selection
 entity:
   term: Taxonomy terms (vocabularies)
   content: Contents
@@ -31,9 +72,15 @@ entity_fields:
       creation_user: Creation user
     term:
       description: Descripció
+#
+# Comments
+#  
 comments:
   title: Comments
   message: Type your comment
   post: Post
+#
+# Aspects
+#    
 aspect:
   comments: Comments. (accept comments)

@@ -38,7 +38,7 @@ module CMSRenders
                block_render = template.render(context, :block => @block, :content => block_content, :arguments => arguments)                        
              end           
            rescue
-             puts "Error creating block : #{$!} #{$@}"
+             puts "Error creating block #{block.name}: #{$!} #{$@}"
            end
                         
            block_render  

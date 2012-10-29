@@ -3,7 +3,7 @@
 <!-- Renders the element description -->
 <script type="text/tmpl" id="elements_description">
 
-  <p>Todos los contenidos que existen en un sitio son de uno de los tipos definidos a continuación. El <em>tipo de contenido</em> le permite configurar el comportamiento del contenido como por ejemplo si acepta comentarios o la información que contiene, o los vocabularios cuyos términos pueden pueden utilizarse para etiquetarlo.</p>
+  <%= t.content_type_management.description %>
 
 </script>
 
@@ -13,9 +13,9 @@
   <table id="elements_table" class="table">
      <thead class="table-header">
        <tr>
-         <th class="table-header-title" scope="col" style="width:20%">Id</th>
-         <th class="table-header-title" scope="col" style="width:30%">Name</th>
-         <th class="table-header-title" scope="col" style="width:50%">Description</th>
+         <th class="table-header-title" scope="col" style="width:20%"><%=t.content_type_management.form.id.label%></th>
+         <th class="table-header-title" scope="col" style="width:30%"><%=t.content_type_management.form.name.label%></th>
+         <th class="table-header-title" scope="col" style="width:50%"><%=t.content_type_management.form.description.label%></th>
        </tr>
      </thead>
      <tbody id="elements_tbody" class="table-tbody">             
@@ -41,10 +41,32 @@
 <script type="text/tmpl" id="element_template">
 
      <div class="element_template" style="overflow:hidden">
-       <div class="entity-field"><div class="entity-fieldlabel">Id</div> <div class="entity-fieldvalue"><span class="entity-id"><%%= entity.id %></span></div> </div>
-       <div class="entity-field"><div class="entity-fieldlabel">Name</div> <div class="entity-fieldvalue"><%%= entity.name %></div> </div>
-       <div class="entity-field"><div class="entity-fieldlabel">Description</div> <div class="entity-fieldvalue"><%%= entity.description %></div></div>
-       <div class="entity-field"><div class="entity-fieldlabel">Aspects</div> <div class="entity-fieldvalue"><%%= self.model.entityHooks[0].formatAspects(entity) %></div></div>
+       <div class="entity-field"><div class="entity-fieldlabel"><%=t.content_type_management.form.id.label%></div> <div class="entity-fieldvalue"><span class="entity-id"><%%= entity.id %></span></div> </div>
+       <div class="entity-field"><div class="entity-fieldlabel"><%=t.content_type_management.form.name.label%></div> <div class="entity-fieldvalue"><%%= entity.name %></div> </div>
+       <div class="entity-field"><div class="entity-fieldlabel"><%=t.content_type_management.form.description.label%></div> <div class="entity-fieldvalue"><%%= entity.description %></div></div>
+       <div class="entity-field">
+         <div class="entity-fieldlabel"><%=t.content_type_management.form.aspects.label%></div> 
+           <table class="table">
+               <thead class="table-header">
+                 <tr>
+                   <th class="table-header-title" width="20%"><%=t.content_type_management.form.aspect_aspect.label%></th>
+                   <th class="table-header-title" width="40%"><%=t.content_type_management.form.aspect_weight.label%></th>
+                 </tr>
+               </thead>
+               <tbody>
+               <%% for (var idx=0;idx<entity.aspects.length;idx++) {%>
+                 <tr class="table-row">
+                   <td class="table-cell"><%%=entity.aspects[idx].aspect%></td>
+                   <td class="table-cell"><%%=entity.aspects[idx].weight%></td>
+                 </tr>
+               <%% } %>
+               </tbody>
+             </table>
+         </div>
+         <div class="entity-fieldlabel"><%=t.content_type_management.form.usergroups.label%></div>
+           <div class="entity-fieldvalue"><%%= self.model.entityHooks[0].formatUserGroups(entity) %></div>
+         </div>
+       </div>
      </div>
 
 </script>
@@ -53,10 +75,10 @@
 
 <script type="text/tmpl" id="element_template_form">
               
-     <form name="element">
+     <form name="element" id="content_type_management_form">
         
         <div class="top-navigation-bar navigation-bar">
-             <h2 class="form-title">Content type</h2>
+             <h2 class="form-title"><%=t.content_type_management.title%></h2>
              <div class="navigation-bar-nav-buttons">
              </div>
         </div>        
@@ -64,27 +86,33 @@
         <div class="form-fields">
         
           <div class="formrow">
-            <label for="id" class="fieldtitle">Id <span class="mandatoryfield">*</span></label>
+            <label for="id" class="fieldtitle"><%=t.content_type_management.form.id.label%> <span class="mandatoryfield">*</span></label>
             <input type="text" maxlength="20" id="id" name="id" class="fieldcontrol" <%% if (entity) { %> value="<%%= entity.id %>" <%% } %> />
           </div>
 
           <div class="formrow">
-            <label for="name" class="fieldtitle">Name</label>
+            <label for="name" class="fieldtitle"><%=t.content_type_management.form.name.label%> <span class="mandatoryfield">*</span></label>
             <input type="text" maxlength="50" id="name" name="name" class="fieldcontrol" <%% if (entity) { %> value="<%%= entity.name %>" <%% } %> />
           </div>
 
           <div class="formrow">
-            <label for="description" class="fieldtitle">Description</label>
-            <textarea name="description" id="description" class="fieldcontrol" rows="5"><%% if (entity) { %> <%%= entity.description %> <%% } %></textarea>
+            <label for="description" class="fieldtitle"><%=t.content_type_management.form.description.label%></label>
+            <textarea name="description" id="description" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.description%><%% } %></textarea>
           </div>
           <p style="text-align:right"> <span id="description_length"></span> <%= t.available_chars %> </p>
 
           <div class="formrow">
-            <fieldset id="content_type_aspects">
-              <legend>Aspects</legend>       
+            <fieldset>
+              <legend><%=t.content_type_management.form.aspects.label%></legend>
+              <div id="content_type_aspects"></div>       
             </fieldset>
           </div>
-                
+          
+          <div class="formrow">
+            <fieldset>
+              <legend><%=t.content_type_management.form.usergroups.label%></legend> 
+              <div id="content_type_usergroups"></div>
+            </fieldset>
         </div>
         
         <div class="bottom-navigation-bar navigation-bar">
@@ -107,7 +135,7 @@
 
 <script type="text/javascript">
  
- require(['jquery', 'YSDEntityManagement', 'YSDRemoteDataSource', 'YSDListSelector'], function($, EntityManagement, RemoteDataSource, ListSelector) {
+ require(['jquery', 'YSDEntityManagement', 'YSDRemoteDataSource', 'YSDListSelector', 'YSDForms'], function($, EntityManagement, RemoteDataSource, ListSelector, YSDForms) {
  
   function ContentTypeHook() {
  	   
@@ -128,50 +156,71 @@
 
     this.adaptFormData = function(data) {
       
-      var aspects_list = [];
-      var aspect = null;
+      data.aspects    = this.adaptAspects(data.aspects, data.id);
+      data.usergroups = this.adaptUsergroups(data.usergroups, data.id); 
       
-      var aspects = null;
-      
-      if (data.aspects instanceof Array) {
-        aspects = data.aspects;	
-      } 	
-      else {
-      	aspects = [];
-        aspects.push(data.aspects);	
-      }
-    	
-      for (var idx=0; idx < aspects.length; idx++) {
+      console.log(data);
 
-         aspect = { aspect: aspects[idx] };
-         
-         if (data.id) {
-           aspect.content_type = { id: data.id };
-         }     
-         
-         aspects_list.push(aspect);   
-        	
-      }	
-    	
-      data.aspects = aspects_list;
-      
       return data;	
     	
     }
+
+    this.adaptAspects = function(aspects, contentTypeId) { /* It converts from an array of string (each is an aspect) to an array of ContentTypeAspect */
+      
+      if (!(aspects instanceof Array)) {
+        aspects = [aspects];
+      }
+
+      return aspects.map(function(value, index, array) {
+
+         return { aspect : value,
+                  content_type : { id: contentTypeId }
+                };   
+
+      });
+
+    }
+
+    this.adaptUsergroups = function(usergroups, contentTypeId) { /* It converts from an array of string (each is an usergroup group) to an array of ContentTypeUserGroup */
+      
+      if (!(usergroups instanceof Array)) {
+        usergroups = [usergroups];
+      }
+
+      return usergroups.map(function(value, index, array) {
+
+        return { usergroup: { group : value},
+                 content_type: {id : contentTypeId}
+               };
+
+      });
+
+    }
+
     
     this.configForm = function(entity) {
 
-         // Configure the available types
+         // Configure the aspects
          var dataSource = new RemoteDataSource('/aspects/entity');
          var value = [];
          if (entity && entity.aspects) {
-           for (var index=0; index < entity.aspects.length; index++) {
-           	  value.push( entity.aspects[index].aspect);
-           }
+           value = entity.aspects.map(function(value, index, array) {
+             return value.aspect;
+           });
          }
-         
          var selector = new ListSelector('content_type_aspects', 'aspects', dataSource, value );
+
+         // Configure the usergroups
+         var ugDataSource = new RemoteDataSource('/usergroups',{id:'group', description:'name'});         
+         var ugValue = [];
+         if (entity && entity.usergroups) {
+           ugValue = entity.usergroups.map(function(value, index, array) {
+              return value.usergroup_group;
+           });
+         }         
+         var ugSelector = new ListSelector('content_type_usergroups', 'usergroups', ugDataSource, ugValue ); 
         
+
          // Limit the text area length
          YSDForms.limit_text_area_content_size(document.getElementById('description'), 256, 
             function (content_remain) {
@@ -180,23 +229,53 @@
          );    
     	
     }
+
+    this.configValidation = function() {
+
+         $('#content_type_management_form').validate({
+            
+            submitHandler: function(form) 
+            {
+               return false;
+            },
+                               
+            rules : { // rules
+               'id' : {
+                 required: true
+               },
+               'name': {
+                 required: true 
+               }
+            },
+            
+            messages : { // messages
+               'id' : {
+                required: '<%= t.content_type_management.form.id.required%>'
+               },
+               'name': {
+                 required : '<%=t.variable_management.form.name.required%>'
+               }
+            }
+            
+          }
+         );
+
+    }
   	
-    
-    this.formatAspects = function(entity) { /* Format the aspects for the representation */
-    	
-      var aspects = [];
-      for (var index=0; index < entity.aspects.length; index++) { 
-         aspects.push(entity.aspects[index].aspect);
-      }	    	
+    this.formatUserGroups = function(entity) { /* Format the usergroups for the representation */
       
-      return aspects;	
-    }  	
-  	
+      var usergroups = entity.usergroups.map(function(value, index, array) {
+        return value.usergroup_group;
+      });
+      
+      return usergroups; 
+    }  
+
   };
   
   var urls = { 
   	           query_url  : '/content-types',
-    	       create_url : '/content-type',
+    	         create_url : '/content-type',
   	           update_url : '/content-type',
   	           delete_url : '/content-type',
   	           get_url    : '/content-type'
@@ -205,7 +284,7 @@
   var contentTypeHook = new ContentTypeHook();
   var contentsTypeManager = new EntityManagement(urls, 'content type', 12, contentTypeHook);
  
-  $('.entity-title').html('Content Type');
+  $('.entity-title').html('<%=t.content_type_management.title%>');
  
  });
   

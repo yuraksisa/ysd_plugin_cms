@@ -33,7 +33,7 @@ module Sinatra
 
             total = 0
             
-            data=ContentManagerSystem::Block.all(:theme => Themes::ThemeManager.instance.selected_theme.name)              
+            data=ContentManagerSystem::Block.all(:conditions => {:theme => Themes::ThemeManager.instance.selected_theme.name}, :order => [:name.asc])              
 
             begin
               total=ContentManagerSystem::Block.count(:theme => Themes::ThemeManager.instance.selected_theme.name)

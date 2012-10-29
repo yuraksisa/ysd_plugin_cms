@@ -30,6 +30,19 @@ module Huasi
         ContentManagerSystem::ContentType.first_or_create({:id => 'story'},
                                                           {:name => 'Articulo', :description => 'Tiene una estructura similar a la página y permite crear y mostrar contenido que informa a los visitantes del sitio. Notas de prensa, anuncios o entradas informales de blog son creadas como páginas.'})
     
+        # Create the primary links menu
+        Site::Menu.first_or_create({:name => 'primary_links'},
+                                   {:title => 'Primary links menus', :description => 'Primary links menu'})
+
+        # Create the secondary links menu
+        Site::Menu.first_or_create({:name => 'secondary_links'},
+                                   {:title => 'Secondary links menu', :description => 'Secondary links menu'})
+
+        # Create the members menu
+        Site::Menu.first_or_create({:name => 'members'},
+                                   {:title => 'Members menu', :description => 'Members menu'})
+
+
     end
 
  
@@ -147,7 +160,14 @@ module Huasi
                                   :link_route => "/view-management",
                                   :description => 'Manage the views: creation and update of views.',
                                   :module => 'cms',
-                                  :weight => 5}}]                      
+                                  :weight => 5}},
+                    {:path => '/sbm/menus',               
+                     :options => {:title => app.t.site_admin_menu.menu_management,
+                                  :link_route => "/menu-management",
+                                  :description => 'Manage the menus. It allows to define custom menus.',
+                                  :module => :cms,
+                                  :weight => 7}}
+                    ]                      
                      
     end
 
@@ -233,7 +253,21 @@ module Huasi
                  :title => 'Contents by category',
                  :description => 'Shows all the contents tagged with the category',
                  :fit => 1,
-                 :module => :cms}]
+                 :module => :cms},
+                {:path => '/menu-management',
+                 :regular_expression => /^\/menu-management/, 
+                 :title => 'Menu', 
+                 :description => 'Manages the menus: creation and update of menus',
+                 :fit => 1,
+                 :module => :cms },
+                {:path => '/menu-item-management/:menu_name',
+                 :parent_path => "/menu-management",
+                 :regular_expression => /^\/menu-item-management\/.+/,                  
+                 :title => 'Menu item',
+                 :description => 'Manage the items of a menu.',
+                 :fit => 1,
+                 :module => :cms }
+               ]
         
     end
 
@@ -301,8 +335,13 @@ module Huasi
     #
     def block_list(context={})
       
-      blocks = get_views_as_blocks(context) || []
-        
+      blocks = []
+      blocks.concat(get_menus_as_blocks(context))
+      blocks.concat(get_breadcrumb_as_block(context))
+      blocks.concat(get_views_as_blocks(context))
+      
+      return blocks
+     
     end
     
     # Get a block representation 
@@ -317,8 +356,61 @@ module Huasi
     #   The representation of the block
     #
     def block_view(context, block_name)
+       
+      app = context[:app]
+    
+      result = case block_name
       
-      result = render_view_as_block(context, block_name) || ''
+        when 'site_breadcrumb'
+          
+          breadcrumb = Site::BreadcrumbBuilder.build(app.request.path_info, context)         
+          bc_render = SiteRenders::BreadcrumbRender.new(breadcrumb, context)
+          
+          bc_render.render
+        
+        when 'site_adminmenu'
+          
+          if app.user and app.user.is_superuser?
+          
+            # Retrieve the admin menu options
+            admin_menu = {:name => 'admin_menu', :title => 'Admin menu', :description => 'Administration menu'}
+            admin_menu_items = Plugins::Plugin.plugin_invoke_all('menu', context)
+                    
+            # Build the menu
+            menu = Site::Menu.build(admin_menu, admin_menu_items)
+           
+            # Render the menu
+            menu_render = SiteRenders::MenuRender.new(menu, context)
+          
+            menu_render.render
+          
+          end
+       
+       when /^menu_/
+       
+         menu_name = block_name.match(/^menu_(.+)/)[1]
+         
+         if menu = Site::Menu.get(menu_name)
+           menu_render = SiteRenders::MenuRender.new(menu, context)
+           menu_render.render
+         else
+           ''
+         end
+      
+       when /^view_/ # view as a block   
+
+         view_name = block_name.sub(/view_/,'')
+       
+         if view = ContentManagerSystem::View.get(view_name)
+            view_render = ::CMSRenders::ViewRender.new(view, app).render  # Gets the view representation  
+         else
+            ''
+         end
+  
+      end
+
+      return result
+ 
       
     end
     
@@ -352,7 +444,43 @@ module Huasi
     
     # ============ Helpers methods ===========
     
-    # Retrive the views as a blocks
+    #
+    # Retrieves the menus as blocks
+    #
+    def get_menus_as_blocks(context)
+
+      blocks = [{:name => 'site_adminmenu',
+                 :module_name => :cms,
+                 :theme => Themes::ThemeManager.instance.selected_theme.name}]
+      
+      # Adds the menus as blocks
+        
+      Site::Menu.all.each do |menu|
+      
+        blocks << {:name => "menu_#{menu.name}",
+                   :module_name => :cms,
+                   :theme => Themes::ThemeManager.instance.selected_theme.name}
+      
+      end
+
+      return blocks
+
+    end
+
+    #
+    # Retrieve the breadcrumb as a block
+    #
+    def get_breadcrumb_as_block(context)
+  
+      blocks = [{:name => 'site_breadcrumb',
+                 :module_name => :cms,
+                 :theme => Themes::ThemeManager.instance.selected_theme.name}]
+
+      return blocks
+    
+    end
+
+    # Retrive the views as blocks
     # 
     #
     def get_views_as_blocks(context)
@@ -369,26 +497,5 @@ module Huasi
     
     end
     
-    # Retrieve a view as a block
-    #
-    #
-    def render_view_as_block(context, block_name)
-        
-      view_name = block_name.sub(/view_/,'')
-      
-      #puts "block name : #{block_name} view : #{view_name}"
-       
-      app = context[:app]
-    
-      view = DataMapper.repository(app.settings.cms_views_repository) do
-        ContentManagerSystem::View.get(view_name)
-      end
-      
-      #puts "view : #{view.to_json}"
-            
-      ::CMSRenders::ViewRender.new(view, app).render if view # Gets the view representation  
-                   
-    end
-
   end
 end

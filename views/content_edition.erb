@@ -180,8 +180,11 @@
 
 <script type="text/javascript">
 
-require(["YSDEntityManagement", "YSDEntityManagementComplementHooks", "YSDRemoteDataSource", "YSDHierachyListAdapter", "YSDSelectHierarchicalSelector", "jquery"], function(EntityManagement, EntityManagementComplementHooks, YSDRemoteDataSource, YSDHierachyListAdapter, YSDSelectHierarchicalSelector,  $) {
-	
+// jquery
+// tabs => jquery.ui
+
+require(["jquery", "YSDEntityManagement", "YSDEntityManagementComplementHooks", "YSDRemoteDataSource", "YSDHierachyListAdapter", "YSDSelectHierarchicalSelector","jquery.ui"], function($, EntityManagement, EntityManagementComplementHooks, YSDRemoteDataSource, YSDHierachyListAdapter, YSDSelectHierarchicalSelector) {
+  	
   var contentsHook = {
  	   
  	entity: null,   

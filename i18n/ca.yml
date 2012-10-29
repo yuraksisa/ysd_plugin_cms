@@ -1,12 +1,6 @@
-contents:
-  description: <p>Aquesta pàgina proporciona una interface per crear i modificar els contiguts de la seva web.</p>
-content:
-  by: per
-  published: publicat
-  categories: categories
-view_styles:
-  teaser: Teaser (resum estàndar)
-  fields: Selecció de camps del model 
+#
+# Menus
+#
 cms_admin_menu:
   cms_menu: Gestió de continguts
   contenttype_management: Tipus de contigut
@@ -16,6 +10,54 @@ cms_admin_menu:
   build_site_menu: Construir site
   block_management: Blocs
   view_management: Vistes
+site_admin_menu:
+  admin_menu: Admin
+  menu_management: Menus
+#
+# Content management
+#
+contents:
+  description: <p>Aquesta pàgina proporciona una interface per crear i modificar els contiguts de la seva web.</p>
+#
+# Content render
+#
+content:
+  by: per
+  published: publicat
+  categories: categories
+#
+# Content Type management
+#
+content_type_management:
+  title: Tipus de contingut
+  description: >
+               <p>Todos los contenidos que existen en un sitio son de uno de los tipos definidos a continuación. 
+               El <em>tipo de contenido</em> le permite configurar el comportamiento del contenido como por ejemplo 
+               si acepta comentarios o la información que contiene, o los vocabularios cuyos términos pueden pueden
+               utilizarse para etiquetarlo.</p>
+  form:
+    id:
+      label: Id
+      required: L\'Id és obligatori
+    name:
+      label: Nom
+      required: El nom del tipus de contingut és obligatori
+    description:
+      label: Descripció
+    aspects:
+      label: Aspectes
+    usergroups:
+      label: Qui pot crear contiguts d\'aquest tipus
+    aspect_aspect:
+      label: Aspecte
+    aspect_weight:
+      label: Pes
+#
+# Views management
+#
+view_styles:
+  teaser: Teaser (resum estàndar)
+  fields: Selecció de camps del model 
 entity:
   term: Termes de vocabulari
   content: Continguts
@@ -31,9 +73,15 @@ entity_fields:
       creation_user: Usuari creador
     term:
       description: Descripció
+#
+# Comments
+#    
 comments:
   title: Comentaris
   message: Escriu el comentari
   post: Publicar
+#
+# Aspects
+#  
 aspect:
   comments: Comentaris. (acceptar comentaris)
