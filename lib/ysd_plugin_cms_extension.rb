@@ -1,5 +1,6 @@
 # encoding: utf-8
 require 'ysd-plugins_viewlistener' unless defined?Plugins::ViewListener
+require 'ui/ysd_ui_page_component' unless defined?UI::PageComponent
 
 #
 # Huasi CMS Extension
@@ -122,7 +123,7 @@ module Huasi
                                   :weight => 10}},
                     {:path => '/cms/contenttypes',
                      :options => {:title => app.t.cms_admin_menu.contenttype_management,
-                                  :link_route => "/content-type-management",
+                                  :link_route => "/mctypes",
                                   :description => 'Manages the content types: creation and update of content types.',
                                   :module => 'cms',
                                   :weight => 6}},
@@ -180,12 +181,19 @@ module Huasi
     #
     def routes(context={})
     
-      routes = [{:path => '/content-type-management',
-      	         :regular_expression => /^\/content-type-management/, 
+      routes = [{:path => '/mctypes',
+      	         :regular_expression => /^\/mctypes/, 
                  :title => 'Content type' , 
                  :description => 'Manages the content types: creation and update of content types.',
                  :fit => 1,
                  :module => :cms},
+                {:path => '/mctype/:type/aspect/:aspect',
+                 :parent_path => "/mctypes",
+                 :regular_expression => /^\/mctype\/.+\/aspect\/.+/, 
+                 :title => 'Content type aspect configuration', 
+                 :description => 'Edit the content type/aspect configuration',
+                 :fit => 1,
+                 :module => :cms},                 
                 {:path => '/mcontents',
                  :regular_expression => /^\/mcontents/, 
                  :title => 'Content', 
@@ -286,12 +294,13 @@ module Huasi
     #end
         
     #
-    # page preprocess
+    # Page process
     #
     # @param [Context]
+    #
     # @return [Hash]
     #
-    #  A Hash where each key represents a variable and the value is an array 
+    #  A Hash where each key represents a variable, the region to insert the content, and the value is an array of blocks
     #
     def page_preprocess(context={})
     
@@ -306,14 +315,28 @@ module Huasi
       blocks.each do |block|
         
         key = block.region.to_sym
-        result.store(key, []) if not result.has_key?(key)       
-        result[key].push(block) if block.can_be_shown?(app.user, app.request.path_info) # Add the block only if can be shown
-              
+
+        if not result.has_key?(key)
+          result.store(key, [])      
+        end
+
+        if block.can_be_shown?(app.user, app.request.path_info) # Add the block only if can be shown
+
+          block_render = CMSRenders::BlockRender.new(block, app).render || ''
+          
+          if String.method_defined?(:force_encoding)
+            block_render.force_encoding('utf-8')
+          end
+
+          result[key].push(UI::PageComponent.new({:component => block, 
+                                                  :weight => block.weight, 
+                                                  :render => block_render })) 
+        end
+
       end
       
-      #puts "page_preprocess : #{result.to_json}"
       
-      result
+      return result
         
     end
 

@@ -51,6 +51,7 @@
                  <tr>
                    <th class="table-header-title" width="20%"><%=t.content_type_management.form.aspect_aspect.label%></th>
                    <th class="table-header-title" width="40%"><%=t.content_type_management.form.aspect_weight.label%></th>
+                   <th class="table-header-title" width="20%"><%=t.content_type_management.form.aspect_config.label%></th>
                  </tr>
                </thead>
                <tbody>
@@ -58,6 +59,7 @@
                  <tr class="table-row">
                    <td class="table-cell"><%%=entity.aspects[idx].aspect%></td>
                    <td class="table-cell"><%%=entity.aspects[idx].weight%></td>
+                   <td class="table-cell"><a href="/mctype/<%%=entity.aspects[idx].content_type_id%>/aspect/<%%=entity.aspects[idx].aspect%>">config</a></td>
                  </tr>
                <%% } %>
                </tbody>
@@ -274,11 +276,11 @@
   };
   
   var urls = { 
-  	           query_url  : '/content-types',
-    	         create_url : '/content-type',
-  	           update_url : '/content-type',
-  	           delete_url : '/content-type',
-  	           get_url    : '/content-type'
+  	           query_url  : '/ctypes',
+    	         create_url : '/ctype',
+  	           update_url : '/ctype',
+  	           delete_url : '/ctype',
+  	           get_url    : '/ctype'
   	         };
 
   var contentTypeHook = new ContentTypeHook();

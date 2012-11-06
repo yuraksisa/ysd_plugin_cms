@@ -49,31 +49,33 @@
 
 <script type="text/javascript">
  
-  function NewContentHook() {
- 	   
-    this.entityKey = function(entity) {
-      return entity.id;
-    }
-  
-    this.onRenderEntities = function(entities) {
-    
-      $('.new-entity-button').hide();
-      $('.edit-entity-button').hide();
-      $('.page-navigation').hide();
-      	
-    }  
-  	
-  };
-  
-  var urls = { 
-  	           query_url  : '/accepted-content-types'
-  	         };
+  require(['jquery','YSDEntityManagement'], function($, EntityManagement) {
 
-  var newContentHook = new NewContentHook();
-  var newContentManager = new EntityManagement(urls, 'content', 20, newContentHook,
-                                               {url_base: '/content/new', action: 'list'});
+    function NewContentHook() {
+ 	   
+      this.entityKey = function(entity) {
+       return entity.id;
+      }
+  
+      this.onRenderEntities = function(entities) {
+    
+        $('.new-entity-button').hide();
+        $('.edit-entity-button').hide();
+        $('.page-navigation').hide();
+      	
+      }  
+  	
+    };
+  
+    var urls = { 
+    	           query_url  : '/ctypesuser'
+  	           };
+
+    var newContentHook = new NewContentHook();
+    var newContentManager = new EntityManagement(urls, 'content', 20, newContentHook,
+                                                {url_base: '/mcontent/new', action: 'list'});
  
-  $('.entity-title').html('New content');
+    $('.entity-title').html('New content');
   
-  
+  });
 </script>

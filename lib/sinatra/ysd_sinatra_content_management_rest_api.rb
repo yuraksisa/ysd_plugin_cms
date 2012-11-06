@@ -6,17 +6,34 @@ module Sinatra
       def self.registered(app)
                             
         app.set :contents_page_size, 10                    
-                            
+        
+        #                    
         # Retrive the contents
+        #
         ["/contents","/contents/page/:page"].each do |path|
           
           app.post path do
-          
+
+            conditions = {}          
+            
+            #
+            # Search information (from body)
+            #
+            if request.media_type == "application/x-www-form-urlencoded" # Just the text
+              request.body.rewind
+              search_text=request.body.read
+            else
+              if request.media_type == "application/json" #json object
+                request.body.rewind
+                search_object = JSON.parse(URI.unescape(request.body.read))                
+              end
+            end
+
             page = params[:page].to_i || 1
             limit = settings.contents_page_size
             offset = (page-1) * settings.contents_page_size
             
-            data, total = ContentManagerSystem::Content.find_all({:limit => limit, :offset => offset})
+            data, total = ContentManagerSystem::Content.find_all({:conditions => conditions, :limit => limit, :offset => offset})
           
             content_type :json
             {:data => data, :summary => {:total => total}}.to_json

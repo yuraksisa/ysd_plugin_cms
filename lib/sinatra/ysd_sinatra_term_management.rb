@@ -10,9 +10,8 @@ module Sinatra
         app.get "/term-management/:taxonomy_id/?*" do
           
           # TODO check that the taxonomy id exists
-          opts = render_entity_aspects(:term)
           
-          load_page(:term_management, :locals => opts)
+          load_em_page(:term_management, :term, true, :locals => opts)
           
         end
               

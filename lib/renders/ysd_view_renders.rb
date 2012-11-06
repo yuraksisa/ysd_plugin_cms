@@ -55,7 +55,7 @@ module CMSRenders
       #   The view to render
       #      
       def find_template(view)
-      
+        
         view_template_path = Themes::ThemeManager.instance.selected_theme.resource_path("render-view-#{view.view_name}.erb","template","cms") ||
                              Themes::ThemeManager.instance.selected_theme.resource_path("render-view-#{view.render}.erb","template","cms")
                              

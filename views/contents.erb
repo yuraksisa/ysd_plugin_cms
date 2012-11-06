@@ -1,28 +1,47 @@
 <%= include('entity-management') %>
 
 <!-- Renders the element description -->
+<script type="text/tmpl" id="elements_title">
+  <h2><%=t.content_management.title%></h2>
+</script>
+
 <script type="text/tmpl" id="elements_description">
+ <%= t.content_management.description %>
+</script>
 
- <%= t.contents.description %>
-
+<script type="text/tmpl" id="elements_search">
+  <form name="contents_search" id="contents_search">
+    <div class="formrow">
+      <select name="type" id="type"/>
+      <div id="categories_container" style="display:inline-block; position:relative; top:10px">
+        <select name="categories[]" id="categories" multiple="multiple" style="display:none"/>
+      </div>
+      <input type="button" class="action-button entity-management-button search-entity-button" value="<%=t.content_management.search_form.search_button.label%>">
+    </div>
+  </form>
 </script>
 
 <!-- Renders the elements container -->
 <script type="text/tmpl" id="elements_container_template">
-
-  <table id="elements_table" class="table">
-     <thead class="table-header">
-       <tr>
-         <th class="table-header-title" scope="col" style="width:25%">Title</th>
-         <th class="table-header-title" scope="col" style="width:20%">Type</th>
-         <th class="table-header-title" scope="col" style="width:15%">Author</th>
-         <th class="table-header-title" scope="col" style="width:20%">Creation Date</th>
-         <th class="table-header-title" scope="col" style="width:20%">Actions</th>
-       </tr>
-     </thead>
-     <tbody id="elements_tbody" class="table-tbody">             
-     </tbody>
-  </table>
+    
+  <form name="bulk_actions" id="bulk_actions">
+  <div class="table-container">
+    <table id="elements_table" class="table">
+       <thead class="table-header">
+         <tr>
+           <th class="table-header-title" scope="col" style="width:1em"></th>
+           <th class="table-header-title" scope="col" style="width:25%">Title</th>
+           <th class="table-header-title" scope="col" style="width:20%">Type</th>
+           <th class="table-header-title" scope="col" style="width:15%">Author</th>
+           <th class="table-header-title" scope="col" style="width:20%">Creation Date</th>
+           <th class="table-header-title" scope="col" style="width:20%">Actions</th>
+         </tr>
+       </thead>
+       <tbody id="elements_tbody" class="table-tbody">             
+       </tbody>
+    </table>
+  </div>
+  </form>
 
 </script>
 
@@ -31,6 +50,7 @@
 <script type="text/tmpl" id="elements_list_template">
 
     <tr class="table-row" rel="<%%= index %>" id="element_row_<%%=index%>">
+      <td class="table-cell selectable-entity"><input type="checkbox" name="id[]" value="<%%=entity.key%>"/></td>
       <td class="table-cell"><a href="<%%='/content/'+entity.key%>"><%%=entity.title %></a></td>
       <td class="table-cell" rel="<%%= index %>"><%%= entity.type %></td>
       <td class="table-cell" rel="<%%= index %>"><%%= entity.creation_user %></td>
@@ -54,7 +74,8 @@
 
 <script type="text/javascript">
  
-require(["YSDEntityManagement","jquery"], function(YSDEntityManagement, $) {
+require(["YSDEntityManagement", "YSDSelectSelector", "YSDRemoteDataSource", "YSDDataAdapter", "jquery", "jquery.fcbkcomplete"], 
+        function(YSDEntityManagement, SelectSelector, RemoteDataSource, DataAdapter, $) {
  
   var contentsHook = {
  	   
@@ -68,6 +89,8 @@ require(["YSDEntityManagement","jquery"], function(YSDEntityManagement, $) {
     
       $('.new-entity-button').hide();
       $('.edit-entity-button').hide();
+      
+      this.configSearchForm();
       	
     }, 
      	     	
@@ -80,7 +103,25 @@ require(["YSDEntityManagement","jquery"], function(YSDEntityManagement, $) {
       
       return categories;	
   		
-  	}
+  	},
+
+    configSearchForm : function() {
+      
+      // content type search
+      var contentTypesDataSource = new RemoteDataSource("/ctypesuser",{'id':'id','description':'name'});
+      var contentTypesListSelector = new SelectSelector("type", contentTypesDataSource, null, true, '- View all content types -');
+      
+      // tags or categories
+      $('#categories').fcbkcomplete({json_url: '/terms', 
+                                     cache: true, 
+                                     width: 200, 
+                                     adapter_matching_properties: {'key':'id', 'value':'description'},
+                                     attachto: '#categories_container',
+                                     input_size: 23,
+                                     input_placeholder: '- View all categories -'
+                                      });
+      
+    }
   	
   };
 
@@ -101,8 +142,6 @@ require(["YSDEntityManagement","jquery"], function(YSDEntityManagement, $) {
   */
      	           
   var contentsManager = new YSDEntityManagement(urls, 'content', <%=settings.contents_page_size%>, hooks);
- 
-  $('.entity-title').html('Contents');
   
 });
   

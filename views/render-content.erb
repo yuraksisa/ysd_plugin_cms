@@ -49,6 +49,13 @@
 </div>
 <% end %>
 
+<!-- Extras (above the content ) -->
+<% if defined?element_custom_above and element_custom_above.strip.length > 0%>
+<div class="content-custom">
+   <%= element_custom_above %>
+</div>
+<% end %>
+
 <!-- Content body -->
 
 <div class="content-body">

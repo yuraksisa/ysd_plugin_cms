@@ -1,3 +1,5 @@
+require 'ui/ysd_ui_entity_management_aspect_render' unless defined?UI::EntityManagementAspectRender
+
 module Sinatra
   module YSD
     module ContentManagement
@@ -9,13 +11,14 @@ module Sinatra
           #
           # Get the content complements
           # 
-          def content_type_aspects(content_type_id)
+          def render_content_type_aspects(content_type_id)
             
             context = {:app => self}
             result = {}
                     
             if content_type = ContentManagerSystem::ContentType.get(content_type_id)
-              result = render_aspects(content_type.get_aspects(context), content_type)
+              aspects_render=UI::EntityManagementAspectRender.new(context, content_type.aspects) 
+              result = aspects_render.render(content_type)
             end            
              
             return result
@@ -33,7 +36,7 @@ module Sinatra
             pass
           end        
         
-          load_page :contents
+          load_em_page(:contents, nil, false)
         
         end
         
@@ -42,7 +45,7 @@ module Sinatra
         #
         app.get "/mcontent/new/?" do
         
-          load_page :content_new
+          load_em_page(:content_new, nil, false)
         
         end
            
@@ -52,14 +55,14 @@ module Sinatra
         app.get "/mcontent/new/:content_type/?*" do
                     
           # TODO check that the content_type exists
-          locals = content_type_aspects(params[:content_type])
+          locals = render_content_type_aspects(params[:content_type])
           locals.store(:url_base, '/mcontent/new')
           locals.store(:action, 'new')
           locals.store(:id, nil)
           locals.store(:content_type, params[:content_type])
           locals.store(:title, "New content (#{params[:content_type]})")
                     
-          load_page :content_edition, :locals => locals
+          load_em_page(:content_edition, nil, false, :locals => locals)
         
         end      
         
@@ -71,14 +74,14 @@ module Sinatra
           # TODO check that the content id exists
           content = ContentManagerSystem::Content.get(params[:id])
 
-          locals = content_type_aspects(content.type)
+          locals = render_content_type_aspects(content.type)
           locals.store(:url_base, '/mcontent/edit')
           locals.store(:action, 'edit')
           locals.store(:id, params[:id])          
           locals.store(:content_type, content.type)
           locals.store(:title, 'Edit content')
 
-          load_page :content_edition, :locals => locals
+          load_em_page(:content_edition, nil, false, :locals => locals)
         
         end
                 
@@ -90,14 +93,14 @@ module Sinatra
           # TODO check that the content id exists
           content = ContentManagerSystem::Content.get(params[:id])
 
-          locals = content_type_aspects(content.type)
+          locals = render_content_type_aspects(content.type)
           locals.store(:url_base, '/mcontent')
           locals.store(:action, 'view')
           locals.store(:id, params[:id])          
           locals.store(:content_type, content.type)
           locals.store(:title, 'Content')
 
-          load_page :content_edition, :locals => locals
+          load_em_page(:content_edition, nil, false, :locals => locals)
         
         end   
         

@@ -16,8 +16,17 @@ site_admin_menu:
 #
 # Content management
 #
-contents:
-  description: <p>Aquesta pàgina proporciona una interface per crear i modificar els contiguts de la seva web.</p>
+content_management:
+  title: Continguts
+  description: >
+               <p>Aquesta pàgina proporciona una interface per crear i modificar els contiguts de la seva web.</p>
+  search_form:
+    type:
+      label: Tipus
+    categories:
+      label: Categories
+    search_button:
+      label: Filtrar
 #
 # Content render
 #
@@ -52,6 +61,8 @@ content_type_management:
       label: Aspecte
     aspect_weight:
       label: Pes
+    aspect_config:
+      label: Configurar
 #
 # Views management
 #

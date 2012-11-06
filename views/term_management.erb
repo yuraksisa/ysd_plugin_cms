@@ -48,14 +48,14 @@
        <div class="entity-field"><div class="entity-fieldlabel">Weight</div> <div class="entity-fieldvalue"><%%= entity.weight %></div> </div>
      </div>
      
-     <% if defined?element_template and element_template.to_s.strip.length > 0 %>
-       <div id="tabs_template">
-         <ul>
-           <%= element_template_tab if defined?element_template_tab %>
-         </ul>
-         <%= element_template if defined?element_template %>
-       </div>
-     <% end %>
+     <%= element_template_above %>
+
+     <div id="tabs_template">
+       <ul>
+          <%= element_template_tab %>
+       </ul>
+       <%= element_template %>
+     </div>
           
      <div class="element_template_actions">
        <div class="element_template_actions_buttons">
@@ -102,14 +102,12 @@
             <select name="parent[id]" id="parent[id]" class="fieldcontrol" size="10"></select>
           </div>      
           
-          <% if defined?element_form and element_form.to_s.strip.length > 0 %>
-            <div id="tabs">
-              <ul>
-                <%= element_form_tab if defined?element_form_tab %>
-              </ul>
-              <%= element_form if defined?element_form %>
-            </div>
-          <% end %>
+          <div id="tabs">
+            <ul>
+              <%= element_form_tab%>
+            </ul>
+            <%= element_form %>
+          </div>
                 
         </div>
         

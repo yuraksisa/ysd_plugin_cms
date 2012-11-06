@@ -23,8 +23,7 @@ module Sinatra
              pass
           end
           
-          context = {:app => self}
-          page(content)
+          page_from_content(content)
           
         end
                       
@@ -39,35 +38,13 @@ module Sinatra
            
            # Gets the content
            
-           content = ContentManagerSystem::Content.get(File.join(session[:locale], params[:id])) ||
-                     ContentManagerSystem::Content.get(params[:id])
-  
-           # Get extra data from extensions
-           context = {:app => self}          
-               
-           # Render the content
-           if content 
-             page(content)
+           if content = ContentManagerSystem::Content.get(File.join(session[:locale], params[:id])) ||
+                        ContentManagerSystem::Content.get(params[:id])
+             page_from_content(content)
            else
              status 404
            end        
       
-        end
-        
-        #
-        # Load a content without layout (for printing ...)
-        #       
-        app.get '/content/:id/nolayout' do
- 
-           content = ContentManagerSystem::Content.get(File.join(session[:locale], params[:id])) ||
-                     ContentManagerSystem::Content.get(params[:id])
-           
-           if content           
-             page content, :layout => false             
-           else
-             status 404
-           end        
-        
         end
         
 

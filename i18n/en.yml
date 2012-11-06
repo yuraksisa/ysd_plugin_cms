@@ -16,8 +16,18 @@ site_admin_menu:
 #
 # Content management
 #
-contents:
-  description: <p>This pages supplies an interface to create and to modify your web site contents.</p>
+
+content_management:
+  title: Contents
+  description: >
+               <p>This pages supplies an interface to create and to modify your web site contents.</p>
+  search_form:
+    type:
+      label: Type
+    categories:
+      label: Categories
+    search_button:
+      label: Filter
 #
 # Content render
 #  
@@ -50,7 +60,9 @@ content_type_management:
     aspect_aspect:
       label: Aspect
     aspect_weight:
-      label: Weight       
+      label: Weight
+    aspect_config:
+      label: Configure       
 #
 # Views management
 #  

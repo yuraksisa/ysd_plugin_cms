@@ -1,5 +1,22 @@
 <%= include('entity-management') %>
 
+<style type="text/css">
+  .ui-tabs-vertical { width:95%; border:none; padding-left:0px;}
+  .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 25%; background: #EEE;}
+  .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 95%; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; border: 1px solid #DDD; }
+  .ui-tabs-vertical .ui-tabs-nav li a { display:block; border-bottom: none;}
+  .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {}
+  .ui-tabs-vertical .ui-tabs-panel { float: right; width: 70%; padding: 5px 10px 10px 10px; border: 1px solid #CCC; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px;}
+  .content-type-fieldvalue {
+  text-align: right;
+  width: auto;
+  background: whiteSmoke;
+  border-radius: 5px;
+  padding: 5px;
+  float: right;  
+   }
+</style>
+
 <!-- Renders the element description -->
 <script type="text/tmpl" id="elements_description">
 
@@ -21,51 +38,70 @@
 <script type="text/tmpl" id="element_template">
 
      <div class="element_template" style="overflow:hidden">
+       <div class="entity-field"><span class="content-type-fieldvalue entity-fieldvalue"><%%= entity.type.charAt(0).toUpperCase() + entity.type.slice(1) %></span></div>
        <div class="entity-field"><span class="entity-fieldlabel">Title</span> <span class="entity-fieldvalue"><a href="<%%='/content/'+entity.key%>"><%%=entity.title %></a></span> </div>
-       <div class="entity-field"><span class="entity-fieldlabel">Type</span> <span class="entity-fieldvalue"><%%= entity.type %></span> </div>
-       <div class="entity-field"><span class="entity-fieldlabel">Categories</span> <span class="entity-fieldvalue"><%%= self.model.entityHooks[0].formatCategories(entity) %></span></div>
-       <div class="entity-field"><span class="entity-fieldlabel">Alias</span> <span class="entity-fieldvalue"><%%= entity.alias %></span> </div>
-              
-       <div id="tabs_template">
-         
-         <ul>
-           <li><a href="#content_template">Content</a></li>
-           <%= element_template_tab %>
-           <li><a href="#audit_template">Audit</a></li>
-           <li><a href="#meta_template">Meta</a></li>
-         </ul>      
-         
-         <div id="content_template">
-           <div> <%%= entity.body %> </div>
+       <%%if (entity.categories_info && entity.categories_info.length > 0) {%>
+       <div class="entity-field"><span class="entity-fieldlabel">Categories/Tags</span> <span class="entity-fieldvalue"><%%= self.model.entityHooks[0].formatCategories(entity) %></span></div>
+       <%%}%>
+       
+       <div class="entity-field">
+         <div id="tabs_template_above">
+           <ul>
+             <%= element_template_above_tab %>
+           </ul>      
+           <%= element_template_above %>
          </div>
-         
-         <%= element_template %>
-         
-         <div id="audit_template">
-           <div class="entity-field"><span class="entity-fieldlabel">Creation date</span> <span class="entity-fieldvalue"><%%= self.formatDate(entity.creation_date) %></span> </div>
-           <div class="entity-field"><span class="entity-fieldlabel">Creation user</span> <span class="entity-fieldvalue"><%%= entity.creation_user %></span> </div>
-           <div class="entity-field"><span class="entity-fieldlabel">Last update</span> <span class="entity-fieldvalue"><%%= self.formatDate(entity.last_update) %></span> </div>         
-           <div class="entity-field"><span class="entity-fieldlabel">Last update user</span> <span class="entity-fieldvalue"><%%= entity.last_update_user %></span> </div>
-         </div>
-         
-         <div id="meta_template">
-           <div class="entity-field"><span class="entity-fieldlabel">Subtitle</span> <span class="entity-fieldvalue"><%%= entity.subtitle %></span> </div>
-           <div class="entity-field"><span class="entity-fieldlabel">Description</span> <span class="entity-fieldvalue"><%%= entity.description %></span> </div>
-           <div class="entity-field"><span class="entity-fieldlabel">Summary</span> <span class="entity-fieldvalue"><%%= entity.summary %></span> </div>
-           <div class="entity-field"><span class="entity-fieldlabel">Keywords</span> <span class="entity-fieldvalue"><%%= entity.keywords %></span> </div>
-           <div class="entity-field"><span class="entity-fieldlabel">Language</span> <span class="entity-fieldvalue"><%%= entity.language %></span> </div>                                                     
-           <div class="entity-field"><span class="entity-fieldlabel">Author</span> <span class="entity-fieldvalue"><%%= entity.author %></span> </div>
-         </div>
-                         
-     </div>
-
-     <% if element_action.strip.length > 0 %>
-     <div class="element_template_actions">
-       <div class="element_template_actions_buttons">
-         <%= element_action %>
        </div>
-     </div>
-     <% end %>
+
+       <div class="entity-field">
+         <span class="entity-fieldlabel">Body</span>
+         <span class="entity-fieldvalue more-block">
+           <div class="more-less">
+             <div class="more-block">
+               <%%=entity.body%>
+             </div>
+           </div>
+         </span>
+       </div>
+
+       <div class="entity-field"><span class="entity-fieldlabel">Alias</span> <span class="entity-fieldvalue"><%%= entity.alias %></span> </div>
+
+       <div class="entity-field">
+         <div id="tabs_template">
+         
+           <ul>
+             <%= element_template_tab %>
+             <li><a href="#audit_template">Audit</a></li>
+             <li><a href="#meta_template">Meta</a></li>
+           </ul>      
+                  
+           <%= element_template %>
+         
+           <div id="audit_template">
+             <div class="entity-field"><span class="entity-fieldlabel">Creation date</span> <span class="entity-fieldvalue"><%%= self.formatDate(entity.creation_date) %></span> </div>
+             <div class="entity-field"><span class="entity-fieldlabel">Creation user</span> <span class="entity-fieldvalue"><%%= entity.creation_user %></span> </div>
+             <div class="entity-field"><span class="entity-fieldlabel">Last update</span> <span class="entity-fieldvalue"><%%= self.formatDate(entity.last_update) %></span> </div>        
+             <div class="entity-field"><span class="entity-fieldlabel">Last update user</span> <span class="entity-fieldvalue"><%%= entity.last_update_user %></span> </div>
+           </div>
+         
+           <div id="meta_template">
+             <div class="entity-field"><span class="entity-fieldlabel">Subtitle</span> <span class="entity-fieldvalue"><%%= entity.subtitle %></span> </div>
+             <div class="entity-field"><span class="entity-fieldlabel">Description</span> <span class="entity-fieldvalue"><%%= entity.description %></span> </div>
+             <div class="entity-field"><span class="entity-fieldlabel">Summary</span> <span class="entity-fieldvalue"><%%= entity.summary %></span> </div>
+             <div class="entity-field"><span class="entity-fieldlabel">Keywords</span> <span class="entity-fieldvalue"><%%= entity.keywords %></span> </div>
+             <div class="entity-field"><span class="entity-fieldlabel">Language</span> <span class="entity-fieldvalue"><%%= entity.language %></span> </div>
+             <div class="entity-field"><span class="entity-fieldlabel">Author</span> <span class="entity-fieldvalue"><%%= entity.author %></span> </div>
+           </div>
+        </div>
+      </div>             
+
+      <% if element_action.strip.length > 0 %>
+      <div class="element_template_actions">
+        <div class="element_template_actions_buttons">
+          <%= element_action %>
+        </div>
+      </div>
+      <% end %>
 
    </div>
    
@@ -97,13 +133,20 @@
             <div class="fielddescription">The content title.</div>
           </div>
 
-          <div id="content_taxonomies" class="formrow">
+          <div id="content_taxonomies" class="formrow" style="display:none">
             <label class="fieldtitle">Categories</label>
             <div class="entity-block fieldcontrol" id="taxonomies">            
             </div>
             <div class="fielddescription">Categories permit you to tag or categorize the content.</div>
           </div>
           
+          <div id="tabs_above">
+            <ul>
+              <%= element_form_above_tab %>
+            </ul>          
+            <%= element_form_above %>
+          </div>
+
           <div class="formrow">
             <label for="body" class="fieldtitle">Content <span class="mandatoryfield">*</span></label>
             <textarea rows="20" id="body" name="body" class="fieldcontrol texteditor"><%% if (entity) {%><%%=entity.body %><%% } %></textarea>
@@ -220,8 +263,11 @@ require(["jquery", "YSDEntityManagement", "YSDEntityManagementComplementHooks", 
       $('.new-entity-button').hide();
       $('.page-navigation').hide();
       $('.navigation-bar-nav-buttons').hide();
-  	  $('#tabs_template').tabs();	
-  	},
+      $('#tabs_template_above').tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
+      $('#tabs_template_above li').removeClass("ui-corner-top").addClass("ui-corner-left");
+  	  $('#tabs_template').tabs();      	
+  	  this.configureMoreLessBody();
+    },
   	
   	adaptFormData : function(data) {
   	
@@ -253,11 +299,45 @@ require(["jquery", "YSDEntityManagement", "YSDEntityManagementComplementHooks", 
     /* ------- Internal function --------- */
     
     configForm : function() {
-      
+
+      $('#tabs_above').tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+      $( "#tabs_above li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+
       $('#tabs').tabs();
       
     },
-  	  	  	
+  	  
+    configureMoreLessBody : function() {
+
+      // The height of the content block when it's not expanded
+      var adjustheight = 90; 
+      // The "more" link text
+      var moreText = "+  More";
+      // The "less" link text
+      var lessText = "- Less";
+
+      // Sets the .more-block div to the specified height and hides any content that overflows
+      $(".more-less .more-block").css('height', adjustheight).css('overflow', 'hidden');
+
+      // The section added to the bottom of the "more-less" div
+      $(".more-less").append('<p class="continued">[&hellip;]</p><a href="#" class="adjust"></a>');
+
+      // Set the "More" text
+      $("a.adjust").text(moreText);
+
+      $(".adjust").toggle(function() {
+         $(this).parents("div:first").find(".more-block").css('height', 'auto').css('overflow', 'visible');
+         // Hide the [...] when expanded
+         $(this).parents("div:first").find("p.continued").css('display', 'none');
+         $(this).text(lessText);
+      }, function() {
+         $(this).parents("div:first").find(".more-block").css('height', adjustheight).css('overflow', 'hidden');
+         $(this).parents("div:first").find("p.continued").css('display', 'block');
+         $(this).text(moreText);
+      });
+
+    },
+
   	buildCategories : function(contentType) {
   	
       var taxonomies = document.getElementById('taxonomies');
@@ -311,7 +391,7 @@ require(["jquery", "YSDEntityManagement", "YSDEntityManagementComplementHooks", 
   	    	
       var categories = [];
       for (index in entity.categories_info) { 
-         categories.push(entity.categories_info[index].description);
+         categories.push('<span class="category">'+entity.categories_info[index].description+'</span>');
       }	    	
       
       return categories;	

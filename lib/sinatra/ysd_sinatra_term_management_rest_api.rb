@@ -1,10 +1,34 @@
 require 'uri'
+require 'json'
+
 module Sinatra
   module YSD
+    #
+    # Term management REST API
+    #
     module TermManagementRESTApi
        
       def self.registered(app)
-                    
+        
+        #
+        # Retrieve terms
+        #
+        app.get "/terms/?" do
+          
+          search_term_request = extract_request_query_string
+          
+          opts = {}
+          if search_term_request.has_key?('tag')
+            opts.store(:conditions, {:description.like => "#{search_term_request['tag']}%"})
+          end 
+
+          data=ContentManagerSystem::Term.all(opts)
+
+          content_type :json
+          data.to_json
+          
+        end
+
         #
         # Retrieve the list of terms which belongs to a taxonomy
         #

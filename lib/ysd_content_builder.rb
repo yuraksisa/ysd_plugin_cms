@@ -2,7 +2,7 @@ require 'ysd_md_cms' unless defined?ContentManagerSystem
 require 'ysd-plugins' if not defined?Plugins
 require 'ysd_core_themes' unless defined?Themes
 require 'renders/ysd_ui_cms_render_factory' unless defined?CMSRenders::Factory
-require 'ysd_plugin_aspects' unless defined?UIRenders::AspectsRenders
+require 'ysd_ui_entity_aspect_render' unless defined?UI::EntityAspectRender
 
 module ContentManagerSystem
 
@@ -33,13 +33,13 @@ module ContentManagerSystem
     # @param [Content] content
     # @param [Object] context
     #
-    def self.build(content, context, locals={})
+    def self.build(content, context, options={})
         
       # Creates an instance of the page
       page_builder = ContentPageBuilder.new(Themes::ThemeManager.instance.selected_theme.regions)
     
       # Builds the page
-      page_builder.build_page(content, context, locals)
+      page_builder.build_page(content, context, options)
               
     end
 
@@ -74,9 +74,19 @@ module ContentManagerSystem
     # @param [Hash] locals
     #   Locals
     #
-    def build_page(the_content, context, locals={})
+    def build_page(the_content, context, options={})
     
-      app = context[:app]
+      app    = context[:app]
+      locals = options[:locals] || {} 
+      layout = if options.has_key?(:layout)
+                 if options[:layout]
+                   options[:layout]
+                 else
+                   'blank'
+                 end
+               else 
+                 'page-render'
+               end
 
       # Get the styles 
       @styles = get_styles(context)
@@ -104,7 +114,7 @@ module ContentManagerSystem
       end
       
       # Renders the page
-      page_template_path = find_template
+      page_template_path = find_template(layout)
       page_template = Tilt.new(page_template_path) 
       page_render = page_template.render(app, locals.merge({:page => self}))          
                  
@@ -160,8 +170,8 @@ module ContentManagerSystem
       result = {}
       
       if content_type = ContentManagerSystem::ContentType.get(content.type)
-        aspects_render = UIRenders::AspectsRenders.new(context, content_type.get_aspects(context))
-        result = aspects_render.render_element(content, content_type) 
+        aspects_render = UI::EntityAspectRender.new(context, content_type.aspects) #get_aspects_definition(context))
+        result = aspects_render.render(content, content_type) 
       end   
       
       actions = content_edit_link(context, content)
@@ -238,14 +248,14 @@ module ContentManagerSystem
     # Finds the template to render the page
     #
     #
-    def find_template
+    def find_template(layout)
       
        # Search in theme path
-       page_template_path = Themes::ThemeManager.instance.selected_theme.resource_path('page-render.erb','template') 
+       page_template_path = Themes::ThemeManager.instance.selected_theme.resource_path("#{layout}.erb",'template') 
          
        # Search in the project
        if not page_template_path
-         path = get_path('page-render') #File.expand_path(File.join(File.dirname(__FILE__), '..', 'views', 'page-render.erb'))                                 
+         path = get_path(layout)                                 
          page_template_path = path if File.exist?(path)
        end
          

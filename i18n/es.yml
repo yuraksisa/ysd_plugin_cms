@@ -16,8 +16,17 @@ site_admin_menu:
 #
 # Content management
 #  
-contents:
-  description: <p>Esta pagina proporciona una interfaz para crear y modificar los contenidos de su sitio web.</p>
+content_management:
+  title: Contenido
+  description: >
+               <p>Esta pagina proporciona una interfaz para crear y modificar los contenidos de su sitio web.</p>
+  search_form:
+    type:
+      label: Tipo
+    categories:
+      label: Categorías
+    search_button:
+      label: Filtrar
 #
 # Content render
 #
@@ -52,6 +61,8 @@ content_type_management:
       label: Aspecto
     aspect_weight:
       label: Peso
+    aspect_config:
+      label: Configurar      
 #
 # Views management
 #  
