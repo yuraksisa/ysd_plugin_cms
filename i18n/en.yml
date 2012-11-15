@@ -28,10 +28,19 @@ content_management:
       label: Categories
     search_button:
       label: Filter
+  form:
+    content:
+      label: Content
+      description: The text you wish to publish
+    categories:
+      label: Categories
+      description: To classify or tag the content
+    show_tabs: More information
 #
 # Content render
 #  
 content:
+  title: Content
   by: by
   published: published
   categories: categories
@@ -44,6 +53,9 @@ content_type_management:
                <p>The site contents belong to one of the types defined here.</p>
                <p>The <em>content type</em> allows to configure the content behaviour. For example, if it accepts comments or
                the vocabularies which can be used to tag them.</p>
+  list:
+    workflow:
+      label: Workflow
   form:
     id:
       label: Id
@@ -53,6 +65,12 @@ content_type_management:
       required: The content type Name is required
     description:
       label: Description
+    message_on_new_content:
+      label: New content message
+    message_on_edit_content:
+      label: Editing content message
+    workflow:
+      label: Publishing workflow      
     aspects:
       label: Aspects
     usergroups:
@@ -60,7 +78,9 @@ content_type_management:
     aspect_aspect:
       label: Aspect
     aspect_weight:
-      label: Weight
+      label: Weight (management)
+    aspect_render_weight:
+      label: Weight (view)        
     aspect_config:
       label: Configure       
 #
@@ -91,6 +111,60 @@ comments:
   title: Comments
   message: Type your comment
   post: Post
+#
+# Publishing
+#
+publishing:
+  status:
+    draft: Draft
+    pend_conf: Pending confirmation
+    pend_valid: Pending validation
+    published: Published
+    banned: Banned
+  action:
+    confirm: Confirm
+    validate: Validate
+    publish: Publish
+    ban: Ban
+    allow: Allow
+#
+# Gui blocks
+#
+guiblock:
+  publishing:
+    title: Publish
+    description: Publish
+    status:
+      title: State
+    confirm:
+      message: Do you want to confirm the publication?
+    validate:
+      message: Do you want to validate the publication?
+    publish:
+      message: Do you want to publish the publication?
+    ban:
+      message: Do you want to ban the publication?
+    allow:
+      message: Do you want to allow the publication?
+  anonymouspublishing:
+    description: Contact data
+    information: Please, fill this information in order to publish
+    form:
+      composer_name:
+        label: Name
+        description: Your name
+        required: Your name is required
+      composer_email:
+        label: Email
+        description: Your email
+        required: Email required
+      composer_website:
+        label: Web site
+        description: Your web site    
+  meta:
+    description: Meta
+  audit:
+    description: Audit
 #
 # Aspects
 #    

@@ -23,8 +23,12 @@ module Sinatra
              pass
           end
           
-          page_from_content(content)
-          
+          if content.can_read?(user) and (not content.is_banned?)
+            page_from_content(content)
+          else
+            status 404
+          end
+
         end
                       
         #  
@@ -36,11 +40,14 @@ module Sinatra
              pass
            end
            
-           # Gets the content
-           
-           if content = ContentManagerSystem::Content.get(File.join(session[:locale], params[:id])) ||
-                        ContentManagerSystem::Content.get(params[:id])
-             page_from_content(content)
+           content = ContentManagerSystem::Content.get(File.join(session[:locale], params[:id])) || ContentManagerSystem::Content.get(params[:id])
+
+           if content and (not content.is_banned?)
+             if content.can_read?(user)
+               page_from_content(content)
+             else
+               status 401
+             end
            else
              status 404
            end        

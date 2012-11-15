@@ -1,6 +1,8 @@
 #
-# Menus
+# ------ Menus --------
 #
+
+# Content Manager
 cms_admin_menu:
   cms_menu: Gestió de continguts
   contenttype_management: Tipus de contigut
@@ -10,9 +12,12 @@ cms_admin_menu:
   build_site_menu: Construir site
   block_management: Blocs
   view_management: Vistes
+
+# Site
 site_admin_menu:
   admin_menu: Admin
   menu_management: Menus
+
 #
 # Content management
 #
@@ -27,10 +32,19 @@ content_management:
       label: Categories
     search_button:
       label: Filtrar
+  form:
+    content:
+      label: Contingut
+      description: El texte a publicar
+    categories:
+      label: Categories
+      description: Et permeten classificar i etiquetar el contingut
+    show_tabs: Més informació
 #
 # Content render
 #
 content:
+  title: Contingut
   by: per
   published: publicat
   categories: categories
@@ -44,6 +58,9 @@ content_type_management:
                El <em>tipo de contenido</em> le permite configurar el comportamiento del contenido como por ejemplo 
                si acepta comentarios o la información que contiene, o los vocabularios cuyos términos pueden pueden
                utilizarse para etiquetarlo.</p>
+  list:
+    workflow:
+      label: Workflow
   form:
     id:
       label: Id
@@ -53,6 +70,12 @@ content_type_management:
       required: El nom del tipus de contingut és obligatori
     description:
       label: Descripció
+    message_on_new_content:
+      label: Missatge al crear nou contingut
+    message_on_edit_content:
+      label: Missatge a l\'editar contingut
+    workflow:
+      label: Workflow de publicació
     aspects:
       label: Aspectes
     usergroups:
@@ -60,7 +83,9 @@ content_type_management:
     aspect_aspect:
       label: Aspecte
     aspect_weight:
-      label: Pes
+      label: Pes (gestió)
+    aspect_render_weight:
+      label: Pes (vista)        
     aspect_config:
       label: Configurar
 #
@@ -91,6 +116,60 @@ comments:
   title: Comentaris
   message: Escriu el comentari
   post: Publicar
+#
+# Publishing
+#
+publishing:
+  status:
+    draft: Esborrany
+    pend_conf: Pendent confirmació
+    pend_valid: Pendent validació
+    published: Publicat
+    banned: Bloquejat
+  action:
+    confirm: Confirmar
+    validate: Validar
+    publish: Publicar
+    ban: Bloquejar
+    allow: Permetre
+#
+# Gui blocks
+#
+guiblock:
+  publishing:
+    title: Publicació
+    description: Publicació
+    status:
+      title: Estat
+    confirm:
+      message: Vol confirmar la publicació?
+    validate:
+      message: Vol validar la publicació?
+    publish:
+      message: Vol publicar la publicació?
+    ban:
+      message: Vol bloquejar la publicació?
+    allow:
+      message: Vol permetre la publicación?         
+  anonymouspublishing:
+    description: Dades de contacte
+    information: Si us plau, introduexi les següents dades
+    form:
+      composer_name:
+        label: Nom
+        description: El seu nom
+        required: El nom és obligatori
+      composer_email:
+        label: Correu electrònic
+        description: La seva compte de correu electrònic
+        required: El correu electrònic és obligatori
+      composer_website:
+        label: Web
+        description: La seva web o blog
+  meta:
+    description: Meta
+  audit:
+    description: Auditoria  
 #
 # Aspects
 #  

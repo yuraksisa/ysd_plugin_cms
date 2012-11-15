@@ -29,6 +29,8 @@ module Sinatra
 
             locals = {}
             locals.store(:aspect, params['aspect'])
+            locals.store(:model, params['content_type'])
+            locals.store(:model_type, 'Content Type')
             locals.store(:update_url, "/ctype/#{content_type.id}/aspect/#{params['aspect']}/config")
             locals.store(:get_url,    "/ctype/#{content_type.id}/aspect/#{params['aspect']}/config")
             locals.store(:url_base,   "/ctype/#{content_type.id}/aspect/#{params['aspect']}")

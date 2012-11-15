@@ -1,0 +1,18 @@
+<div id="publishing_form" class="guiblock">
+  
+  <div class="guiblock-title">
+    <%= t.guiblock.publishing.title %>
+  </div>
+
+  <div class="formrow">
+
+   <div class="entity-field"><span class="entity-fieldlabel"><%=t.guiblock.publishing.status.title%></span> <span class="entity-fieldvalue content-status content-status-<%%=entity.publishing_state.toLowerCase().replace('_','-')%>" style="display:inline"> <%% if (entity) { %>
+     <%%= self.model.entityHooks[0].formatPublishingState(entity) %> <%% } %></span> </div>
+
+  </div>
+
+  <div class="form-row">
+    <%= publishing_buttons %>
+  </div>
+
+</div>

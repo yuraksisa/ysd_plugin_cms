@@ -1,6 +1,11 @@
 <%= include('entity-management') %>
 
 <!-- Renders the element description -->
+<script type="text/tmpl" id="elements_title">
+  <h2 class="entity-title"><%=t.content_type_management.title%></h2>
+</script>
+
+<!-- Renders the element description -->
 <script type="text/tmpl" id="elements_description">
 
   <%= t.content_type_management.description %>
@@ -14,7 +19,8 @@
      <thead class="table-header">
        <tr>
          <th class="table-header-title" scope="col" style="width:20%"><%=t.content_type_management.form.id.label%></th>
-         <th class="table-header-title" scope="col" style="width:30%"><%=t.content_type_management.form.name.label%></th>
+         <th class="table-header-title" scope="col" style="width:20%"><%=t.content_type_management.form.name.label%></th>
+         <th class="table-header-title" scope="col" style="width:10%"><%=t.content_type_management.list.workflow.label%></th>
          <th class="table-header-title" scope="col" style="width:50%"><%=t.content_type_management.form.description.label%></th>
        </tr>
      </thead>
@@ -31,6 +37,7 @@
     <tr class="table-row element-navigation-detail" rel="<%%= index %>" id="element_row_<%%=index%>">
       <td class="table-cell"><%%= entity.id %></td>
       <td class="table-cell"><%%= entity.name %></td>
+      <td class="table-cell"><%%= entity.publishing_workflow %></td>
       <td class="table-cell"><%%= entity.description %></td>
     </tr>
 
@@ -44,13 +51,18 @@
        <div class="entity-field"><div class="entity-fieldlabel"><%=t.content_type_management.form.id.label%></div> <div class="entity-fieldvalue"><span class="entity-id"><%%= entity.id %></span></div> </div>
        <div class="entity-field"><div class="entity-fieldlabel"><%=t.content_type_management.form.name.label%></div> <div class="entity-fieldvalue"><%%= entity.name %></div> </div>
        <div class="entity-field"><div class="entity-fieldlabel"><%=t.content_type_management.form.description.label%></div> <div class="entity-fieldvalue"><%%= entity.description %></div></div>
+       <div class="entity-field"><div class="entity-fieldlabel"><%=t.content_type_management.form.message_on_new_content.label%></div> <div class="entity-fieldvalue"><%%= entity.message_on_new_content %></div></div>    
+       <div class="entity-field"><div class="entity-fieldlabel"><%=t.content_type_management.form.message_on_edit_content.label%></div> <div class="entity-fieldvalue"><%%= entity.message_on_edit_content %></div></div>              
+       <div class="entity-field"><div class="entity-fieldlabel"><%=t.content_type_management.form.workflow.label%></div><div class="entity-fieldvalue"><%%= entity.publishing_workflow%></div></div>
        <div class="entity-field">
          <div class="entity-fieldlabel"><%=t.content_type_management.form.aspects.label%></div> 
+          <div class="table-container">
            <table class="table">
                <thead class="table-header">
                  <tr>
                    <th class="table-header-title" width="20%"><%=t.content_type_management.form.aspect_aspect.label%></th>
                    <th class="table-header-title" width="40%"><%=t.content_type_management.form.aspect_weight.label%></th>
+                   <th class="table-header-title" width="40%"><%=t.content_type_management.form.aspect_render_weight.label%></th>
                    <th class="table-header-title" width="20%"><%=t.content_type_management.form.aspect_config.label%></th>
                  </tr>
                </thead>
@@ -59,11 +71,13 @@
                  <tr class="table-row">
                    <td class="table-cell"><%%=entity.aspects[idx].aspect%></td>
                    <td class="table-cell"><%%=entity.aspects[idx].weight%></td>
+                   <td class="table-cell"><%%=entity.aspects[idx].render_weight%></td>
                    <td class="table-cell"><a href="/mctype/<%%=entity.aspects[idx].content_type_id%>/aspect/<%%=entity.aspects[idx].aspect%>">config</a></td>
                  </tr>
                <%% } %>
                </tbody>
              </table>
+            </div>
          </div>
          <div class="entity-fieldlabel"><%=t.content_type_management.form.usergroups.label%></div>
            <div class="entity-fieldvalue"><%%= self.model.entityHooks[0].formatUserGroups(entity) %></div>
@@ -79,12 +93,6 @@
               
      <form name="element" id="content_type_management_form">
         
-        <div class="top-navigation-bar navigation-bar">
-             <h2 class="form-title"><%=t.content_type_management.title%></h2>
-             <div class="navigation-bar-nav-buttons">
-             </div>
-        </div>        
-
         <div class="form-fields">
         
           <div class="formrow">
@@ -102,6 +110,23 @@
             <textarea name="description" id="description" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.description%><%% } %></textarea>
           </div>
           <p style="text-align:right"> <span id="description_length"></span> <%= t.available_chars %> </p>
+
+          <div class="formrow">
+            <label for="message_on_new_content" class="fieldtitle"><%=t.content_type_management.form.message_on_new_content.label%></label>
+            <textarea name="message_on_new_content" id="message_on_new_content" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.message_on_new_content%><%% } %></textarea>
+          </div>
+          <p style="text-align:right"> <span id="message_on_new_content_length"></span> <%= t.available_chars %> </p>
+
+          <div class="formrow">
+            <label for="message_on_edit_content" class="fieldtitle"><%=t.content_type_management.form.message_on_edit_content.label%></label>
+            <textarea name="message_on_edit_content" id="message_on_edit_content" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.message_on_edit_content%><%% } %></textarea>
+          </div>
+          <p style="text-align:right"> <span id="message_on_edit_content_length"></span> <%= t.available_chars %> </p>
+
+          <div class="formrow">
+            <label for="publishing_workflow" class="fieldtitle"><%=t.content_type_management.form.workflow.label%></label>
+            <select name="publishing_workflow" id="publishing_workflow" class="fieldcontrol"/>
+          </div>
 
           <div class="formrow">
             <fieldset>
@@ -137,7 +162,7 @@
 
 <script type="text/javascript">
  
- require(['jquery', 'YSDEntityManagement', 'YSDRemoteDataSource', 'YSDListSelector', 'YSDForms'], function($, EntityManagement, RemoteDataSource, ListSelector, YSDForms) {
+ require(['jquery', 'YSDEntityManagement', 'YSDRemoteDataSource', 'YSDListSelector', 'YSDForms', 'YSDSelectSelector'], function($, EntityManagement, RemoteDataSource, ListSelector, YSDForms, SelectSelector) {
  
   function ContentTypeHook() {
  	   
@@ -222,6 +247,10 @@
          }         
          var ugSelector = new ListSelector('content_type_usergroups', 'usergroups', ugDataSource, ugValue ); 
         
+         // Configure the workflows
+         var wfDataSource = new RemoteDataSource('/workflows');
+         var wfValue = (entity && entity.publishing_workflow)?entity.publishing_workflow:null;
+         var wfSelector = new SelectSelector('publishing_workflow', wfDataSource, wfValue); 
 
          // Limit the text area length
          YSDForms.limit_text_area_content_size(document.getElementById('description'), 256, 
@@ -229,7 +258,23 @@
               document.getElementById('description_length').innerHTML = '<strong>' + content_remain + '</strong>';
             }
          );    
-    	
+
+         // Limit the text area length
+         YSDForms.limit_text_area_content_size(document.getElementById('message_on_new_content'), 1024, 
+            function (content_remain) {
+              document.getElementById('message_on_new_content_length').innerHTML = '<strong>' + content_remain + '</strong>';
+            }
+         );  
+
+
+         // Limit the text area length
+         YSDForms.limit_text_area_content_size(document.getElementById('message_on_edit_content'), 1024, 
+            function (content_remain) {
+              document.getElementById('message_on_edit_content_length').innerHTML = '<strong>' + content_remain + '</strong>';
+            }
+         );      	
+
+
     }
 
     this.configValidation = function() {
@@ -285,9 +330,7 @@
 
   var contentTypeHook = new ContentTypeHook();
   var contentsTypeManager = new EntityManagement(urls, 'content type', 12, contentTypeHook);
- 
-  $('.entity-title').html('<%=t.content_type_management.title%>');
- 
+  
  });
   
 </script>

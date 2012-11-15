@@ -16,7 +16,7 @@ site_admin_menu:
 #
 # Content management
 #  
-content_management:
+content_management:  
   title: Contenido
   description: >
                <p>Esta pagina proporciona una interfaz para crear y modificar los contenidos de su sitio web.</p>
@@ -27,10 +27,19 @@ content_management:
       label: Categorías
     search_button:
       label: Filtrar
+  form:
+    content:
+      label: Contenido
+      description: El texto a publicar
+    categories:
+      label: Categorías
+      description: Permiten clasificar i etiquetar el contenido
+    show_tabs: Más información      
 #
 # Content render
 #
 content:
+  title: Contenido
   by: por
   published: publicado
   categories: categorías
@@ -44,6 +53,9 @@ content_type_management:
                El <em>tipo de contenido</em> le permite configurar el comportamiento del contenido como por ejemplo 
                si acepta comentarios o la información que contiene, o los vocabularios cuyos términos pueden pueden
                utilizarse para etiquetarlo.</p>
+  list:
+    workflow:
+      label: Workflow
   form:
     id:
       label: Id
@@ -53,6 +65,12 @@ content_type_management:
       required: El nombre del tipo de contenido es obligatorio
     description:
       label: Descripción
+    message_on_new_content:
+      label: Mensaje al crear nuevo contenido
+    message_on_edit_content:
+      label: Mensaje al editar contenido      
+    workflow:
+      label: Workflow de publicación      
     aspects:
       label: Aspectos
     usergroups:
@@ -60,7 +78,9 @@ content_type_management:
     aspect_aspect:
       label: Aspecto
     aspect_weight:
-      label: Peso
+      label: Peso (gestión)
+    aspect_render_weight:
+      label: Peso (vista)     
     aspect_config:
       label: Configurar      
 #
@@ -91,6 +111,59 @@ comments:
   title: Comentarios
   message: Escribe el comentario
   post: Publicar
+#
+# Publishing
+#
+publishing:
+  status:
+    draft: Borrador
+    pend_conf: Pendiente confirmación
+    pend_valid: Pendiente validación
+    published: Publicado
+    banned: Bloqueado
+  action:
+    confirm: Confirmar
+    validate: Validar
+    publish: Publicar
+    ban: Bloquear
+    allow: Permitir
+#
+# Gui blocks
+#
+guiblock:
+  publishing:
+    title: Publicación
+    description: Publicación
+    status:
+      title: Estado
+    confirm:
+      message: ¿Desea confirmar la publicación?
+    validate:
+      message: ¿Desea validar la publicación?
+    publish:
+      message: ¿Desea publicar la publicación?
+    ban:
+      message: ¿Desea bloquear la publicación?
+    allow:
+      message: ¿Desea permitir la publicación?
+  anonymouspublishing:
+    description: Datos de contacto
+    information: Por favor, rellene la siguiente información
+    form:
+      composer_name:
+        label: Nombre
+        description: Su nombre
+        required: Nombre obligatorio
+      composer_email:
+        label: Correo electrónico
+        description: Su cuenta de correo electrónico
+        required: Correo electrónico obligatorio
+      composer_website:
+        label: Web
+        description: Su página web o blog
+    description: Meta
+  audit:
+    description: Auditoría
 #
 # Aspects
 #    

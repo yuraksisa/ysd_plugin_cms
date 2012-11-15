@@ -2,7 +2,7 @@
 
 <!-- Renders the element description -->
 <script type="text/tmpl" id="elements_title">
-  <h2><%=t.content_management.title%></h2>
+  <h2 class="entity-title"><%=t.content_management.title%></h2>
 </script>
 
 <script type="text/tmpl" id="elements_description">
@@ -10,13 +10,14 @@
 </script>
 
 <script type="text/tmpl" id="elements_search">
-  <form name="contents_search" id="contents_search">
-    <div class="formrow">
-      <select name="type" id="type"/>
-      <div id="categories_container" style="display:inline-block; position:relative; top:10px">
+  <form name="contents_search" id="contents_search" style="overflow:visible">
+    <div class="formrow" style="overflow:visible">
+      <select name="type" id="type" style="position:relative; top:-10px"/>
+      <select name="publishing_state" id="publishing_state" style="position:relative; top:-10px"/>
+      <!--div id="categories_container" style="display:inline-block">
         <select name="categories[]" id="categories" multiple="multiple" style="display:none"/>
-      </div>
-      <input type="button" class="action-button entity-management-button search-entity-button" value="<%=t.content_management.search_form.search_button.label%>">
+      </div-->
+      <input type="button" style="position:relative; top:-10px" class="action-button entity-management-button search-entity-button" value="<%=t.content_management.search_form.search_button.label%>">
     </div>
   </form>
 </script>
@@ -30,11 +31,11 @@
        <thead class="table-header">
          <tr>
            <th class="table-header-title" scope="col" style="width:1em"></th>
-           <th class="table-header-title" scope="col" style="width:25%">Title</th>
-           <th class="table-header-title" scope="col" style="width:20%">Type</th>
+           <th class="table-header-title" scope="col" style="width:30%">Title</th>
+           <th class="table-header-title" scope="col" style="width:15%">Type</th>
+           <th class="table-header-title" scope="col" style="width:15%">State</th>
            <th class="table-header-title" scope="col" style="width:15%">Author</th>
-           <th class="table-header-title" scope="col" style="width:20%">Creation Date</th>
-           <th class="table-header-title" scope="col" style="width:20%">Actions</th>
+           <th class="table-header-title" scope="col" style="width:20%">Created</th>
          </tr>
        </thead>
        <tbody id="elements_tbody" class="table-tbody">             
@@ -51,11 +52,11 @@
 
     <tr class="table-row" rel="<%%= index %>" id="element_row_<%%=index%>">
       <td class="table-cell selectable-entity"><input type="checkbox" name="id[]" value="<%%=entity.key%>"/></td>
-      <td class="table-cell"><a href="<%%='/content/'+entity.key%>"><%%=entity.title %></a></td>
-      <td class="table-cell" rel="<%%= index %>"><%%= entity.type %></td>
-      <td class="table-cell" rel="<%%= index %>"><%%= entity.creation_user %></td>
-      <td class="table-cell" rel="<%%= index %>"><%%= self.formatDate(entity.creation_date) %></td>    
-      <td class="table-cell" rel="<%%= index %>"><a href="<%%='/mcontent/'+entity.key%>">manage</a>&nbsp;<a href="<%%='/mcontent/edit/'+entity.key%>">edit</a></td>
+      <td class="table-cell"><a href="<%%='/content/'+entity.key%>" target="_blank"><%%=entity.title %></a></td>
+      <td class="table-cell element-row-selector" rel="<%%= index %>"><%%= entity.type %></td>
+      <td class="table-cell element-row-selector" rel="<%%= index %>"><span class="content-status <%%=self.model.entityHooks[0].formatPublishingStateClass(entity)%>"><%%=self.model.entityHooks[0].formatPublishingState(entity)%></span></td>
+      <td class="table-cell element-row-selector" rel="<%%= index %>"><%%= entity.creation_user %></td>
+      <td class="table-cell element-row-selector" rel="<%%= index %>"><%%= self.formatDate(entity.creation_date) %></td>    
     </tr>
 
 </script>
@@ -72,15 +73,21 @@
               
 </script>
 
+<!-- It's used to show the content detail -->
+
+<iframe id="content_detail" class="content_detail" style="padding:5px; border: none; width: 98%">
+</iframe>
+
 <script type="text/javascript">
  
-require(["YSDEntityManagement", "YSDSelectSelector", "YSDRemoteDataSource", "YSDDataAdapter", "jquery", "jquery.fcbkcomplete"], 
-        function(YSDEntityManagement, SelectSelector, RemoteDataSource, DataAdapter, $) {
+require(["YSDEntityManagement", "YSDSelectSelector", "YSDRemoteDataSource", "YSDDataAdapter", "YSDHierachyListAdapter", "YSDSelectHierarchicalSelector", "YSDGui", "jquery", "jquery.fcbkcomplete"], 
+        function(YSDEntityManagement, SelectSelector, RemoteDataSource, DataAdapter, YSDHierachyListAdapter, YSDSelectHierarchicalSelector, YSDGui, $) {
  
   var contentsHook = {
- 	   
- 	entity: null,   
- 	   
+    	   
+    manager: null,
+    publishingStates: JSON.parse('<%=publishing_states%>'),    
+
     entityKey : function(entity) {
       return entity.key;
     },
@@ -90,20 +97,79 @@ require(["YSDEntityManagement", "YSDSelectSelector", "YSDRemoteDataSource", "YSD
       $('.new-entity-button').hide();
       $('.edit-entity-button').hide();
       
-      this.configSearchForm();
-      	
+      var self = this;
+      $('.element-row-selector').bind('click',
+               function() {                   
+                 var index = new Number($(this).attr('rel'));
+                 self.loadContentForEdit(self.manager.model.getEntities()[index]);
+               });               
+
     }, 
-     	     	
-  	formatCategories : function(entity) {
-  	    	
-      var categories = [];
-      for (index in entity.categories_info) { 
-         categories.push(entity.categories_info[index].description);
-      }	    	
+
+    onRenderSearch : function() {
+    
+      this.configSearchForm();
+  
+    },
+  
+    loadContent: function(entity) {
       
-      return categories;	
-  		
-  	},
+      var return_url = window.location.href;
+      window.location.href = '/mcontent/' + entity.key + '?destination=/mcontents';
+
+      //var url = '/mcontent/' + entity.key + '?layout=no';
+      
+      /*     
+      $('#content_detail').bind('load', function() {
+        $('#content_detail').unbind('load');
+        YSDGui.unLockBackground();
+        window.content_detail.document.getElementsByTagName('body')[0].style.minWidth=0;
+        $('#content_detail').css('display','block');
+        $('#content_detail').width(Math.min(screen.width, 720));
+        $('#content_detail').height(480); 
+        $('#content_detail').dialog('option', 'width', $('#content_detail').width() + 20);
+        $('#content_detail').dialog('option', 'height', $('#content_detail').height() + 20);
+        $('#content_detail').dialog('open');
+        $('#content_detail').width(Math.min(screen.width, 720));
+        $('#content_detail').height(480);
+        $('#content_detail').focus();
+      });
+      
+      YSDGui.lockBackground('#000000', false); 
+      $('#content_detail').attr('src', url);
+      */
+
+    },
+
+    loadContentForEdit: function(entity) {
+
+      var return_url = window.location.href;
+      window.location.href = '/mcontent/edit/' + entity.key + '?destination=/mcontents';
+
+    },
+
+    formatPublishingStateClass : function(entity) {
+     
+      var text='';
+
+      if (entity && entity.publishing_state) {
+        text = 'content-status-' + entity.publishing_state.toLowerCase().replace('_','-');
+      }
+
+      return text;
+
+    },
+
+    formatPublishingState: function(entity) {
+
+      var text='';
+      if (entity) {
+        text= this.publishingStates[entity.publishing_state];
+      }
+
+      return text;
+
+    },
 
     configSearchForm : function() {
       
@@ -111,7 +177,11 @@ require(["YSDEntityManagement", "YSDSelectSelector", "YSDRemoteDataSource", "YSD
       var contentTypesDataSource = new RemoteDataSource("/ctypesuser",{'id':'id','description':'name'});
       var contentTypesListSelector = new SelectSelector("type", contentTypesDataSource, null, true, '- View all content types -');
       
+      var publishingStateDataSource = new RemoteDataSource("/publishing/states");
+      var publishingStateListSelector = new SelectSelector("publishing_state", publishingStateDataSource, null, true, '- View all publishing states -');
+
       // tags or categories
+/*
       $('#categories').fcbkcomplete({json_url: '/terms', 
                                      cache: true, 
                                      width: 200, 
@@ -120,13 +190,23 @@ require(["YSDEntityManagement", "YSDSelectSelector", "YSDRemoteDataSource", "YSD
                                      input_size: 23,
                                      input_placeholder: '- View all categories -'
                                       });
+*/
+/*
+      var tagsDataSource = new YSDRemoteDataSource('/terms/'+taxonomy_id,null,[YSDHierachyListAdapter]);
+      if (this.entity && this.entity.categories_by_taxonomy && this.entity.categories_by_taxonomy[taxonomy_id]) {
+        value = this.entity.categories_by_taxonomy[taxonomy_id]; 
+      }
+      var termsSelect = new YSDSelectHierarchicalSelector('categories', dataSource, null, true, );
+*/
       
     }
   	
   };
 
+  $('#content_detail').dialog({title: 'Content', width: 480, height: 480, autoOpen: false})
+
   var urls = { query_url  : '/contents',
-    	       create_url : '/content',
+    	         create_url : '/content',
   	           update_url : '/content',
   	           delete_url : '/content',
   	           get_url    : '/content'
@@ -143,6 +223,8 @@ require(["YSDEntityManagement", "YSDSelectSelector", "YSDRemoteDataSource", "YSD
      	           
   var contentsManager = new YSDEntityManagement(urls, 'content', <%=settings.contents_page_size%>, hooks);
   
+  contentsHook.manager = contentsManager;
+
 });
   
 </script>

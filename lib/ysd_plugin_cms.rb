@@ -3,6 +3,12 @@ require 'sinatra/ysd_sinatra_pages'
 
 require 'ysd_plugin_cms_comment_aspect'
 
+require 'guiblocks/ysd_guiblock_meta'
+require 'guiblocks/ysd_guiblock_audit'
+require 'guiblocks/ysd_guiblock_anonymous_publishing'
+require 'guiblocks/ysd_guiblock_publishing_actions'
+require 'guiblocks/ysd_guiblock_post_publishing'
+
 require 'renders/ysd_ui_cms_render_factory'
 require 'renders/ysd_content_renders'
 require 'renders/ysd_block_renders'
@@ -22,7 +28,7 @@ require 'sinatra/ysd_sinatra_view_management'
 require 'sinatra/ysd_sinatra_block_management'
 require 'sinatra/ysd_sinatra_menu_management'
 require 'sinatra/ysd_sinatra_menu_item_management'
-
+require 'sinatra/ysd_sinatra_publishing_rest_api'
 require 'sinatra/ysd_sinatra_content_management_rest_api'
 require 'sinatra/ysd_sinatra_content_type_management_rest_api'
 require 'sinatra/ysd_sinatra_taxonomy_management_rest_api'

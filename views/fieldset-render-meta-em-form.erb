@@ -1,0 +1,32 @@
+            <div id="meta_form" class="guiblock">
+              <div class="formrow">
+                <label for="key" class="fieldtitle">Alias</label>
+                <input type="text" id="alias" name="alias" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.alias %>" <%% } %> />
+                <div class="fielddescription">An optional URL, human readable, which can be used to access the content.</div>
+              </div>              
+              <div class="formrow">
+                <label for="subtitle" class="fieldtitle">Subtitle</label>
+                <input type="text" maxlength="80" id="subtitle" name="subtitle" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.subtitle%>" <%% } %>/>
+                <div class="fielddescription">The subtitle of the content</div>
+              </div>
+              <div class="formrow">
+                <label for="description" class="fieldtitle">Description</label>
+                <textarea rows="4" id="description" name="description" class="fieldcontrol"><%% if(entity) {%><%%=entity.description %> <%% } %></textarea>
+                <div class="fielddescription">The content description. It's used as a metatag when the page is rendered.</div>
+              </div>
+              <div class="formrow">
+                <label for="summary" class="fieldtitle">Summary</label>
+                <textarea rows="4" id="summary" name="summary" class="fieldcontrol"><%% if (entity) {%><%%=entity.summary %> <%% } %></textarea>
+                <div class="fielddescription">The content summary. It's used in when render a set of contents in one page.</div>
+              </div>
+              <div class="formrow">
+                <label for="keywords" class="fieldtitle">Keywords</label>
+                <textarea rows="3" id="keywords" name="keywords" class="fieldcontrol"><%% if (entity) {%><%%=entity.keywords %> <%% } %></textarea>
+                <div class="fielddescription">Meta keywords</div>
+              </div>
+              <div class="formrow">
+                <label for="language" class="fieldtitle">Language</label>
+                <input type="text" maxlength="3" id="language" name="language" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.language %>"<%% } %>/>
+                <div class="fielddescription">The language in which the content has been written.</div>
+              </div>
+            </div>  

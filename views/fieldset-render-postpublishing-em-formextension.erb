@@ -1,0 +1,72 @@
+<script type="text/javascript">
+
+  define("postPublishing", ["jquery", "YSDGui", "jquery.ui"], function($, YSDGui) {
+
+    RedirectCommand = function(url) {
+      
+      this.url = url;
+
+      this.execute = function() {
+      	try {
+          YSDGui.lockBackground('#000000', false);
+      	  window.location.href = this.url;
+      	}
+      	catch (error) {
+          YSDGui.unlockBackground();
+      	}  
+      }
+
+    }
+
+    NotifyCommand = function(url) {
+
+      this.url = url;
+
+      this.execute = function() {
+      	// pending
+      }
+
+    }
+
+    NoneCommand = function() {
+
+      this.execute = function() {
+      	 // none
+      }
+
+    }
+
+    postPublishing = function(action, url) {
+
+      var command = null;
+
+      switch (action) {
+
+        case 'REDIRECT_TO_PUBLICATION':
+          command = new RedirectCommand(url);
+          break;
+
+        case 'REDIRECT_TO_STATUS':
+          command = new RedirectCommand(url);
+          break;
+
+        case 'NOTIFY_STATUS':
+          command = new NotifyCommand(url);
+          break;
+
+        case 'NONE':
+          command = new NoneCommand();
+          break;
+
+      }
+
+      return command;
+
+    }
+
+
+    return postPublishing;
+
+  });
+
+</script>

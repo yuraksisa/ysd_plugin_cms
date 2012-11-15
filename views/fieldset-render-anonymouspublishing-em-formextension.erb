@@ -1,0 +1,70 @@
+<script type="text/javascript">
+
+require(['jquery', 'YSDEntityManagementComplementHooks'],
+        function($, EntityManagementComplementHooks) {
+
+  /* ------------------------------------------------
+     Plugin for ResourceAccessControl
+     ------------------------------------------------ */
+  AnonymousPublishingHookPlugin = function() {
+	
+    this.onEdit = function(entity) { /* On Edit the entity */
+  	  this.configForm(entity);
+    };
+  
+    this.onNew = function() {
+      this.configForm(null);	
+    };  	
+
+
+    // -------- Support ----------------
+  	
+    this.configForm = function(entity) {
+
+      this.configValidation();
+
+    };
+  
+  
+    this.configValidation = function() {
+
+      if (document.getElementById('composer_name')) {
+
+         $($('#composer_name')[0].form).validate({
+            
+            submitHandler: function(form) 
+            {
+               return false;
+            },
+                               
+            rules : { // rules
+               'composer_name' : {
+                 required: true
+               },
+               'composer_email': {
+                 required: true 
+               }
+            },
+            
+            messages : { // messages
+               'composer_name' : {
+                required: '<%= t.guiblock.anonymouspublishing.form.composer_name.required %>'
+               },
+               'composer_email': {
+                 required : '<%=t.guiblock.anonymouspublishing.form.composer_email.required%>'
+               }
+            }
+            
+          });
+       }
+
+    }
+
+  }
+	
+  var pluginAnonymousPublishing = new AnonymousPublishingHookPlugin();
+  EntityManagementComplementHooks.register(pluginAnonymousPublishing);	
+
+});
+        
+</script>

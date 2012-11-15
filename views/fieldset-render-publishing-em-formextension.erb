@@ -1,0 +1,36 @@
+<script type="text/tmpl" id="publishing_actions_tmpl">
+
+</script>
+
+<script type="text/javascript">
+
+require(['jquery', 'YSDEntityManagementComplementHooks', 'ysdtemplate'],
+        function($, EntityManagementComplementHooks, tmpl) {
+
+  /* ------------------------------------------------
+     Plugin for Publishing
+     ------------------------------------------------ */
+  PublishingHookPlugin = function() {
+	
+
+    this.onAction = function(the_model, data) { /* When an action is executed */
+
+      $('#publishing_actions_tmpl').load('/publishing-actions/' + data.key, function() {
+
+        if ($('#publishing_form')) {
+          $('#publishing_form').replaceWith(tmpl('publishing_actions_tmpl')({entity: data, self: the_model.entityView}));
+          the_model.entityView.configureElementEvents('.publishing-button');
+        }
+
+      });
+      
+    }
+
+  }
+	
+  var pluginPublishing = new PublishingHookPlugin();
+  EntityManagementComplementHooks.register(pluginPublishing);	
+
+});
+        
+</script>
