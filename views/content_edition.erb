@@ -1,22 +1,5 @@
 <%= include('entity-management') %>
 
-<style type="text/css">
-  .ui-tabs-vertical { width:95%; border:none; padding-left:0px;}
-  .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 25%; background: #EEE;}
-  .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 95%; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; border: 1px solid #DDD; }
-  .ui-tabs-vertical .ui-tabs-nav li a { display:block; border-bottom: none; float: none;}
-  .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {}
-  .ui-tabs-vertical .ui-tabs-panel { float: right; width: 70%; padding: 5px 10px 10px 10px; border: 1px solid #CCC; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px;}
-  .content-type-fieldvalue {
-  text-align: right;
-  width: auto;
-  background: whiteSmoke;
-  border-radius: 5px;
-  padding: 5px;
-  float: right;  
-   }
-</style>
-
 <!-- Renders the element description -->
 <script type="text/tmpl" id="elements_title">
   <h2 class="entity-title"><%=title%></h2>
@@ -301,11 +284,9 @@ require(["jquery", "YSDEntityManagement", "YSDEntityManagementComplementHooks", 
   	  var send = {};
   	  
   	  for (idx in data) {
-  	  
   	    if (idx != 'categories_info') {
   	      send[idx] = data[idx]	
   	    }
-  	  	
   	  }
   	  
   	  var categories = [];  	  

@@ -1,5 +1,9 @@
+require 'ysd_md_menu'
 module Sinatra
   module YSD
+    #
+    # Menu management REST API
+    #
     module MenuManagementRESTApi
        
       def self.registered(app)
@@ -8,7 +12,7 @@ module Sinatra
         # Retrieve all menus
         #
         app.get "/menus" do
-          data = Site::Menu.all
+          data = ::Site::Menu.all
           
           content_type :json
           data.to_json
@@ -20,11 +24,11 @@ module Sinatra
         ["/menus","/menus/page/:page"].each do |path|
           app.post path do
           
-            data=Site::Menu.all
+            data=::Site::Menu.all
             begin
-              total=Site::Menu.count
+              total=::Site::Menu.count
             rescue
-              total=Site::Menu.all.length
+              total=::Site::Menu.all.length
             end
             
             content_type :json
@@ -38,12 +42,8 @@ module Sinatra
         # Retrieve a menu
         #
         app.get "/menu/:name" do
-          
-          puts "Getting menu"
-          
-          menu = Site::Menu.get(params['name'])
-          
-          puts "menu loaded : #{menu}"
+
+          menu = ::Site::Menu.get(params['name'])
           
           status 200
           content_type :json
@@ -56,17 +56,13 @@ module Sinatra
         #
         app.post "/menu" do
         
-          puts "Creating menu"
-          
           request.body.rewind
           menu_request = JSON.parse(URI.unescape(request.body.read))
           
           # Creates the new menu
-          menu = Site::Menu.new(menu_request)
+          menu = ::Site::Menu.new(menu_request)
           menu.save
-          
-          puts "created menu : #{menu}"
-          
+                   
           # Return          
           status 200
           content_type :json
@@ -85,18 +81,14 @@ module Sinatra
           menu_request = JSON.parse(URI.unescape(request.body.read))
           
           # Updates the menu
-          menu = Site::Menu.get(menu_request['name'])
-          puts "updating menu : #{menu.to_json} ** #{menu_request}"
+          menu = ::Site::Menu.get(menu_request['name'])
           menu.attributes=(menu_request)
           menu.save
-          
-          puts "updated menu : #{menu}"
-                   
+                             
           # Return          
           status 200
           content_type :json
           menu.to_json
-        
         
         end
         

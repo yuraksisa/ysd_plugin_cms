@@ -1,10 +1,13 @@
 <%= include('entity-management') %>
 
+<!-- Renders the element title -->
+<script type="text/tmpl" id="elements_title">
+  <h2 class="entity-title"><%=t.taxonomy_management.title%></h2>
+</script>
+
 <!-- Renders the element description -->
 <script type="text/tmpl" id="elements_description">
-
-  <p>Taxonomías le permite organizar su contenido usuario etiquetas y términos. Cree una <em>taxonomías</em> para que contenga un grupo de términos o etiquetas. Una taxonomía puede estar vinculado a tipos de contenidos y se mostrará cuando se creen o editen contenidos de ese tipo.</p>
-
+  <%=t.taxonomy_management.description%>
 </script>
 
 <!-- Renders the elements container -->
@@ -14,10 +17,9 @@
      <thead class="table-header">
        <tr>
          <th class="table-header-title" scope="col" style="width:20%">Name</th>
-         <th class="table-header-title" scope="col" style="width:25%">Type</th>
-         <th class="table-header-title" scope="col" style="width:40%">Description</th>
-         <th class="table-header-title" scope="col"></th>
-         <th class="table-header-title" scope="col"></th>
+         <th class="table-header-title" scope="col" style="width:20%">Type</th>
+         <th class="table-header-title" scope="col" style="width:30%">Description</th>
+         <th class="table-header-title" scope="col" style="width:30%"></th>
        </tr>
      </thead>
      <tbody id="elements_tbody" class="table-tbody">             
@@ -34,8 +36,10 @@
       <td class="table-cell element-navigation-detail" rel="<%%= index %>"><%%= entity.name %></td>
       <td class="table-cell element-navigation-detail" rel="<%%= index %>"><%%= self.model.entityHooks[0].formatContentTypes(entity) %></td>
       <td class="table-cell element-navigation-detail" rel="<%%= index %>"><%%= entity.description %></td>
-      <td class="table-cell"><a href="/term-management/<%%= entity.id%>">List of terms</a></td>
-      <td class="table-cell"><a href="/term-management/<%%= entity.id%>/new">Add terms</a></td>
+      <td class="table-cell">
+        <a href="/term-management/<%%= entity.id%>" style="display:block">List of terms</a>
+        <a href="/term-management/<%%= entity.id%>/new" style="display:block">Add terms</a>
+      </td>
     </tr>
 
 </script>
@@ -58,12 +62,6 @@
 <script type="text/tmpl" id="element_template_form">
               
      <form name="element">
-        
-        <div class="top-navigation-bar navigation-bar">
-             <h2 class="form-title">Taxonomy</h2>
-             <div class="navigation-bar-nav-buttons">
-             </div>
-        </div>        
 
         <div class="form-fields">
         
@@ -111,8 +109,8 @@
 
 <script type="text/javascript">
  
- require(['jquery', 'YSDRemoteDataSource', 'YSDListSelector', 'YSDForms'],
-         function($, RemoteDataSource, ListSelector, YSDForms) {
+ require(['YSDEntityManagement', 'jquery', 'YSDRemoteDataSource', 'YSDListSelector', 'YSDForms'],
+         function(EntityManagement, $, RemoteDataSource, ListSelector, YSDForms) {
  
   function TaxonomyHook() {
  	   
@@ -207,8 +205,6 @@
   
   var taxonomyHook = new TaxonomyHook();
   var taxonomiesManager = new EntityManagement(urls, 'taxonomy', 12, taxonomyHook);
- 
-  $('.entity-title').html('Taxonomies');
   
  });
 </script>

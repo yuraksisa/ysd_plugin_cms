@@ -1,11 +1,13 @@
 <%= include('entity-management') %>
 
 <!-- Renders the element description -->
+<script type="text/tmpl" id="elements_title">
+  <h2 class="entity-title"><%=t.view_management.title%></h2>
+</script>
+
+<!-- Renders the element description -->
 <script type="text/tmpl" id="elements_description">
-
-    <p>Las vistas permiten definir consultas sobre el modelo de datos para presentarlas en forma de <em>bloques</em> o <em>páginas</em>.</p>
-    <p>Para visualizarla como una <em>página</em>, utilice la URL <strong>/nombre_vista</strong>. Para visualizarla como un <em>bloque</em>, configúrela en la gestión de bloques.</p>
-
+  <%=t.view_management.description%>
 </script>
 
 <!-- Renders the elements container -->
@@ -46,9 +48,8 @@
        <div class="entity-field"><div class="entity-fieldlabel">Description</div> <div class="entity-fieldvalue"><%%= entity.description %></div> </div>
        <div class="entity-field"><div class="entity-fieldlabel">Model</div><div class="entity-fieldvalue"><%%=entity.model_name%></div></div>
        <div class="entity-field"><div class="entity-fieldlabel">Style</div><div class="entity-fieldvalue"><%%=entity.style%></div></div>
-       <div class="entity-field"><div class="entity-fieldlabel">Title</div><div class="entity-fieldvalue"><%%=entity.title%></div></div>
-              
-       <div class="entity-field"><div class="entity-fieldlabel">Fields</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.query_fields)%></code></div>
+       <div class="entity-field"><div class="entity-fieldlabel">Title</div><div class="entity-fieldvalue"><%%=entity.title%></div></div>             
+       <div class="entity-field"><div class="entity-fieldlabel">Fields</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.v_fields)%></code></div>
        <div class="entity-field"><div class="entity-fieldlabel">Conditions</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.query_conditions)%></code></div>
        <div class="entity-field"><div class="entity-fieldlabel">Order</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.query_order)%></code></div>       
        <div class="entity-field"><div class="entity-fieldlabel">Arguments</div><code class="entity-fieldvalue"><%%= JSON.stringify(entity.query_arguments)%></code></div>       
@@ -57,17 +58,6 @@
        <div class="entity-field"><div class="entity-fieldlabel">Limit</div> <div class="entity-fieldvalue"><%%= entity.view_limit %></div> </div>
        <div class="entity-field"><div class="entity-fieldlabel">Pagination</div> <div class="entity-fieldvalue"><%%= entity.pagination %></div> </div>
        <div class="entity-field"><div class="entity-fieldlabel">Page size</div> <div class="entity-fieldvalue"><%%= entity.page_size %></div> </div>
-
-     </div>
-     <div class="entity-block">
-       <h2 class="entity-block-title">View preview</h2>
-       <form name="view-preview">
-         <label for="arguments">Arguments</label>
-         <input type="text" name="arguments" id="arguments" maxlength="80" size="80"/>
-         <input type="button" name="send-view-preview" id="send-view-preview" value="Preview"/>
-       </form>
-       <div id="view-preview-result">
-       </div>  
      </div>
 
 </script>
@@ -77,110 +67,145 @@
 <script type="text/tmpl" id="element_template_form">
               
      <form name="element">
-        
-        <div class="top-navigation-bar navigation-bar">
-             <h2 class="form-title">View</h2>
-             <div class="navigation-bar-nav-buttons">
-             </div>
-        </div>        
-
         <div class="form-fields">
         
           <div class="formrow">
-            <label for="view_name" class="fieldtitle">Name <span class="mandatoryfield">*</span></label>
+            <label for="view_name" class="fieldtitle"><%=t.view_management.form.name.label%><span class="mandatoryfield">*</span></label>
             <input type="text" maxlength="32" id="view_name" name="view_name" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.view_name%>" <%% } %> />
-            <div class="fielddescription">The view name. It must be unique because it identifies each of the views.</div>
+            <div class="fielddescription"><%=t.view_management.form.name.description%></div>
           </div>
 
-          <div class="formrow">
-            <label for="description" class="fieldtitle">Description</label>
-            <textarea name="description" id="description" class="fieldcontrol"><%% if (entity) { %><%%=entity.description%><%% } %></textarea>
-            <div class="fielddescription">The view description.</div>
-          </div>
-          <p style="text-align:right"> <span id="description_length"></span> <%= t.available_chars %> </p>
+          <div id="tabs">
+            <ul>
+              <%= render_tab('view_description', t.view_management.form.description_block.label) %>
+              <%= render_tab('view_style', t.view_management.form.style_block.label) %>
+              <%= render_tab('view_query', t.view_management.form.query_block.label) %>
+              <%= render_tab('view_result', t.view_management.form.result_block.label) %>
+              <%= render_tab('view_page', t.view_management.form.page_block.label) %>
+              <%= render_tab('view_extras', t.view_management.form.extras_block.label) %>
+            </ul>
 
-         <div class="formrow">
-            <label for="model_name" class="fieldtitle">Model</label>
-            <select id="model_name" name="model_name" class="fieldcontrol"></select>
-            <div class="fielddescription">The model. The type of data that is retrieved by this view. For example: contents, comments, users, taxonomies</div> 
-          </div>
+            <div id="view_description">
+              <div class="formrow">
+                <label for="description" class="fieldtitle"><%=t.view_management.form.description.label%></label>
+                <textarea name="description" id="description" class="fieldcontrol"><%% if (entity) { %><%%=entity.description%><%% } %></textarea>
+                <div class="fielddescription"><%=t.view_management.form.description.description%></div>
+              </div>
+              <p style="text-align:right"> <span id="description_length"></span> <%= t.available_chars %> </p>
+            </div>
 
-          <div class="formrow">
-            <label for="style" class="fieldtitle">Style</label>
-            <select name="style" id="style" class="fieldcontrol"></select>
-            <div class="fielddescription">The style of the view.</div>
-          </div>
-          
-          <div id="view_fields" class="formrow">
-            <label for="query_fields" class="fieldtitle">Fields</label>
-            <textarea id="query_fields" name="query_fields" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.query_fields)%><%% } %></textarea>  
-            <div class="fielddescription">The model's fields which are shown in the view.</div>
-          </div>
-            
-          <fieldset>
-            <legend>Query</legend>
-            <div class="formrow">
-                <label for="query_conditions" class="fieldtitle">Conditions</label>
+            <div id="view_style">
+              <div class="formrow">
+                <label for="style" class="fieldtitle"><%=t.view_management.form.style.label%></label>
+                <select name="style" id="style" class="fieldcontrol"></select>
+                <div class="fielddescription"><%=t.view_management.form.style.description%></div>
+              </div>
+              <div id="view_fields_row" class="formrow">
+                <label for="v_fields" class="fieldtitle"><%=t.view_management.form.fields.label%></label>
+                <textarea id="v_fields" name="v_fields" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.v_fields)%><%% } %></textarea>  
+                <div class="fielddescription"><%=t.view_management.form.fields.description%></div>
+              </div>
+              <div class="formrow">
+                <label for="render" class="fieldtitle"><%=t.view_management.form.render.label%></label>
+                <select name="render" id="render" class="fieldcontrol"></select>
+                <div class="fielddescription"><%=t.view_management.form.render.label%></div>
+              </div>              
+            </div>
+
+            <div id="view_query">
+              <div class="formrow">
+                <label for="model_name" class="fieldtitle"><%=t.view_management.form.model.label%></label>
+                <select id="model_name" name="model_name" class="fieldcontrol"></select>
+                <div class="fielddescription"><%=t.view_management.form.model.description%></div> 
+              </div>
+              <div class="formrow">
+                <label for="query_conditions" class="fieldtitle"><%=t.view_management.form.conditions.label%></label>
                 <textarea id="query_conditions" name="query_conditions" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.query_conditions)%><%% } %></textarea>
-                <div class="fielddescription">The conditions which match the items shown in the view.</div>
-            </div>
-            <div class="formrow">
-                <label for="query_order" class="fieldtitle">Order</label>
+                <div class="fielddescription"><%=t.view_management.form.conditions.description%></div>
+              </div>
+              <div class="formrow">
+                <label for="query_order" class="fieldtitle"><%=t.view_management.form.order.label%></label>
                 <textarea id="query_order" name="query_order" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.query_order)%><%% } %></textarea>
-                <div class="fielddescription">The order in which the model's items will be showed.</div>  
-            </div>                    
-            <div class="formrow">
-                <label for="query_arguments" class="fieldtitle">Arguments</label>
+                <div class="fielddescription"><%=t.view_management.form.order.description%></div>  
+              </div>                    
+              <div class="formrow">
+                <label for="query_arguments" class="fieldtitle"><%=t.view_management.form.arguments.label%></label>
                 <textarea id="query_arguments" name="query_arguments" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.query_arguments)%><%% } %></textarea>
-                <div class="fielddescription">The query arguments (retrieved from the url).</div>  
-            </div>                    
-          </fieldset>
-                   
-          <fieldset>
-            <legend>Basic options</legend>
-            <div class="formrow">
-              <label for="title" class="fieldtitle">Title</label>
-              <input type="text" maxlength="80" id="title" name="title" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.title%>" <%% } %> />
-              <div class="fielddescription">The view title. It will be shown in the view rendering.</div>
+                <div class="fielddescription"><%=t.view_management.form.arguments.description%></div>  
+              </div> 
             </div>
-            <div class="formrow">
-              <label for="url" class="fieldtitle">URL</label>
-              <input type="text" maxlength="256" id="url" name="url" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.url%>" <%% } %> />
-              <div class="fielddescription">The view url. How the view will be accessible as a page.</div>
+
+            <div id="view_result">
+              <div class="formrow">
+                 <label for="query_limit" class="fieldtitle"><%=t.view_management.form.limit.label%></label>
+                 <input type="text" maxlength="3" id="view_limit" name="view_limit" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.view_limit%>" <%% } else { %> value="0" <%% } %> />
+                 <div class="fielddescription"><%=t.view_management.form.limit.description%></div> 
+              </div>
+              <div class="formrow">
+                <label for="pagination" class="fieldtitle"><%=t.view_management.form.pagination.label%></label>
+                <input type="radio" name="pagination" id="pagination_true" value="true" <%%if (entity && entity.pagination) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_yes.label%>
+                <input type="radio" name="pagination" id="pagination_false" value="false" <%%if (entity && !entity.pagination) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_no.label%>
+              </div>  
+              <div class="formrow">
+                <label for="ajax_pagination" class="fieldtitle"><%=t.view_management.form.ajax_pagination.label%></label>
+                <input type="radio" name="ajax_pagination" id="ajax_pagination_true" value="true" <%%if (entity && entity.ajax_pagination) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_yes.label%>
+                <input type="radio" name="ajax_pagination" id="ajax_pagination_false" value="false" <%%if (entity && !entity.ajax_pagination) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_no.label%>
+              </div>                            
+              <div class="formrow" id="page_size_row">
+                 <label for="page_size" class="fieldtitle"><%=t.view_management.form.page_size.label%></label>
+                 <input type="text" maxlength="3" id="page_size" name="page_size" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.page_size%>" <%% } else { %> value="0" <%% } %> />
+                 <div class="fielddescription"><%=t.view_management.form.page_size.description%></div> 
+              </div>   
+              <div class="formrow">
+                 <label for="pagination" class="fieldtitle"><%=t.view_management.form.pager.label%></label>
+                 <select name="pager" id="pager" class="fieldcontrol"></select>
+                 <div class="fielddescription"><%=t.view_management.form.pager.description%></div>
+              </div>
             </div>
-            <div class="formrow">
-              <label for="render" class="fieldtitle">Render</label>
-              <select name="render" id="render" class="fieldcontrol"></select>
-              <div class="fielddescription">The render which will be used to show the view elements.</div>
+
+            <div id="view_page">
+              <div class="formrow">
+                <label for="title" class="fieldtitle"><%=t.view_management.form.title.label%></label>
+                <input type="text" maxlength="80" id="title" name="title" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.title%>" <%% } %> />
+                <div class="fielddescription"><%=t.view_management.form.title.description%>.</div>
+              </div>
+              <div class="formrow">
+                <label for="header" class="fieldtitle"><%=t.view_management.form.header.label%></label>
+                <textarea name="header" id="view_header" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.header%><%% } %></textarea>
+                <div class="fielddescription"><%=t.view_management.form.header.description%></div>
+              </div>
+              <div class="formrow">
+                <label for="footer" class="fieldtitle"><%=t.view_management.form.footer.label%></label>
+                <textarea name="footer" id="description" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.footer%><%% } %></textarea>
+                <div class="fielddescription"><%=t.view_management.form.footer.description%></div>
+              </div>               
+              <div class="formrow">
+                <label for="script" class="fieldtitle"><%=t.view_management.form.script.label%></label>
+                <textarea name="script" id="script" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.footer%><%% } %></textarea>
+                <div class="fielddescription"><%=t.view_management.form.script.description%></div>
+              </div>                                          
+              <div class="formrow">
+                <label for="url" class="fieldtitle"><%=t.view_management.form.url.label%></label>
+                <input type="text" maxlength="256" id="url" name="url" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.url%>" <%% } %> />
+                <div class="fielddescription"><%=t.view_management.form.url.description%></div>
+              </div>
             </div>
-            <div class="formrow">
-               <label for="query_limit" class="fieldtitle">Limit</label>
-               <input type="text" maxlength="3" id="view_limit" name="view_limit" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.view_limit%>" <%% } else { %> value="0" <%% } %> />
-               <div class="fielddescription">The number of results to show in the view. Type 0 if you do not want any limit.</div> 
+
+            <div id="view_extras">
+              <div class="formrow">
+                <label for="block" class="fieldtitle"><%=t.view_management.form.block.label%></label>
+                <input type="radio" name="block" id="block_true" value="true" <%%if (entity && entity.block) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_yes.label%>
+                <input type="radio" name="block" id="block_false" value="false" <%%if (entity && !entity.block) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_no.label%>
+              </div>
             </div>
-            <div class="formrow">
-              <label for="pagination" class="fieldtitle">Pagination</label>
-              <select name="pagination" id="pagination" class="fieldcontrol"></select>
-              <div class="fielddescription">If you want to create a pager to navigate</div>
-            </div>
-            <div class="formrow">
-               <label for="page_size" class="fieldtitle">Page size</label>
-               <input type="text" maxlength="3" id="page_size" name="page_size" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.page_size%>" <%% } else { %> value="0" <%% } %> />
-               <div class="fielddescription">The number of results to show in the view. Type 0 if you do not want any limit.</div> 
-            </div>            
-          </fieldset>
-          
-          <div class="formrow">
-            <label for="type" class="fieldtitle">Repository</label>
-            <input type="text" maxlength="32" id="data_repository" name="data_repository" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.data_repository%>" <%% } %> />
-            <div class="fielddescription">The repository to query from.</div>
+
           </div>
                 
         </div>
         
         <div class="bottom-navigation-bar navigation-bar">
              <div class="navigation-bar-nav-buttons">
-                <input type="button" class="cancel-entity-button action-button entity-management-button" value="Cancel"/>
+                <input type="button" class="cancel-entity-button action-button entity-management-button" value="Back"/>
                 <%% if (entity) { %>
                   <input type="submit" class="update-entity-button action-button entity-management-button" value="Update"/>
                 <%% } 
@@ -192,6 +217,21 @@
      
      </form>
      
+     <div class="entity-block highlight_block">
+       <h2 class="entity-block-title">View preview</h2>
+       <form name="view-preview">
+         <div class="formrow">
+           <label for="arguments" class="fieldtitle">Arguments</label>
+           <input type="text" name="arguments" id="arguments" maxlength="80" size="80" class="fieldcontrol"/>
+         </div>
+         <div class="formrow">
+           <input type="button" name="view-preview" id="view-preview" class="view-preview" value="Preview"/>
+         </div>
+       </form>
+       <div id="view-preview-result">
+       </div>  
+     </div>
+
 
 </script>
 
@@ -203,8 +243,10 @@
  
   function ViewHook() {
  	   
- 	this.entity = null;
- 	   
+    this.manager = null;
+ 	  this.entity = null;
+ 	  this.pagers = JSON.parse('<%=pagers%>');
+
     this.entityKey = function(entity) {
       return entity.view_name;
     }
@@ -226,160 +268,217 @@
     }
     
     this.onRender = function(entity) {
-      this.entity = entity;
-      var self = this;	
-      $('#send-view-preview').bind('click', 
-           function event(event) {
-      	     self.preview(entity, $('#arguments').val()); 
-      	   });
-      	
+     this.configPreview(entity);
     }
-        
-  	this.adaptFormData = function(data) {
-  	
-  	  var send = {};
-  	  
-  	  for (idx in data) {
+                
+    this.adaptFormData = function(data) {
+    
+      var send = {};
+      
+      for (idx in data) {
 
         var value = null;
         
-        if (idx == 'query_fields' && data.viewStyle == 'teaser') {
-          value = {};	
-        }
-        else
-        if (idx == 'query_fields' || idx == 'query_arguments') {
-          value = (data[idx] == '' || data[idx] == 'null')?[]:JSON.parse(data[idx]);
-        }
-        else if (idx == 'query_order') {
-          value = (data[idx] == '' || data[idx] == 'null')?{}:JSON.parse(data[idx]);        
-        }
-        else {
-          value = data[idx];	
+        switch (idx) {
+
+          case 'v_fields':
+            if (data.viewStyle == 'teaser') {
+              value = []; 
+            }
+            else {
+              value = (data[idx] == '' || data[idx] == 'null')?[]:JSON.parse(data[idx]);
+            }
+            break;
+
+          case 'query_conditions':
+            value = (data[idx] == '' || data[idx] == 'null')?{}:JSON.parse(data[idx]); 
+            break;
+
+          case 'query_order':
+            value = (data[idx] == '' || data[idx] == 'null')?[]:JSON.parse(data[idx]); 
+            break;
+
+          case 'query_arguments':
+            value = (data[idx] == '' || data[idx] == 'null')?[]:JSON.parse(data[idx]);
+            break;
+
+          default:
+            value = data[idx];
         }
         
-	    send[idx] = value;	
-  	  	
-  	  }
+        send[idx] = value;  
+        
+      }
  
-  	  return send;
-  		
-  	}
-        
+      return send;
+      
+    }
+
     this.configForm = function(entity) {
         
-         // Configure the models
-         var dataSourceModel = new RemoteDataSource('/view-models',{'id':'view_entity_model','description':'view_entity_description'});
-         var valueModel = (entity && entity.model_name)?entity.model_name:null; 
-         var selectorModel = new SelectSelector('model_name', dataSourceModel, valueModel, false );             
+       $('#tabs').tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
+       $('#tabs li').removeClass("ui-corner-top").addClass( "ui-corner-left" );
 
-         // Configure the styles
-         var dataSourceStyles = new RemoteDataSource('/view-styles',{'id':'id','description':'description'});
-         var valueStyles = (entity && entity.style)?entity.style:null; 
-         var selectorStyles = new SelectSelector('style', dataSourceStyles, valueStyles, false );             
+       // Configure the models
+       var dataSourceModel = new RemoteDataSource('/view-models',{'id':'view_entity_model','description':'view_entity_description'});
+       var valueModel = (entity && entity.model_name)?entity.model_name:null; 
+       var selectorModel = new SelectSelector('model_name', dataSourceModel, valueModel, false );             
 
-         // Configure pagination
-         var pagination = [true, false];
-         var paginationDataSource = new MemoryDataSource(pagination);
-         var paginationValue = (entity && entity.pagination)?entity.pagination:false;
-         var selectPagination = new SelectSelector('pagination', paginationDataSource, paginationValue);
-
-         var self = this;
-
-         if (this.entity == null) {
-           dataSourceStyles.addListener('data_available', function(event) {
-      	     if (event.data && event.data.length > 0) {
-      	       self.buildViewRenders(event.data[0].style);
-      	     }
+       // Configure the styles
+       var dataSourceStyles = new RemoteDataSource('/view-styles',{'id':'id','description':'description'});
+       var valueStyles = (entity && entity.style)?entity.style:null; 
+       var selectorStyles = new SelectSelector('style', dataSourceStyles, valueStyles, false );             
+       var self = this;
+       
+       if (entity == null) 
+       {
+          dataSourceStyles.addListener('data_available', function(event) {
+             if (event.data && event.data.length > 0) {
+               self.configViewStyle(event.data[0].style);
+             }
            });
-         }
+       }
+       else {
+        self.configViewStyle(entity.style);
+        self.configPagination();
+       }
 
-         $('#style').change(function(event) { 
-      	   self.changeViewStyle(event);
-      	   });
-      	   
-      	 $('#pagination').change(function(event) {
-      	   self.changePagination(event);
-      	 });
-         
-         // Limit the text area length
-         YSDForms.limit_text_area_content_size(document.getElementById('description'), 256, 
-            function (content_remain) {
-              document.getElementById('description_length').innerHTML = '<strong>' + content_remain + '</strong>';
-            }
-         );    
+       $('#style').change(function(event) { 
+         self.changeViewStyle(event);
+       });
+
+       // Configure pagination      	   
+     	 $("input[name=pagination]").change(function(event) {
+     	   self.changePagination(event);
+     	 });
+        
+       // Configure pagers
+       var pagerDataSource = new MemoryDataSource(this.pagers);
+       var pagerValue = (entity && entity.pager)?entity.pager:null;
+       var selectPager = new SelectSelector('pager', pagerDataSource, pagerValue);       
+
+       // Limit the text area length
+       YSDForms.limit_text_area_content_size(document.getElementById('description'), 256, 
+           function (content_remain) {
+             document.getElementById('description_length').innerHTML = '<strong>' + content_remain + '</strong>';
+           }
+       );    
+
+       // Configure preview
+       this.configPreview(entity);
     	
     }
     
+    /* ----- View style ------- */
+
   	this.changeViewStyle = function(event) {
   	
   	  var viewStyle = $('#style option:selected').val();
-  	  this.buildViewRenders(viewStyle);
+
+      this.configViewStyle(viewStyle); 
   	    		
   	}
   	
-  	this.changePagination = function(event) {
-  	
-  	  var pagination = $('#pagination option:selected').val();	
-  
-  	  if (pagination) {
-  	    $('#page_size').show();	
-  	  }
-  	  else {
-  	  	$('#page_size').hide();
-  	  }  
-  		
-  	}
-    
-  	this.buildViewRenders = function(viewStyle) {
+    this.configViewStyle = function(viewStyle) {
 
-      // Configure the renders
+      if (viewStyle == 'teaser') {
+        $('#view_fields_row').hide();  
+      }
+      else {
+        $('#view_fields_row').show();
+      }  
+
+      this.buildViewRenders(viewStyle);
+
+    }
+
+    this.buildViewRenders = function(viewStyle) {
+
       var dataSourceRenders = new RemoteDataSource('/view-renders/'+viewStyle,{'id':'id','description':'description'});
       var valueRenders = (this.entity && this.entity.render)?this.entity.render:null; 
       var selectorRenders = new SelectSelector('render', dataSourceRenders, valueRenders, false );     
-      
-  	  if (viewStyle == 'teaser') {
-  	    $('#view_fields').hide();	
-  	  }
-  	  else {
-  	  	$('#view_fields').show();
-  	  }              
-  		
-  	}
+               
+    }
     
+    /* ------ Pagination ------ */
+
+  	this.changePagination = function(event) {
+  	
+  	  this.configPagination();
+
+  	}
+        
+    this.configPagination = function() {
+
+      var pagination = ($(document.forms["element"].pagination).val() == "true");  
+  
+      if (pagination) {
+        $('#page_size_row').show(); 
+      }
+      else {
+        $('#page_size_row').hide();
+      }  
+
+    }
+
+    /* ------- Preview ------- */
+
+    this.configPreview = function(entity) {
+
+      this.entity = entity;
+      var self = this;  
+      $('.view-preview').bind('click', 
+           function event(event) {
+             self.preview(entity, $('#arguments').val()); 
+           });
+
+    }
+
     this.preview = function(entity, args) { /* preview the view */
 
-      var view = entity;	
-      var url = '/view/preview/'+view.view_name;
+      var doPreview = function() {
+
+        var view = entity;  
+        var url = '/view/preview/'+view.view_name;
       
-      if (args.length > 0) {
-        url += '/' + args;
-      }
+        if (args.length > 0) {
+          url += '/' + args;
+        }
       
-      $.ajax({url: url,
+        $.ajax({url: url,
               success: function(data, textStatus, jqXHR) { 
-      	        $('#view-preview-result').html(data);	
-      	      },
-      	      error: function(data, textStatus, jqXHR) {
-      	      	viewsManager.view.notify_user('Error retrieving data', 'Server error retrieving data');
-      	      }
-      });
+                $('#view-preview-result').html(data); 
+              },
+              error: function(data, textStatus, jqXHR) {
+                viewsManager.view.notify_user('Error retrieving data', 'Server error retrieving data');
+              }
+        });
+      };
+
+      if (this.manager.view.isFormElementMode()) {
+        this.manager.model.update(null, doPreview);
+      }
+      else {
+        doPreview();
+      }
       	     
     }
   	
+
   };
   
   var urls = { 
   	      query_url  : '/views',
-    	  create_url : '/view',
+    	    create_url : '/view',
   	      update_url : '/view',
   	      delete_url : '/view',
   	      get_url    : '/view'
   	     };
   
   var viewHook = new ViewHook();  
-  var viewsManager = new EntityManagement(urls, 'view', 12, viewHook);
- 
-  $('.entity-title').html('Views');
-  
+  var viewsManager = new EntityManagement(urls, 'view', 12, viewHook, {hold_form_after_action:true});
+   
+  viewHook.manager = viewsManager;
+
 });
 </script>

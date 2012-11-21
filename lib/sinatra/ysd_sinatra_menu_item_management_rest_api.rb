@@ -1,5 +1,9 @@
+require 'ysd_md_menu_item'
 module Sinatra
   module YSD
+    #
+    # Menu item REST API
+    # 
     module MenuItemManagementRESTApi
        
       def self.registered(app)
@@ -9,7 +13,7 @@ module Sinatra
         #
         app.get "/menu-items/:menu_name" do
           
-          data=Site::MenuItem.all(:menu => {:name => params['menu_name']}, :order => [:parent_id.desc,:weight.desc])
+          data=::Site::MenuItem.all(:menu => {:name => params['menu_name']}, :order => [:parent_id.desc,:weight.desc])
           
           content_type :json
           data.to_json
@@ -22,7 +26,7 @@ module Sinatra
         ["/menu-items-parent-candidate/:menu_name","/menu-items-parent-candidate/:menu_name/:menu_item_id"].each do |path|
         
           app.get path do
-            data=Site::MenuItem.all(:menu => {:name => params['menu_name']}, :order => [:parent_id.desc,:weight.desc])
+            data=::Site::MenuItem.all(:menu => {:name => params['menu_name']}, :order => [:parent_id.desc,:weight.desc])
           
             content_type :json
             data.to_json          
@@ -36,12 +40,12 @@ module Sinatra
         ["/menu-items/:menu_name","/menu-items/:menu_name/page/:page"].each do |path|
           app.post path do
           
-            data=Site::MenuItem.all(:menu => {:name => params['menu_name']}, :order => [:parent_id.desc,:weight.desc])
+            data=::Site::MenuItem.all(:menu => {:name => params['menu_name']}, :order => [:parent_id.desc,:weight.desc])
             
             begin
-              total=Site::MenuItem.count(:menu => {:name => params['menu_name']})
+              total=::Site::MenuItem.count(:menu => {:name => params['menu_name']})
             rescue
-              total=Site::MenuItem.all(:menu => {:name => params['menu_name']}).length
+              total=::Site::MenuItem.all(:menu => {:name => params['menu_name']}).length
             end
             
             content_type :json
@@ -56,7 +60,7 @@ module Sinatra
         #
         app.get "/menu-item/:id" do
           
-          menu_item = Site::MenuItem.get(params['id'])
+          menu_item = ::Site::MenuItem.get(params['id'])
           
           status 200
           content_type :json
@@ -73,7 +77,7 @@ module Sinatra
           menu_item_request = JSON.parse(URI.unescape(request.body.read))
           
           # Creates the new content
-          menu_item = Site::MenuItem.new(menu_item_request)
+          menu_item = ::Site::MenuItem.new(menu_item_request)
           menu_item.save
           
           # Return          
@@ -92,7 +96,7 @@ module Sinatra
           menu_item_request = JSON.parse(URI.unescape(request.body.read))
           
           # Updates the menu item
-          menu_item = Site::MenuItem.get(menu_item_request['id'])
+          menu_item = ::Site::MenuItem.get(menu_item_request['id'])
           menu_item.attributes=(menu_item_request)
           menu_item.save
                    
@@ -111,7 +115,7 @@ module Sinatra
           menu_item_request = JSON.parse(URI.unescape(request.body.read))
 
           # Remove the storage
-          if menu_item = Site::MenuItem.get(menu_item_request['id'])
+          if menu_item = ::Site::MenuItem.get(menu_item_request['id'])
             menu_item.destroy
           end
           

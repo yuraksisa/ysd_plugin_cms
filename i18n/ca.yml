@@ -1,7 +1,6 @@
 #
 # ------ Menus --------
 #
-
 # Content Manager
 cms_admin_menu:
   cms_menu: Gestió de continguts
@@ -12,12 +11,49 @@ cms_admin_menu:
   build_site_menu: Construir site
   block_management: Blocs
   view_management: Vistes
-
 # Site
 site_admin_menu:
   admin_menu: Admin
   menu_management: Menus
-
+#
+# Taxonomy management
+#
+taxonomy_management:
+  title: Taxonomías
+  description: >
+               <p>Taxonomías le permite organizar su contenido usuario etiquetas y términos. Cree una <em>taxonomías</em> para que 
+               contenga un grupo de términos o etiquetas. Una taxonomía puede estar vinculado a tipos de contenidos y se mostrará 
+               cuando se creen o editen contenidos de ese tipo.</p>
+#
+# Term management
+#
+term_management:
+  title: Términos de la taxonomía %1
+  description: >
+               <p>Puede definir los <em>términos</em> que pertenecen a la taxonomía, de forma que pueda clasificar los contenidos utilizando estos términos.</p>
+#
+# Menu management
+#
+menu_management:
+  title: Menus
+  description: >
+               <p>Esta página muestra los menús. Un <strong>menú</strong> es una herramienta para navegar por el sitio web. Los menús se organizan siguiendo el principio de los árboles, esto quiere decir que un menú puede tener menús hijos y menús padres.</p>
+               <p>Puede utilizar <em>bloques</em> para activar los menus.</p> 
+#
+# Menu item management
+#
+menu_item_management:
+  title: Items del menú %1
+  description: >
+               <p>Pendiente de definir</p>
+#
+# View management
+#
+view_management:
+  title: Vistas
+  description: >
+               <p>Las vistas permiten definir consultas sobre el modelo de datos para presentarlas en forma de <em>bloques</em> o <em>páginas</em>.</p>
+               <p>Para visualizarla como una <em>página</em>, utilice la URL <strong>/nombre_vista</strong>. Para visualizarla como un <em>bloque</em>, configúrela en la gestión de bloques.</p>
 #
 # Content management
 #

@@ -9,9 +9,13 @@ module Sinatra
         #        
         app.get "/term-management/:taxonomy_id/?*" do
           
-          # TODO check that the taxonomy id exists
-          
-          load_em_page(:term_management, :term, true, :locals => opts)
+          if taxonomy = ContentManagerSystem::Taxonomy.get(params[:taxonomy_id])
+            locals = {}
+            locals.store(:title, t.term_management.title(taxonomy.name))
+            load_em_page(:term_management, :term, true, :locals => locals)
+          else
+            status 404
+          end 
           
         end
               

@@ -425,7 +425,11 @@ module Huasi
          view_name = block_name.sub(/view_/,'')
        
          if view = ContentManagerSystem::View.get(view_name)
-            view_render = ::CMSRenders::ViewRender.new(view, app).render  # Gets the view representation  
+            arguments = ""
+            if app.request.path_info and app.request.path_info.split('/').length > 2
+              arguments = (x=app.request.path_info.split('/')).slice(2,x.length).join('/')
+            end
+            view_render = ::CMSRenders::ViewRender.new(view, app).render(1, arguments)  # Gets the view representation  
          else
             ''
          end

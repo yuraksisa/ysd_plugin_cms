@@ -1,0 +1,57 @@
+<div id="<%="view_#{view.view_name}"%>" class="view">
+
+  <% if view.title and (view.title.strip.length > 0) %>
+    <h2><%=view.title%></h2>
+  <% end %>
+  
+  <% if view.header and (view.header.strip.length > 0) %>
+    <div class="view_header">
+      <%=view.header%>	
+    </div>
+  <% end %>
+  
+  <% if view_body and (view_body.strip.length > 0) %>
+    <div id="<%="view_body_#{view.view_name}"%>" class="view_body">
+    <%= view_body %>
+    </div>
+  <% end %>
+
+  <% if view.footer and (view.footer.strip.length > 0) %>
+    <div class="view_footer">
+      <%= view.footer %>
+    </div>
+  <% end %>
+
+  <% if view.pagination and view_data[:summary][:total_pages] > 1 %>
+    <div id="<%="view_#{view.view_name}_pagination"%>" class="view_pagination">
+    </div>
+  <% end %>
+
+</div>
+
+<% if view.pagination and view_data[:summary][:total_pages] > 1 %>
+
+  <script type="text/javascript">
+
+    require(['jquery','YSDPager','YSDPagerFactory'], function($, Pager, PagerFactory) {
+      
+      controller_class = PagerFactory.getPagerController('<%=view.pager%>');
+      view_class = PagerFactory.getPagerView('<%=view.pager%>'); 
+
+      controller = new controller_class();
+      view       = new view_class('<%="view_#{view.view_name}_pagination"%>');
+      pager      = new Pager(<%=view.page_size%>, <%=view_data[:summary][:current_page]%>, <%=view_data[:summary][:total_records]%>, controller, view);
+      pager.model.setTotal(<%=view_data[:summary][:total_records]%>);
+      pager.addListener('navigate', function(data) {
+      	<% if view.ajax_pagination %>
+          $('#<%="view_#{view.view_name}"%>').load('/view/<%=view.view_name%>/page/'+ data.page +'/<%=view_arguments%>');
+        <% else %>
+          window.location.href = '<%=view_url%>/page/' + data.page + '/<%=view_arguments%>';
+        <% end %>
+      });
+
+    });
+
+  </script>
+
+<% end %>

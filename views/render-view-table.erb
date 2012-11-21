@@ -1,4 +1,4 @@
-    <div id="<%="view_#{view.view_name}"%>" class="view">
+    <div class="view_body">
        <table class="view_table">
          <thead>  
            <tr class="view_table_header_row">
@@ -8,7 +8,7 @@
            </tr>
          </thead>
          <tbody>
-           <% view_data.each do |element| %>
+           <% view_data[:data].each do |element| %>
            <tr class="view_table_body_row">
              <% view.view_fields.each do |view_field| %>
              <td class="view_table_body_cell <%= view_field.class if view_field.class.to_s.strip.length > 0 %>">

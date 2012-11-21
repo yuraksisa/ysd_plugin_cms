@@ -1,5 +1,5 @@
-    <div id="<%="view_#{view.view_name}"%>" class="view">
-      <% view_data.each do |element| %>
+    <div class="view_body">
+      <% view_data[:data].each do |element| %>
         <div class="view_div_element">
           <% view.view_fields.each do |view_field| %>
              <div class="view_div_element_attribute <%= view_field.class if view_field.class.to_s.strip.length > 0 %>">

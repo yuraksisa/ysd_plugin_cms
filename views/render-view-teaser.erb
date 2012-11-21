@@ -1,5 +1,5 @@
-    <div id="<%="view_#{view.view_name}"%>" class="view">
-      <% view_data.each do |element_rendered| %>
+    <div class="view_body">
+      <% view_data[:data].each do |element_rendered| %>
         <div class="view_teaser_element">
            <%= element_rendered %>
         </div>

@@ -1,5 +1,15 @@
 <%= include('entity-management') %>
 
+<!-- Renders the element title -->
+<script type="text/tmpl" id="elements_title">
+  <h2 class="entity-title"><%=title%></h2>
+</script>
+
+<!-- Renders the element description -->
+<script type="text/tmpl" id="elements_description">
+  <%= t.menu_item_management.description %>
+</script>
+
 <!-- Renders the elements container -->
 <script type="text/tmpl" id="elements_container_template">
 
@@ -58,12 +68,6 @@
               
      <form name="element">
         
-        <div class="top-navigation-bar navigation-bar">
-             <h2 class="form-title">Menu items on <%%= self.model.configuration.parentId %></h2>
-             <div class="navigation-bar-nav-buttons">
-             </div>
-        </div>        
-
         <div class="form-fields">
         
           <%% if (entity) { %>
@@ -122,6 +126,8 @@
 
 <script type="text/javascript">
  
+require(['YSDTreeEntityManagement', 'YSDMemoryDataSource',  'YSDRemoteDataSource', 'YSDHierachyListAdapter', 'YSDSelectHierarchicalSelector', "YSDEntityManagementComplementHooks", 'jquery'], function(TreeEntityManagement, MemoryDataSource, RemoteDataSource, HierachyListAdapter, SelectHierarchicalSelector, EntityManagementComplementHooks, $) {
+
   function MenuItemHook() {
  	   
     this.entityKey = function(entity) {
@@ -142,14 +148,14 @@
     
          // Configure weights
          var weights = [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10];
-         var weightDataSource = new YsdForms.MemoryDataSource(weights);
+         var weightDataSource = new MemoryDataSource(weights);
          var weightValue = (entity && entity.weight)?entity.weight:0;
-         var selectWeight = new YsdForms.SelectSelector('weight', weightDataSource, weightValue);
+         var selectWeight = new SelectSelector('weight', weightDataSource, weightValue);
          
          // Configure parents
-         var parentsDataSource = new YsdForms.RemoteDataSource('/menu-items-parent-candidate/'+ menuItemsManager.model.configuration.parentId,null,[YsdForms.HierachyListAdapter]);
+         var parentsDataSource = new RemoteDataSource('/menu-items-parent-candidate/'+ menuItemsManager.model.configuration.parentId,null,[HierachyListAdapter]);
          var parentValue = (entity && entity.parent_id)?entity.parent_id:null;
-         var parentTerms = new YsdForms.SelectHierarchicalSelector('parent[id]', parentsDataSource, parentValue, true);
+         var parentTerms = new SelectHierarchicalSelector('parent[id]', parentsDataSource, parentValue, true);
     	
     }
         
@@ -169,12 +175,10 @@
   var menuItemHooks = [menuItemHook];
   
   // Add the complement hooks
-  if (typeof YSD.entityManagement.complementHooks != 'undefined') {
-    menuItemHooks = menuItemHooks.concat(YSD.entityManagement.complementHooks.complements);
-  }    
-  
+  menuItemHooks = menuItemHooks.concat(EntityManagementComplementHooks.complements);
+      
   var menuItemsManager = new TreeEntityManagement(urls, 'menu item', 12, menuItemHooks, {parent_filtered:true});
   
-  $('.entity-title').html('Menu items on ' + menuItemsManager.model.configuration.parentId);
-   
+});
+
 </script>

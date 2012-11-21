@@ -9,6 +9,7 @@ module CMSRenders
     # This class is responsible of render a view
     #
     class ViewRender
+     
        attr_reader :view
        attr_reader :context
        attr_reader :display
@@ -28,31 +29,92 @@ module CMSRenders
        # - view-render-<view.type>.erb (in theming)
        # - view-render-<view.type>.erb (in views)
        #
-      def render(arguments="")
-      
-        view_template = find_template(view)
+      def render(page=1, arguments="")
         
-        view_data = if view.style == 'teaser'
-                      view.get_data(arguments).map { |element| Factory.get_render(element, context, view.render).render }
-                    else
-                      view.get_data(arguments)
-                    end
+        view_data = get_view_data(page, arguments)
+        
+        view_url = '/'
+        
+        if view.url.to_s.strip.length > 0
+          view_url << view.url
+        else
+          view_url << view.view_name
+        end
 
-        template = Tilt.new(view_template)
-        view = template.render(context, {:view => @view, :view_data => view_data})
-                
-        view.force_encoding('utf-8')
+        template_path = find_view_holder
+        template = Tilt.new(template_path)
         
-        return view
+        result = template.render(context, {:view => @view, :view_url => view_url, :view_data => view_data, :view_body => render_view_body(view_data), :view_arguments => arguments})
+        
+        if String.method_defined?(:force_encoding)
+          result.force_encoding('utf-8')
+        end
+
+        return result
         
       end
 
       private
       
+      #
+      # Render the view body
+      #
+      # @return [String] the rendered body
+      #
+      def render_view_body(view_data)
+
+        template = Tilt.new(find_template(view))
+        result = template.render(context, {:view => @view, :view_data => view_data})
+        
+        if String.method_defined?(:force_encoding)
+          result.force_encoding('utf-8')
+        end
+
+        return result
+
+      end
+ 
+      #
+      # Get the view data
+      #
+      # @return [Array] The elements
+      #
+      def get_view_data(page=1, arguments="")
+
+        data = view.get_data(page, arguments)
+
+        if view.style == 'teaser'
+          data[:data].map! { |element| Factory.get_render(element, context, view.render).render }
+        end
+
+        return data
+
+      end
+
+      #
+      # Finds the template which holds the view
+      #
+      # @return [String] The holder path
+      #
+      def find_view_holder
+
+        view_holder_path = Themes::ThemeManager.instance.selected_theme.resource_path("view-holder.erb")
+
+        if not view_holder_path
+          path = context.get_path("view-holder")
+          view_holder_path = path if not path.nil? and File.exists?(path)
+        end
+
+        return view_holder_path
+
+      end
+
       # Finds the template to render the view
       #
       # @param [View] view
       #   The view to render
+      #
+      # @param [String] The concrete renderer path
       #      
       def find_template(view)
         

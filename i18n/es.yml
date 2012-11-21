@@ -14,6 +14,121 @@ site_admin_menu:
   admin_menu: Admin
   menu_management: Menus
 #
+# Taxonomy management
+#
+taxonomy_management:
+  title: Taxonomías
+  description: >
+               <p>Taxonomías le permite organizar su contenido usuario etiquetas y términos. Cree una <em>taxonomías</em> para que 
+               contenga un grupo de términos o etiquetas. Una taxonomía puede estar vinculado a tipos de contenidos y se mostrará 
+               cuando se creen o editen contenidos de ese tipo.</p>
+#
+# Term management
+#
+term_management:
+  title: Términos de la taxonomía %1
+  description: >
+               <p>Puede definir los <em>términos</em> que pertenecen a la taxonomía, de forma que pueda clasificar los contenidos utilizando estos términos.</p>
+#
+# Menu management
+#
+menu_management:
+  title: Menus
+  description: >
+               <p>Esta página muestra los menús. Un <strong>menú</strong> es una herramienta para navegar por el sitio web. Los menús se organizan siguiendo el principio de los árboles, esto quiere decir que un menú puede tener menús hijos y menús padres.</p>
+               <p>Puede utilizar <em>bloques</em> para activar los menus.</p> 
+#
+# Menu item management
+#
+menu_item_management:
+  title: Items del menú %1
+  description: >
+               <p>Pendiente de definir</p>
+#
+# View management
+#
+view_management:
+  title: Vistas
+  description: >
+               <p>Las vistas permiten definir consultas sobre el modelo de datos para presentarlas en forma de <em>bloques</em> o <em>páginas</em>.</p>
+  form:
+    description_block:
+      label: Descripción
+    style_block:
+      label: Estilo
+    query_block:
+      label: Consulta
+    result_block:
+      label: Resultado
+    page_block:
+      label: Página
+    extras_block:
+      label: Más opciones
+    name:
+      label: Nombre
+      description: El nombre de la vista. Debe ser único porque identifica a cada una de las vistas. 
+    description:
+      label: Descripción
+      description: Descripción de la vista
+    style:
+      label: Estilo
+      description: Estilo de la vista
+    fields:
+      label: Campos
+      description: Los campos del modelo que desea presentar en la vista
+    render:
+      label: Presentación
+      description: El modo de presentación de la vista
+    model:
+      label: Modelo
+      description: El origen de los datos de la vista
+    conditions:
+      label: Condiciones
+      description: Las condiciones que han de cumplir los datos del modelo para aparecer en la vista
+    order:
+      label: Orden
+      description: El orden de presentación de los datos
+    arguments:
+      label: Argumentos    
+      description: Los argumentos de las condiciones, que se extraen de la URL.
+    limit:
+      label: Límite
+      description: El número máximo de resultados. Seleccione 0 si no desea límite
+    pagination:
+      label: Paginación
+      description: Si desea paginación de resultados
+    ajax_pagination:
+      label: Paginación con Ajax
+      description: Paginación con Ajax
+    page_size:
+      label: Tamaño de página
+      description: Número de elementos que se presentan en cada página
+    pager:
+      label: Tipo de paginación
+      description: Tipo de paginación
+    title:
+      label: Título
+      description: Título de la vista
+    header:
+      label: Cabecera
+      description: Texto a mostrar en la cabecera de la vista
+    footer:
+      label: Pie
+      description: Texto a mostrar en el pie de la vista
+    script:
+      label: Script
+      description: Código js a incluir para mejorar Gui
+    url:
+      label: Url
+      description: Url en la que estará disponible la vista
+    block:
+      label: Usar la vista como bloque
+      description: Usar la vista como bloque
+    rb_yes:
+      label: Si
+    rb_no:
+      label: No
+#
 # Content management
 #  
 content_management:  
