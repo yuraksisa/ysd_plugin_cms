@@ -95,6 +95,14 @@ content_type_management:
     workflow:
       label: Workflow
   form:
+    description_block:
+      label: Description
+    messages_block:
+      label: Messages
+    workflow_block:
+      label: Workflow
+    permissions_block:
+      label: Permissions  
     id:
       label: Id
       required: The content type Id is required
@@ -143,12 +151,23 @@ entity_fields:
     term:
       description: Descripció
 #
+# Aspects
+#    
+aspect:
+  comments: Comments. (accept comments)
+  translate: Translate
+#
 # Comments
 #  
 comments:
   title: Comments
   message: Type your comment
   post: Post
+#
+# Translation
+#
+cms_translations:
+  translate: Translate
 #
 # Publishing
 #
@@ -203,8 +222,3 @@ guiblock:
     description: Meta
   audit:
     description: Audit
-#
-# Aspects
-#    
-aspect:
-  comments: Comments. (accept comments)

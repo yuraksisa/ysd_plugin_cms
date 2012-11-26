@@ -1,6 +1,7 @@
 # encoding: utf-8
 require 'ysd-plugins_viewlistener' unless defined?Plugins::ViewListener
 require 'ui/ysd_ui_page_component' unless defined?UI::PageComponent
+require 'ysd_md_commentable'
 
 #
 # Huasi CMS Extension
@@ -57,27 +58,13 @@ module Huasi
       app = context[:app]
       
       aspects = []
-      aspects << ::Plugins::Aspect.new(:comments, app.t.aspect.comments, [:entity], CommentAspectDelegate.new)
+      aspects << ::Plugins::Aspect.new(:comments, app.t.aspect.comments, ContentManagerSystem::Commentable, CommentAspectDelegate.new)
+      aspects << ::Plugins::Aspect.new(:translation, app.t.aspect.translate, Model::Translatable, CMSTranslationAspectDelegate.new)
                                 
       return aspects
        
     end
 
-    # ========= Entities =================
-    
-    #
-    # Return the entities which support aspects
-    #
-    # @return [Array] of ::Model::EntityInfo
-    #
-    def entities(context={})
-       
-      app = context[:app] 
-       
-      [::Model::EntityInfo.new(:term, app.t.entity.term, ContentManagerSystem::Term)]
-    
-    end
- 
     # ========= Views ====================
     
     #
@@ -274,7 +261,26 @@ module Huasi
                  :title => 'Menu item',
                  :description => 'Manage the items of a menu.',
                  :fit => 1,
-                 :module => :cms }
+                 :module => :cms },
+                {:path => '/translate/content/:content_id',
+                 :parent_path => '/mcontents',
+                 :regular_expression => /^\/translate\/content\/.+/, 
+                 :title => 'Content translation', 
+                 :description => 'Translate a content',
+                 :fit => 1,
+                 :module => :translation },
+                {:path => '/translate/menuitem/:menuitem_id',
+                 :regular_expression => /^\/translate\/menuitem\/.+/, 
+                 :title => 'Menu item translation', 
+                 :description => 'Translate a menu item',
+                 :fit => 1,
+                 :module => :translation },                 
+                {:path => '/translate/term/:term_id',
+                 :regular_expression => /^\/translate\/term\/.+/,                  
+                 :title => 'Term translation',
+                 :description => 'Translate a term.',
+                 :fit => 1,
+                 :module => :translation }                 
                ]
         
     end

@@ -1,0 +1,114 @@
+<%= include('entity-management') %>
+
+<!-- Renders the elements container -->
+<script type="text/tmpl" id="elements_container_template">
+
+</script>
+
+<!-- Renders one element in the elements list view -->
+        
+<script type="text/tmpl" id="elements_list_template">
+
+</script>
+
+<!-- Renders one element in the element view (full detailed) -->
+
+<script type="text/tmpl" id="element_template">
+
+</script>
+
+<!-- Renders the form to edit an element -->
+
+<script type="text/tmpl" id="element_template_form">
+
+  <form name="term_translation" id="term_translation">
+
+    <div class="top-navigation-bar navigation-bar">
+       <h2 class="form-title">Term translation</h2>
+       <div class="navigation-bar-nav-buttons">
+       </div>
+    </div>        
+
+    <input type="hidden" name="term_id" value="<%=term_id%>"/>
+
+    <div class="form-fields">
+    
+      <div class="formrow">
+        <label for="language" class="fieldtitle">Language <span class="mandatoryfield">*</span></label>
+        <select name="language" id="language" class="fieldcontrol"/> 
+        <div class="fielddescription">The translation language.</div>
+      </div>
+
+      <div class="formrow">
+        <label for="name" class="fieldtitle">Description <span class="mandatoryfield">*</span></label>
+        <input type="text" maxlength="256" id="description" name="description" class="fieldcontrol" <%% if (entity) { %> value="<%%= entity.description %>" <%% } %> />
+      </div>
+    
+      <div class="bottom-navigation-bar navigation-bar">
+        <div class="navigation-bar-nav-buttons">
+           <input type="submit" class="update-entity-button action-button entity-management-button" value="Update"/>
+        </div>
+      </div>
+    </div>
+  </form>
+  
+</script>
+
+<script type="text/javascript">
+
+require(['jquery','YSDEntityManagement', 'YSDRemoteDataSource', 'YSDSelectSelector'],
+        function($, EntityManagement, RemoteDataSource, SelectSelector) {
+
+  function TermTranslationHook() {
+ 	   
+  	this.onEdit = function(entity) {
+  	  this.configForm(entity);	
+  	}
+  	
+  	this.onNew = function() {
+  	  this.configForm(null);	
+  	}
+  	
+    this.onRenderEntities = function(entities) {
+    
+      $('.new-entity-button').hide();
+      $('.edit-entity-button').hide();
+      $('.page-navigation').hide();
+      	
+    }
+    
+    this.configForm = function(entity) {       
+    
+      var dataSource = new RemoteDataSource('/translationlanguages',{id:'code', description:'description'});
+      var value = (this.entity && this.entity.language)?this.entity.language:'<%=language%>'; 
+      var selector = new SelectSelector('language', dataSource, value );
+      
+      $('#language').change(function(event) { 
+      	  self.changeLanguage(event) 
+      	 });    	
+    }
+    
+    this.changeLanguage = function(event) {
+      
+      var language = $('#language option:selected').val();	
+      
+      // 
+      
+    }
+  	  	
+  };
+  
+  var urls = {
+               get_url        : '/translation/<%=language%>/term/<%=term_id%>',
+               update_url     : '/translation/term'
+             };
+             
+  var termTranslationHook = new TermTranslationHook();
+  var termTranslation = new EntityManagement(urls, 'term translation', 1, termTranslationHook, 
+                                            {url_base: '/translate/term', action: 'edit'});
+ 
+  $('.entity-title').html('Term translation');
+  
+ });
+
+</script>

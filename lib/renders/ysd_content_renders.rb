@@ -141,7 +141,7 @@ module CMSRenders
        result = {}
       
        if content_type = ContentManagerSystem::ContentType.get(content.type)
-         aspects_render = UI::EntityAspectRender.new({:app=>context}, content_type.aspects) #get_aspects_definition(context))
+         aspects_render = UI::EntityAspectRender.new({:app=>context}, content_type.aspects) 
          result = aspects_render.render(content, content_type) 
        end   
       

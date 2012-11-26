@@ -172,6 +172,14 @@ content_type_management:
     workflow:
       label: Workflow
   form:
+    description_block:
+      label: Descripción
+    messages_block:
+      label: Mensajes
+    workflow_block:
+      label: Workflow
+    permissions_block:
+      label: Permisos  
     id:
       label: Id
       required: El Id es obligatorio
@@ -220,12 +228,23 @@ entity_fields:
     term:
       description: Descripció
 #
+# Aspects
+#    
+aspect:
+  comments: Comentarios. (aceptar comentarios)
+  translate: Traducir       
+#
 # Comments
 #        
 comments:
   title: Comentarios
   message: Escribe el comentario
   post: Publicar
+#
+# Translation
+#
+cms_translations:
+  translate: Traducir
 #
 # Publishing
 #
@@ -279,8 +298,3 @@ guiblock:
     description: Meta
   audit:
     description: Auditoría
-#
-# Aspects
-#    
-aspect:
-  comments: Comentarios. (aceptar comentarios)

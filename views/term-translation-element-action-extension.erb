@@ -1,0 +1,25 @@
+<script type="text/javascript">
+
+require(['jquery', 'YSDEntityManagementComplementHooks'],
+        function($, EntityManagementComplementHooks) {
+
+   TermTranslatePlugin = function() {
+
+     this.onRender = function(entity) {
+     
+       var self = this;
+       $('#term_translate').bind('click', 
+             function event(event) {
+               window.location.href = '/translate/term/' + entity.id + '?destination=/term-management/' + entity.id; //TODO Taxonomy id	 
+             });
+     	
+     }
+
+   }
+             	
+   var termTranslatePlugin = new TermTranslatePlugin();
+   EntityManagementComplementHooks.register(termTranslatePlugin);	
+   
+});          
+       
+</script>

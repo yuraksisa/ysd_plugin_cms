@@ -1,5 +1,12 @@
+require 'ui/ysd_ui_entity_management_aspect_render' 
+require 'guiblocks/ysd_guiblock_aspects'
+require 'ui/ysd_ui_guiblock_entity_aspect_adapter'
+
 module Sinatra
   module YSD
+    #
+    # Content type management
+    #
     module ContentTypeManagement
    
       def self.registered(app)
@@ -12,7 +19,18 @@ module Sinatra
         # Content types management page
         #
         app.get "/mctypes/?*" do
-          load_page(:content_type_management)
+          
+          context = {:app => self}
+
+          aspects = []
+          aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::Aspects.new('/mctype', 'content'), 99, false, true, true, false, 100, true)
+
+          aspects_render=UI::EntityManagementAspectRender.new(context, aspects) 
+          
+          locals = aspects_render.render(content_type)
+
+          load_em_page(:content_type_management, :contenttype, false, :locals => locals)
+        
         end
         
         #
@@ -23,7 +41,8 @@ module Sinatra
           context = {:app => self}
                   
           content_type = ::ContentManagerSystem::ContentType.get(params['content_type'])
-          aspect = content_type.get_aspect_definition(params['aspect'], context)
+
+          aspect = content_type.aspect(params[:aspect]).get_aspect(context)
                   
           if content_type and aspect 
 
@@ -31,25 +50,25 @@ module Sinatra
             locals.store(:aspect, params['aspect'])
             locals.store(:model, params['content_type'])
             locals.store(:model_type, 'Content Type')
-            locals.store(:update_url, "/ctype/#{content_type.id}/aspect/#{params['aspect']}/config")
-            locals.store(:get_url,    "/ctype/#{content_type.id}/aspect/#{params['aspect']}/config")
-            locals.store(:url_base,   "/ctype/#{content_type.id}/aspect/#{params['aspect']}")
-            locals.store(:url_destination, "/mctypes/#{content_type.id}")
-            locals.store(:description, "#{params['aspect']} - #{content_type.id}")
+            locals.store(:update_url, "/ctype/#{content_type.id}/aspect/#{params[:aspect]}/config")
+            locals.store(:get_url,    "/ctype/#{content_type.id}/aspect/#{params[:aspect]}/config")
+            locals.store(:url_base,   "/ctype/#{content_type.id}/aspect/#{params[:aspect]}")
+            #locals.store(:url_destination, "/mctypes/#{content_type.id}")
+            locals.store(:description, "#{params[:aspect]} - #{content_type.id}")
                     
-            if aspect and aspect.respond_to?(:config)
-              locals.store(:aspect_config_form, aspect.config(context))
+            if aspect.gui_block.respond_to?(:config)
+              locals.store(:aspect_config_form, aspect.gui_block.config(context))
             else
               locals.store(:aspect_config_form, '')
             end
       
-            if aspect and aspect.respond_to?(:config_extension)
-              locals.store(:aspect_config_form_extension, aspect.config_extension(context))
+            if aspect.gui_block.respond_to?(:config_extension)
+              locals.store(:aspect_config_form_extension, aspect.gui_block.config_extension(context))
             else
               locals.store(:aspect_config_form_extension, '')
             end
           
-            load_page(:model_aspect_configuration, :locals => locals)
+            load_em_page(:model_aspect_configuration, nil, false, :locals => locals)
           
           else
             

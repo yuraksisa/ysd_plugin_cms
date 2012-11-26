@@ -1,0 +1,23 @@
+<script type="text/javascript">
+
+require(['jquery', 'YSDEntityManagementComplementHooks'],
+        function($, EntityManagementComplementHooks) {
+
+   ContentTranslatePlugin = function() {
+
+     this.onRender = function(entity) {
+       var self = this;
+       $('#content_translate').bind('click', 
+             function event(event) {
+               window.location.href = '/translate/content/' + entity.key + '?destination=/mcontents/' + entity.key;	
+             });
+     }
+
+   }
+          
+   var contentTranslatePlugin = new ContentTranslatePlugin();
+   EntityManagementComplementHooks.register(contentTranslatePlugin);	
+   
+});
+       
+</script>

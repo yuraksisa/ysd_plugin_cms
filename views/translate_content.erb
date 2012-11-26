@@ -1,0 +1,139 @@
+<%= include('entity-management') %>
+
+<!-- Renders the elements container -->
+<script type="text/tmpl" id="elements_container_template">
+
+</script>
+
+<!-- Renders one element in the elements list view -->
+        
+<script type="text/tmpl" id="elements_list_template">
+
+</script>
+
+<!-- Renders one element in the element view (full detailed) -->
+
+<script type="text/tmpl" id="element_template">
+
+</script>
+
+<!-- Renders the form to edit an element -->
+
+<script type="text/tmpl" id="element_template_form">
+
+  <form name="content_translation" id="content_translation">
+
+    <div class="top-navigation-bar navigation-bar">
+       <h2 class="form-title">Content translation</h2>
+       <div class="navigation-bar-nav-buttons">
+       </div>
+    </div>        
+
+    <input type="hidden" name="content_id" value="<%=content_id%>"/>
+
+    <div class="form-fields">
+    
+      <div class="formrow">
+        <label for="language" class="fieldtitle">Language <span class="mandatoryfield">*</span></label>
+        <select name="language" id="language" class="fieldcontrol"/> 
+        <div class="fielddescription">The translation language.</div>
+      </div>
+    
+      <div class="formrow">
+        <label for="title" class="fieldtitle">Title <span class="mandatoryfield">*</span></label>
+        <input type="text" maxlength="120" id="title" name="title" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.title %>" <%% } %>/>
+        <div class="fielddescription">The content title.</div>
+      </div>
+      <div class="formrow">
+        <label for="body" class="fieldtitle">Content <span class="mandatoryfield">*</span></label>
+        <textarea rows="20" id="body" name="body" class="fieldcontrol texteditor"><%% if (entity) {%><%%=entity.body %><%% } %></textarea>
+        <div class="fielddescription">The body of the content</div>
+      </div>
+      <div id="meta_form">
+        <div class="formrow">
+          <label for="subtitle" class="fieldtitle">Subtitle</label>
+          <input type="text" maxlength="80" id="subtitle" name="subtitle" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.subtitle%>" <%% } %>/>
+          <div class="fielddescription">The subtitle of the content</div>
+        </div>
+        <div class="formrow">
+          <label for="description" class="fieldtitle">Description</label>
+          <textarea rows="4" id="description" name="description" class="fieldcontrol"><%% if(entity) {%><%%=entity.description %> <%% } %></textarea>
+          <div class="fielddescription">The content description. It's used as a metatag when the page is rendered.</div>
+        </div>
+        <div class="formrow">
+          <label for="summary" class="fieldtitle">Summary</label>
+          <textarea rows="4" id="summary" name="summary" class="fieldcontrol"><%% if (entity) {%><%%=entity.summary %> <%% } %></textarea>
+          <div class="fielddescription">The content summary. It's used in when render a set of contents in one page.</div>
+        </div>
+        <div class="formrow">
+          <label for="keywords" class="fieldtitle">Keywords</label>
+          <textarea rows="3" id="keywords" name="keywords" class="fieldcontrol"><%% if (entity) {%><%%=entity.keywords %> <%% } %></textarea>
+          <div class="fielddescription">Meta keywords</div>
+        </div>
+      </div>
+      <div class="bottom-navigation-bar navigation-bar">
+        <div class="navigation-bar-nav-buttons">
+           <input type="submit" class="update-entity-button action-button entity-management-button" value="Update"/>
+        </div>
+      </div>
+    </div>
+  </form>
+  
+</script>
+
+<script type="text/javascript">
+
+require(['jquery','YSDEntityManagement', 'YSDRemoteDataSource', 'YSDSelectSelector'],
+        function($, EntityManagement, RemoteDataSource, SelectSelector) {
+
+  function ContentTranslationHook() {
+ 	   
+  	this.onEdit = function(entity) {
+  	  this.configForm(entity);	
+  	}
+  	
+  	this.onNew = function() {
+  	  this.configForm(null);	
+  	}
+  	
+    this.onRenderEntities = function(entities) {
+    
+      $('.new-entity-button').hide();
+      $('.edit-entity-button').hide();
+      $('.page-navigation').hide();
+      	
+    }
+    
+    this.configForm = function(entity) {       
+    
+      var dataSource = new RemoteDataSource('/translationlanguages',{id:'code', description:'description'});
+      var value = (this.entity && this.entity.language)?this.entity.language:'<%=language%>'; 
+      var selector = new SelectSelector('language', dataSource, value );
+      
+      $('#language').change(function(event) { 
+      	  self.changeLanguage(event) 
+      	 });    	
+    }
+    
+    this.changeLanguage = function(event) {
+      
+      var language = $('#language option:selected').val();	
+
+    }
+  	  	
+  };
+  
+  var urls = {
+               get_url        : '/translation/<%=language%>/content/<%=content_id%>',
+               update_url     : '/translation/content'
+             };
+             
+  var contentTranslationHook = new ContentTranslationHook();
+  var contentTranslation = new EntityManagement(urls, 'content translation', 1, contentTranslationHook, 
+                                               {url_base: '/translate/content', action: 'edit'});
+ 
+  $('.entity-title').html('Content translation');
+  
+ });
+
+</script>

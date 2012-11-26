@@ -31,4 +31,6 @@ Plugins::SinatraAppPlugin.register :cms do
    sinatra_extension Sinatra::YSD::MenuManagementRESTApi
    sinatra_extension Sinatra::YSD::MenuItemManagementRESTApi   
    sinatra_extension Sinatra::YSD::PublishingRESTApi
+   sinatra_extension Sinatra::YSD::CMSTranslation
+   sinatra_extension Sinatra::YSD::CMSTranslationRESTApi
 end
