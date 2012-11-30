@@ -1,7 +1,10 @@
 # encoding: utf-8
+require 'r18n-core'
 require 'ysd-plugins_viewlistener' unless defined?Plugins::ViewListener
 require 'ui/ysd_ui_page_component' unless defined?UI::PageComponent
 require 'ysd_md_commentable'
+require 'ysd_md_view_model'
+require 'ysd_md_view_model_field'
 
 #
 # Huasi CMS Extension
@@ -9,6 +12,7 @@ require 'ysd_md_commentable'
 module Huasi
 
   class CMSExtension < Plugins::ViewListener
+  include R18n::Helpers
 
     # ========= Installation =================
 
@@ -46,6 +50,78 @@ module Huasi
 
 
     end
+    
+    # ========= Initialization ===========
+    
+    #
+    # Extension initialization (on runtime)
+    #
+    def init(context={})
+
+      app = context[:app]
+      
+      # Define the view models
+      [::Model::ViewModel.new(:content, 'content', ContentManagerSystem::Content, :view_template_contents,
+         [::Model::ViewModelField.new(:_id, 'id', :string),
+          ::Model::ViewModelField.new(:title, 'title', :string),
+          ::Model::ViewModelField.new(:path, 'path', :string),
+          ::Model::ViewModelField.new(:alias, 'alias', :string),
+          ::Model::ViewModelField.new(:summary, 'summary', :string),
+          ::Model::ViewModelField.new(:type, 'type', :string),
+          ::Model::ViewModelField.new(:creation_date, 'creation_date', :date),
+          ::Model::ViewModelField.new(:creation_user, 'creation_user', :string)]),
+       ::Model::ViewModel.new(:term, 'term', ContentManagerSystem::Term, :view_template_terms,
+         [::Model::ViewModelField.new(:id, 'id', :serial),
+          ::Model::ViewModelField.new(:description, 'description', :string)])
+       ]
+
+#      [::Model::ViewModel.new(:content, t.entity.content, ContentManagerSystem::Content, :view_template_contents,
+#         [::Model::ViewModelField.new(:_id, t.entity_fields.content.id, :string),
+#          ::Model::ViewModelField.new(:title, t.entity_fields.content.title, :string),
+#          ::Model::ViewModelField.new(:path, t.entity_fieldscontent.path, :string),
+#          ::Model::ViewModelField.new(:alias, t.entity_fields.content.alias, :string),
+#          ::Model::ViewModelField.new(:summary, t.entity_fields.content.summary, :string),
+#          ::Model::ViewModelField.new(:type, t.entity_fields.content.type, :string),
+#          ::Model::ViewModelField.new(:creation_date, t.entity_fields.content.creation_date, :date),
+#          ::Model::ViewModelField.new(:creation_user, t.entity_fields.content.creation_user, :string)]),
+#       ::Model::ViewModel.new(:term, t.entity.term, ContentManagerSystem::Term, :view_template_terms,
+#         [::Model::ViewModelField.new(:id, t.entity_fields.term.id, :serial),
+#          ::Model::ViewModelField.new(:description, t.entity_fields.term.description, :string)])
+#       ]
+
+      # Define the view renders 
+      teaser_preprocessor = Proc.new do |data, context, render_options|
+                              data.map { |element| CMSRenders::Factory.get_render(element, context, 'teaser').render }
+                            end
+
+      slider_preprocessor = Proc.new do |data, context, render_options|
+                              data.map { |element| CMSRenders::Factory.get_render(element, context, 'slider').render }
+                            end
+
+      term_hierarchy_preprocessor = Proc.new do |data, context, render_options|
+                                      separator = render_options['separator'] || "&middot;"
+                                      data.map do |element| 
+                                        terms = []
+                                        terms << "<a href=\"#{render_options['prefix']}/#{element.id}\">#{element.description}</a>"
+                                        while not element.parent.nil?
+                                          element = element.parent
+                                          terms << separator
+                                          terms << "<a href=\"#{render_options['prefix']}/#{element.id}\">#{element.description}</a>"
+                                        end
+                                        terms.reverse.join
+                                      end
+                                      
+                                    end
+
+      ::Model::ViewRender.new(:teaser, 'default teaser', ::Model::ViewStyle::VIEW_STYLE_TEASER, teaser_preprocessor)
+      ::Model::ViewRender.new(:slider, 'slider', ::Model::ViewStyle::VIEW_STYLE_TEASER, slider_preprocessor)
+      ::Model::ViewRender.new(:term_h, 'term hierarchy', Model::ViewStyle::VIEW_STYLE_TEASER, term_hierarchy_preprocessor)
+      ::Model::ViewRender.new(:div, 'div', Model::ViewStyle::VIEW_STYLE_FIELDS)
+      ::Model::ViewRender.new(:list, 'list', Model::ViewStyle::VIEW_STYLE_FIELDS)
+      ::Model::ViewRender.new(:table, 'table', Model::ViewStyle::VIEW_STYLE_FIELDS)
+
+
+    end
 
  
     # ========= Aspects ==================
@@ -64,32 +140,6 @@ module Huasi
       return aspects
        
     end
-
-    # ========= Views ====================
-    
-    #
-    # Return the view models available
-    #
-    def view_models(context={})
-    
-      app = context[:app]
-      
-      [::Model::ViewEntityInfo.new(:content, app.t.entity.content, ContentManagerSystem::Content, :view_template_contents,
-         [::Model::ViewEntityFieldInfo.new(:_id, app.t.entity_fields.content.id, :string),
-          ::Model::ViewEntityFieldInfo.new(:title, app.t.entity_fields.content.title, :string),
-          ::Model::ViewEntityFieldInfo.new(:path, app.t.entity_fieldscontent.path, :string),
-          ::Model::ViewEntityFieldInfo.new(:alias, app.t.entity_fields.content.alias, :string),
-          ::Model::ViewEntityFieldInfo.new(:summary, app.t.entity_fields.content.summary, :string),
-          ::Model::ViewEntityFieldInfo.new(:type, app.t.entity_fields.content.type, :string),
-          ::Model::ViewEntityFieldInfo.new(:creation_date, app.t.entity_fields.content.creation_date, :date),
-          ::Model::ViewEntityFieldInfo.new(:creation_user, app.t.entity_fields.content.creation_user, :string)]),
-       ::Model::ViewEntityInfo.new(:term, app.t.entity.term, ContentManagerSystem::Term, :view_template_terms,
-         [::Model::ViewEntityFieldInfo.new(:id, app.t.entity_fields.term.id, :serial),
-          ::Model::ViewEntityFieldInfo.new(:description, app.t.entity_fields.term.description, :string)])
-       ]
-    
-    end
-    
     
     # ========= Menu =====================
     

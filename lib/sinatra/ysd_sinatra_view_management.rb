@@ -29,11 +29,9 @@ module Sinatra
           app.get path do
           
             view = ContentManagerSystem::View.first(:url => params['view_name'])
-          
             pass unless view
 
             page = params[:page]
-
             arguments_start_at = if request.path_info.match /\/page\/\d+/
                                    4
                                  else            
@@ -45,14 +43,17 @@ module Sinatra
             page = [params[:page].to_i, 1].max 
 
             # Creates a content using the view information
-            content = ContentManagerSystem::Content.new(view.view_name) 
-            content.title = view.title
-            content.description = view.description
-            content.alias = view.url         
-            content.body = CMSRenders::ViewRender.new(view, self).render(page, arguments)
-          
-            page_from_content(content) # Renders the content in a page
-            
+            begin
+              content = ContentManagerSystem::Content.new(view.view_name) 
+              content.title = view.title
+              content.alias = request.path_info
+              content.description = view.description       
+              content.body = CMSRenders::ViewRender.new(view, self).render(page, arguments)
+              page_from_content(content) # Renders the content in a page
+            rescue ContentManagerSystem::ViewArgumentNotSupplied
+              status 404
+            end
+
           end
         end
         
@@ -63,7 +64,11 @@ module Sinatra
 
           if view = ContentManagerSystem::View.get(params[:view_name])
             arguments = (x=request.path_info.split('/')).slice(4,x.length).join('/')
-            CMSRenders::ViewRender.new(view, self).render(params[:page].to_i, arguments)
+            begin
+              CMSRenders::ViewRender.new(view, self).render(params[:page].to_i, arguments)
+            rescue ContentManagerSystem::ViewArgumentNotSupplied
+              status 404
+            end              
           else
             status 404          
           end
@@ -81,7 +86,11 @@ module Sinatra
         
             if view = ContentManagerSystem::View.get(params[:view_name])         
               arguments = (x=request.path_info.split('/')).slice(4,x.length).join('/')
-              CMSRenders::ViewRender.new(view, self).render(1, arguments)
+              begin
+                CMSRenders::ViewRender.new(view, self).render(1, arguments)
+              rescue ContentManagerSystem::ViewArgumentNotSupplied
+                status 404
+              end
             else
               "Sorry, the views #{params[:view_name]} does not exist"
             end

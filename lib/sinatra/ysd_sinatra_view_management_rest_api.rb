@@ -1,4 +1,8 @@
 require 'uri'
+require 'ysd-plugins_plugin'
+require 'ysd_md_view_style'
+require 'ysd_md_view_model'
+
 module Sinatra
   module YSD
     module ViewManagementRESTApi
@@ -10,8 +14,8 @@ module Sinatra
         #
         app.get "/view-models/?" do
         
-          view_models = Plugins::Plugin.plugin_invoke_all('view_models', {:app => self})
-                    
+          view_models = ::Model::ViewModel.all
+
           status 200
           content_type :json
           view_models.to_json        
@@ -25,7 +29,7 @@ module Sinatra
           
           context = {:app => self}
           
-          view_types = ::Model::ViewDefinition.view_styles(context)
+          view_types = ::Model::ViewStyle.all
                   
           status 200
           content_type :json
@@ -36,13 +40,24 @@ module Sinatra
         #
         # Retrieve the view renders
         #
-        app.get "/view-renders/:view_style" do
-        
-          view_renders = ::Model::ViewDefinition.view_renders(params['view_style'])
+        ["/view-renders/:view_style",
+          "/view-renders/:view_style/:view_model"].each do |path|
           
-          status 200
-          content_type :json
-          view_renders.to_json
+          app.get path do
+            
+            view_style = ::Model::ViewStyle.get(params[:view_style].to_sym)
+            view_model = if params[:view_model]
+                           ::Model::ViewModel.get(params[:view_model].to_sym)
+                         else
+                            nil
+                         end
+
+            view_renders = ::Model::ViewRender.all(view_style, view_model)
+            
+            status 200
+            content_type :json
+            view_renders.to_json
+          end
         
         end
         

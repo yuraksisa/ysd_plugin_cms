@@ -44,7 +44,11 @@ module CMSRenders
         template_path = find_view_holder
         template = Tilt.new(template_path)
         
-        result = template.render(context, {:view => @view, :view_url => view_url, :view_data => view_data, :view_body => render_view_body(view_data), :view_arguments => arguments})
+        result = template.render(context, {:view => @view, 
+                                           :view_url => view_url, 
+                                           :view_data => view_data, 
+                                           :view_body => render_view_body(view_data), 
+                                           :view_arguments => arguments})
         
         if String.method_defined?(:force_encoding)
           result.force_encoding('utf-8')
@@ -62,8 +66,15 @@ module CMSRenders
       # @return [String] the rendered body
       #
       def render_view_body(view_data)
+        
 
-        template = Tilt.new(find_template(view))
+        view_render = Model::ViewRender.get(view.render.to_sym)
+
+        if view_render and view_render.pre_processor
+          view_data[:data] = view_render.pre_processor.call(view_data[:data], context, view.render_options)
+        end
+
+        template = Tilt.new(find_view_render_template(view))
         result = template.render(context, {:view => @view, :view_data => view_data})
         
         if String.method_defined?(:force_encoding)
@@ -82,10 +93,6 @@ module CMSRenders
       def get_view_data(page=1, arguments="")
 
         data = view.get_data(page, arguments)
-
-        if view.style == 'teaser'
-          data[:data].map! { |element| Factory.get_render(element, context, view.render).render }
-        end
 
         return data
 
@@ -116,7 +123,7 @@ module CMSRenders
       #
       # @param [String] The concrete renderer path
       #      
-      def find_template(view)
+      def find_view_render_template(view)
         
         view_template_path = Themes::ThemeManager.instance.selected_theme.resource_path("render-view-#{view.view_name}.erb","template","cms") ||
                              Themes::ThemeManager.instance.selected_theme.resource_path("render-view-#{view.render}.erb","template","cms")

@@ -1,12 +1,14 @@
     <div class="view_body">
        <table class="view_table">
+         <% if view.render_options['show_column_titles'] %>
          <thead>  
            <tr class="view_table_header_row">
              <% view.view_fields.each do |view_field| %>
-               <th class="view_table_header_cell" scope="col"><%= view_field.field %></th>
+               <th class="view_table_header_cell" scope="col"><%= (view.render_options['table_column_titles'])?(view.render_options['table_column_titles'][view_field.field] || view_field.field):(view_field.field) %></th>
              <% end %>
            </tr>
          </thead>
+         <% end %>
          <tbody>
            <% view_data[:data].each do |element| %>
            <tr class="view_table_body_row">

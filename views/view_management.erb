@@ -109,7 +109,12 @@
                 <label for="render" class="fieldtitle"><%=t.view_management.form.render.label%></label>
                 <select name="render" id="render" class="fieldcontrol"></select>
                 <div class="fielddescription"><%=t.view_management.form.render.label%></div>
-              </div>              
+              </div>
+              <div class="formrow">
+                <label for="render_options" class="fieldtitle"><%=t.view_management.form.render_options.label%></label>
+                <textarea id="render_options" name="render_options" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.render_options)%><%% } %></textarea>
+                <div class="fielddescription"><%=t.view_management.form.render_options.description%></div>
+              </div>                            
             </div>
 
             <div id="view_query">
@@ -302,6 +307,9 @@
             value = (data[idx] == '' || data[idx] == 'null')?[]:JSON.parse(data[idx]);
             break;
 
+          case 'render_options':
+            value = (data[idx] == '' || data[idx] == 'null')?{}:JSON.parse(data[idx]);
+
           default:
             value = data[idx];
         }
@@ -445,6 +453,8 @@
           url += '/' + args;
         }
       
+        $("#view-preview-result").load(url);
+/*
         $.ajax({url: url,
               success: function(data, textStatus, jqXHR) { 
                 $('#view-preview-result').html(data); 
@@ -452,7 +462,7 @@
               error: function(data, textStatus, jqXHR) {
                 viewsManager.view.notify_user('Error retrieving data', 'Server error retrieving data');
               }
-        });
+        }); */
       };
 
       if (this.manager.view.isFormElementMode()) {

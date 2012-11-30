@@ -79,6 +79,9 @@ view_management:
     render:
       label: Presentación
       description: El modo de presentación de la vista
+    render_options:
+      label: Opciones de presentación
+      description: Datos a pasar al responsable de la presentación
     model:
       label: Modelo
       description: El origen de los datos de la vista
