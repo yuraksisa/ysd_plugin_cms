@@ -1,6 +1,6 @@
     <div class="view_body">
       <% view_data[:data].each do |element| %>
-        <div class="view_div_element <%= view.render_options['container_class'] if view_render_options.has_key?('container_class')">
+        <div class="view_div_element <%= view.render_options['container_class'] if view_render_options.has_key?('container_class')%>">
           <% view.view_fields.each do |view_field| %>
              <div class="view_div_element_attribute <%= view_field.class if view_field.class.to_s.strip.length > 0 %>">
                 <% if view_field.link %>
