@@ -1,6 +1,10 @@
 <%= include('entity-management') %>
 
 <!-- Renders the element description -->
+<script type="text/tmpl" id="elements_title">
+  <h2 class="entity-title">Bloques</h2>
+</script>
+
 <script type="text/tmpl" id="elements_description">
 
  <p>Esta página proporciona una interfaz para conocer los bloques disponibles, asignarlos a una región y controlar 
@@ -17,7 +21,6 @@
          <th class="table-header-title" scope="col" style="width:30%">Block</th>
          <th class="table-header-title" scope="col" style="width:30%">Module</th>
          <th class="table-header-title" scope="col" style="width:20%">Region</th>
-         <th class="table-header-title" scope="col" style="width:20%">Title</th>
        </tr>
      </thead>
      <tbody id="elements_tbody" class="table-tbody">             
@@ -34,7 +37,6 @@
       <td class="table-cell"><%%= entity.name %></td>
       <td class="table-cell"><%%= entity.module_name %></td>
       <td class="table-cell"><%%= entity.region %></td> 
-      <td class="table-cell"><%%= entity.title %></td>
     </tr>
 
 </script>
