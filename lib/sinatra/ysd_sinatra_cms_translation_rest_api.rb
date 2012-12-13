@@ -38,7 +38,7 @@ module Sinatra
           
           result = {:language => params[:language], :content_id => params[:content_id] }
           
-          if ct=::Model::Translation::CMS::ContentTranslation.get(params[:content_id])
+          if ct=::ContentManagerSystem::Translation::ContentTranslation.get(params[:content_id])
             result.merge!(prepare_translation(ct, params[:language]))
           end
           
@@ -59,7 +59,7 @@ module Sinatra
           language_code = translation_request.delete('language')
           content_id = translation_request.delete('content_id')
           
-          content_translation = Model::Translation::CMS::ContentTranslation.create_or_update(content_id, language_code, translation_request)
+          content_translation = ::ContentManagerSystem::Translation::ContentTranslation.create_or_update(content_id, language_code, translation_request)
           
           status 200
           content_type :json
@@ -74,7 +74,7 @@ module Sinatra
         
           result = {:language => params[:language], :term_id => params[:term_id]}
           
-          if tt=::Model::Translation::CMS::TermTranslation.get(params[:term_id])
+          if tt=::ContentManagerSystem::Translation::TermTranslation.get(params[:term_id])
             result.merge!(prepare_translation(tt, params[:language]))
           end
           
@@ -95,7 +95,7 @@ module Sinatra
           language_code = translation_request.delete('language')
           term_id = translation_request.delete('term_id')
           
-          term_translation = ::Model::Translation::CMS::TermTranslation.create_or_update(term_id, language_code, translation_request)
+          term_translation = ::ContentManagerSystem::Translation::TermTranslation.create_or_update(term_id, language_code, translation_request)
           
           status 200
           content_type :json
@@ -110,7 +110,7 @@ module Sinatra
         
           result = {:language => params[:language], :menu_item_id => params[:menu_item_id]}
           
-          if mitt = ::Model::Translation::Site::MenuItemTranslation.get(params[:menu_item_id])
+          if mitt = ::ContentManagerSystem::Translation::MenuItemTranslation.get(params[:menu_item_id])
             result.merge!(prepare_translation(mitt, params[:language]))
           end
           
@@ -131,7 +131,7 @@ module Sinatra
           language_code = translation_request.delete('language')
           menu_item_id = translation_request.delete('menu_item_id')
           
-          menu_item_translation = ::Model::Translation::Site::MenuItemTranslation.create_or_update(menu_item_id, language_code, translation_request)
+          menu_item_translation = ::ContentManagerSystem::Translation::MenuItemTranslation.create_or_update(menu_item_id, language_code, translation_request)
           
           status 200
           content_type :json

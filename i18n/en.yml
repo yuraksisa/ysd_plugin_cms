@@ -56,6 +56,10 @@ view_management:
 # Content management
 #
 content_management:
+  new_content:
+    title: Create content
+    description: >
+                 <p>Choose the content type you want to create.</p>
   title: Contents
   description: >
                <p>This pages supplies an interface to create and to modify your web site contents.</p>
@@ -156,11 +160,14 @@ entity_fields:
 aspect:
   comments: Comments. (accept comments)
   translate: Translate
+  content_place: Place   
 #
 # Comments
 #  
 comments:
-  title: Comments
+  title: !!pl
+    1: <span class="number_of">1</span> Comment
+    n: <span class="number_of">%1</span> Comments
   message: Type your comment
   post: Post
 #
@@ -168,6 +175,17 @@ comments:
 #
 cms_translations:
   translate: Translate
+#
+# Content place aspect
+#
+content_place:
+  description: Place
+  form:
+    place:
+      description: Place
+  config_form:
+    type:
+      label: Content type  
 #
 # Publishing
 #
@@ -222,3 +240,8 @@ guiblock:
     description: Meta
   audit:
     description: Audit
+#
+# Breadcrumb
+#
+breadcrumb:
+  home: Home  

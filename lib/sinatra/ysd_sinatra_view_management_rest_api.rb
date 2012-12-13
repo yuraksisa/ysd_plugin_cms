@@ -1,4 +1,6 @@
 require 'uri'
+require 'json'
+require 'tempfile'
 require 'ysd-plugins_plugin'
 require 'ysd_md_view_style'
 require 'ysd_md_view_model'
@@ -10,7 +12,8 @@ module Sinatra
       def self.registered(app)
         
         #
-        # Retrieve the view models defined
+        # Retrieve the view models
+        #
         #
         app.get "/view-models/?" do
         
@@ -41,7 +44,7 @@ module Sinatra
         # Retrieve the view renders
         #
         ["/view-renders/:view_style",
-          "/view-renders/:view_style/:view_model"].each do |path|
+         "/view-renders/:view_style/:view_model"].each do |path|
           
           app.get path do
             
@@ -135,7 +138,9 @@ module Sinatra
         
         end
         
+        #
         # Deletes a view
+        #
         app.delete "/view" do
 
           request.body.rewind
@@ -150,8 +155,63 @@ module Sinatra
           true.to_json
         
         end
+
+        #
+        # Exports a view
+        #
+        app.get '/export/view/:view_name' do
+
+          if view = ContentManagerSystem::View.get(params[:view_name])
+            file_name = "#{view.view_name}.txt"
+            file = Tempfile.new(file_name)
+            file.write(view.to_json)
+            file.close 
+            response['Content-Disposition'] = 'attachment; filename="%s"' % file_name
+            send_file(file.path, {:type => :text})
+          else
+            status 404
+          end  
+           
+        end
+
+        #
+        # Imports view
+        #
+        app.post '/import/view' do
+
+           import_file = params['import_file'][:tempfile]
+           view_to_import = JSON.parse(import_file.read)
+           
+           if view = ContentManagerSystem::View.get(view_to_import['view_name'])
+             view_to_import.delete('view_name')
+             view.attributes = view_to_import
+             view.save
+           else
+             view = ContentManagerSystem::View.create(view_to_import)
+           end
+
+           status 200
+
+        end 
         
-      
+        #
+        # Clone a view
+        #
+        app.post '/clone/view/:view_name/:new_name' do
+
+           if view = ContentManagerSystem::View.get(params[:view_name])
+
+              cloned_view = ContentManagerSystem::View.new
+              cloned_view.attributes= view.attributes.clone
+              cloned_view.view_name = params[:new_name]
+              cloned_view.save
+
+           else
+              status 404
+           end
+
+        end
+
       end
     
     end #ViewManagement

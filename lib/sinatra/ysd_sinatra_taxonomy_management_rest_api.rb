@@ -72,12 +72,8 @@ module Sinatra
         #
         app.get "/taxonomy/:id" do
           
-          puts "Getting taxonomy"
-          
           taxonomy = ContentManagerSystem::Taxonomy.get(params['id'])
           taxonomy = prepare_taxonomy(taxonomy) if taxonomy
-          
-          puts "taxonomy loaded : #{taxonomy}"
           
           status 200
           content_type :json
@@ -89,8 +85,6 @@ module Sinatra
         # Create a new taxonomy
         #
         app.post "/taxonomy" do
-        
-          puts "Creating taxonomy"
           
           request.body.rewind
           taxonomy_request = JSON.parse(URI.unescape(request.body.read))
@@ -98,8 +92,6 @@ module Sinatra
           # Creates the new content
           taxonomy = ContentManagerSystem::Taxonomy.new(taxonomy_request)
           taxonomy.save
-          
-          puts "created taxonomy : #{taxonomy}"
           
           # Return          
           status 200
@@ -112,9 +104,7 @@ module Sinatra
         # Updates a taxonomy
         #
         app.put "/taxonomy" do
-        
-          puts "Updating taxonomy"
-        
+                
           request.body.rewind
           taxonomy_request = JSON.parse(URI.unescape(request.body.read))
           taxonomy_request_content_types = taxonomy_request['taxonomy_content_types']
@@ -125,9 +115,7 @@ module Sinatra
           taxonomy.attributes=(taxonomy_request)
           taxonomy.assign_content_types(taxonomy_request_content_types.map { |trct| trct['content_type']['id'] })
           taxonomy.save
-                    
-          puts "updated taxonomy : #{taxonomy}"
-                   
+                                       
           # Return          
           status 200
           content_type :json

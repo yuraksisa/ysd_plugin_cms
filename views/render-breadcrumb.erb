@@ -1,7 +1,6 @@
 <% 
    # Process the breadcrumb and gets a HTML representation
    bc_html = []
-   puts "rendering breadcrumb : #{breadcrumb.to_json}"
    breadcrumb.each do |element|
      bc_html << "<a class=\"breadcrumb-element\" href=\"#{element[:path]}\">#{element[:title]}</a>" if element[:path].to_s.strip.length > 0
    end

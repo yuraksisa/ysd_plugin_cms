@@ -1,5 +1,7 @@
 <script type="text/javascript">
+
   require(['jquery', 'YSDCommentsManager','ysdhtmleditor'], function($, YSDCommentsManager, htmlEditor) {
+    
     $(document).ready(function() {
   	
       var commentSetId = null;
@@ -8,10 +10,12 @@
         commentSetId = <%= comment_set.id %>;
       <% end %>
     
-      var commentsManager = new YSDCommentsManager(commentSetId);
+      var commentsManager = new YSDCommentsManager(commentSetId, <%=comments_page_size%>, '<%=comments_pager%>');
+      
       htmlEditor('.texteditor');
 
     });
+  
   });
   
 </script>

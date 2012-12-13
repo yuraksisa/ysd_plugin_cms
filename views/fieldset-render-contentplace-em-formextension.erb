@@ -1,0 +1,37 @@
+<script type="text/javascript">
+
+  require(['jquery','YSDEntityManagementComplementHooks', 'YSDRemoteDataSource', 'YSDSelectSelector'], 
+  	      function($, EntityManagementComplementHooks, RemoteDataSource, SelectSelector){
+
+    ContentPlacePlugin = function() {
+
+      this.onEdit = function(entity) {
+        this.configForm(entity);
+      }
+
+      this.onNew = function() {
+        this.configForm(null);
+      }
+
+      this.configForm = function(entity) {
+        
+        var contents_url = '/search/content'
+        
+        <% if type_filter and type_filter.to_s.strip.length > 0 %>
+          contents_url = contents_url + '?type=<%=type_filter%>';
+        <% end %>
+
+        var placeDataSource = new RemoteDataSource(contents_url, {id:'key', description:'title'});
+        var placeValue = entity?(entity.content_place):null;
+        var placeSelectSelector = new SelectSelector('content_place', placeDataSource, placeValue);
+
+      }
+
+    }
+    
+    contentPlacePlugin = new ContentPlacePlugin();
+    EntityManagementComplementHooks.register(contentPlacePlugin);
+
+  });
+
+</script>

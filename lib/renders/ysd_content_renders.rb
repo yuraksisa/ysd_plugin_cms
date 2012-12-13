@@ -43,9 +43,10 @@ module CMSRenders
                         
        result = ''
        locals ||= {}
-
+       
        if content_template_path = (content_type_template || content_template)
          content_locals = locals.merge(content_complements) # Integrate the content complements
+         content_locals.merge!(content_author)
          content_body = build_content_body(content_locals)
          template = Tilt.new(content_template_path)
          result = template.render(context, content_locals.merge({:content => content, :content_body => content_body}))
@@ -105,7 +106,7 @@ module CMSRenders
         template_engine = if (content.class.method_defined?(:template_engine) and content.template_engine.to_s.strip.length > 0)
                             content.template_engine 
                           else
-                            SystemConfiguration::Variable.get_value('site_template_engine') || 'erb'
+                            SystemConfiguration::Variable.get_value('site.template_engine', 'erb')
                           end
                         
         template = Tilt[template_engine].new { content.body }      
@@ -132,7 +133,30 @@ module CMSRenders
          return content_template_path
          
       end
-      
+       
+      #
+      # Builds the content author
+      # 
+      def content_author
+       
+       result = {}
+
+       author = if content.composer_user.strip.length > 0
+                  content.composer_user
+                else
+                  content.composer_name
+                end
+       author_url = SystemConfiguration::Variable.get_value('cms.author_url', '')
+       if content.composer_user.strip.length > 0 and author_url.strip.length > 0
+         result.store(:author, "<a class=\"content-author content-composer\" href=\"#{author_url % [content.composer_user]}\">#{content.composer_user}</a>")
+       else
+         result.store(:author, "<span class=\"content-author\">#{author}</span>")
+       end
+       
+       return result
+
+      end
+
      #
      # prepare the complements configured from the content type
      #
@@ -141,7 +165,9 @@ module CMSRenders
        result = {}
       
        if content_type = ContentManagerSystem::ContentType.get(content.type)
-         aspects_render = UI::EntityAspectRender.new({:app=>context}, content_type.aspects) 
+         aspects = []
+         aspects.concat(content_type.aspects) 
+         aspects_render = UI::EntityAspectRender.new({:app=>context}, aspects) 
          result = aspects_render.render(content, content_type) 
        end   
       

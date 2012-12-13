@@ -57,13 +57,13 @@ module Sinatra
             locals.store(:description, "#{params[:aspect]} - #{content_type.id}")
                     
             if aspect.gui_block.respond_to?(:config)
-              locals.store(:aspect_config_form, aspect.gui_block.config(context))
+              locals.store(:aspect_config_form, aspect.gui_block.config(context, content_type))
             else
               locals.store(:aspect_config_form, '')
             end
       
             if aspect.gui_block.respond_to?(:config_extension)
-              locals.store(:aspect_config_form_extension, aspect.gui_block.config_extension(context))
+              locals.store(:aspect_config_form_extension, aspect.gui_block.config_extension(context, content_type))
             else
               locals.store(:aspect_config_form_extension, '')
             end

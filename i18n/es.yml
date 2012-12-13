@@ -131,10 +131,21 @@ view_management:
       label: Si
     rb_no:
       label: No
+  view_preview:
+    title: Previsualización
+    arguments: Argumentos
+  export_clone:
+    title: Exportación y clonación
+    export:
+      title: Exportar
 #
 # Content management
 #  
 content_management:  
+  new_content:
+    title: Crear contenido
+    description: >
+                 <p>Seleccione el tipo de contenido que desea crear.</p>
   title: Contenido
   description: >
                <p>Esta pagina proporciona una interfaz para crear y modificar los contenidos de su sitio web.</p>
@@ -236,11 +247,14 @@ entity_fields:
 aspect:
   comments: Comentarios. (aceptar comentarios)
   translate: Traducir       
+  content_place: Lugar. 
 #
 # Comments
 #        
 comments:
-  title: Comentarios
+  title: !!pl
+    1: <span class="number_of">1</span> Comentario
+    n: <span class="number_of">%1</span> Comentarios
   message: Escribe el comentario
   post: Publicar
 #
@@ -248,6 +262,17 @@ comments:
 #
 cms_translations:
   translate: Traducir
+#
+# Content place aspect
+#
+content_place:
+  description: Lugar
+  form:
+    place:
+      description: Lugar  
+  config_form:
+    type:
+      label: Tipo de contenido
 #
 # Publishing
 #
@@ -301,3 +326,8 @@ guiblock:
     description: Meta
   audit:
     description: Auditoría
+#
+# Breadcrumb
+#
+breadcrumb:
+  home: Inicio

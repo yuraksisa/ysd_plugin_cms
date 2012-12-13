@@ -9,9 +9,9 @@ module Sinatra
         
         app.helpers do
 
-          def extract_view_arguments(arguments_page, arguments_no_page)
+          def extract_view_arguments(page_num, arguments_page, arguments_no_page)
 
-            page = [params[:page].to_i, 1].max
+            page = [page_num, 1].max
 
             arguments_start_at = if request.path_info.match /\/page\/\d+/
                                    arguments_page
@@ -21,6 +21,8 @@ module Sinatra
            
             arguments = (x=request.path_info.split('/')).slice(arguments_start_at, x.length).join('/')
              
+            puts "PAGE : #{page} #{page_num} ARGUMENTS: #{arguments}"
+
             return [page, arguments]
 
           end
@@ -33,8 +35,13 @@ module Sinatra
         app.get "/view-management" do
           
           locals = {}
-          locals.store(:pagers, UI::Pager.all.to_json)
 
+          import_extension = partial(:import_extension)
+          import_extension << partial(:import_em_extension)
+
+          locals.store(:pagers, UI::Pager.all.to_json)
+          locals.store(:import_form, partial(:import, :locals => {:action => '/import/view', :accept_import_file => 'text/plain'}))
+          locals.store(:import_form_extension, import_extension )
           load_em_page('view_management'.to_sym, :view, false, :locals => locals)
 
         end
@@ -42,13 +49,13 @@ module Sinatra
         #
         # Get a view page
         #
-        [ "/view/:view_name/?*",
-          "/view/:view_name/page/:page/?*"].each do |path| 
+        [ "/view/:view_name/page/:page/?*",
+          "/view/:view_name/?*"].each do |path| 
           app.get path do
 
             if view = ContentManagerSystem::View.get(params[:view_name])
-
-              page, arguments = extract_view_arguments(5, 3)
+              puts "PARAM PAGE : #{params[:page]}"
+              page, arguments = extract_view_arguments(params[:page].to_i, 5, 3)
               
               begin
                 CMSRenders::ViewRender.new(view, self).render(page, arguments)
@@ -67,13 +74,13 @@ module Sinatra
         #
         # Gets a view preview
         #
-        ["/view/preview/:view_name/?*",
-         "/view/preview/:view_name/page/:page/?*"].each do |path|
+        ["/preview/view/:view_name/page/:page/?*",
+         "/preview/view/:view_name/?*"].each do |path|
           
           app.get path do
         
             if view = ContentManagerSystem::View.get(params[:view_name])      
-              page, arguments = extract_view_arguments(6, 4)   
+              page, arguments = extract_view_arguments(params[:page].to_i, 6, 4)   
               begin
                 CMSRenders::ViewRender.new(view, self).render(1, arguments)
               rescue ContentManagerSystem::ViewArgumentNotSupplied
@@ -90,15 +97,15 @@ module Sinatra
         #
         # Loads a view as a page by its url
         #
-        ["/:view_name/?*",
-         "/:view_name/page/:page/*"].each do |path|
+        ["/:view_name/page/:page/*",
+         "/:view_name/?*"].each do |path|
         
           app.get path do
           
             view = ContentManagerSystem::View.first(:url => params['view_name'])
             pass unless view
-           
-            page, arguments = extract_view_arguments(4, 2)
+            puts "PARAM PAGE : #{params[:page]}"
+            page, arguments = extract_view_arguments(params[:page].to_i, 4, 2)
 
             # Creates a content using the view information
             begin

@@ -58,6 +58,10 @@ view_management:
 # Content management
 #
 content_management:
+  new_content:
+    title: Crear contingut
+    description: >
+                 <p>Trii el tipus de contingut que vol crear</p>
   title: Continguts
   description: >
                <p>Aquesta pàgina proporciona una interface per crear i modificar els contiguts de la seva web.</p>
@@ -159,11 +163,14 @@ entity_fields:
 aspect:
   comments: Comentaris. (acceptar comentaris)
   translate: Traduir
+  content_place: Lloc.   
 #
 # Comments
 #    
 comments:
-  title: Comentaris
+  title: !!pl
+    1: <span class="number_of">1</span> Comentari
+    n: <span class="number_of">%1</span> Comentaris
   message: Escriu el comentari
   post: Publicar
 #
@@ -171,6 +178,17 @@ comments:
 #
 cms_translations:
   translate: Traduir
+#
+# Content place aspect
+#
+content_place:
+  description: Lloc
+  form:
+    place:
+      description: Lloc
+  config_form:
+    type:
+      label: Tipus de contigut    
 #
 # Publishing
 #
@@ -225,3 +243,8 @@ guiblock:
     description: Meta
   audit:
     description: Auditoria  
+#
+# Breadcrumb
+#
+breadcrumb:
+  home: Inici

@@ -10,6 +10,9 @@ module Sinatra
        
         app.helpers do 
        
+          #
+          #
+          #
           def build_publishing_state_translations
             publishing_states = {}
             ContentManagerSystem::PublishingState.all.each do |p_state|
@@ -19,6 +22,9 @@ module Sinatra
             return publishing_states
           end
 
+          #
+          #
+          #
           def build_post_publishing_actions
 
             publishing_actions = {}
@@ -28,6 +34,9 @@ module Sinatra
             return publishing_actions
           end
 
+          #
+          #
+          #
           def build_creation_buttons(available_actions)
 
             creation_buttons = []

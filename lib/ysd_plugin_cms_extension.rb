@@ -2,7 +2,7 @@
 require 'r18n-core'
 require 'ysd-plugins_viewlistener' unless defined?Plugins::ViewListener
 require 'ui/ysd_ui_page_component' unless defined?UI::PageComponent
-require 'ysd_md_commentable'
+require 'fieldsets/ysd_md_commentable'
 require 'ysd_md_view_model'
 require 'ysd_md_view_model_field'
 
@@ -21,15 +21,15 @@ module Huasi
     #
     def install(context={})
             
-        SystemConfiguration::Variable.first_or_create({:name => 'content_album_name'}, 
-                                                      {:value => 'contents', :description => 'album name', :module => :cms}) 
-                                                      
-        SystemConfiguration::Variable.first_or_create({:name => 'content_album_photo_width'}, 
-                                                      {:value => '600', :description => 'photo width', :module => :cms})
-                                                      
-        SystemConfiguration::Variable.first_or_create({:name => 'content_album_photo_height'},
-                                                      {:value => '200', :description => 'photo height', :module => :cms})
-                                                      
+        SystemConfiguration::Variable.first_or_create({:name => 'cms.author_url'},
+                                                      {:value => '/profile/%s', :description => 'author url. Example /profile/%s', :module => :cms})
+
+        SystemConfiguration::Variable.first_or_create({:name => 'cms.comments.pager'},
+                                                      {:value => 'page_list', :description => 'comments pager', :module => :cms})
+
+        SystemConfiguration::Variable.first_or_create({:name => 'cms.comments.page_size'},
+                                                      {:value => '10', :description => 'comments page size', :module => :cms})
+
         ContentManagerSystem::ContentType.first_or_create({:id => 'page'},
                                                            {:name => 'Pagina', :description => 'Representa una página web. Es una forma sencilla de gestionar información que no suele cambiar como la página acerca de o condiciones. Suelen mostrarse en el menú.'})
                                                                   
@@ -99,16 +99,19 @@ module Huasi
                             end
 
       term_hierarchy_preprocessor = Proc.new do |data, context, render_options|
-                                      separator = render_options['separator'] || "&middot;"
+                                      separator = render_options['separator'] || "&nbsp;&middot;&nbsp;"
                                       data.map do |element| 
                                         terms = []
-                                        terms << "<a href=\"#{render_options['prefix']}/#{element.id}\">#{element.description}</a>"
+                                        #terms << "<img src=\"#{element.photo_url_tiny}\"/>" if element.photo_url_tiny.to_s.strip.length > 0
+                                        terms << "<a href=\"#{render_options['prefix']}/#{element.id}\">"
+                                        terms << "#{element.description}</a>"
                                         while not element.parent.nil?
                                           element = element.parent
                                           terms << separator
+                                          #terms << "<img src=\"#{element.photo_url_tiny}\"/>" if element.photo_url_tiny.to_s.strip.length > 0
                                           terms << "<a href=\"#{render_options['prefix']}/#{element.id}\">#{element.description}</a>"
                                         end
-                                        terms.reverse.join
+                                        render_result = "<div class=\"term-hierarchy-container #{render_options['container_class']}\">" << terms.reverse.join << "</div>"
                                       end
                                       
                                     end
@@ -134,8 +137,15 @@ module Huasi
       app = context[:app]
       
       aspects = []
-      aspects << ::Plugins::Aspect.new(:comments, app.t.aspect.comments, ContentManagerSystem::Commentable, CommentAspectDelegate.new)
+      aspects << ::Plugins::Aspect.new(:comments, app.t.aspect.comments, ContentManagerSystem::FieldSet::Commentable, CommentAspectDelegate.new,
+                                       [Plugins::AspectConfigurationAttribute.new(:publishing_workflow, 'workflow', 'standard'),
+                                        Plugins::AspectConfigurationAttribute.new(:usergroups,'users','user,staff')])
+      
       aspects << ::Plugins::Aspect.new(:translation, app.t.aspect.translate, Model::Translatable, CMSTranslationAspectDelegate.new)
+
+      aspects << ::Plugins::Aspect.new(:content_place, app.t.aspect.content_place, ContentManagerSystem::FieldSet::ContentPlace, 
+                                       ContentPlaceAspectDelegate.new,
+                                       [Plugins::AspectConfigurationAttribute.new(:type, 'content type')])
                                 
       return aspects
        

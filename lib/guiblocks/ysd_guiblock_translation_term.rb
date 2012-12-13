@@ -35,7 +35,7 @@ module GuiBlock
     #
     # Element action
     #
-    def element_action(context={})
+    def element_action(context={}, aspect_model)
     
       app = context[:app]
       
@@ -48,7 +48,7 @@ module GuiBlock
     #
     # Element action extension
     #
-    def element_action_extension(context={})
+    def element_action_extension(context={}, aspect_model)
     
       app = context[:app]
       

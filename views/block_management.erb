@@ -253,13 +253,9 @@ require(['jquery','YSDEntityManagement', 'YSDMemoryDataSource', 'YSDRemoteDataSo
     
     this.preview = function(entity) { /* preview the block */
 
-      var block = entity;	
-      var url = '/block/preview/'+block.id;
+      var url = '/preview/block/' + entity.id;
       
-      $.get(url, 
-      	    function (data) {
-      	      $('#block-preview-result').html(data);	
-      	    });
+      $('#block-preview-result').load(url);
       
     }
     

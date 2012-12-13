@@ -35,7 +35,7 @@ module GuiBlock
     #
     # Menu item element action
     #    
-    def menu_item_element_action(context={})
+    def menu_item_element_action(context={}, aspect_model)
     
       app = context[:app]
       
@@ -49,7 +49,7 @@ module GuiBlock
     #
     # Menu item element action extension
     #
-    def menu_item_element_action_extension(context={})
+    def menu_item_element_action_extension(context={}, aspect_model)
     
       app = context[:app]
       

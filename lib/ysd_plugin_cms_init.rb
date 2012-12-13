@@ -22,6 +22,7 @@ Plugins::SinatraAppPlugin.register :cms do
    sinatra_extension Sinatra::YSD::MenuManagement
    sinatra_extension Sinatra::YSD::MenuItemManagement   
    sinatra_extension Sinatra::YSD::ContentManagementRESTApi
+   sinatra_extension Sinatra::YSD::ContentSearchRESTApi
    sinatra_extension Sinatra::YSD::ContentTypeManagementRESTApi
    sinatra_extension Sinatra::YSD::TaxonomyManagementRESTApi
    sinatra_extension Sinatra::YSD::TermManagementRESTApi

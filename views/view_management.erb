@@ -24,6 +24,10 @@
      <tbody id="elements_tbody" class="table-tbody">             
      </tbody>
   </table>
+  
+  <button id="import_button" class="form-button">Importar</button>
+
+  <%= import_form %>
 
 </script>
 
@@ -210,23 +214,24 @@
         
         <div class="bottom-navigation-bar navigation-bar">
              <div class="navigation-bar-nav-buttons">
-                <input type="button" class="cancel-entity-button action-button entity-management-button" value="Back"/>
                 <%% if (entity) { %>
-                  <input type="submit" class="update-entity-button action-button entity-management-button" value="Update"/>
+                  <input type="submit" class="update-entity-button action-button entity-management-button" value="<%=t.entitymanagement.update%>"/>
                 <%% } 
                    else { %>
-                  <input type="submit" class="create-entity-button action-button entity-management-button" value="Create"/>
+                  <input type="submit" class="create-entity-button action-button entity-management-button" value="<%=t.entitymanagement.create%>"/>
                 <%% } %>
              </div>
         </div>
      
      </form>
      
-     <div class="entity-block highlight_block">
-       <h2 class="entity-block-title">View preview</h2>
+     <div class="guiblock" style="margin:5px">
+       <div class="guiblock-title">
+         <%=t.view_management.view_preview.title%>
+       </div>     
        <form name="view-preview">
          <div class="formrow">
-           <label for="arguments" class="fieldtitle">Arguments</label>
+           <label for="arguments" class="fieldtitle"><%=t.view_management.view_preview.arguments%></label>
            <input type="text" name="arguments" id="arguments" maxlength="80" size="80" class="fieldcontrol"/>
          </div>
          <div class="formrow">
@@ -237,14 +242,27 @@
        </div>  
      </div>
 
+     <%% if (entity) { %>
+     <div id="export_clone_view" class="guiblock" style="margin:5px">
+        <div class="guiblock-title">
+          <%= t.view_management.export_clone.title %>
+        </div>
+        <div class="form-row">
+           <div class="form-button">
+             <a href="/export/view/<%%=entity.view_name%>"><%=t.view_management.export_clone.export.title%></a>
+           </div>
+        </div>
+    </div>     
+    <%% } %>
 
 </script>
 
+<%= import_form_extension %>
 
 <script type="text/javascript">
  
- require(['jquery','YSDEntityManagement','YSDRemoteDataSource','YSDSelectSelector', 'YSDMemoryDataSource', 'YSDForms'],
-         function($, EntityManagement, RemoteDataSource, SelectSelector, MemoryDataSource, YSDForms) {
+ require(['jquery','YSDEntityManagement','YSDEntityManagementComplementHooks','YSDRemoteDataSource','YSDSelectSelector', 'YSDMemoryDataSource', 'YSDForms'],
+         function($, EntityManagement, EntityManagementComplementHooks, RemoteDataSource, SelectSelector, MemoryDataSource, YSDForms) {
  
   function ViewHook() {
  	   
@@ -309,6 +327,7 @@
 
           case 'render_options':
             value = (data[idx] == '' || data[idx] == 'null')?{}:JSON.parse(data[idx]);
+            break;
 
           default:
             value = data[idx];
@@ -447,7 +466,7 @@
       var doPreview = function() {
 
         var view = entity;  
-        var url = '/view/preview/'+view.view_name;
+        var url = '/preview/view/'+view.view_name;
       
         if (args.length > 0) {
           url += '/' + args;
@@ -485,8 +504,11 @@
   	      get_url    : '/view'
   	     };
   
-  var viewHook = new ViewHook();  
-  var viewsManager = new EntityManagement(urls, 'view', 12, viewHook, {hold_form_after_action:true});
+  var viewHook = new ViewHook();
+  var hooks = [viewHook];
+  hooks = hooks.concat(EntityManagementComplementHooks.complements);  
+
+  var viewsManager = new EntityManagement(urls, 'view', 12, hooks, {hold_form_after_action:true});
    
   viewHook.manager = viewsManager;
 

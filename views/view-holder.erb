@@ -12,14 +12,14 @@
     </div>
   <% end %>
 
-  <% if view.footer and (view.footer.strip.length > 0) %>
-    <div class="view_footer">
-      <%= view.footer %>
+  <% if view.pagination and view_data[:summary][:total_pages] > 1 %>
+    <div id="<%="view_#{view.view_name}_pagination"%>" class="view_pagination">
     </div>
   <% end %>
 
-  <% if view.pagination and view_data[:summary][:total_pages] > 1 %>
-    <div id="<%="view_#{view.view_name}_pagination"%>" class="view_pagination">
+  <% if view.footer and (view.footer.strip.length > 0) %>
+    <div class="view_footer">
+      <%= view.footer %>
     </div>
   <% end %>
 

@@ -16,10 +16,8 @@
   <table id="elements_table" class="table">
      <thead class="table-header">
        <tr>
-         <th class="table-header-title" scope="col" style="width:20%"><%=t.content_type_management.form.id.label%></th>
-         <th class="table-header-title" scope="col" style="width:20%"><%=t.content_type_management.form.name.label%></th>
-         <th class="table-header-title" scope="col" style="width:10%"><%=t.content_type_management.list.workflow.label%></th>
-         <th class="table-header-title" scope="col" style="width:50%"><%=t.content_type_management.form.description.label%></th>
+         <th class="table-header-title" scope="col" style="width:25%"><%=t.content_type_management.form.name.label%></th>
+         <th class="table-header-title" scope="col" style="width:75%"><%=t.content_type_management.form.description.label%></th>
        </tr>
      </thead>
      <tbody id="elements_tbody" class="table-tbody">             
@@ -33,9 +31,7 @@
 <script type="text/tmpl" id="elements_list_template">
 
     <tr class="table-row element-navigation-detail" rel="<%%= index %>" id="element_row_<%%=index%>">
-      <td class="table-cell"><%%= entity.id %></td>
       <td class="table-cell"><%%= entity.name %></td>
-      <td class="table-cell"><%%= entity.publishing_workflow %></td>
       <td class="table-cell"><%%= entity.description %></td>
     </tr>
 
@@ -46,40 +42,33 @@
 <script type="text/tmpl" id="element_template">
 
      <div class="element_template" style="overflow:hidden">
-       <div class="entity-field"><div class="entity-fieldlabel"><%=t.content_type_management.form.id.label%></div> <div class="entity-fieldvalue"><span class="entity-id"><%%= entity.id %></span></div> </div>
-       <div class="entity-field"><div class="entity-fieldlabel"><%=t.content_type_management.form.name.label%></div> <div class="entity-fieldvalue"><%%= entity.name %></div> </div>
-       <div class="entity-field"><div class="entity-fieldlabel"><%=t.content_type_management.form.description.label%></div> <div class="entity-fieldvalue"><%%= entity.description %></div></div>
-       <div class="entity-field"><div class="entity-fieldlabel"><%=t.content_type_management.form.message_on_new_content.label%></div> <div class="entity-fieldvalue"><%%= entity.message_on_new_content %></div></div>    
-       <div class="entity-field"><div class="entity-fieldlabel"><%=t.content_type_management.form.message_on_edit_content.label%></div> <div class="entity-fieldvalue"><%%= entity.message_on_edit_content %></div></div>              
-       <div class="entity-field"><div class="entity-fieldlabel"><%=t.content_type_management.form.workflow.label%></div><div class="entity-fieldvalue"><%%= entity.publishing_workflow%></div></div>
        <div class="entity-field">
-         <div class="entity-fieldlabel"><%=t.content_type_management.form.aspects.label%></div> 
-          <div class="table-container">
-           <table class="table">
-               <thead class="table-header">
-                 <tr>
-                   <th class="table-header-title" width="20%"><%=t.content_type_management.form.aspect_aspect.label%></th>
-                   <th class="table-header-title" width="40%"><%=t.content_type_management.form.aspect_weight.label%></th>
-                   <th class="table-header-title" width="40%"><%=t.content_type_management.form.aspect_render_weight.label%></th>
-                   <th class="table-header-title" width="20%"><%=t.content_type_management.form.aspect_config.label%></th>
-                 </tr>
-               </thead>
-               <tbody>
-               <%% for (var idx=0;idx<entity.aspects.length;idx++) {%>
-                 <tr class="table-row">
-                   <td class="table-cell"><%%=entity.aspects[idx].aspect%></td>
-                   <td class="table-cell"><%%=entity.aspects[idx].weight%></td>
-                   <td class="table-cell"><%%=entity.aspects[idx].render_weight%></td>
-                   <td class="table-cell"><a href="/mctype/<%%=entity.aspects[idx].content_type_id%>/aspect/<%%=entity.aspects[idx].aspect%>">config</a></td>
-                 </tr>
-               <%% } %>
-               </tbody>
-             </table>
-            </div>
-         </div>
+         <div class="entity-fieldlabel"><%=t.content_type_management.form.id.label%></div> 
+         <div class="entity-fieldvalue"><span class="entity-id"><%%= entity.id %></span></div> 
+       </div>
+       <div class="entity-field">
+         <div class="entity-fieldlabel"><%=t.content_type_management.form.name.label%></div> 
+         <div class="entity-fieldvalue"><%%= entity.name %></div> 
+       </div>
+       <div class="entity-field">
+         <div class="entity-fieldlabel"><%=t.content_type_management.form.description.label%></div> 
+         <div class="entity-fieldvalue"><%%= entity.description %></div>
+       </div>
+       <div class="entity-field">
+         <div class="entity-fieldlabel"><%=t.content_type_management.form.message_on_new_content.label%></div> 
+         <div class="entity-fieldvalue"><%%= entity.message_on_new_content %></div>
+       </div>    
+       <div class="entity-field">
+         <div class="entity-fieldlabel"><%=t.content_type_management.form.message_on_edit_content.label%></div> 
+         <div class="entity-fieldvalue"><%%= entity.message_on_edit_content %></div>
+       </div>              
+       <div class="entity-field">
+         <div class="entity-fieldlabel"><%=t.content_type_management.form.workflow.label%></div>
+         <div class="entity-fieldvalue"><%%= entity.publishing_workflow%></div>
+       </div>
+       <div class="entity-field">
          <div class="entity-fieldlabel"><%=t.content_type_management.form.usergroups.label%></div>
-           <div class="entity-fieldvalue"><%%= self.model.entityHooks[0].formatUserGroups(entity) %></div>
-         </div>
+         <div class="entity-fieldvalue"><%%= self.model.entityHooks[0].formatUserGroups(entity) %></div>
        </div>
      </div>
 
@@ -249,17 +238,6 @@
          $('#tabs li').removeClass("ui-corner-top").addClass("ui-corner-left");
          $('#tabs').tabs();
 
-         // Configure the aspects
-/*         
-         var dataSource = new RemoteDataSource('/aspects/entity');
-         var value = [];
-         if (entity && entity.aspects) {
-           value = entity.aspects.map(function(value, index, array) {
-             return value.aspect;
-           });
-         }
-         var selector = new ListSelector('content_type_aspects', 'aspects', dataSource, value );
-*/
          // Configure the usergroups
          var ugDataSource = new RemoteDataSource('/usergroups',{id:'group', description:'name'});         
          var ugValue = [];

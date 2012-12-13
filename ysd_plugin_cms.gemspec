@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name    = "ysd_plugin_cms"
-  s.version = "0.1"
+  s.version = "0.1.3"
   s.authors = ["Yurak Sisa Dream"]
   s.date    = "2012-03-15"
   s.email   = ["yurak.sisa.dream@gmail.com"]
@@ -13,8 +13,8 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "ysd_md_cms"                   # The model
   s.add_runtime_dependency "ysd_core_plugins"             # The plugins system
   s.add_runtime_dependency "ysd_core_themes"              # The theme system 
-  s.add_runtime_dependency "ysd_plugin_yito_base"         # Base component to create Web
-  s.add_runtime_dependency "ysd_plugin_yito_ui"           # Base component to create the Web front end
+  s.add_runtime_dependency "ysd_yito_core"                # Base component to create Web
+  s.add_runtime_dependency "ysd_yito_js"                  # Base component to create the Web front end
   s.add_runtime_dependency "ysd_plugin_aspects"           # Aspects management
       
 end

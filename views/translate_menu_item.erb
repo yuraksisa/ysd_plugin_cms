@@ -84,7 +84,8 @@ require(['jquery','YSDEntityManagement', 'YSDRemoteDataSource', 'YSDSelectSelect
     }
     
     this.configForm = function(entity) {       
-    
+      
+      $('.top-navigation-bar').hide();
       var dataSource = new RemoteDataSource('/translationlanguages',{id:'code', description:'description'});
       var value = (this.entity && this.entity.language)?this.entity.language:'<%=language%>'; 
       var selector = new SelectSelector('language', dataSource, value );

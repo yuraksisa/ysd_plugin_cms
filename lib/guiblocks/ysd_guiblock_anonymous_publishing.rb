@@ -24,6 +24,38 @@ module GuiBlock
     def get_aspect_definition(context={})
       return self
     end
+    
+    #
+    #
+    #
+    def custom(context={}, element, aspect_model)
+
+      app = context[:app]
+      
+      if app.user.belongs_to?('anonymous')
+        renderer = ::UI::FieldSetRender.new('anonymouspublishing', app)      
+        renderer.render('form') 
+      else
+        ''
+      end      
+
+    end
+    
+    #
+    #
+    #
+    def custom_extension(context={}, element, aspect_model)
+
+      app = context[:app]
+      
+      if app.user.belongs_to?('anonymous')
+        renderer = ::UI::FieldSetRender.new('anonymouspublishing', app)      
+        renderer.render('formextension') 
+      else
+        ''
+      end      
+
+    end
 
     #
     # Information

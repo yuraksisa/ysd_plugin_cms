@@ -22,7 +22,7 @@ module Sinatra
         #
         # Gets a block preview
         #
-        ["/block/preview/:block_id"].each do |path|
+        ["/preview/block/:block_id"].each do |path|
           
           app.get path do
         

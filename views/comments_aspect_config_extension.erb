@@ -1,0 +1,43 @@
+<script type="text/javascript">
+
+  require(['jquery', 'YSDEntityManagementComplementHooks', 'YSDRemoteDataSource', 'YSDSelectSelector', 'YSDListSelector'], 
+  	      function($, EntityManagementComplementHooks, RemoteDataSource, SelectSelector, ListSelector){
+
+     CommentsHookPlugin = function() {
+       this.onEdit = function(entity) { /* On Edit the entity */
+     	  this.configForm(entity);
+       };
+       this.onNew = function() {
+          this.configForm(null);	
+       };  	
+
+       this.adaptFormData = function(data) {
+
+         if (data.aspect_attributes.usergroups) {
+           data.aspect_attributes.usergroups = data.aspect_attributes.usergroups.join(',');
+         }
+
+         return data;
+
+       }
+
+       this.configForm = function(entity) {
+        
+         var wfDataSource = new RemoteDataSource('/workflows');
+         var wfValue = (entity && entity.aspect_attributes.publishing_workflow)?entity.aspect_attributes.publishing_workflow:null;;
+         var wfSelector = new SelectSelector('aspect_attributes[publishing_workflow]', wfDataSource, wfValue); 
+
+         var ugDataSource = new RemoteDataSource('/usergroups',{id:'group', description:'name'});
+         var ugValue = (entity&&entity.aspect_attributes.usergroups)?entity.aspect_attributes.usergroups.split(','):[]; 
+         var ugSelector = new ListSelector('user_groups', 'aspect_attributes[usergroups]', ugDataSource, ugValue );
+
+       }
+
+    }
+
+    var commentsHookPlugin = new CommentsHookPlugin();
+    EntityManagementComplementHooks.register(commentsHookPlugin);	
+
+  });
+
+</script>

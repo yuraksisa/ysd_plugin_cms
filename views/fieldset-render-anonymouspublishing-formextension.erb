@@ -1,0 +1,34 @@
+<script type="text/javascript">
+  require(['jquery', 'jquery.validate'], function($){
+
+    $(document).ready(function(){
+         $($('#composer_name')[0].form).validate({
+            
+            submitHandler: function(form) 
+            {
+               return false;
+            },
+                               
+            rules : { // rules
+               'composer_name' : {
+                 required: true
+               },
+               'composer_email': {
+                 required: true 
+               }
+            },
+            
+            messages : { // messages
+               'composer_name' : {
+                required: '<%= t.guiblock.anonymouspublishing.form.composer_name.required %>'
+               },
+               'composer_email': {
+                 required : '<%=t.guiblock.anonymouspublishing.form.composer_email.required%>'
+               }
+            }
+            
+          });
+
+    });
+  });
+</script>

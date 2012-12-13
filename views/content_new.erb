@@ -1,10 +1,12 @@
 <%= include('entity-management') %>
 
 <!-- Renders the element description -->
+<script type="text/tmpl" id="elements_title">
+  <h2 class="entity-title"><%=t.content_management.new_content.title%></h2>
+</script>
+
 <script type="text/tmpl" id="elements_description">
-
-  <p>Choose the content type you want to create.</p>
-
+  <%=t.content_management.new_content.description%>
 </script>
 
 <!-- Renders the elements container -->
@@ -74,8 +76,6 @@
     var newContentHook = new NewContentHook();
     var newContentManager = new EntityManagement(urls, 'content', 20, newContentHook,
                                                 {url_base: '/mcontent/new', action: 'list'});
- 
-    $('.entity-title').html('New content');
   
   });
 </script>
