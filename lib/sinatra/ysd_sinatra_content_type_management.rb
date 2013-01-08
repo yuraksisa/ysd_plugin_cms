@@ -10,11 +10,7 @@ module Sinatra
     module ContentTypeManagement
    
       def self.registered(app)
-            
-        # Add the local folders to the views and translations     
-        #app.settings.views = Array(app.settings.views).push(File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'views')))
-        #app.settings.translations = Array(app.settings.translations).push(File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'i18n')))
-        
+                   
         #
         # Content types management page
         #
@@ -24,17 +20,16 @@ module Sinatra
 
           aspects = []
           aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::Aspects.new('/mctype', 'content'), 99, false, true, true, false, 100, true)
-
-          aspects_render=UI::EntityManagementAspectRender.new(context, aspects) 
           
-          locals = aspects_render.render(content_type)
+          aspects_render=UI::EntityManagementAspectRender.new(context, aspects) 
+          locals = aspects_render.render(nil)
 
           load_em_page(:content_type_management, :contenttype, false, :locals => locals)
         
         end
         
         #
-        # Entity aspects configuration : The configuration of a entity aspect
+        # Configuration of a content type aspect (to set up the aspect attributes)
         #
         app.get "/mctype/:content_type/aspect/:aspect" do
           
@@ -53,7 +48,7 @@ module Sinatra
             locals.store(:update_url, "/ctype/#{content_type.id}/aspect/#{params[:aspect]}/config")
             locals.store(:get_url,    "/ctype/#{content_type.id}/aspect/#{params[:aspect]}/config")
             locals.store(:url_base,   "/ctype/#{content_type.id}/aspect/#{params[:aspect]}")
-            #locals.store(:url_destination, "/mctypes/#{content_type.id}")
+            locals.store(:url_destination, "/mctypes/#{content_type.id}")
             locals.store(:description, "#{params[:aspect]} - #{content_type.id}")
                     
             if aspect.gui_block.respond_to?(:config)

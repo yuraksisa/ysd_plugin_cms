@@ -1,0 +1,24 @@
+    <div class="view_body <%=view.render_options['container_class'] if view.render_options.has_key?('container_class') and view_data[:data].length > 0%>">      
+      <% view_data[:data].each do |element| %>       
+      <div class="view_div_thumb_container">
+         <div class="view_div_thumb_element <%= view.render_options['container_element_class'] if view.render_options.has_key?('container_element_class')%>">
+           <% if view.view_fields.first.link %>
+             <a href="<%=view.view_fields.first.evaluate_link(element)%>" <%unless view.view_fields.first.link_class.to_s.empty?%>class="<%=view.view_fields.first.link_class%>"<%end%>>
+           <% end %>
+           <% if view.view_fields.first.image %>
+             <img src="<%=element.attribute_get(view.view_fields.first.field)%>" <%unless view.view_fields.first.image_class.to_s.empty?%>class="<%= view.view_fields.first.image_class%>"<%end%>/>
+           <% end %>
+             <span>
+                  <div class="view_div_thumb_element_info">
+                    <% view.view_fields[1, view.view_fields.length-1].each do |view_field| %>
+                       <%= include 'field-view', {:view_field => view_field, :element => element} %>
+                    <% end %>
+                  </div>
+             </span>
+           <% if view.view_fields.first.link %>
+             </a>
+           <% end %>
+         </div>
+       </div>
+      <% end%>
+    </div>

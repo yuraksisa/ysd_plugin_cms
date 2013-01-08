@@ -74,10 +74,18 @@ content_management:
     content:
       label: Content
       description: The text you wish to publish
+    title:
+      label: Title
+      description: The content title      
     categories:
       label: Categories
       description: To classify or tag the content
+    body:
+      label: Content
+      description: The content body      
     show_tabs: More information
+    complements: 
+      label: More    
 #
 # Content render
 #  
@@ -103,6 +111,8 @@ content_type_management:
       label: Description
     messages_block:
       label: Messages
+    presentation_block:
+      label: Presentation
     workflow_block:
       label: Workflow
     permissions_block:
@@ -119,6 +129,12 @@ content_type_management:
       label: New content message
     message_on_edit_content:
       label: Editing content message
+    display_prop:
+      label: Display 
+    max_length:
+      label: Max length           
+    template:
+      label: Template      
     workflow:
       label: Publishing workflow      
     aspects:

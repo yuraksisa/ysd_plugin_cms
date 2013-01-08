@@ -1,4 +1,4 @@
-<%= include('entity-management') %>
+<%= include('entity-management', {:element_action => element_action}) %>
 
 <!-- Renders the element title -->
 <script type="text/tmpl" id="elements_title">
@@ -48,18 +48,6 @@
 
 <script type="text/tmpl" id="element_template">
 
-     <div class="element_template" style="overflow:hidden">
-       <div class="entity-field"><div class="entity-fieldlabel">Title</div> <div class="entity-fieldvalue"><%%= entity.title %></div> </div>
-       <div class="entity-field"><div class="entity-fieldlabel">Route</div> <div class="entity-fieldvalue"><%%= entity.link_route %></div> </div>
-       <div class="entity-field"><div class="entity-fieldlabel">Description</div> <div class="entity-fieldvalue"><%%= entity.description %></div> </div>
-       <div class="entity-field"><div class="entity-fieldlabel">Weight</div> <div class="entity-fieldvalue"><%%= entity.weight %></div> </div>
-     </div>
-     <div class="element_template_actions">
-       <div class="element_template_actions_buttons">
-         <%= call_hook(:menu_item_element_action) %>
-       </div>
-     </div>     
-
 </script>
 
 <!-- Renders the form to edit an element -->
@@ -101,13 +89,26 @@
           <div class="formrow">
             <label for="parent" class="fieldtitle">Parent menu</label>
             <select name="parent[id]" id="parent[id]" class="fieldcontrol" size="10"></select>
-          </div>      
+          </div>    
+
+          <%= include('entity-tabs-above', {:edit_element_form_above => edit_element_form_above,
+                                            :edit_element_form_above_ingroup_tab => edit_element_form_above_ingroup_tab,
+                                            :edit_element_form_above_ingroup => edit_element_form_above_ingroup,
+                                            :new_element_form_above => new_element_form_above,
+                                            :new_element_form_above_ingroup_tab => new_element_form_above_ingroup_tab,
+                                            :new_element_form_above_ingroup => new_element_form_above_ingroup}) %>
+
+          <%= include('entity-tabs-below', {:edit_element_form => edit_element_form,
+                                            :edit_element_form_ingroup_tab => edit_element_form_ingroup_tab,
+                                            :edit_element_form_ingroup => edit_element_form_ingroup,
+                                            :new_element_form => new_element_form,
+                                            :new_element_form_ingroup_tab => new_element_form_ingroup_tab,
+                                            :new_element_form_ingroup => new_element_form_ingroup}) %>
                 
         </div>
         
         <div class="bottom-navigation-bar navigation-bar">
              <div class="navigation-bar-nav-buttons">
-                <input type="button" class="cancel-entity-button action-button entity-management-button" value="Cancel"/>
                 <%% if (entity) { %>
                   <input type="submit" class="update-entity-button action-button entity-management-button" value="Update"/>
                 <%% } 

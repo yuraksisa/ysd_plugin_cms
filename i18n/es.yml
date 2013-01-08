@@ -160,10 +160,18 @@ content_management:
     content:
       label: Contenido
       description: El texto a publicar
+    title:
+      label: Título
+      description: El título del contenido      
     categories:
       label: Categorías
-      description: Permiten clasificar i etiquetar el contenido
-    show_tabs: Más información      
+      description: Permiten clasificar y etiquetar el contenido
+    body:
+      label: Contenido
+      description: El texto del contenido
+    show_tabs: Más información
+    complements: 
+      label: Más      
 #
 # Content render
 #
@@ -190,6 +198,8 @@ content_type_management:
       label: Descripción
     messages_block:
       label: Mensajes
+    presentation_block:
+      label: Presentación
     workflow_block:
       label: Workflow
     permissions_block:
@@ -206,6 +216,12 @@ content_type_management:
       label: Mensaje al crear nuevo contenido
     message_on_edit_content:
       label: Mensaje al editar contenido      
+    display_prop:
+      label: Display
+    max_length:
+      label: Tamaño máximo
+    template:
+      label: Plantilla      
     workflow:
       label: Workflow de publicación      
     aspects:

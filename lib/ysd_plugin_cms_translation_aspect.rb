@@ -48,7 +48,7 @@ module Huasi
     #
     def element_action_extension(context={}, aspect_model)
       
-      content_translation_guiblock.element_action(context, aspect_model)
+      content_translation_guiblock.element_action_extension(context, aspect_model)
     
     end    
     

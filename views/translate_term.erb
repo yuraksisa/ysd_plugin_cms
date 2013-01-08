@@ -1,5 +1,10 @@
 <%= include('entity-management') %>
 
+<!-- Renders the element title -->
+<script type="text/tmpl" id="elements_title">
+  <h2 class="entity-title">Term translation</h2>
+</script>
+
 <!-- Renders the elements container -->
 <script type="text/tmpl" id="elements_container_template">
 
@@ -22,13 +27,7 @@
 <script type="text/tmpl" id="element_template_form">
 
   <form name="term_translation" id="term_translation">
-
-    <div class="top-navigation-bar navigation-bar">
-       <h2 class="form-title">Term translation</h2>
-       <div class="navigation-bar-nav-buttons">
-       </div>
-    </div>        
-
+     
     <input type="hidden" name="term_id" value="<%=term_id%>"/>
 
     <div class="form-fields">
@@ -61,6 +60,8 @@ require(['jquery','YSDEntityManagement', 'YSDRemoteDataSource', 'YSDSelectSelect
 
   function TermTranslationHook() {
  	   
+    this.language = '<%=language%>';
+
   	this.onEdit = function(entity) {
   	  this.configForm(entity);	
   	}
@@ -80,11 +81,12 @@ require(['jquery','YSDEntityManagement', 'YSDRemoteDataSource', 'YSDSelectSelect
     this.configForm = function(entity) {       
 
       $('.top-navigation-bar').hide();
-    
+
       var dataSource = new RemoteDataSource('/translationlanguages',{id:'code', description:'description'});
-      var value = (this.entity && this.entity.language)?this.entity.language:'<%=language%>'; 
+      var value = (this.entity && this.entity.language)?this.entity.language:this.language; 
       var selector = new SelectSelector('language', dataSource, value );
       
+      var self = this;
       $('#language').change(function(event) { 
       	  self.changeLanguage(event) 
       	 });    	
@@ -92,9 +94,13 @@ require(['jquery','YSDEntityManagement', 'YSDRemoteDataSource', 'YSDSelectSelect
     
     this.changeLanguage = function(event) {
       
-      var language = $('#language option:selected').val();	
-      
-      // 
+      var newLanguage = $('#language option:selected').val(); 
+
+      if (typeof this.manager != 'undefined') {
+        this.manager.model.urls.get_url = this.manager.model.urls.get_url.replace('/'+this.language+'/', '/'+newLanguage+'/');
+        this.language = newLanguage;
+        this.manager.model.get(); /* Reload the element */
+      }  
       
     }
   	  	
@@ -107,7 +113,7 @@ require(['jquery','YSDEntityManagement', 'YSDRemoteDataSource', 'YSDSelectSelect
              
   var termTranslationHook = new TermTranslationHook();
   var termTranslation = new EntityManagement(urls, 'term translation', 1, termTranslationHook, 
-                                            {url_base: '/translate/term', action: 'edit'});
+                                            {url_base: '/translate/term', action: 'edit', hold_form_after_action: true});
  
   $('.entity-title').html('Term translation');
   

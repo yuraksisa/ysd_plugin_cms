@@ -1,24 +1,3 @@
-<div class="content-wrapper">
-
-  <!-- Content title -->
-
-  <% if content and not content.title.empty? %>
-    <h2 class="content-title"><a href="<%= (content.alias.strip.length>0)?(content.alias):(content.path)%>"><%= content.title%></a></h2>
-  <% end %>
-
-  <!-- Extras (above the content ) -->
-  <% if defined?element_custom_above and element_custom_above.strip.length > 0%>
-  <div class="content-custom">
-    <%= element_custom_above %>
-  </div>
-  <% end %>
-
-  <!-- Content body -->
-
-  <div class="content-body">
-    <%= content_body if content_body%>
-  </div>
-  
   <!-- Content extras -->
   <% if defined?element_custom and element_custom.strip.length > 0 %>
   <div class="content-custom">
@@ -39,5 +18,3 @@
   <% if defined?element_actions_extensions and element_actions_extensions.strip.length > 0 %>
   <%= element_actions_extensions if defined?element_actions_extensions%>
   <% end %>
-
-</div>

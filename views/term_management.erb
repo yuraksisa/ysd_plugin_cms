@@ -1,4 +1,4 @@
-<%= include('entity-management') %>
+<%= include('entity-management', {:element_action => element_action}) %>
 
 <!-- Renders the element title -->
 <script type="text/tmpl" id="elements_title">
@@ -45,29 +45,6 @@
 <!-- Renders one element in the element view (full detailed) -->
 
 <script type="text/tmpl" id="element_template">
-
-     <div class="element_template" style="overflow:hidden">
-       <div class="entity-field"><div class="entity-fieldlabel">Description</div> <div class="entity-fieldvalue"><%%= entity.description %></div> </div>
-       <div class="entity-field"><div class="entity-fieldlabel">Weight</div> <div class="entity-fieldvalue"><%%= entity.weight %></div> </div>
-     </div>
-     
-     <%= element_template_above %>
-
-     <div id="tabs_template">
-       <ul>
-          <%= element_template_above_ingroup_tab %>
-       </ul>
-       <%= element_template_above_ingroup %>
-     </div>
-          
-     <% if element_action.strip.length > 0 %>
-     <div class="element_template_actions">
-        <div class="element_template_actions_buttons">
-          <%= element_action %>
-        </div>
-     </div>
-     <% end %>
-
 </script>
 
 <!-- Renders the form to edit an element -->
@@ -100,33 +77,24 @@
             <select name="parent[id]" id="parent[id]" class="fieldcontrol" size="10"></select>
           </div>      
           
-          <%% if (entity) { %>
-            <div id="form_above">
-               <%= edit_element_form_above %>
-            </div>            
-            <div id="tabs">
-              <ul>
-                <%= edit_element_form_above_ingroup_tab%>
-              </ul>
-              <%= edit_element_form_above_ingroup %>
-            </div>
-          <%% } else { %>
-            <div id="form_above">
-               <%= new_element_form_above %>
-            </div>            
-            <div id="tabs">
-              <ul>
-                <%= new_element_form_above_ingroup_tab%>
-              </ul>
-              <%= new_element_form_above_ingroup %>
-            </div>
-          <%% } %>
-                
+          <%= include('entity-tabs-above', {:edit_element_form_above => edit_element_form_above,
+                                            :edit_element_form_above_ingroup_tab => edit_element_form_above_ingroup_tab,
+                                            :edit_element_form_above_ingroup => edit_element_form_above_ingroup,
+                                            :new_element_form_above => new_element_form_above,
+                                            :new_element_form_above_ingroup_tab => new_element_form_above_ingroup_tab,
+                                            :new_element_form_above_ingroup => new_element_form_above_ingroup}) %>
+
+          <%= include('entity-tabs-below', {:edit_element_form => edit_element_form,
+                                            :edit_element_form_ingroup_tab => edit_element_form_ingroup_tab,
+                                            :edit_element_form_ingroup => edit_element_form_ingroup,
+                                            :new_element_form => new_element_form,
+                                            :new_element_form_ingroup_tab => new_element_form_ingroup_tab,
+                                            :new_element_form_ingroup => new_element_form_ingroup}) %>
+
         </div>
         
         <div class="bottom-navigation-bar navigation-bar">
              <div class="navigation-bar-nav-buttons">
-                <input type="button" class="cancel-entity-button action-button entity-management-button" value="Cancel"/>
                 <%% if (entity) { %>
                   <input type="submit" class="update-entity-button action-button entity-management-button" value="Update"/>
                 <%% } 
@@ -173,9 +141,7 @@
     };
              
     this.configForm = function(entity) {
-    
-         $('#tabs').tabs();
-    
+        
          // Configure weights
          var weights = [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10];
          var weightDataSource = new MemoryDataSource(weights);

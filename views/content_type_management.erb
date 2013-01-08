@@ -37,40 +37,7 @@
 
 </script>
 
-<!-- Renders one element in the element view (full detailed) -->
-
 <script type="text/tmpl" id="element_template">
-
-     <div class="element_template" style="overflow:hidden">
-       <div class="entity-field">
-         <div class="entity-fieldlabel"><%=t.content_type_management.form.id.label%></div> 
-         <div class="entity-fieldvalue"><span class="entity-id"><%%= entity.id %></span></div> 
-       </div>
-       <div class="entity-field">
-         <div class="entity-fieldlabel"><%=t.content_type_management.form.name.label%></div> 
-         <div class="entity-fieldvalue"><%%= entity.name %></div> 
-       </div>
-       <div class="entity-field">
-         <div class="entity-fieldlabel"><%=t.content_type_management.form.description.label%></div> 
-         <div class="entity-fieldvalue"><%%= entity.description %></div>
-       </div>
-       <div class="entity-field">
-         <div class="entity-fieldlabel"><%=t.content_type_management.form.message_on_new_content.label%></div> 
-         <div class="entity-fieldvalue"><%%= entity.message_on_new_content %></div>
-       </div>    
-       <div class="entity-field">
-         <div class="entity-fieldlabel"><%=t.content_type_management.form.message_on_edit_content.label%></div> 
-         <div class="entity-fieldvalue"><%%= entity.message_on_edit_content %></div>
-       </div>              
-       <div class="entity-field">
-         <div class="entity-fieldlabel"><%=t.content_type_management.form.workflow.label%></div>
-         <div class="entity-fieldvalue"><%%= entity.publishing_workflow%></div>
-       </div>
-       <div class="entity-field">
-         <div class="entity-fieldlabel"><%=t.content_type_management.form.usergroups.label%></div>
-         <div class="entity-fieldvalue"><%%= self.model.entityHooks[0].formatUserGroups(entity) %></div>
-       </div>
-     </div>
 
 </script>
 
@@ -92,6 +59,7 @@
             <ul>
               <%= render_tab('ctype_description', t.content_type_management.form.description_block.label) %>
               <%= render_tab('ctype_messages',  t.content_type_management.form.messages_block.label) %>
+              <%= render_tab('ctype_presentation', t.content_type_management.form.presentation_block.label) %>
               <%= render_tab('ctype_workflow',  t.content_type_management.form.workflow_block.label) %>
               <%= render_tab('ctype_permissions', t.content_type_management.form.permissions_block.label) %>
             </ul>
@@ -123,6 +91,21 @@
               <p style="text-align:right"> <span id="message_on_edit_content_length"></span> <%= t.available_chars %> </p>
             </div>
 
+            <div id="ctype_presentation">
+              <div class="formrow">
+                <label for="display" class="fieldtitle"><%=t.content_type_management.form.display_prop.label%></label>
+                <input type="text" name="display" id="display" maxlength="40" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.display%>" <%%}%> />
+              </div>
+              <div class="formrow">
+                <label for="max_length" class="fieldtitle"><%=t.content_type_management.form.max_length.label%></label>
+                <input type="text" name="max_length" id="max_length" maxlength="4" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.max_length%>" <%%}%> />
+              </div>              
+              <div class="formrow">
+                <label for="template" class="fieldtitle"><%=t.content_type_management.form.template.label%></label>
+                <textarea name="template" id="template" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.template%><%% } %></textarea> 
+              </div>
+            </div>
+
             <div id="ctype_workflow">
               <div class="formrow">
                 <label for="publishing_workflow" class="fieldtitle"><%=t.content_type_management.form.workflow.label%></label>
@@ -138,10 +121,6 @@
             </div>
 
           </div>
-
-          <!--div class="formrow">
-            <div id="content_type_aspects"></div>       
-          </div-->
             
           <%% if (entity) { %>
             <%= edit_element_form %>
@@ -151,7 +130,6 @@
 
         <div class="bottom-navigation-bar navigation-bar">
              <div class="navigation-bar-nav-buttons">
-                <input type="button" class="cancel-entity-button action-button entity-management-button" value="<%= t.entitymanagement.cancel%>"/>
                 <%% if (entity) { %>
                   <input type="submit" class="update-entity-button action-button entity-management-button" value="<%= t.entitymanagement.update%>"/>
                 <%% } 
@@ -193,7 +171,9 @@
       data.aspects    = this.adaptAspects(data.aspects, data.id);
       data.usergroups = this.adaptUsergroups(data.usergroups, data.id); 
       
-      console.log(data);
+      if (data.display == '') {
+        data.display = null;
+      }
 
       return data;	
     	

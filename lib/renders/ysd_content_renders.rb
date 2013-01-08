@@ -18,7 +18,7 @@ module CMSRenders
                      content
                    end
         @context = context       
-        @display = display
+        @display = display || content.get_content_type.display
      end
      
      #
@@ -51,7 +51,7 @@ module CMSRenders
          template = Tilt.new(content_template_path)
          result = template.render(context, content_locals.merge({:content => content, :content_body => content_body}))
        else
-         puts "Template not found #{content_template_path}"
+         puts "Template not found template: #{content_template_path} display: #{display}"
        end
 
        if String.method_defined?(:force_encoding)
@@ -73,7 +73,7 @@ module CMSRenders
 
        if content.type         
          content_type_template_name = "render-content-#{content.type}"
-         content_type_template_name << "-#{display}" if display
+         content_type_template_name << "-#{display}" if (not display.nil?) and (not display.empty?)
          content_type_template = find_template(content_type_template_name)
        end
 
@@ -87,7 +87,7 @@ module CMSRenders
      def content_template
        
        content_template_name = "render-content"
-       content_template_name << "-#{display}" if display
+       content_template_name << "-#{display}" if (not display.nil?) and (not display.empty?)
        content_template = find_template(content_template_name)        
 
        return content_template
@@ -164,14 +164,14 @@ module CMSRenders
       
        result = {}
       
-       if content_type = ContentManagerSystem::ContentType.get(content.type)
+       if content_type = content.get_content_type
          aspects = []
          aspects.concat(content_type.aspects) 
          aspects_render = UI::EntityAspectRender.new({:app=>context}, aspects) 
          result = aspects_render.render(content, content_type) 
        end   
       
-       actions = content_edit_link()
+       actions = content_edit_link
        actions << result[:element_actions] if result.has_key?(:element_actions)
        result.store(:element_actions, actions) 
  
@@ -183,8 +183,8 @@ module CMSRenders
      # Creates the content edit link
      #
      def content_edit_link()
-                  
-       result = if content and (not content.new?) and content.can_write?(context.user)      
+                       
+       result = if content and (content.publishing_state and (not content.publishing_state.empty?)) and content.can_write?(context.user)   #(not content.new?)  
 
                  edit_content_url = "/mcontent/edit/#{content.key}"
       

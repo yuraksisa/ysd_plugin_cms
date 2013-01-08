@@ -140,7 +140,7 @@ module Sinatra
         end
       
         #
-        # Get the entity/aspect configuration attributes
+        # Get the content type aspect configuration attributes
         #
         app.get "/ctype/:content_type/aspect/:aspect/config" do
           
@@ -158,23 +158,22 @@ module Sinatra
         end
         
         #
-        # Update the aspect/entity configuration attributes
+        # Update the content type aspect configuration attributes
         #
         app.put "/ctype/:content_type/aspect/:aspect/config" do
                              
-          c_type = ::ContentManagerSystem::ContentType.get(params['content_type'])
-          c_type_aspect = c_type.aspect(params['aspect'])
+          c_type = ::ContentManagerSystem::ContentType.get(params[:content_type])
+          c_type_aspect = c_type.aspect(params[:aspect])
  
           if c_type and c_type_aspect
             request.body.rewind
             aspect_configuration_request = JSON.parse(URI.unescape(request.body.read))
-            aspect_configuration_attributes = aspect_configuration_request.delete('aspect_attributes')
             
-            ContentManagerSystem::ContentTypeAspect.transaction do |transaction|
-              c_type_aspect.attributes= aspect_configuration_request
-              c_type_aspect.save
-              c_type_aspect.aspect_attributes=aspect_configuration_attributes
-              transaction.commit
+            if aspect_configuration_attributes = aspect_configuration_request['aspect_attributes']
+              ContentManagerSystem::ContentTypeAspect.transaction do |transaction|
+                c_type_aspect.aspect_attributes=aspect_configuration_attributes
+                transaction.commit
+              end
             end
 
             status 200

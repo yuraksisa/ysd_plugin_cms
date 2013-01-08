@@ -124,7 +124,9 @@ module Sinatra
           
           if content_type 
             if content_type.can_be_created_by?(user)
-              blank_content = ContentManagerSystem::Content.new('new-temp-content', {:type => params[:content_type], :composer_user => user.username})
+              blank_content = ContentManagerSystem::Content.new('new-temp-content', {:type => params[:content_type], :composer_user => user.username, 
+                               :publishing_state => ContentManagerSystem::PublishingState::INITIAL.id,
+                               :publishing_workflow => content_type.publishing_workflow})
 
               locals = render_content_type_aspects(params[:content_type], blank_content)
               locals.store(:url_base, "/mcontent/new/#{params[:content_type]}")

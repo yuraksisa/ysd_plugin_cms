@@ -4,9 +4,11 @@
   	      function($, EntityManagementComplementHooks, RemoteDataSource, SelectSelector, ListSelector){
 
      CommentsHookPlugin = function() {
+
        this.onEdit = function(entity) { /* On Edit the entity */
      	  this.configForm(entity);
        };
+      
        this.onNew = function() {
           this.configForm(null);	
        };  	

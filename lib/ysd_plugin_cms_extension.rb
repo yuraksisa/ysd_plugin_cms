@@ -120,6 +120,7 @@ module Huasi
       ::Model::ViewRender.new(:slider, 'slider', ::Model::ViewStyle::VIEW_STYLE_TEASER, slider_preprocessor)
       ::Model::ViewRender.new(:term_h, 'term hierarchy', Model::ViewStyle::VIEW_STYLE_TEASER, term_hierarchy_preprocessor)
       ::Model::ViewRender.new(:div, 'div', Model::ViewStyle::VIEW_STYLE_FIELDS)
+      ::Model::ViewRender.new(:thumbnails, 'thumbnails', Model::ViewStyle::VIEW_STYLE_FIELDS)
       ::Model::ViewRender.new(:list, 'list', Model::ViewStyle::VIEW_STYLE_FIELDS)
       ::Model::ViewRender.new(:table, 'table', Model::ViewStyle::VIEW_STYLE_FIELDS)
 

@@ -1,0 +1,13 @@
+  <!-- Content photo -->
+  <% if content and content['photo_url_full'] and content['photo_url_full'].strip.length > 0%>
+  <div class="content-photo">
+    <img src="<%=content['photo_url_full']%>" class="content-photo-img"/>
+  </div>
+  <% end %>
+
+  <!-- Extras (above the content ) -->
+  <% if defined?element_custom_above and element_custom_above.strip.length > 0%>
+  <div class="content-custom">
+    <%= element_custom_above %>
+  </div>
+  <% end %>

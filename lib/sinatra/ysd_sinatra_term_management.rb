@@ -17,6 +17,7 @@ module Sinatra
             
             locals = aspects_render.render(content_type)
             locals.store(:title, t.term_management.title(taxonomy.name))
+            
             load_em_page(:term_management, :term, true, :locals => locals)
           else
             status 404

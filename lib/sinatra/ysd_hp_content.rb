@@ -10,7 +10,7 @@ module Sinatra
     #
     # Load a content
     #
-    def page_from_content(content, options={})
+    def page_from_content(content, display=nil, options={})
     
        content_page = UI::Page.new(:title => content.title, 
                                    :author => content.author, 
@@ -21,6 +21,26 @@ module Sinatra
                                    :content => CMSRenders::ContentRender.new(content, self).render(options[:locals]))
       
        page(content_page, options)   
+
+    end
+
+    #
+    # Load a view as a page
+    #
+    def page_from_view(view, page, arguments, options={})
+
+      # Creates a content using the view information
+      begin
+        content = ContentManagerSystem::Content.new(view.view_name) 
+        content.title = view.title
+        content.alias = request.path_info
+        content.description = view.description       
+        content.body = CMSRenders::ViewRender.new(view, self).render(page, arguments)
+        
+        page_from_content(content, nil, options) 
+      rescue ContentManagerSystem::ViewArgumentNotSupplied
+        status 404
+      end
 
     end
      

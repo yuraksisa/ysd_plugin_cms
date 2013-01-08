@@ -20,8 +20,6 @@ module Sinatra
                                  end
            
             arguments = (x=request.path_info.split('/')).slice(arguments_start_at, x.length).join('/')
-             
-            puts "PAGE : #{page} #{page_num} ARGUMENTS: #{arguments}"
 
             return [page, arguments]
 
@@ -54,9 +52,7 @@ module Sinatra
           app.get path do
 
             if view = ContentManagerSystem::View.get(params[:view_name])
-              puts "PARAM PAGE : #{params[:page]}"
               page, arguments = extract_view_arguments(params[:page].to_i, 5, 3)
-              
               begin
                 CMSRenders::ViewRender.new(view, self).render(page, arguments)
               rescue ContentManagerSystem::ViewArgumentNotSupplied
@@ -104,20 +100,9 @@ module Sinatra
           
             view = ContentManagerSystem::View.first(:url => params['view_name'])
             pass unless view
-            puts "PARAM PAGE : #{params[:page]}"
             page, arguments = extract_view_arguments(params[:page].to_i, 4, 2)
 
-            # Creates a content using the view information
-            begin
-              content = ContentManagerSystem::Content.new(view.view_name) 
-              content.title = view.title
-              content.alias = request.path_info
-              content.description = view.description       
-              content.body = CMSRenders::ViewRender.new(view, self).render(page, arguments)
-              page_from_content(content) # Renders the content in a page
-            rescue ContentManagerSystem::ViewArgumentNotSupplied
-              status 404
-            end
+            page_from_view(view, page, arguments)
 
           end
         end

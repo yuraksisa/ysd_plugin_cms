@@ -76,10 +76,18 @@ content_management:
     content:
       label: Contingut
       description: El texte a publicar
+    title:
+      label: Titol
+      description: El titol del contingut
     categories:
       label: Categories
       description: Et permeten classificar i etiquetar el contingut
+    body:
+      label: Contingut
+      description: El contingut
     show_tabs: Més informació
+    complements: 
+      label: Més
 #
 # Content render
 #
@@ -106,6 +114,8 @@ content_type_management:
       label: Descripció
     messages_block:
       label: Missatges
+    presentation_block:
+      label: Presentació
     workflow_block:
       label: Workflow
     permissions_block:
@@ -122,6 +132,12 @@ content_type_management:
       label: Missatge al crear nou contingut
     message_on_edit_content:
       label: Missatge a l\'editar contingut
+    display_prop:
+      label: Display
+    max_length:
+      label: Tamany màxim
+    template:
+      label: Plantilla 
     workflow:
       label: Workflow de publicació
     aspects:

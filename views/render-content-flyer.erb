@@ -1,10 +1,4 @@
-<div class="content-wrapper">
-
-  <!-- Content title -->
-
-  <% if content and not content.title.empty? %>
-    <h2 class="content-title"><a href="<%= (content.alias.strip.length>0)?(content.alias):(content.path)%>"><%= content.title%></a></h2>
-  <% end %>
+<div class="content-flyer-wrapper">
 
   <!-- Extras (above the content ) -->
   <% if defined?element_custom_above and element_custom_above.strip.length > 0%>

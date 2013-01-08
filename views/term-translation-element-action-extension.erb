@@ -5,13 +5,9 @@ require(['jquery', 'YSDEntityManagementComplementHooks'],
 
    TermTranslatePlugin = function() {
 
-     this.onRender = function(entity) {
+     this.onEdit = function(entity) {
      
-       var self = this;
-       $('#term_translate').bind('click', 
-             function event(event) {
-               window.location.href = '/translate/term/' + entity.id + '?destination=/term-management/' + entity.id; //TODO Taxonomy id	 
-             });
+       $('#term_translate a').attr('href', '/translate/term/' + entity.id + '?destination=/term-management/' + entity.taxonomy_id + '/' + entity.id); //TODO Taxonomy id 
      	
      }
 
