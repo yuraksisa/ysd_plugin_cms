@@ -11,7 +11,7 @@ module CMSRenders
     class ViewRender
      
        attr_reader :view
-       attr_reader :context
+       attr_reader :context # The application
        attr_reader :display
        
        def initialize(view, context, display=nil)
@@ -92,7 +92,16 @@ module CMSRenders
       #
       def get_view_data(page=1, arguments="")
 
-        data = view.get_data(page, arguments)
+        session_data = {}
+        session_data.store(:me, context.user.username) if not context.nil? and not context.user.nil?
+        if not context.nil? and context.instance_variable_defined?("@current_profile")
+          session_data.store(:current_profile, context.instance_variable_get("@current_profile"))
+        end
+        if not context.nil? and context.instance_variable_defined?("@current_content")
+          session_data.store(:current_content, context.instance_variable_get("@current_content")) 
+        end 
+
+        data = view.get_data(page, arguments, session_data)
 
         return data
 

@@ -6,7 +6,7 @@
              <a href="<%=view.view_fields.first.evaluate_link(element)%>" <%unless view.view_fields.first.link_class.to_s.empty?%>class="<%=view.view_fields.first.link_class%>"<%end%>>
            <% end %>
            <% if view.view_fields.first.image %>
-             <img src="<%=element.attribute_get(view.view_fields.first.field)%>" <%unless view.view_fields.first.image_class.to_s.empty?%>class="<%= view.view_fields.first.image_class%>"<%end%>/>
+             <img src="<%=view.view_fields.first.field.split(".").inject(element){|result, method| result.send(method.to_sym)}%>" <%unless view.view_fields.first.image_class.to_s.empty?%>class="<%= view.view_fields.first.image_class%>"<%end%>/>
            <% end %>
              <span>
                   <div class="view_div_thumb_element_info">

@@ -45,22 +45,6 @@
 
 <script type="text/tmpl" id="element_template">
 
-     <div class="element_template" style="overflow:hidden">
-       <div class="entity-field"><div class="entity-fieldlabel">Name</div> <div class="entity-fieldvalue"><%%=entity.name%></div> </div>
-       <div class="entity-field"><div class="entity-fieldlabel">Module</div> <div class="entity-fieldvalue"><%%=entity.module_name%></div> </div>
-       <div class="entity-field"><div class="entity-fieldlabel">Region</div> <div class="entity-fieldvalue"><%%=entity.region%></div> </div>
-       <div class="entity-field"><div class="entity-fieldlabel">Title</div> <div class="entity-fieldvalue"><%%=entity.title%></div> </div>
-       <div class="entity-field"><div class="entity-fieldlabel">Weight</div> <div class="entity-fieldvalue"><%%=entity.weight%></div> </div>
-     </div>
-     <div class="entity-block">
-       <h2 class="entity-block-title">Block preview</h2>
-       <form name="view-preview">
-         <input type="button" name="send-block-preview" id="send-block-preview" value="Preview"/>
-       </form>
-       <div id="block-preview-result">
-       </div>  
-     </div>
-
 
 </script>
 
@@ -69,13 +53,7 @@
 <script type="text/tmpl" id="element_template_form">
               
      <form name="element">
-        
-        <div class="top-navigation-bar navigation-bar">
-             <h2 class="form-title">Block</h2>
-             <div class="navigation-bar-nav-buttons">
-             </div>
-        </div>        
-
+      
         <input type="hidden" id="id" name="id" <%% if (entity) { %> value="<%%=entity.id%>" <%% } %>/>
 
         <div class="form-fields">
@@ -112,25 +90,20 @@
           
           <fieldset class="fieldcontrol">
             <legend>Show the block to the following users</legend>
-            <div class="formrow">
-              <input type="checkbox" name="show_block_on_anonymous_user" id="show_block_on_anonymous_user" value="true" <%% if (entity && entity.show_block_on_anonymous_user) { %> checked="true" <%% } %>>Anonymous user (not connected)</input>
-              <div id="user_groups">
-              </div>
-            </div> 
+            <div id="user_groups">
+            </div>
           </fieldset>  
           
           <fieldset class="fieldcontrol">
             <legend>Show the block on the following pages</legend>
-            <div class="formrow">
-              <div>
+            <div>
                 <input type="radio" name="show_block_on_page" value="1" <%% if (entity && entity.show_block_on_page == 1) { %> checked="true" <%% } %>>
                   Show the block on all pages but</input>
-              </div>
-              <div>
+            </div>
+            <div>
                 <input type="radio" name="show_block_on_page" value="2" <%% if (entity && entity.show_block_on_page == 2) { %> checked="true" <%% } %>>
                   Show the block only on the listed pages</input>
-              </div>
-            </div>                
+            </div>
             <div class="formrow">
               <textarea id="show_block_on_page_list" name="show_block_on_page_list" class="fieldcontrol"><%% if (entity) {%><%%= entity.show_block_on_page_list%><%% } %></textarea>
               <div class="fielddescription">Type one entry per line in the form of a regular expression which matches the URL to apply</div>
@@ -168,7 +141,8 @@ require(['jquery','YSDEntityManagement', 'YSDMemoryDataSource', 'YSDRemoteDataSo
     this.onEdit = function(entity) {    	
       $('#module_name').attr('readonly', true);
       $('#theme').attr('readonly', true);
-      $('#name').focus();  	
+      $('#name').attr('readonly', true);
+      $('#region').focus();  	
       this.configForm(entity);
     };
   
@@ -191,34 +165,15 @@ require(['jquery','YSDEntityManagement', 'YSDMemoryDataSource', 'YSDRemoteDataSo
 
 
     this.adaptFormData = function(data) { // Adapt the form data before it's sent to backend
-  	
-  	  // Convert the list of user groups in the proper data structure
-  	  var block_usergroups_list = [];
-  	  var block_usergroup = null;
-  	  var bug = data.block_usergroups;
-  	
-  	  for (index in bug) {
-  	
-  	    block_usergroup = { 
-  	    	'usergroup' : {
-  	  	       'group' : bug[index]	
-  	  	     }
-  	    };
-  	  
-  	    if (data.id != null) {
-  	      block_usergroup.block = {
-  	        'id' : data.id	
-  	      };
-  	    }
-  	
-  	    block_usergroups_list.push(block_usergroup);  		
-  	  }
-  	
-  	  // update the object
-  	  data.block_usergroups = block_usergroups_list;
-  	  data.show_block_on_anonymous_user = (typeof $('#show_block_on_anonymous_user').attr('checked') == 'undefined')?false:true;
-  	  //data.show_block_on_page = $('#show_block_on_page').val();	
-  	
+      
+      var adaptedUsergroups = [];
+
+      for (idx in data['usergroups']) {
+        adaptedUsergroups.push({'group': data['usergroups'][idx]});
+      }
+
+      data['usergroups'] = adaptedUsergroups;
+
   	  return data;
     };
 
@@ -239,15 +194,10 @@ require(['jquery','YSDEntityManagement', 'YSDMemoryDataSource', 'YSDRemoteDataSo
          var regionValue = (entity && entity.region)?entity.region:null;
          var selectRegion = new SelectSelector('region', regionsDataSource, regionValue);        
      	
-     	 // Configure the user groups
-         var ugDataSource = new RemoteDataSource('/usergroups',{id:'group', description:'name'});         
-         var ugValue = [];
-         if (entity && entity.block_usergroups) {
-           for (index in entity.block_usergroups) {
-           	  ugValue.push( entity.block_usergroups[index].usergroup.group);
-           }
-         }         
-         var ugSelector = new ListSelector('user_groups', 'block_usergroups', ugDataSource, ugValue );     	 
+     	   // Configure the user groups
+         var ugDataSource = new RemoteDataSource('/usergroups',{id:'group', description:'name'});
+         var ugValue = (entity&&entity.usergroups)?entity.usergroups.map(function(item){return item.group;}):[]; 
+         var ugSelector = new ListSelector('user_groups', 'usergroups[]', ugDataSource, ugValue );
 
     }
     

@@ -11,10 +11,10 @@
   
        <form id="comment_form" name="comment_form">
 
-         <input type="hidden" name="publishing_workflow" value="<%=publishing_workflow%>"/>
+         <input type="hidden" name="publishing_workflow" value="<%=publishing_workflow_id%>"/>
 
          <div class="formrow">
-           <textarea id="message" name="message" rows="10" placeholder="<%= t.comments.message%>" class="texteditor"></textarea>
+           <textarea id="message" name="message" rows="10" placeholder="<%= t.comments.message%>" class="texteditor fieldcontrol"></textarea>
          </div>
          <p style="text-align:right"> <span id="message_length"></span> <%= t.available_chars %> </p>
            

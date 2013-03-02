@@ -24,7 +24,6 @@ require 'renders/ysd_menu_render'
 
 require 'sinatra/ysd_hp_cms'
 require 'sinatra/ysd_hp_content'
-require 'sinatra/ysd_sinatra_site'
 require 'sinatra/ysd_sinatra_content_management'
 require 'sinatra/ysd_sinatra_content_type_management'
 require 'sinatra/ysd_sinatra_taxonomy_management'

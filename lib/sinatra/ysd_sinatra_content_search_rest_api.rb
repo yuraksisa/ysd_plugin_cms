@@ -18,30 +18,22 @@ module Sinatra
        	 
            query_params = extract_request_query_string[:params]
          
-           conditions = []
+           conditions = {}
            query_params.each do |property, value|
              case property
                when 'category'
-                conditions << Conditions::Comparison.new(property.to_sym, '$in', [value.to_i])
+                conditions[:content_categories] = {:category => {:id => value.to_i}}
+               when 'type'
+                conditions[:content_type] = {:id => value}
                else
-                conditions << Conditions::Comparison.new(property.to_sym, "$eq", value)
+                conditions.store(property.to_sym, value)
              end
            end
 
-           condition = if conditions.length > 1
-         	             Conditions::JoinComparison('$and', conditions)
-         	           else
-         	             if conditions.length == 1
-         	               conditions.first
-         	             else
-         	               nil
-         	             end
-         	           end
-
            query = {}
-           query.store(:fields, [:key, :title, :photo_url_small])
-           query.store(:conditions, condition ) unless condition.nil?
-           query.store(:order, [[:title, :desc]])
+           query.store(:fields, [:id, :title, :photo_url_small])
+           query.store(:conditions, conditions ) unless conditions.empty?
+           query.store(:order, [:title.asc])
 
            data = ContentManagerSystem::Content.all(query)
          

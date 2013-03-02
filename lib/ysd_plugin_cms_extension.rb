@@ -139,7 +139,7 @@ module Huasi
       
       aspects = []
       aspects << ::Plugins::Aspect.new(:comments, app.t.aspect.comments, ContentManagerSystem::FieldSet::Commentable, CommentAspectDelegate.new,
-                                       [Plugins::AspectConfigurationAttribute.new(:publishing_workflow, 'workflow', 'standard'),
+                                       [Plugins::AspectConfigurationAttribute.new(:publishing_workflow_id, 'workflow', 'standard'),
                                         Plugins::AspectConfigurationAttribute.new(:usergroups,'users','user,staff')])
       
       aspects << ::Plugins::Aspect.new(:translation, app.t.aspect.translate, Model::Translatable, CMSTranslationAspectDelegate.new)
@@ -507,35 +507,7 @@ module Huasi
  
       
     end
-    
-    # ============ Gallery aspect integration =============
-    
-    #
-    # Get the template to integrate
-    #
-    def album_aspect_action_extension(context, aspect_model)
-    
-      app = context[:app]
-      
-      puts "llego a album_aspect_action_extension #{aspect_model.inspect}" 
-      
-      template_path = if aspect_model.kind_of?(::ContentManagerSystem::ContentType)
-                        File.join(File.dirname(__FILE__), '..', 'views', "content-album-action-extension.erb")
-                      else
-                        nil
-                      end
-      
-      puts "album_aspect_action_extension #{template_path}"
-      
-      result = if template_path
-                 template = Tilt.new(template_path)
-                 template.render(app)  
-               else
-                 ''
-               end
-          
-    end
-    
+        
     # ============ Helpers methods ===========
     
     #

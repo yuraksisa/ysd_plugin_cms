@@ -19,11 +19,12 @@ module Sinatra
         #
         app.get /^[^.]*$/ do
           
-          unless content = ContentManagerSystem::Content.first(:conditions => Conditions::Comparison.new(:alias,'$eq',request.path_info))
+          unless content = ContentManagerSystem::Content.first(:alias => request.path_info)
              pass
           end
-          
+        
           if content.can_read?(user) and (not content.is_banned?)
+            @current_content = content
             page_from_content(content)
           else
             status 404
@@ -40,10 +41,11 @@ module Sinatra
              pass
            end
            
-           content = ContentManagerSystem::Content.get(File.join(session[:locale], params[:id])) || ContentManagerSystem::Content.get(params[:id])
+           content = ContentManagerSystem::Content.get(params[:id])
 
            if content and (not content.is_banned?)
              if content.can_read?(user)
+               @current_content = content
                page_from_content(content)
              else
                status 401

@@ -11,19 +11,19 @@ module Sinatra
         app.helpers do 
        
           #
-          #
+          # Helper to get the publishing state translations
           #
           def build_publishing_state_translations
             publishing_states = {}
-            ContentManagerSystem::PublishingState.all.each do |p_state|
-              publishing_states.store(p_state.id, t.publishing.status[p_state.id.downcase.to_sym]) unless p_state.id.nil?
+            ContentManagerSystem::PublishingState.all.each do |publishing_state|
+              publishing_states.store(publishing_state.id, t.publishing.status[publishing_state.id.downcase.to_sym]) unless publishing_state.id.nil?
             end
 
             return publishing_states
           end
 
           #
-          #
+          # Helper to get the POST publishing actions
           #
           def build_post_publishing_actions
 
@@ -35,7 +35,7 @@ module Sinatra
           end
 
           #
-          #
+          # Helper to create the new content buttons
           #
           def build_creation_buttons(available_actions)
 
@@ -119,14 +119,12 @@ module Sinatra
         #      
         app.get "/mcontent/new/:content_type/?*" do
                     
-          # TODO check that the content_type exists and that the user can create it
-          content_type = ContentManagerSystem::ContentType.get(params[:content_type])
-          
-          if content_type 
+          if content_type = ContentManagerSystem::ContentType.get(params[:content_type])
             if content_type.can_be_created_by?(user)
-              blank_content = ContentManagerSystem::Content.new('new-temp-content', {:type => params[:content_type], :composer_user => user.username, 
-                               :publishing_state => ContentManagerSystem::PublishingState::INITIAL.id,
-                               :publishing_workflow => content_type.publishing_workflow})
+              blank_content = ContentManagerSystem::Content.new({:content_type => content_type, 
+                               :composer_username => user.username, 
+                               :publishing_state_id => ContentManagerSystem::PublishingState::INITIAL.id,
+                               :publishing_workflow_id => content_type.publishing_workflow_id})
 
               locals = render_content_type_aspects(params[:content_type], blank_content)
               locals.store(:url_base, "/mcontent/new/#{params[:content_type]}")
@@ -158,15 +156,14 @@ module Sinatra
 
           if content 
             if content.can_write?(user)            
-              content_type = content.get_content_type
 
-              locals = render_content_type_aspects(content.type, content)
+              locals = render_content_type_aspects(content.content_type.id, content)
               locals.store(:url_base, "/mcontent/edit/params[:id]")
               locals.store(:action, 'edit')
               locals.store(:id, params[:id])          
-              locals.store(:content_type, content.type)
-              locals.store(:title, "#{t.entitymanagement.edit} #{content_type.name.downcase}")
-              locals.store(:description, content_type.message_on_edit_content)
+              locals.store(:content_type, content.content_type.id)
+              locals.store(:title, "#{t.entitymanagement.edit} #{content.content_type.name.downcase}")
+              locals.store(:description, content.content_type.message_on_edit_content)
               locals.store(:publishing_actions, {}.to_json)
               locals.store(:publishing_states, build_publishing_state_translations.to_json )
 
@@ -204,11 +201,10 @@ module Sinatra
 
            if content 
              if content.can_write?(user)
-               content_type = content.get_content_type
                aspects = []
                aspects << GuiBlock::PublishingActions.new(content)
                aspects_render=UI::EntityManagementAspectRender.new({:app => self}, aspects) 
-               aspects_render.render(content_type)[:edit_element_form]
+               aspects_render.render(content.content_type)[:edit_element_form]
              else
               status 401
              end

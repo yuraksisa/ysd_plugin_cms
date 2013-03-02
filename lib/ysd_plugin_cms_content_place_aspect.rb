@@ -14,7 +14,7 @@ module Huasi
       app = context[:app]
       
       renderer = ::UI::FieldSetRender.new('location', app)
-      renderer.render('view','',{:element => element.place})
+      renderer.render('view','',{:element => element.place, :show_title => true})
 
     end
 

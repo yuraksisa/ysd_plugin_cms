@@ -17,34 +17,24 @@ module Sinatra
           
           app.post path do
 
-            query_conditions = nil          
+            conditions = {}         
             
             if request.media_type == "application/x-www-form-urlencoded" # Just the text
               request.body.rewind
               search = JSON.parse(URI.unescape(request.body.read))
               if search.is_a?(Hash)
-                conditions = []
                 search.each do |property, value| 
                   case property
-                    when 'publishing_state'
-                      conditions << Conditions::Comparison.new(property.to_sym, '$eq', value)
-                    when 'type'
-                      conditions << Conditions::Comparison.new(property.to_sym, '$eq', value)
+                    when 'publishing_state_id'
+                      conditions[:publishing_state_id] = value
+                    when 'content_type_id'
+                      conditions[:content_type] = {:id => value}  
                     when 'categories'
                       unless value.nil?
-                        conditions << Conditions::Comparison.new(property.to_sym, '$in', value.map {|element| element.to_i}) 
+                        conditions[:categories] = value.map {|element| element.to_i}
                       end
                   end
                 end
-                if conditions.length > 1
-                  query_conditions = Conditions::JoinComparison.new('$and', conditions)
-                else
-                  if conditions.length == 1
-                    query_conditions = conditions.first
-                  end 
-                end            
-              else
-                # None in this moment
               end
             end
 
@@ -52,12 +42,8 @@ module Sinatra
             limit = settings.contents_page_size
             offset = (page-1) * settings.contents_page_size
             
-            query_opts =  {:limit => limit, :offset => offset}
-            unless query_conditions.nil?
-              query_opts.store(:conditions, query_conditions)
-            end
-
-            data, total = ContentManagerSystem::Content.find_all(query_opts)
+            data  = ContentManagerSystem::Content.all(:conditions => conditions, :limit => limit, :offset => offset)
+            total = ContentManagerSystem::Content.count(conditions)
           
             content_type :json
             {:data => data, :summary => {:total => total}}.to_json
@@ -84,16 +70,16 @@ module Sinatra
         #
         #  /content                  : Publish the content
         #  /content?op=save          : Save the content (create a draft)
-        #  /content?op=creation-step : Just save ()
+        #  /content?op=creation-step : Just save
         #
         #
         app.post "/content" do
         
           options = extract_request_query_string
           
-          request.body.rewind
-          content_request = JSON.parse(URI.unescape(request.body.read))
-          content = ContentManagerSystem::Content.new(nil, content_request)
+          content_request = body_as_json(ContentManagerSystem::Content)
+
+          content = ContentManagerSystem::Content.new(content_request)
 
           if options.has_key?(:params) and options[:params].has_key?('op')
             case options[:params]['op'] 
@@ -117,22 +103,16 @@ module Sinatra
         # Updates a content
         #
         app.put "/content" do
-                
-          request.body.rewind
-          content_request = JSON.parse(URI.unescape(request.body.read))
           
-          # Updates an existing content
-          key = content_request.delete('key')
-          
-          content = ContentManagerSystem::Content.get(key)
-          content.attributes=(content_request)
-             
-          content.update
-          
-          # Return          
+          content_request = body_as_json(ContentManagerSystem::Content)
+                              
+          if content = ContentManagerSystem::Content.get(content_request.delete(:id))     
+            content.attributes=(content_request)  
+            content.save
+          end
+      
           content_type :json
-          content.to_json
-        
+          content.to_json        
         
         end
         
@@ -141,11 +121,10 @@ module Sinatra
         #
         app.delete "/content" do
         
-          request.body.rewind
-          content_request = JSON.parse(URI.unescape(request.body.read))
+          content_request = body_as_json(ContentManagerSystem::Content)
           
           # Remove the content
-          key = content_request.delete('key')
+          key = content_request.delete(:id)
           
           if content = ContentManagerSystem::Content.get(key)
             content.delete

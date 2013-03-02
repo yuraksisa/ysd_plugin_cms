@@ -14,21 +14,7 @@
            <tr class="view_table_body_row">
              <% view.view_fields.each do |view_field| %>
              <td class="view_table_body_cell <%= view_field.class if view_field.class.to_s.strip.length > 0 %>">
-                <% if view_field.link %>
-                  <a href="<%=view_field.evaluate_link(element)%>" <%if view_field.link_class.to_s.strip.length > 0%>class="<%= view_field.link_class%>"<%end%>>
-                <% end %>
-                <% if view_field.image %>
-                   <img src="<%=element.attribute_get(view_field.field)%>" <%if view_field.image_class.to_s.strip.length > 0%>class="<%= view_field.image_class%>"<%end%>/>
-                <% else %>
-                    <% if element.attribute_get(view_field.field).kind_of?(Time) %>
-                      <%= element.attribute_get(view_field.field).strftime('%d.%m.%y') %>
-                    <% else %>
-                      <%= element.attribute_get(view_field.field) %>
-                    <% end %>
-                <% end %>
-                <% if view_field.link %>
-                  </a>
-                <% end %>
+                <%= include 'field-view', {:view_field => view_field, :element => element} %>
              </td>
              <% end %>
            </tr>

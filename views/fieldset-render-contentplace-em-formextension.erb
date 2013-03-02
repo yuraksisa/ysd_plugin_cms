@@ -21,9 +21,9 @@
           contents_url = contents_url + '?type=<%=type_filter%>';
         <% end %>
 
-        var placeDataSource = new RemoteDataSource(contents_url, {id:'key', description:'title'});
-        var placeValue = entity?(entity.content_place):null;
-        var placeSelectSelector = new SelectSelector('content_place', placeDataSource, placeValue);
+        var placeDataSource = new RemoteDataSource(contents_url, {id:'id', description:'title'});
+        var placeValue = (entity && entity.place)?(entity.place.id):null;
+        var placeSelectSelector = new SelectSelector('place[id]', placeDataSource, placeValue);
 
       }
 

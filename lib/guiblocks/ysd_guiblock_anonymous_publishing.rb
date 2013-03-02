@@ -32,7 +32,7 @@ module GuiBlock
 
       app = context[:app]
       
-      if app.user.belongs_to?('anonymous')
+      if app.user.belongs_to?(Users::Group.get('anonymous'))
         renderer = ::UI::FieldSetRender.new('anonymouspublishing', app)      
         renderer.render('form') 
       else
@@ -48,7 +48,7 @@ module GuiBlock
 
       app = context[:app]
       
-      if app.user.belongs_to?('anonymous')
+      if app.user.belongs_to?(Users::Group.get('anonymous'))
         renderer = ::UI::FieldSetRender.new('anonymouspublishing', app)      
         renderer.render('formextension') 
       else
@@ -71,7 +71,7 @@ module GuiBlock
     def element_form_tab(context={}, aspect_model)
       app = context[:app]
       
-      if app.user.belongs_to?('anonymous')
+      if app.user.belongs_to?(Users::Group.get('anonymous'))
       	info = element_info(context)
         app.render_tab("#{info[:id]}_form", info[:description])
       else
@@ -87,7 +87,7 @@ module GuiBlock
       
       app = context[:app]
       
-      if app.user.belongs_to?('anonymous')
+      if app.user.belongs_to?(Users::Group.get('anonymous'))
         renderer = ::UI::FieldSetRender.new('anonymouspublishing', app)      
         renderer.render('form', 'em') 
       else
@@ -103,7 +103,7 @@ module GuiBlock
     
       app = context[:app]
 
-      if app.user.belongs_to?('anonymous')
+      if app.user.belongs_to?(Users::Group.get('anonymous'))
         renderer = ::UI::FieldSetRender.new('anonymouspublishing', app)      
         renderer.render('formextension', 'em')      
       else       

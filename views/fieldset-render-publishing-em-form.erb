@@ -6,7 +6,7 @@
 
   <div class="formrow">
 
-   <div class="entity-field"><span class="entity-fieldlabel"><%=t.guiblock.publishing.status.title%></span> <span class="entity-fieldvalue content-status content-status-<%%=entity.publishing_state.toLowerCase().replace('_','-')%>" style="display:inline"> <%% if (entity) { %>
+   <div class="entity-field"><span class="entity-fieldlabel"><%=t.guiblock.publishing.status.title%></span> <span class="entity-fieldvalue content-status content-status-<%%=entity.publishing_state_id.toLowerCase().replace('_','-')%>" style="display:inline"> <%% if (entity) { %>
      <%%= self.model.entityHooks[0].formatPublishingState(entity) %> <%% } %></span> </div>
 
   </div>

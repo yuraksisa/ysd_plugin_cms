@@ -18,7 +18,7 @@ module CMSRenders
                      content
                    end
         @context = context       
-        @display = display || content.get_content_type.display
+        @display = display || content.content_type.display
      end
      
      #
@@ -108,7 +108,7 @@ module CMSRenders
                           else
                             SystemConfiguration::Variable.get_value('site.template_engine', 'erb')
                           end
-                        
+            
         template = Tilt[template_engine].new { content.body }      
         template.render(context, locals) 
       
@@ -141,14 +141,14 @@ module CMSRenders
        
        result = {}
 
-       author = if content.composer_user.strip.length > 0
-                  content.composer_user
-                else
+       author = if content.composer_user.nil?
                   content.composer_name
+                else
+                  content.composer_user.full_name
                 end
        author_url = SystemConfiguration::Variable.get_value('cms.author_url', '')
-       if content.composer_user.strip.length > 0 and author_url.strip.length > 0
-         result.store(:author, "<a class=\"content-author content-composer\" href=\"#{author_url % [content.composer_user]}\">#{content.composer_user}</a>")
+       if (not content.composer_user.nil?) and (not author_url.empty?)
+         result.store(:author, "<a class=\"content-author content-composer\" href=\"#{author_url % [content.composer_username]}\">#{author}</a>")
        else
          result.store(:author, "<span class=\"content-author\">#{author}</span>")
        end
@@ -164,11 +164,11 @@ module CMSRenders
       
        result = {}
       
-       if content_type = content.get_content_type
+       if content.content_type 
          aspects = []
-         aspects.concat(content_type.aspects) 
+         aspects.concat(content.content_type.aspects) 
          aspects_render = UI::EntityAspectRender.new({:app=>context}, aspects) 
-         result = aspects_render.render(content, content_type) 
+         result = aspects_render.render(content, content.content_type) 
        end   
       
        actions = content_edit_link
@@ -184,9 +184,9 @@ module CMSRenders
      #
      def content_edit_link()
                        
-       result = if content and (content.publishing_state and (not content.publishing_state.empty?)) and content.can_write?(context.user)   #(not content.new?)  
+       result = if content and content.publishing_state and content.can_write?(context.user)   #(not content.new?)  
 
-                 edit_content_url = "/mcontent/edit/#{content.key}"
+                 edit_content_url = "/mcontent/edit/#{content.id}"
       
                  if context and context.respond_to?(:request) and context.request.respond_to?(:path_info)
                    edit_content_url << "?destination=#{context.request.path_info}"

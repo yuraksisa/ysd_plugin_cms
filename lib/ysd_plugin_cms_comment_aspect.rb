@@ -29,8 +29,7 @@ module Huasi
       
       # aspect configuration
       aspect = aspect_model.aspect('comments')
-      publishing_workflow = aspect.get_aspect_attribute_value('publishing_workflow')
-      locals.store(:publishing_workflow, publishing_workflow)
+      locals.store(:publishing_workflow_id, aspect.get_aspect_attribute_value('publishing_workflow_id'))
 
       # Renders the comments 
       template_path = File.join(File.dirname(__FILE__), '..', 'views', "comments-render.erb")
@@ -97,11 +96,10 @@ module Huasi
       app = context[:app]
       
       aspect = aspect_model.aspect('comments')
-      publishing_workflow = aspect.get_aspect_attribute_value('publishing_workflow')
 
       template_path = File.expand_path(File.join(File.dirname(__FILE__),'..','views','comments_aspect_config_extension.erb'))
       template = Tilt.new(template_path)
-      the_render = template.render(app, {:publishing_workflow => publishing_workflow})    
+      the_render = template.render(app, {:publishing_workflow_id => aspect.get_aspect_attribute_value('publishing_workflow_id')})    
 
       if String.method_defined?(:force_encoding)
         the_render.force_encoding('utf-8')

@@ -41,7 +41,7 @@ module GuiBlock
     #
     def element_form_tab(context={}, aspect_model)
       app = context[:app]
-      if app.user.belongs_to?('anonymous')
+      if app.user.belongs_to?(Users::Group.get('anonymous'))
         ''
       else
         info = element_info(context)
@@ -56,7 +56,7 @@ module GuiBlock
       
       app = context[:app]
       
-      if app.user.belongs_to?('anonymous')
+      if app.user.belongs_to?(Users::Group.get('anonymous'))
         ''
       else
         renderer = ::UI::FieldSetRender.new('audit', app)      
@@ -71,7 +71,7 @@ module GuiBlock
     def element_template_tab(context={}, aspect_model)
       app = context[:app]
       
-      if app.user.belongs_to?('anonymous')
+      if app.user.belongs_to?(Users::Group.get('anonymous'))
         ''
       else
         info = element_info(context)
@@ -87,7 +87,7 @@ module GuiBlock
     
       app = context[:app]
       
-      if app.user.belongs_to?('anonymous')
+      if app.user.belongs_to?(Users::Group.get('anonymous'))
         ''
       else    
        renderer = ::UI::FieldSetRender.new('audit', app)      

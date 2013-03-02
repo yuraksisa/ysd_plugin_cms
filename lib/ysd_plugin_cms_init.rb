@@ -12,7 +12,6 @@ Plugins::SinatraAppPlugin.register :cms do
    sinatra_helper    Sinatra::YSD::ContentBuilderHelper           # Content Builder helper
    sinatra_extension Sinatra::YSD::ContentManagement              # Content management (/content/new)
    sinatra_extension Sinatra::YSD::CMS                            # Main sinatra application
-   sinatra_extension Sinatra::YSD::Site                           # Site extension (homepage and direct resources)
    sinatra_extension Sinatra::YSD::Pages                          # Pages serving (/page/*)
    sinatra_extension Sinatra::YSD::ContentTypeManagement          # Content type management
    sinatra_extension Sinatra::YSD::TaxonomyManagement

@@ -32,7 +32,13 @@
     <%= element_custom %>
   </div>
   <% end %>
-
+  <!-- Content extras no group-->
+  <% if defined?element_custom_nogroup and element_custom_nogroup.strip.length > 0 %>
+  <div class="content-custom-nogroup">
+    <%= element_custom_nogroup %>
+  </div>
+  <% end %>
+  
   <% if defined?element_actions and element_actions.strip.length > 0 %>
   <div class="content-actions">
     <%= element_actions %>

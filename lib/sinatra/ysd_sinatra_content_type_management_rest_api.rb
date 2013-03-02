@@ -1,6 +1,11 @@
 require 'uri'
 module Sinatra
   module YSD
+    #
+    # Private REST API
+    #
+    # Sinatra extension to manage ContentManagerSystem::ContentType
+    #
     module ContentTypeManagementRESTApi
    
       def self.registered(app)
@@ -9,8 +14,8 @@ module Sinatra
         # Retrieve the content types the user can create (GET)
         #        
         app.get "/ctypesuser/?" do
-
-          data = ContentManagerSystem::ContentType.all('usergroups.usergroup.group' => user.usergroups)
+          
+          data = ContentManagerSystem::ContentType.all(:content_type_user_groups => { :usergroup => user.usergroups })
           
           content_type :json
           data.to_json
@@ -23,7 +28,7 @@ module Sinatra
         ["/ctypesuser/?","/ctypesuser/page/:page"].each do |path|
           app.post path do       
       
-            data = ContentManagerSystem::ContentType.all('usergroups.usergroup.group' => user.usergroups)
+            data = ContentManagerSystem::ContentType.all(:content_type_user_groups => { :usergroup => user.usergroups })
           
             begin # Count does not work for all adapters
               total=ContentManagerSystem::ContentType.count
@@ -41,11 +46,8 @@ module Sinatra
         # Retrive all content types (GET)
         #
         app.get "/ctypes" do
-          data=ContentManagerSystem::ContentType.all
-          
-          # Prepare the result
           content_type :json
-          data.to_json
+          ContentManagerSystem::ContentType.all.to_json
         end
       
         #
@@ -53,7 +55,7 @@ module Sinatra
         #
         app.get "/ctype/:id" do
         
-          the_content_type = ContentManagerSystem::ContentType.get(params['id'])
+          the_content_type = ContentManagerSystem::ContentType.get(params[:id])
           
           status 200
           content_type :json
@@ -86,17 +88,13 @@ module Sinatra
         # Create a new content type
         #
         app.post "/ctype" do
-        
-          request.body.rewind
-          content_type_request = JSON.parse(URI.unescape(request.body.read))
           
-          # Creates the new content
-          the_content_type = ContentManagerSystem::ContentType.create(content_type_request) 
+          content_type_request = body_as_json(ContentManagerSystem::ContentType)
+
+          m_content_type = ContentManagerSystem::ContentType.create(content_type_request) 
           
-          # Return          
-          status 200
           content_type :json
-          the_content_type.to_json          
+          m_content_type.to_json          
         
         end
         
@@ -104,20 +102,17 @@ module Sinatra
         # Updates a content type
         #
         app.put "/ctype" do
-                
-          request.body.rewind
-          content_type_request = JSON.parse(URI.unescape(request.body.read))
-                    
-          # Updates the content type          
-          the_content_type = ContentManagerSystem::ContentType.get(content_type_request['id'])
-          the_content_type.attributes=(content_type_request)
-          the_content_type.save
-                             
-          # Return          
-          status 200
+          
+          content_type_request = body_as_json(ContentManagerSystem::ContentType)
+          content_type_id = content_type_request.delete(:id)
+
+          if m_content_type = ContentManagerSystem::ContentType.get(content_type_id)
+            m_content_type.attributes=(content_type_request)
+            m_content_type.save
+          end
+
           content_type :json
-          the_content_type.to_json
-        
+          m_content_type.to_json
         
         end
         
@@ -125,13 +120,13 @@ module Sinatra
         # Deletes a content type
         #
         app.delete "/ctype" do
-        
-          request.body.rewind
-          content_type_request = JSON.parse(URI.unescape(request.body.read))
+           
+          content_type_request = body_as_json(ContentManagerSystem::ContentType)
+          content_type_id = content_type_request.delete(:id)
 
-          # Delete the content type
-          the_content_type = ContentManagerSystem::ContentType.get(content_type_request['id'])
-          the_content_type.destroy
+          if m_content_type = ContentManagerSystem::ContentType.get(content_type_id)
+            m_content_type.destroy
+          end
 
           status 200
           content_type :json

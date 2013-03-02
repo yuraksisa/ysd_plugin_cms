@@ -36,10 +36,10 @@
         <div class="form-fields">
         
           <%% if (entity) { %>
-          <input type="hidden" id="key" name="key" value="<%%=entity.key%>"/>
+          <input type="hidden" id="id" name="id" value="<%%=entity.id%>"/>
           <%% } %>
 
-          <input type="hidden" id="type" name="type" value="<%= content_type %>"/>
+          <input type="hidden" id="content_type[id]" name="content_type[id]" value="<%= content_type %>"/>
                 
           <div class="formrow">
             <label for="title" class="fieldtitle"><%= t.content_management.form.title.label %> <span class="mandatoryfield">*</span></label>
@@ -49,7 +49,7 @@
               
           <div id="content_taxonomies" class="formrow" style="display:none">
              <label class="fieldtitle"><%= t.content_management.form.categories.label %></label>
-             <div class="entity-block fieldcontrol" id="taxonomies">            
+             <div id="taxonomies">            
              </div>
              <div class="fielddescription">
                <%= t.content_management.form.categories.description %>
@@ -65,9 +65,7 @@
            
           <div id="content_body" class="formrow">
               <label for="body" class="fieldtitle"><%= t.content_management.form.body.label %> <span class="mandatoryfield">*</span></label>
-              <div class="formrow">
-                <textarea rows="20" cols="50" id="body" name="body" class="fieldcontrol texteditor"><%% if (entity) {%><%%=entity.body %><%% } %></textarea>
-              </div>
+              <textarea rows="20" cols="50" id="body" name="body" class="fieldcontrol texteditor"><%% if (entity) {%><%%=entity.body %><%% } %></textarea>
               <div class="fielddescription"><%= t.content_management.form.body.description %></div>
           </div>
 
@@ -81,7 +79,7 @@
         </div>
                        
         <div class="bottom-navigation-bar navigation-bar">
-             <div class="form-crud-buttons">
+             <div class="navigation-bar-crud-buttons">
                 <%% if (entity) { %>
                   <input type="button" class="update-entity-button action-button entity-management-button" value="<%=t.entitymanagement.update%>"/>
                 <%% } 
@@ -135,7 +133,7 @@ require(["jquery", "YSDEntityManagement", "YSDEntityManagementComplementHooks", 
     
     onCreate: function(data) { /* onCreate hook */
       
-      var publishingAction  = this.publishingActions[data.publishing_state];
+      var publishingAction  = this.publishingActions[data.publishing_state_id];
       
       if (publishingAction) {
         var command = postPublishing(publishingAction.action, publishingAction.url_prefix + data.key);
@@ -157,24 +155,28 @@ require(["jquery", "YSDEntityManagement", "YSDEntityManagementComplementHooks", 
   	adaptFormData : function(data) {
   	
   	  var send = {};
-  	  
+
+      send.categories = [];
+      
+      if (data.categories_by_taxonomy) {
+        for (idx in data.categories_by_taxonomy) {
+          var category = data.categories_by_taxonomy[idx];
+          for (var idx_category=0; idx_category < category.length; idx_category++) {
+            category[idx_category] = new Number(category[idx_category]).valueOf();  
+            send.categories.push({'id':category[idx_category]});     
+          }         
+        }
+      }
+
   	  for (idx in data) {
-  	    if (idx != 'categories_info') {
+  	    if (idx != 'categories_by_taxonomy' && idx != 'translated_categories' && idx != 'type') {
   	      send[idx] = data[idx]	
   	    }
+        if (idx == 'type') {
+          send['content_type'] = {'id':data[idx]};
+        }
   	  }
   	  
-  	  var categories = [];  	  
-  	  for (idx in data.categories_by_taxonomy) {
-  	    var category = data.categories_by_taxonomy[idx];
-  	    for (idx_category in category) {
-  	      category[idx_category] = new Number(category[idx_category]).valueOf();	
-  	      categories.push(category[idx_category]);   	
-  	    }  	    	
-  	  }
-  	  
-  	  send.categories = categories;
-
   	  return send;
   		
   	},
@@ -182,26 +184,7 @@ require(["jquery", "YSDEntityManagement", "YSDEntityManagementComplementHooks", 
     /* ------- Internal function --------- */
     
     configForm : function() {
-      $('.top-navigation-bar').hide();
-
-      $('#tabs_above').tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
-      $('#tabs_above li').removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
-
-      $('#tabs').tabs();
-
-      if ($('#tabs_above ul').children().length) {
-        $('#tabs_above').show();
-      }
-
-      if ($('#tabs ul').children().length) {
-        $('#show_tabs').show();
-        $('#show_tabs').toggle(function() {
-           $('#tabs').show();
-        }, function() {
-           $('#tabs').hide();
-        });
-      }
-      
+      $('.top-navigation-bar').hide();      
     },
   	  
   	buildCategories : function(contentType) {
@@ -249,28 +232,18 @@ require(["jquery", "YSDEntityManagement", "YSDEntityManagementComplementHooks", 
       var termsSelect = new YSDSelectHierarchicalSelector(selectName, dataSource, value, true);
   	  
   	},
-  	
-  	formatCategories : function(entity) {
-  	    	
-      var categories = [];
-      for (index in entity.categories_info) { 
-         categories.push('<span class="category">'+entity.categories_info[index].description+'</span>');
-      }	    	
-      
-      return categories;	
-  		
-  	},
 
     formatPublishingState: function(entity) {
      
       var text='';
       if (entity) {
-        text= this.publishingStates[entity.publishing_state];
+        text= this.publishingStates[entity.publishing_state_id];
       }
 
       return text;
 
     }
+
 
   };
 
