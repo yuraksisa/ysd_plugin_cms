@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name    = "ysd_plugin_cms"
-  s.version = "0.1.67"
+  s.version = "0.1.76"
   s.authors = ["Yurak Sisa Dream"]
   s.date    = "2012-03-15"
   s.email   = ["yurak.sisa.dream@gmail.com"]
@@ -17,5 +17,13 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "ysd_yito_js"                  # Base component to create the Web front end
   s.add_runtime_dependency "ysd_plugin_aspects"           # Aspects management
   s.add_runtime_dependency "ysd_plugin_rca"
+
+  s.add_development_dependency "rake"
+  s.add_development_dependency "rspec"
+  s.add_development_dependency "rack"
+  s.add_development_dependency "rack-test"
+  s.add_development_dependency "sinatra"
+  s.add_development_dependency "sinatra-r18n"
+  s.add_development_dependency "dm-sqlite-adapter" # Model testing using sqlite  
 
 end

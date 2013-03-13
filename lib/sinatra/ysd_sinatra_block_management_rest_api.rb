@@ -62,6 +62,7 @@ module Sinatra
           if block = ContentManagerSystem::Block.get(block_id)         
             block.attributes=(block_request)
             block.save
+            puts "ERRORS : #{block.errors.inspect}"
           end
 
           content_type :json

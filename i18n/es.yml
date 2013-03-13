@@ -342,6 +342,8 @@ guiblock:
     description: Meta
   audit:
     description: Auditoría
+  others:
+    description: Otros
 #
 # Breadcrumb
 #

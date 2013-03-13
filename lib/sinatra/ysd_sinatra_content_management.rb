@@ -64,14 +64,15 @@ module Sinatra
             if content_type = ContentManagerSystem::ContentType.get(content_type_id)
               aspects = []
               aspects.concat(content_type.aspects)
-              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::AnonymousPublishing.new, 99, false, true, false, false, 100, true )               # EDIT NEW (composer info)
-              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::PostPublishing.new, 99, false, true, true, false, 100, true )                     # EDIT NEW / EDIT (after publish)
+              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::AnonymousPublishing.new, 99, false, true, false, false, 100, true )               
+              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::PostPublishing.new, 99, false, true, true, false, 100, true )                     
               unless content.nil? or content.new?
-                aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::ResourceAccessControl.new(content), 100, true, false, true, true, 100, true )   # EDIT EXTRA  
-                aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::PublishingActions.new(content), 99, false, false, true, false, 100, true )      # EDIT EXTRA
+                aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::ResourceAccessControl.new(content), 100, true, false, true, true, 100, true )   
+                aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::PublishingActions.new(content), 99, false, false, true, false, 100, true )      
               end
-              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::Meta.new, 101, true, false, true, true, 100, true )                               # EDIT EXTRA
-              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::Audit.new, 102, true, false, true, true, 100, true )                              # EDIT EXTRA
+              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::Meta.new, 101, true, false, true, true, 100, true )                               
+              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::Audit.new, 102, true, false, true, true, 100, true )                              
+              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::ContentOther.new, 103, true, false, true, true, 100, true)
               
               aspects_render = UI::EntityManagementAspectRender.new(context, aspects) 
               result = aspects_render.render(content_type)

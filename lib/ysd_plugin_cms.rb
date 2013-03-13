@@ -7,6 +7,7 @@ require 'ysd_plugin_cms_content_place_aspect'
 
 require 'guiblocks/ysd_guiblock_meta'
 require 'guiblocks/ysd_guiblock_audit'
+require 'guiblocks/ysd_guiblock_content_other'
 require 'guiblocks/ysd_guiblock_anonymous_publishing'
 require 'guiblocks/ysd_guiblock_publishing_actions'
 require 'guiblocks/ysd_guiblock_post_publishing'

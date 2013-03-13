@@ -7,11 +7,12 @@ module GuiBlock
     #
     # Menu item element action
     #    
-    def menu_item_element_action(context={}, aspect_model)
+    def element_action(context={}, aspect_model)
     
       app = context[:app]
       
-      app.render_element_action_menuitem({:text  => app.t.cms_translations.translate, :id => 'menu_item_translate'})
+      app.render_element_action_menuitem({:text  => app.t.cms_translations.translate,
+        :id => 'menu_item_translate'})
 
     
     end
@@ -19,7 +20,7 @@ module GuiBlock
     #
     # Menu item element action extension
     #
-    def menu_item_element_action_extension(context={}, aspect_model)
+    def element_action_extension(context={}, aspect_model)
     
       app = context[:app]
       

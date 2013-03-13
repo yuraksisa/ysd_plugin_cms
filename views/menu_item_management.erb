@@ -123,7 +123,9 @@
 
 </script>
 
-<%= call_hook(:menu_item_element_action_extension) %>
+<%= element_form_extension if defined?element_form_extension %>
+<%= element_extension if defined?element_extension %>
+<%= element_action_extension if defined?element_action_extension %>
 
 <script type="text/javascript">
  

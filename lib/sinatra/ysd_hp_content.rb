@@ -31,7 +31,7 @@ module Sinatra
 
       # Creates a content using the view information
       begin
-        content = ContentManagerSystem::Content.new(view.view_name) 
+        content = ContentManagerSystem::Content.new 
         content.title = view.title
         content.alias = request.path_info
         content.description = view.description       

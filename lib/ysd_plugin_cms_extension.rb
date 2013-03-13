@@ -60,7 +60,6 @@ module Huasi
 
       app = context[:app]
       
-      # Define the view models
       [::Model::ViewModel.new(:content, 'content', ContentManagerSystem::Content, :view_template_contents,
          [::Model::ViewModelField.new(:_id, 'id', :string),
           ::Model::ViewModelField.new(:title, 'title', :string),
@@ -347,19 +346,7 @@ module Huasi
     end
 
     # ========= Page Building ============
-    
-    #
-    # It gets the style sheets defined in the module
-    #
-    # @param [Context]
-    #
-    # @return [Array]
-    #   An array which contains the css resources used by the module
-    #
-    #def page_style(context={})
-    #  ['/cms/css/cms.css']     
-    #end
-        
+            
     #
     # Page process
     #
@@ -429,6 +416,7 @@ module Huasi
       blocks.concat(get_menus_as_blocks(context))
       blocks.concat(get_breadcrumb_as_block(context))
       blocks.concat(get_views_as_blocks(context))
+      blocks.concat(get_contents_as_blocks(context))
       
       return blocks
      
@@ -466,13 +454,8 @@ module Huasi
             admin_menu = {:name => 'admin_menu', :title => 'Admin menu', :description => 'Administration menu'}
             admin_menu_items = Plugins::Plugin.plugin_invoke_all('menu', context)
                     
-            # Build the menu
             menu = Site::Menu.build(admin_menu, admin_menu_items)
-           
-            # Render the menu
-            menu_render = SiteRenders::MenuRender.new(menu, context)
-          
-            menu_render.render
+            SiteRenders::MenuRender.new(menu, context).render
           
           end
        
@@ -487,7 +470,7 @@ module Huasi
            ''
          end
       
-       when /^view_/ # view as a block   
+       when /^view_/   
 
          view_name = block_name.sub(/view_/,'')
        
@@ -496,11 +479,21 @@ module Huasi
             if app.request.path_info and app.request.path_info.split('/').length > 2
               arguments = (x=app.request.path_info.split('/')).slice(2,x.length).join('/')
             end
-            view_render = ::CMSRenders::ViewRender.new(view, app).render(1, arguments)  # Gets the view representation  
+            ::CMSRenders::ViewRender.new(view, app).render(1, arguments) 
          else
             ''
          end
   
+       when /^content_/
+   
+         content_id = block_name.sub(/content_/,'')
+         if content = ContentManagerSystem::Content.get(content_id.to_i)
+           CMSRenders::ContentRender.new(content, app).render
+         else
+           ''
+         end 
+
+
       end
 
       return result
@@ -518,9 +511,7 @@ module Huasi
       blocks = [{:name => 'site_adminmenu',
                  :module_name => :cms,
                  :theme => Themes::ThemeManager.instance.selected_theme.name}]
-      
-      # Adds the menus as blocks
-        
+              
       Site::Menu.all.each do |menu|
       
         blocks << {:name => "menu_#{menu.name}",
@@ -550,18 +541,31 @@ module Huasi
     # 
     #
     def get_views_as_blocks(context)
-    
-      app = context[:app]
-    
-      views = DataMapper.repository(app.settings.cms_views_repository) do
-        ContentManagerSystem::View.all
-      end
+        
+      views = ContentManagerSystem::View.all
       
       views.map do |view|
-        {:name => "view_#{view.view_name}", :module_name => :cms, :theme => Themes::ThemeManager.instance.selected_theme.name}
+        {:name => "view_#{view.view_name}", 
+         :module_name => :cms, 
+         :theme => Themes::ThemeManager.instance.selected_theme.name}
       end    
     
     end
     
+    #
+    # Retrieve the content as blocks
+    #
+    def get_contents_as_blocks(context)
+    
+      ContentManagerSystem::Content.all(:block => true).map do |content|
+        {:name => "content_#{content.id}",
+         :description => content.title, 
+         :module_name => :cms, 
+         :theme => Themes::ThemeManager.instance.selected_theme.name}
+      end
+
+    end
+
+
   end
 end

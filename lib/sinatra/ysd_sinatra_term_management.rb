@@ -15,7 +15,7 @@ module Sinatra
             aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::TermTranslate.new, 100, false, false, true, true, 100, true )
             aspects_render = UI::EntityManagementAspectRender.new({app:self}, aspects) 
             
-            locals = aspects_render.render(content_type)
+            locals = aspects_render.render(ContentManagerSystem::Term)#content_type)
             locals.store(:title, t.term_management.title(taxonomy.name))
             
             load_em_page(:term_management, :term, true, :locals => locals)

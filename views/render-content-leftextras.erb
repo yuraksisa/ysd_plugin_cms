@@ -1,18 +1,5 @@
 <div class="content-leftextras-wrapper">
 
-  <!-- Content title -->
-
-  <% if content and not content.title.empty? %>
-    <h2 class="content-title"><a href="<%= (content.alias.strip.length>0)?(content.alias):(content.path)%>"><%= content.title%></a></h2>
-  <% end %>
-
-  <!-- Content header (subtitle) -->
-  <% if content and not content.subtitle.empty? %>
-  <div class="content-header">
-    <h3 class="content-subtitle"><%=content.subtitle%></h3>
-  </div>
-  <% end %>
-
   <!-- Extras (above the content ) -->
   <% if defined?element_custom_above and element_custom_above.strip.length > 0%>
   <div class="content-custom">
@@ -23,6 +10,17 @@
   <!-- Content body -->
 
   <div class="content-body">
+    <!-- Content title -->
+    <% if content and not content.title.empty? %>
+      <h2 class="content-title"><a href="<%= (content.alias.strip.length>0)?(content.alias):(content.path)%>"><%= content.title%></a></h2>
+    <% end %>
+
+  <!-- Content header (subtitle) -->
+    <% if content and not content.subtitle.empty? %>
+      <div class="content-header">
+         <h3 class="content-subtitle"><%=content.subtitle%></h3>
+      </div>
+    <% end %>
     <%= content_body if content_body%>
   </div>
   

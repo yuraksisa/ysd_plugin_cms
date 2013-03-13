@@ -30,7 +30,7 @@ module SiteRenders
       menu_item     = "<li class=\"menuitem\"><a href=\"<%=leaf[:link_route]%>\"><%=leaf[:title]%></a></li>"
       end_submenu   = "</ul></li>"
       end_menu      = "</ul>"    
-      separator     = "&middot;&nbsp;"
+      separator     = "&nbsp;&middot;&nbsp;"
       
       menu = {:id       => @menu.name,
               :title    => @menu.title,
