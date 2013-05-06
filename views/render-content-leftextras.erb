@@ -1,42 +1,57 @@
 <div class="content-leftextras-wrapper">
 
-  <!-- Extras (above the content ) -->
   <% if defined?element_custom_above and element_custom_above.strip.length > 0%>
   <div class="content-custom">
     <%= element_custom_above %>
   </div>
   <% end %>
 
-  <!-- Content body -->
-
   <div class="content-body">
-    <!-- Content title -->
     <% if content and not content.title.empty? %>
       <h2 class="content-title"><a href="<%= (content.alias.strip.length>0)?(content.alias):(content.path)%>"><%= content.title%></a></h2>
     <% end %>
-
-  <!-- Content header (subtitle) -->
     <% if content and not content.subtitle.empty? %>
       <div class="content-header">
          <h3 class="content-subtitle"><%=content.subtitle%></h3>
       </div>
     <% end %>
+    <% if defined?content_above_body and content_above_body %>
+      <div class="content-above-body">
+        <% content_above_body.each do |c| %>
+          <%= c[:body] %>
+        <% end %>
+      </div>
+    <% end %>
     <%= content_body if content_body%>
+    <% if defined?content_below_body and content_below_body %>
+      <div class="content-below-body">
+        <% content_below_body.each do |c| %>
+          <%= c[:body] %>
+        <% end %>     
+      </div>
+    <% end %>
   </div>
   
-  <!-- Content extras -->
   <% if defined?element_custom and element_custom.strip.length > 0 %>
   <div class="content-custom">
     <%= element_custom %>
   </div>
   <% end %>
-  <!-- Content extras no group-->
+
   <% if defined?element_custom_nogroup and element_custom_nogroup.strip.length > 0 %>
   <div class="content-custom-nogroup">
     <%= element_custom_nogroup %>
   </div>
   <% end %>
   
+  <% if defined?content_above_actions and content_above_actions %>
+    <div class="content-above-actions">
+      <% content_above_actions.each do |c| %>
+        <%= c[:body] %>
+      <% end %>   
+    </div>
+  <% end %>
+
   <% if defined?element_actions and element_actions.strip.length > 0 %>
   <div class="content-actions">
     <%= element_actions %>

@@ -12,10 +12,13 @@ module Sinatra
         #
         app.get "/block-management" do
 
-          # Rehashes all blocks
           ContentManagerSystem::Block.rehash_blocks( Plugins::Plugin.plugin_invoke_all('block_list', {:app => self}) )
           
-          load_page 'block_management'.to_sym
+          # Build the regions (theme manager + plugins) 
+          regions = Themes::ThemeManager.instance.selected_theme.regions
+          regions.concat Plugins::Plugin.plugin_invoke_all(:apps_regions, {:app => self})
+
+          load_page 'block_management'.to_sym, :locals => {:regions => regions}
           
         end
                 

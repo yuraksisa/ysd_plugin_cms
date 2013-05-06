@@ -1,4 +1,4 @@
-<div class="content-rightextras-wrapper">
+<div class="content-leftextras-wrapper">
 
   <% if defined?element_custom_above and element_custom_above.strip.length > 0%>
   <div class="content-custom">
@@ -7,14 +7,6 @@
   <% end %>
 
   <div class="content-body">
-    <% if content and not content.title.empty? %>
-      <h2 class="content-title"><a href="<%= (content.alias.strip.length>0)?(content.alias):(content.path)%>"><%= content.title%></a></h2>
-    <% end %>
-    <% if content and not content.subtitle.empty? %>
-      <div class="content-header">
-         <h3 class="content-subtitle"><%=content.subtitle%></h3>
-      </div>
-    <% end %>
     <% if defined?content_above_body and content_above_body %>
       <div class="content-above-body">
         <% content_above_body.each do |c| %>
@@ -29,7 +21,7 @@
           <%= c[:body] %>
         <% end %>     
       </div>
-    <% end %>
+    <% end %>  
   </div>
   
   <% if defined?element_custom and element_custom.strip.length > 0 %>
@@ -42,8 +34,8 @@
   <div class="content-custom-nogroup">
     <%= element_custom_nogroup %>
   </div>
-  <% end %>  
-
+  <% end %>
+  
   <% if defined?content_above_actions and content_above_actions %>
     <div class="content-above-actions">
       <% content_above_actions.each do |c| %>

@@ -1,11 +1,9 @@
 <div class="content-blogentry-wrapper">
 
-  <!-- Content title -->
   <% if content and content.title and content.title.strip.length > 0 %>
     <h2 class="content-title"><a href="<%= (content.alias.strip.length>0)?(content.alias):(content.path)%>"><%= content.title%></a></h2>
   <% end %>
 
-  <!-- Content header (author, date) -->
   <div class="content-header">
     <% separator = false %>
     <% if content and content['creation_date'] and content['creation_date'].to_s.strip.length > 0 %>
@@ -34,38 +32,56 @@
     <% end %> 
   </div>
 
-  <!-- Content photo -->
-  <% if content and content['photo_url_full'] and content['photo_url_full'].strip.length > 0%>
+  <% if content and content.photo_url_full and not content.photo_url_full.empty?%>
   <div class="content-photo">
     <img src="<%=content['photo_url_full']%>" class="content-photo-img"/>
   </div>
   <% end %>
 
-  <!-- Extras (above the content ) -->
   <% if defined?element_custom_above and element_custom_above.strip.length > 0%>
   <div class="content-custom">
     <%= element_custom_above %>
   </div>
   <% end %>
 
-  <!-- Content body -->
+  <% if defined?content_above_body and content_above_body %>
+    <div class="content-above-body">
+      <% content_above_body.each do |c| %>
+        <%= c[:body] %>
+      <% end %>
+    </div>
+  <% end %>
 
   <div class="content-body">
     <%= content_body if content_body%>
   </div>
   
-  <!-- Content extras -->
+  <% if defined?content_below_body and content_below_body %>
+    <div class="content-below-body">
+      <% content_below_body.each do |c| %>
+        <%= c[:body] %>
+      <% end %>     
+    </div>
+  <% end %>
+
   <% if defined?element_custom and element_custom.strip.length > 0 %>
   <div class="content-custom">
     <%= element_custom %>
   </div>
   <% end %>
 
-  <!-- Content extras no group-->
   <% if defined?element_custom_nogroup and element_custom_nogroup.strip.length > 0 %>
   <div class="content-custom-nogroup">
     <%= element_custom_nogroup %>
   </div>
+  <% end %>
+
+  <% if defined?content_above_actions and content_above_actions %>
+    <div class="content-above-actions">
+      <% content_above_actions.each do |c| %>
+        <%= c[:body] %>
+      <% end %>   
+    </div>
   <% end %>
 
   <% if defined?element_actions and element_actions.strip.length > 0 %>

@@ -189,7 +189,7 @@ require(['jquery','YSDEntityManagement', 'YSDMemoryDataSource', 'YSDRemoteDataSo
          var selectWeight = new SelectSelector('weight', weightDataSource, weightValue);
          
          // Configure the regions
-         var regions = [null,<%= Themes::ThemeManager.instance.selected_theme.regions.map do |e| "'#{e}'" end.join(',') %>];
+         var regions = [null,<%= regions.map do |e| "'#{e}'" end.join(',') %>];
          var regionsDataSource = new MemoryDataSource(regions);
          var regionValue = (entity && entity.region)?entity.region:null;
          var selectRegion = new SelectSelector('region', regionsDataSource, regionValue);        

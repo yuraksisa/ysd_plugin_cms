@@ -46,6 +46,7 @@ module CMSRenders
        
        if content_template_path = (content_type_template || content_template)
          content_locals = locals.merge(content_complements) # Integrate the content complements
+         content_locals.merge!(content_blocks)
          content_locals.merge!(content_author)
          content_body = build_content_body(content_locals)
          template = Tilt.new(content_template_path)
@@ -126,7 +127,7 @@ module CMSRenders
          
          # Search in the project
          if not content_template_path
-           path = context.get_path(resource_name) #File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'views', resource_name))                                 
+           path = context.get_path(resource_name)                                 
            content_template_path = path if not path.nil? and File.exist?(path)
          end
          
@@ -178,7 +179,36 @@ module CMSRenders
        return result
     
      end
-    
+     
+     #
+     # Get the blocks configured on the content regions
+     #
+     def content_blocks
+
+        result = {}
+
+        blocks_hash = ContentManagerSystem::Block.active_blocks(
+          Themes::ThemeManager.instance.selected_theme,
+          Plugins::Plugin.plugin_invoke(:cms, :apps_regions, context),
+          context.user,
+          context.request.path_info)
+
+        blocks_hash.each do |region, blocks|
+          result[region.to_sym] = []
+          blocks.each do |block|
+            block_render = CMSRenders::BlockRender.new(block, context).render || ''
+            if String.method_defined?(:force_encoding)
+              block_render.force_encoding('utf-8')
+            end
+            result[block.region.to_sym].push({:id => block.name, 
+              :title => block.title, :body => block_render}) 
+          end
+        end
+
+        return result
+
+     end
+
      #
      # Creates the content edit link
      #

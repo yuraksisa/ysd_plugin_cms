@@ -1,17 +1,12 @@
   <div class="comments content_data_block">
      
      <h3 class="content_data_block_title"><%= t.comments.title(comment_set.comments_count)%></h3>
-
-     <div class="content_data_row">
-       <div id="comments-container">
-       </div>
-     </div>
      
      <div id="comment_form_container">
   
        <form id="comment_form" name="comment_form">
 
-         <input type="hidden" name="publishing_workflow" value="<%=publishing_workflow_id%>"/>
+         <input type="hidden" name="publishing_workflow_id" value="<%=publishing_workflow_id%>"/>
 
          <div class="formrow">
            <textarea id="message" name="message" rows="10" placeholder="<%= t.comments.message%>" class="texteditor fieldcontrol"></textarea>
@@ -30,6 +25,12 @@
        </form> 
     
      </div>    
+
+     <div class="content_data_row">
+       <div id="comments-container">
+       </div>
+     </div>
+
   </div>
 
   <%= element_custom_extensions %>
@@ -53,15 +54,26 @@
 
   <script type="text/tmpl" id="comment_script">
 
-    <div class="comment">
-      <div class="comment_header">
-         <span class="comment_sender"><%%= self.format_sender_url(comment)%></span> 
-         <span class="comment_date"><%%= self.format_message_date_time(comment) %></span>
+    <div class="container_12 conversation_item conversation_item_other">
+      <div class="grid_1">
+        <%% if (comment.composer_user && comment.composer_user.photo_url_tiny) { %>
+        <img class="rounded profile-img-tiny" src="<%%=comment.composer_user.photo_url_tiny%>"/>
+        <%% } else { %>
+        <img class="rounded profile-img-tiny" src="<%=settings.profile_default_photo%>"/>
+        <%% } %>
       </div>
-      <div class="comment_body">
-         <%%= self.format_message(comment) %>
-      </div>
-      <div class="conversation_item_footer">
+      <div class="grid_11">
+        <div class="left-space">
+          <div class="conversation_item_header">
+            <span class="message_detail_sender"><%%= self.format_sender_url(comment)%></span> 
+          </div>
+          <div class="conversation_item_body">
+             <%%= self.format_message(comment) %>
+          </div>
+          <div class="conversation_item_footer">
+            <span class="message_detail_date smaller_text less_contrast_text"><%%= self.format_message_date_time(comment) %></span>
+          </div>
+        </div>
       </div>
     </div>
   

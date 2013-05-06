@@ -71,7 +71,8 @@ module Huasi
           ::Model::ViewModelField.new(:creation_user, 'creation_user', :string)]),
        ::Model::ViewModel.new(:term, 'term', ContentManagerSystem::Term, :view_template_terms,
          [::Model::ViewModelField.new(:id, 'id', :serial),
-          ::Model::ViewModelField.new(:description, 'description', :string)])
+          ::Model::ViewModelField.new(:description, 'description', :string)]),
+       ::Model::ViewModel.new(:profile, 'profile', Users::Profile, :view_template_profiles,[])       
        ]
 
 #      [::Model::ViewModel.new(:content, t.entity.content, ContentManagerSystem::Content, :view_template_contents,
@@ -126,7 +127,15 @@ module Huasi
 
     end
 
- 
+     # ========= Application regions ======
+    
+    #
+    # Retrieve the regions used by the apps 
+    #
+    def apps_regions(context={})
+      [:content_above_body, :content_below_body, :content_above_actions]
+    end
+
     # ========= Aspects ==================
     
     #
@@ -364,7 +373,9 @@ module Huasi
 
       # Retrieve the theme blocks which are positionated in the page
       
-      blocks = ContentManagerSystem::Block.all(:region.not => nil, :theme => Themes::ThemeManager.instance.selected_theme.name)
+      blocks = ContentManagerSystem::Block.all(
+        :region => Themes::ThemeManager.instance.selected_theme.regions, 
+        :theme => Themes::ThemeManager.instance.selected_theme.name)
       
       blocks.each do |block|
         
