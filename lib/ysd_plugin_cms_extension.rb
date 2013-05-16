@@ -60,7 +60,8 @@ module Huasi
 
       app = context[:app]
       
-      [::Model::ViewModel.new(:content, 'content', ContentManagerSystem::Content, :view_template_contents,
+      # View models
+      ::Model::ViewModel.new(:content, 'content', ContentManagerSystem::Content, :view_template_contents,
          [::Model::ViewModelField.new(:_id, 'id', :string),
           ::Model::ViewModelField.new(:title, 'title', :string),
           ::Model::ViewModelField.new(:path, 'path', :string),
@@ -68,30 +69,17 @@ module Huasi
           ::Model::ViewModelField.new(:summary, 'summary', :string),
           ::Model::ViewModelField.new(:type, 'type', :string),
           ::Model::ViewModelField.new(:creation_date, 'creation_date', :date),
-          ::Model::ViewModelField.new(:creation_user, 'creation_user', :string)]),
-       ::Model::ViewModel.new(:term, 'term', ContentManagerSystem::Term, :view_template_terms,
+          ::Model::ViewModelField.new(:creation_user, 'creation_user', :string)])
+      
+      ::Model::ViewModel.new(:term, 'term', ContentManagerSystem::Term, :view_template_terms,
          [::Model::ViewModelField.new(:id, 'id', :serial),
-          ::Model::ViewModelField.new(:description, 'description', :string)]),
-       ::Model::ViewModel.new(:profile, 'profile', Users::Profile, :view_template_profiles,[])       
-       ]
+          ::Model::ViewModelField.new(:description, 'description', :string)])
 
-#      [::Model::ViewModel.new(:content, t.entity.content, ContentManagerSystem::Content, :view_template_contents,
-#         [::Model::ViewModelField.new(:_id, t.entity_fields.content.id, :string),
-#          ::Model::ViewModelField.new(:title, t.entity_fields.content.title, :string),
-#          ::Model::ViewModelField.new(:path, t.entity_fieldscontent.path, :string),
-#          ::Model::ViewModelField.new(:alias, t.entity_fields.content.alias, :string),
-#          ::Model::ViewModelField.new(:summary, t.entity_fields.content.summary, :string),
-#          ::Model::ViewModelField.new(:type, t.entity_fields.content.type, :string),
-#          ::Model::ViewModelField.new(:creation_date, t.entity_fields.content.creation_date, :date),
-#          ::Model::ViewModelField.new(:creation_user, t.entity_fields.content.creation_user, :string)]),
-#       ::Model::ViewModel.new(:term, t.entity.term, ContentManagerSystem::Term, :view_template_terms,
-#         [::Model::ViewModelField.new(:id, t.entity_fields.term.id, :serial),
-#          ::Model::ViewModelField.new(:description, t.entity_fields.term.description, :string)])
-#       ]
+      ::Model::ViewModel.new(:profile, 'profile', Users::Profile, :view_template_profiles,[])       
 
-      # Define the view renders 
+      # View renders 
       teaser_preprocessor = Proc.new do |data, context, render_options|
-                              data.map { |element| CMSRenders::Factory.get_render(element, context, 'teaser').render }
+                              data.map { |element| CMSRenders::Factory.get_render(element, context, 'teaser').render({}, [:ignore_complements, :ignore_blocks]) }
                             end
 
       slider_preprocessor = Proc.new do |data, context, render_options|
@@ -102,13 +90,11 @@ module Huasi
                                       separator = render_options['separator'] || "&nbsp;&middot;&nbsp;"
                                       data.map do |element| 
                                         terms = []
-                                        #terms << "<img src=\"#{element.photo_url_tiny}\"/>" if element.photo_url_tiny.to_s.strip.length > 0
                                         terms << "<a href=\"#{render_options['prefix']}/#{element.id}\">"
                                         terms << "#{element.description}</a>"
                                         while not element.parent.nil?
                                           element = element.parent
                                           terms << separator
-                                          #terms << "<img src=\"#{element.photo_url_tiny}\"/>" if element.photo_url_tiny.to_s.strip.length > 0
                                           terms << "<a href=\"#{render_options['prefix']}/#{element.id}\">#{element.description}</a>"
                                         end
                                         render_result = "<div class=\"term-hierarchy-container #{render_options['container_class']}\">" << terms.reverse.join << "</div>"
@@ -133,7 +119,8 @@ module Huasi
     # Retrieve the regions used by the apps 
     #
     def apps_regions(context={})
-      [:content_above_body, :content_below_body, :content_above_actions]
+      [:content_above_body, :content_below_body, :content_left_body, 
+       :content_right_body, :content_above_actions]
     end
 
     # ========= Aspects ==================

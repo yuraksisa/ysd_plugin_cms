@@ -66,7 +66,6 @@ module CMSRenders
       # @return [String] the rendered body
       #
       def render_view_body(view_data)
-        
 
         view_render = Model::ViewRender.get(view.render.to_sym)
 

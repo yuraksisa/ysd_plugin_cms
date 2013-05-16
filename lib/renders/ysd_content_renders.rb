@@ -39,14 +39,17 @@ module CMSRenders
      # @return [String]
      #   The content rendered
      #
-     def render(locals={})
-                        
+     def render(locals={}, opts=[])
+                     
        result = ''
        locals ||= {}
+       opts ||= []
        
        if content_template_path = (content_type_template || content_template)
-         content_locals = locals.merge(content_complements) # Integrate the content complements
-         content_locals.merge!(content_blocks)
+         content_locals = {}
+         content_locals.merge!(locals)
+         content_locals.merge!(content_complements) if opts.index(:ignore_complements).nil?
+         content_locals.merge!(content_blocks) if opts.index(:ignore_blocks).nil?
          content_locals.merge!(content_author)
          content_body = build_content_body(content_locals)
          template = Tilt.new(content_template_path)
@@ -161,7 +164,7 @@ module CMSRenders
      #
      # prepare the complements configured from the content type
      #
-     def content_complements()
+     def content_complements
       
        result = {}
       
@@ -192,6 +195,14 @@ module CMSRenders
           Plugins::Plugin.plugin_invoke(:cms, :apps_regions, context),
           context.user,
           context.request.path_info)
+        
+        # To avoid circular
+        blocks_hash = blocks_hash.inject({}) do |result, element| 
+           result[element[0]] = element[1].select do |block| 
+              block.can_be_shown?(context.user, content.alias || content.path) 
+           end 
+           result 
+        end
 
         blocks_hash.each do |region, blocks|
           result[region.to_sym] = []

@@ -108,6 +108,11 @@
               <textarea id="show_block_on_page_list" name="show_block_on_page_list" class="fieldcontrol"><%% if (entity) {%><%%= entity.show_block_on_page_list%><%% } %></textarea>
               <div class="fielddescription">Type one entry per line in the form of a regular expression which matches the URL to apply</div>
             </div>
+            <div class="formrow">
+              <label for="show_title" class="fieldtitle">Show title</label>
+              <input type="radio" name="show_title" id="show_title_true" value="true" <%%if (entity && entity.show_title) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_yes.label%>
+              <input type="radio" name="show_title" id="show_title_false" value="false" <%%if (entity && !entity.show_title) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_no.label%>
+            </div>              
         </div>
         
         <div class="bottom-navigation-bar navigation-bar">

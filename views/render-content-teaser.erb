@@ -1,27 +1,40 @@
 <div class="entry clearfix">
-    <div class="prefix_2 clearfix">
-    <% if content and content.title and not content.title.empty? %>
-       <h2 class="content-teaser-title"><a href="<%=content.path%>"><%= content.title %></a></h2>
-    <% end %>
-    </div>
-    <div class="grid_2 clearfix">
-      <% if content and content.creation_date and not content.creation_date.nil? %>
-        <div class="content-teaser-date">
-           <%=content.creation_date.strftime("%d . %m . %Y")%>
-        </div>
-      <% end %>  
-  
-      <% if content and content.categories and not content.categories.empty? %>
-        <% content.categories.each do |category| %>
-          <div class="content-teaser-category">
-            <a href='<%="/category/#{category.id}"%>'><%= category.description %></a>
-          </div>
-        <% end %>
+    
+    <div class="grid_3">
+      <% if content and content.photo_url_full %>
+         <img class="rounded top-margin" style="width:100%" src="<%=content.photo_url_full%>"/>
       <% end %> 
     </div>
-    <div class="grid_7" style="margin-left:0px; margin-right:0px">
+
+    <div class="grid_9">
+      <div class="left-space">
+      <% if content and content.title and not content.title.empty? %>
+        <h3 class="content-teaser-title"><a href="<%=content.path%>"><%= content.title %></a></h3>
+      <% end %>
+      <div class="top-separator bottom-separator">
+        <% if content and content.creation_date and not content.creation_date.nil? %>
+          <span class="content-teaser-date less_contrast_text smaller_text" data-icon="&#xe071;" aria-hidden="true">
+            <%=content.creation_date.strftime("%d . %m . %Y")%>
+          </span>
+        <% end %>  
+        <% if defined?author and author %>
+          <span class="content-teaser-author less_contrast_text smaller_text" data-icon="&#xe00c;" aria-hidden="true">
+            <%=author %>
+          </span>
+        <% end %>
+        <% if content and content.categories and not content.categories.empty? %>
+          <span data-icon="&#xe000;" aria-hidden="true">
+          <% content.categories.each do |category| %>
+            <span class="content-teaser-category less_contrast_text smaller_text">
+              <a href='<%="/category/#{category.id}"%>'><%= category.description %></a>
+            </span>
+          <% end %>
+          </span>
+        <% end %> 
+      </div>
       <div class="content-teaser-body">
         <%= content.body if content and content.body and not content.body.empty?%>
+      </div> 
       </div>      
     </div>
 </div>

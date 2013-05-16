@@ -1,5 +1,5 @@
 <% contents.each do |content| %>
 
-  <%= CMSRenders::ContentRender.new(content, self, 'teaser').render %>
+  <%= CMSRenders::ContentRender.new(content, self, 'teaser').render({}, [:ignore_complements, :ignore_blocks]) %>
 
 <% end %>

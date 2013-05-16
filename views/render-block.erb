@@ -1,5 +1,5 @@
     <div id="<%="block_#{block.name}"%>" class="block">
-      <% if block and block.title and block.title.strip.length > 0 %>
+      <% if block and block.show_title and block.title and not block.title.empty? %>
         <h3 class="block-title"><%= block.title%></h3>
       <% end %>
       <%= content %>

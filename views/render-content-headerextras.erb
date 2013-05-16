@@ -1,0 +1,92 @@
+<div class="content-header-wrapper">
+  
+  <div class="container_12">
+    <div class="grid_8">
+      <% if defined?element_custom_above and element_custom_above.strip.length > 0%>
+      <div class="content-custom">
+        <%= element_custom_above %>
+      </div>
+      <% end %>
+    </div>
+    <div class="grid_4">
+      <% if defined?content_above_body and content_above_body %>
+      <div class="content-above-body">
+        <% content_above_body.each do |c| %>
+          <%= c[:body] %>
+        <% end %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+  
+  <div class="container_12">
+
+    <% if defined?content_left_body and not content_left_body.empty? %>
+    <div class="content-left-body grid_4">
+      <div class="right-space smaller_text">
+      <% content_left_body.each do |c| %>
+        <%= c[:body] %>
+      <% end %>  
+      </div>
+    </div>
+    <% end %>
+
+    <div class="content-body grid_<%= ((defined?content_left_body and not content_left_body.empty?)?0:4) + 4 + 
+         ((defined?content_right_body and not content_right_body.empty?)?0:4) %>">
+      <%= content_body if content_body%>
+      <% if defined?content_below_body and content_below_body %>
+        <div class="content-below-body">
+          <% content_below_body.each do |c| %>
+            <%= c[:body] %>
+          <% end %>     
+        </div>
+      <% end %>  
+    </div>
+
+    <% if defined?content_right_body and not content_right_body.empty? %>
+    <div class="content-right-body grid_4">
+      <div class="left-space smaller_text">
+        <% content_right_body.each do |c| %>
+          <%= c[:body] %>
+        <% end %>  
+      </div>
+    </div>
+    <% end %> 
+
+  </div>
+  
+  <% if defined?element_custom and element_custom.strip.length > 0 %>
+  <div class="content-custom">
+    <%= element_custom %>
+  </div>
+  <% end %>
+
+  <% if defined?element_custom_nogroup and element_custom_nogroup.strip.length > 0 %>
+  <div class="content-custom-nogroup">
+    <%= element_custom_nogroup %>
+  </div>
+  <% end %>
+  
+  <% if defined?content_above_actions and content_above_actions %>
+    <div class="content-above-actions">
+      <% content_above_actions.each do |c| %>
+        <%= c[:body] %>
+      <% end %>           
+    </div>
+  <% end %>
+
+  <% if defined?element_actions and element_actions.strip.length > 0 %>
+  <div class="content-actions">
+    <%= element_actions %>
+  </div>
+  <% end %>
+
+  <% if defined?element_custom_extensions and element_custom_extensions.strip.length > 0 %>
+  <%= element_custom_extensions if defined?element_custom_extensions %>
+  <% end %>
+
+  <% if defined?element_actions_extensions and element_actions_extensions.strip.length > 0 %>
+  <%= element_actions_extensions if defined?element_actions_extensions%>
+  <% end %>
+
+</div>
