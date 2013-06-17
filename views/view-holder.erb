@@ -11,6 +11,19 @@
     <%= view_body %>
     </div>
   <% end %>
+  
+  <% if view.show_number_of_results %>
+    <div>
+      <% case view_data[:summary][:total_records] 
+           when 0 %>
+          <%= view.num_of_results_no_data_text % view_data[:summary][:total_records] %>
+        <% when 1 %>
+          <%= view.num_of_results_1_data_text % view_data[:summary][:total_records] %>
+        <% else %>
+          <%= view.num_of_results_text % view_data[:summary][:total_records] %>
+      <% end %>
+    </div>
+  <% end %>
 
   <% if view.pagination and view_data[:summary][:total_pages] > 1 %>
     <div id="<%="view_#{view.view_name}_pagination"%>" class="view_pagination">

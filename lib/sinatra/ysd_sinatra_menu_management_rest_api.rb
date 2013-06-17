@@ -11,7 +11,7 @@ module Sinatra
         #
         # Retrieve all menus
         #
-        app.get "/menus" do
+        app.get "/menus", :allowed_usergroups => ['staff'] do
           data = ::Site::Menu.all
           
           content_type :json
@@ -22,7 +22,7 @@ module Sinatra
         # Retrive menus
         #
         ["/menus","/menus/page/:page"].each do |path|
-          app.post path do
+          app.post path, :allowed_usergroups => ['staff'] do
           
             data=::Site::Menu.all
             begin
@@ -41,7 +41,7 @@ module Sinatra
         #
         # Retrieve a menu
         #
-        app.get "/menu/:name" do
+        app.get "/menu/:name", :allowed_usergroups => ['staff'] do
 
           menu = ::Site::Menu.get(params['name'])
           
@@ -54,7 +54,7 @@ module Sinatra
         #
         # Create a new menu
         #
-        app.post "/menu" do
+        app.post "/menu", :allowed_usergroups => ['staff'] do
         
           request.body.rewind
           menu_request = JSON.parse(URI.unescape(request.body.read))
@@ -73,7 +73,7 @@ module Sinatra
         #
         # Updates a menu
         #
-        app.put "/menu" do
+        app.put "/menu", :allowed_usergroups => ['staff'] do
         
           puts "Updating menu"
         
@@ -93,7 +93,7 @@ module Sinatra
         end
         
         # Deletes a menu
-        app.delete "/menu" do
+        app.delete "/menu", :allowed_usergroups => ['staff'] do
         
         end
       

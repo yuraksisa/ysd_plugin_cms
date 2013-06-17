@@ -197,7 +197,7 @@
                 <label for="url" class="fieldtitle"><%=t.view_management.form.url.label%></label>
                 <input type="text" maxlength="256" id="url" name="url" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.url%>" <%% } %> />
                 <div class="fielddescription"><%=t.view_management.form.url.description%></div>
-              </div>
+              </div>                       
             </div>
 
             <div id="view_extras">
@@ -206,6 +206,27 @@
                 <input type="radio" name="block" id="block_true" value="true" <%%if (entity && entity.block) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_yes.label%>
                 <input type="radio" name="block" id="block_false" value="false" <%%if (entity && !entity.block) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_no.label%>
               </div>
+              <div class="formrow">
+                <label for="show_number_of_results" class="fieldtitle"><%=t.view_management.form.show_number_of_results.label%></label>
+                <input type="radio" name="show_number_of_results" id="show_number_of_results_true" value="true" <%%if (entity && entity.show_number_of_results) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_yes.label%>
+                <input type="radio" name="show_number_of_results" id="show_number_of_results_false" value="false" <%%if (entity && !entity.show_number_of_results) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_no.label%>
+                <div class="fielddescription"><%=t.view_management.form.show_number_of_results.description%></div>
+              </div>               
+              <div class="formrow">
+                <label for="num_of_results_no_data_text" class="fieldtitle"><%=t.view_management.form.num_of_results_no_data_text.label%></label>
+                <input type="text" maxlength="80" id="num_of_results_no_data_text" name="num_of_results_no_data_text" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.num_of_results_no_data_text%>" <%% } %> />
+                <div class="fielddescription"><%=t.view_management.form.num_of_results_no_data_text.description%></div>
+              </div>
+              <div class="formrow">
+                <label for="num_of_results_1_data_text" class="fieldtitle"><%=t.view_management.form.num_of_results_1_data_text.label%></label>
+                <input type="text" maxlength="80" id="num_of_results_1_data_text" name="num_of_results_1_data_text" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.num_of_results_1_data_text%>" <%% } %> />
+                <div class="fielddescription"><%=t.view_management.form.num_of_results_1_data_text.description%></div>
+              </div>  
+              <div class="formrow">
+                <label for="num_of_results_text" class="fieldtitle"><%=t.view_management.form.num_of_results_text.label%></label>
+                <input type="text" maxlength="80" id="num_of_results_text" name="num_of_results_text" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.num_of_results_text%>" <%% } %> />
+                <div class="fielddescription"><%=t.view_management.form.num_of_results_text.description%></div>
+              </div>                 
             </div>
 
           </div>

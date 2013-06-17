@@ -7,6 +7,7 @@ cms_admin_menu:
   content_new: Nuevo contenido  
   content_management: Contenidos
   taxonomy_management: Taxonomías
+  template_management: Plantillas
   build_site_menu: Construir sitio
   block_management: Bloques
   view_management: Vistas
@@ -124,6 +125,18 @@ view_management:
     url:
       label: Url
       description: Url en la que estará disponible la vista
+    show_number_of_results:
+      label: Mostrar el número de resultados
+      description: Mostrar el número de resultados en la vista
+    num_of_results_text:
+      label: Texto resultados (% parámetro)
+      description: Texto para el número de resultados (% parámetro)
+    num_of_results_1_data_text:
+      label: Texto cuando hay 1 resultado (% parámetro)
+      description: Texto cuando hay 1 resultado (% parámetro)
+    num_of_results_no_data_text:
+      label: Texto cuando no hay resultados
+      description: Texto cuando no hay resultados      
     block:
       label: Usar la vista como bloque
       description: Usar la vista como bloque
@@ -236,6 +249,23 @@ content_type_management:
       label: Peso (vista)     
     aspect_config:
       label: Configurar      
+#
+# Template management
+#
+template_management:
+  title: Plantillas
+  description: >
+               <p>Permite definir plantillas que se utilizarán en diversos procesos,
+               como envío de correo electrónico.</p>
+  table:
+    name: Nombre
+    description: Descripción
+  form:
+    name: Nombre
+    description: Descripción
+    text: Texto
+    name_required: El nombre es obligatorio
+    text_required: El texto es obligatorio 
 #
 # Views management
 #  

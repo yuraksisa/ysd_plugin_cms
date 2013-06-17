@@ -22,7 +22,7 @@ module Sinatra
         
         # Retrive the blocks
         ["/blocks","/blocks/page/:page"].each do |path|
-          app.post path do
+          app.post path, :allowed_usergroups => ['staff'] do
 
             total = 0
             
@@ -42,7 +42,7 @@ module Sinatra
         end
         
         # Create a block
-        app.post "/block" do
+        app.post "/block", :allowed_usergroups => ['staff'] do
           
           body_request = body_as_json(ContentManagerSystem::Block)
 
@@ -54,7 +54,7 @@ module Sinatra
         end
         
         # Updates a block
-        app.put "/block" do
+        app.put "/block", :allowed_usergroups => ['staff'] do
           
           block_request = body_as_json(ContentManagerSystem::Block)      
           block_id = block_request.delete(:id)

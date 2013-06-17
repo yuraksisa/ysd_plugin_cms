@@ -1,0 +1,166 @@
+<%= include('entity-management') %>
+
+<!-- Renders the element description -->
+
+<script type="text/tmpl" id="elements_title">
+  <h2 class="entity-title"><%=t.template_management.title%></h2>
+</script>
+
+<script type="text/tmpl" id="elements_description">
+  <%= t.template_management.description %>
+</script>
+
+<!-- Renders the elements container -->
+<script type="text/tmpl" id="elements_container_template">
+  <table id="elements_table" class="table">
+     <thead class="table-header">
+       <tr>
+         <th class="table-header-title" scope="col" style="width:50%"><%= t.template_management.table.name %></th>
+         <th class="table-header-title" scope="col" style="width:50%"><%= t.template_management.table.description %></th>
+       </tr>
+     </thead>
+     <tbody id="elements_tbody" class="table-tbody">             
+     </tbody>
+  </table>
+</script>
+
+<!-- Renders one element in the elements list view -->
+        
+<script type="text/tmpl" id="elements_list_template">
+    <tr class="table-row element-navigation-detail" rel="<%%= index %>" id="element_row_<%%=index%>">
+      <td class="table-cell"><%%= entity.name %></td>
+      <td class="table-cell"><%%= entity.description %></td>
+    </tr>
+</script>
+
+<!-- Renders one element in the element view (full detailed) -->
+
+<script type="text/tmpl" id="element_template">
+</script>
+
+<!-- Renders the form to edit an element -->
+
+<script type="text/tmpl" id="element_template_form">
+     <form name="element" id="template_management_form">
+        <%% if (entity) { %>
+        <input type="hidden" name="id" value="<%%=entity.id%>"/>
+        <%% } %>
+        <div class="form-fields">
+          <div class="formrow">
+            <label for="name" class="fieldtitle"><%= t.template_management.form.name %> <span class="mandatoryfield">*</span></label>
+            <input type="text" maxlength="80" id="name" name="name" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.name%>" <%% } %> />
+          </div>
+          <div class="formrow">
+            <label for="description" class="fieldtitle"><%= t.template_management.form.description %></label>
+            <textarea name="description" id="description" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.description%><%%}%></textarea>
+          </div>
+          <p style="text-align:right"> <span id="description_length"></span> <%= t.available_chars %> </p>
+          <div class="formrow">
+            <label for="text" class="fieldtitle"><%= t.template_management.form.text %><span class="mandatoryfield">*</span></label>
+            <textarea name="text" id="text" class="fieldcontrol editable_text" rows="20"><%% if (entity) { %><%%=entity.text%><%%}%></textarea>
+          </div>
+        </div>
+        <div class="bottom-navigation-bar navigation-bar">
+             <div class="navigation-bar-crud-buttons">
+                <input type="button" class="cancel-entity-button action-button entity-management-button" value="<%=t.entitymanagement.cancel%>"/>
+                <%% if (entity) { %>
+                  <input type="submit" class="update-entity-button action-button entity-management-button" value="<%=t.entitymanagement.update%>"/>
+                <%% } 
+                   else { %>
+                  <input type="submit" class="create-entity-button action-button entity-management-button" value="<%=t.entitymanagement.create%>"/>
+                <%% } %>
+             </div>
+        </div>
+     </form>
+</script>
+
+
+<script type="text/javascript">
+ 
+ require(['jquery', 'YSDEntityManagement', 'YSDForms', 'jquery.validate'], function($, EntityManagement, YSDForms) {
+
+ 
+  function TemplateHook() {
+ 	   
+    this.entityKey = function(entity) {
+      return entity.name;
+    }
+
+    this.onEdit = function(entity) {
+      $('#name').attr('readonly', true);
+      $('#description').focus();  	
+      this.configForm(entity);
+    };
+  
+    this.onNew = function() {
+  	  $('#name').focus();
+  	  this.configForm(null);
+    }
+        
+    this.onRenderEntities = function(entities) {
+      $('.elements-search').show();	
+    }
+    
+    this.configForm = function(entity) {
+             
+         // Limit the description length
+         YSDForms.limit_text_area_content_size(document.getElementById('description'), 256, 
+            function (content_remain) {
+              document.getElementById('description_length').innerHTML = '<strong>' + content_remain + '</strong>';
+            }
+         );    
+         
+         this.configValidation();
+    	
+    }
+    
+    this.configValidation = function() {
+           	 
+       	 $('#template_management_form').validate({
+       	  	
+            submitHandler: function(form) 
+            {
+               return false;
+            },
+                 	        	   
+       	    rules : { // rules
+       	       'name': {
+       	         required: true	
+       	       },
+               'text': {
+                 required: true
+               }
+       	    },
+       	    
+       	    messages : { // messages
+       	       'name': {
+       	       	 required: '<%=t.template_management.form.name_required%>'
+       	       },
+               'text': {
+                 required: '<%=t.template_management.form.text_required%>'
+               }
+       	    }
+       	    
+       	  }
+       	 );
+    	
+    	
+    }
+  	
+  };
+  
+  var urls = { 
+  	           query_url  : '/templates',
+    	         create_url : '/template',
+  	           update_url : '/template',
+  	           delete_url : '/template',
+  	           get_url    : '/template'
+  	         };
+  
+  var templateHook = new TemplateHook();
+  var templateManager = new EntityManagement(urls, 
+     'template', <%=template_page_size%>, templateHook, {prefix: '/admin'});
+ 
+ });
+  
+</script>

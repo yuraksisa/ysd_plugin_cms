@@ -46,6 +46,8 @@ require 'sinatra/ysd_sinatra_menu_management_rest_api'
 require 'sinatra/ysd_sinatra_menu_item_management_rest_api'
 require 'sinatra/ysd_sinatra_cms_translation'
 require 'sinatra/ysd_sinatra_cms_translation_rest_api'
+require 'sinatra/ysd_sinatra_template_management'
+require 'sinatra/ysd_sinatra_template_management_rest_api'
 require 'support/ysd_cms_support'
 
 require 'ysd_plugin_cms_extension'

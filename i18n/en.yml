@@ -7,6 +7,7 @@ cms_admin_menu:
   content_new: New content  
   content_management: Admin content
   taxonomy_management: Taxonomies
+  template_management: Templates  
   build_site_menu: Build site
   block_management: Blocks
   view_management: Views
@@ -148,7 +149,24 @@ content_type_management:
     aspect_render_weight:
       label: Weight (view)        
     aspect_config:
-      label: Configure       
+      label: Configure
+#
+# Template management
+#
+template_management:
+  title: Template
+  description: >
+               <p>Templates define documents that can be used in processes such as
+               mailing.</p>
+  table:
+    name: Name
+    description: Description
+  form:
+    name: Name
+    description: Description
+    text: Text
+    name_required: Name is required
+    text_required: Text is required       
 #
 # Views management
 #  

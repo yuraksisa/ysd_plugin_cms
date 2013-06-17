@@ -67,7 +67,7 @@ module Sinatra
         #
         # Retrieve all views
         #
-        app.get "/views" do
+        app.get "/views", :allowed_usergroups => ['staff'] do
 
             data = ContentManagerSystem::View.all
             content_type :json
@@ -75,9 +75,9 @@ module Sinatra
 
         end
         
-        # Retrive the contents
+        # Retrive views
         ["/views","/views/page/:page"].each do |path|
-          app.post path do
+          app.post path, :allowed_usergroups => ['staff'] do
 
             data=ContentManagerSystem::View.all              
 
@@ -98,7 +98,7 @@ module Sinatra
         #
         # Create a view
         #
-        app.post "/view" do
+        app.post "/view", :allowed_usergroups => ['staff'] do
            
           request.body.rewind
           view_request = JSON.parse(URI.unescape(request.body.read))
@@ -122,7 +122,7 @@ module Sinatra
         end
         
         # Updates a view
-        app.put "/view" do
+        app.put "/view", :allowed_usergroups => ['staff'] do
         
           request.body.rewind
           view_request = JSON.parse(URI.unescape(request.body.read))
@@ -141,7 +141,7 @@ module Sinatra
         #
         # Deletes a view
         #
-        app.delete "/view" do
+        app.delete "/view", :allowed_usergroups => ['staff'] do
 
           request.body.rewind
           view_request = JSON.parse(URI.unescape(request.body.read))
@@ -159,7 +159,7 @@ module Sinatra
         #
         # Exports a view
         #
-        app.get '/export/view/:view_name' do
+        app.get '/export/view/:view_name', :allowed_usergroups => ['staff'] do
 
           if view = ContentManagerSystem::View.get(params[:view_name])
             file_name = "#{view.view_name}.txt"
@@ -177,7 +177,7 @@ module Sinatra
         #
         # Imports view
         #
-        app.post '/import/view' do
+        app.post '/import/view', :allowed_usergroups => ['staff'] do
 
            import_file = params['import_file'][:tempfile]
            view_to_import = JSON.parse(import_file.read)
@@ -197,7 +197,7 @@ module Sinatra
         #
         # Clone a view
         #
-        app.post '/clone/view/:view_name/:new_name' do
+        app.post '/clone/view/:view_name/:new_name', :allowed_usergroups => ['staff'] do
 
            if view = ContentManagerSystem::View.get(params[:view_name])
 

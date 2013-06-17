@@ -10,7 +10,7 @@ module Sinatra
         #
         # View management page
         #
-        app.get "/block-management" do
+        app.get "/block-management", :allowed_usergroups => ['staff'] do
 
           ContentManagerSystem::Block.rehash_blocks( Plugins::Plugin.plugin_invoke_all('block_list', {:app => self}) )
           
@@ -27,7 +27,7 @@ module Sinatra
         #
         ["/preview/block/:block_id"].each do |path|
           
-          app.get path do
+          app.get path, :allowed_usergroups => ['staff'] do
         
             block = DataMapper.repository(settings.cms_views_repository) do
               ContentManagerSystem::Block.get(params['block_id'])

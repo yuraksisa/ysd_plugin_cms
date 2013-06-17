@@ -30,6 +30,9 @@ module Huasi
         SystemConfiguration::Variable.first_or_create({:name => 'cms.comments.page_size'},
                                                       {:value => '10', :description => 'comments page size', :module => :cms})
 
+        SystemConfiguration::Variable.first_or_create({:name => 'cms.templates.page_size'},
+                                                      {:value => '20', :description => 'templates page size', :module => :cms})
+
         ContentManagerSystem::ContentType.first_or_create({:id => 'page'},
                                                            {:name => 'Pagina', :description => 'Representa una página web. Es una forma sencilla de gestionar información que no suele cambiar como la página acerca de o condiciones. Suelen mostrarse en el menú.'})
                                                                   
@@ -83,7 +86,7 @@ module Huasi
                             end
 
       slider_preprocessor = Proc.new do |data, context, render_options|
-                              data.map { |element| CMSRenders::Factory.get_render(element, context, 'slider').render }
+                              data.map { |element| CMSRenders::Factory.get_render(element, context, 'slider').render({}, [:ignore_complements, :ignore_blocks]) }
                             end
 
       term_hierarchy_preprocessor = Proc.new do |data, context, render_options|
@@ -119,7 +122,7 @@ module Huasi
     # Retrieve the regions used by the apps 
     #
     def apps_regions(context={})
-      [:content_above_body, :content_below_body, :content_left_body, 
+      [:content_custom, :content_above_body, :content_below_body, :content_left_body, 
        :content_right_body, :content_above_actions]
     end
 
@@ -164,18 +167,18 @@ module Huasi
                                   :description => 'Content management', 
                                   :module => 'cms',
                                   :weight => 10}},
-                    {:path => '/cms/contenttypes',
-                     :options => {:title => app.t.cms_admin_menu.contenttype_management,
-                                  :link_route => "/mctypes",
-                                  :description => 'Manages the content types: creation and update of content types.',
-                                  :module => 'cms',
-                                  :weight => 6}},
                     {:path => '/cms/newcontent',
                      :options => {:title => app.t.cms_admin_menu.content_new,
                                   :link_route => "/mcontent/new",
                                   :description => 'Creates a new content.',
                                   :module => 'cms',
-                                  :weight => 5}},                                  
+                                  :weight => 6}},                                    
+                    {:path => '/cms/contenttypes',
+                     :options => {:title => app.t.cms_admin_menu.contenttype_management,
+                                  :link_route => "/mctypes",
+                                  :description => 'Manages the content types: creation and update of content types.',
+                                  :module => 'cms',
+                                  :weight => 5}},                                
                     {:path => '/cms/contents',
                      :options => {:title => app.t.cms_admin_menu.content_management,
                                   :link_route => "/mcontents",
@@ -188,6 +191,12 @@ module Huasi
                                   :description => 'Manages the taxonomies: creation and update of taxonomies.',
                                   :module => 'cms',
                                   :weight => 3}},
+                    {:path => '/cms/templates',             
+                     :options => {:title => app.t.cms_admin_menu.template_management,
+                                  :link_route => "/admin/templates",
+                                  :description => 'Manages template: creation and update of template.',
+                                  :module => 'cms',
+                                  :weight => 2}},                                  
                     {:path => '/sbm',
                      :options => {:title => app.t.cms_admin_menu.build_site_menu,
                                   :description => 'Site building',
@@ -282,6 +291,12 @@ module Huasi
                  :description => 'Manage the terms of a taxonomy.',
                  :fit => 1,
                  :module => :cms },
+                {:path => '/admin/templates',
+                 :regular_expression => /^\/admin\/templates/, 
+                 :title => 'Templates', 
+                 :description => 'Manages templates: creation and update of templates',
+                 :fit => 1,
+                 :module => :cms },                 
                 {:path => '/block-management',
                  :regular_expression => /^\/block-management/, 
                  :title => 'Block', 

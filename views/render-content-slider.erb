@@ -1,5 +1,3 @@
-<div class="bottom-margin">
-<a href="<%=content.path%>">
-  <img class="content-photo-img" src="<%=content.photo_url_full%>" <%if content.summary and not content.summary.empty?%>title="<%=content.summary%>"<%end%>/>
+<a href="<%=(content.link.empty?)?(content.path):(content.link)%>">
+  <img class="content-photo-img" src="<%=content.photo_url_full%>" <%if content.body and not content.body.empty?%>title="<%=content.body%>"<%end%>/>
 </a>
-</div>

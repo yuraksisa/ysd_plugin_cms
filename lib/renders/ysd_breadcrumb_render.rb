@@ -1,4 +1,4 @@
-require 'ysd_md_site' unless defined?Site::Breadcrumb
+require 'ysd_md_cms' unless defined?Site::Breadcrumb
 require 'tilt' unless defined?Tilt
 require 'ysd_core_themes' unless defined?Themes::ThemeManager
 

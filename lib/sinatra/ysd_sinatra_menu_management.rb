@@ -11,8 +11,7 @@ module Sinatra
         #
         # Taxonomies management page
         #        
-        app.get "/menu-management/?*" do
-          puts "Llego a /menu-management"
+        app.get "/menu-management/?*", :allowed_usergroups => ['staff'] do
           load_page 'menu_management'.to_sym
         end
         

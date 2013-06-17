@@ -30,7 +30,7 @@ module Sinatra
         #
         # View management page
         #
-        app.get "/view-management" do
+        app.get "/view-management", :allowed_usergroups => ['staff'] do
           
           locals = {}
 

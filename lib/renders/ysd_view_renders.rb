@@ -67,12 +67,13 @@ module CMSRenders
       #
       def render_view_body(view_data)
 
-        view_render = Model::ViewRender.get(view.render.to_sym)
 
+        view_render = Model::ViewRender.get(view.render.to_sym)
+        
         if view_render and view_render.pre_processor
           view_data[:data] = view_render.pre_processor.call(view_data[:data], context, view.render_options)
         end
-
+       
         template = Tilt.new(find_view_render_template(view))
         result = template.render(context, {:view => @view, :view_data => view_data})
         
@@ -137,7 +138,7 @@ module CMSRenders
                              Themes::ThemeManager.instance.selected_theme.resource_path("render-view-#{view.render}.erb","template","cms")
                              
         if not view_template_path
-          path = context.get_path("render-view-#{view.render}") #File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'views', "render-view-#{view.render}.erb"))
+          path = context.get_path("render-view-#{view.render}")
           view_template_path = path if not path.nil? and File.exist?(path)
         end
 

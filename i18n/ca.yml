@@ -7,7 +7,8 @@ cms_admin_menu:
   contenttype_management: Tipus de contigut
   content_new: Nou contigut  
   content_management: Continguts
-  taxonomy_management: Vocabularis  
+  taxonomy_management: Vocabularis
+  template_management: Plantilles    
   build_site_menu: Construir site
   block_management: Blocs
   view_management: Vistes
@@ -152,6 +153,23 @@ content_type_management:
       label: Pes (vista)        
     aspect_config:
       label: Configurar
+#
+# Template management
+#
+template_management:
+  title: Plantilles
+  description: >
+               <p>Permet definir plantilles que s\'utilitzaren en diversos processos,
+               com enviament de correus electrònic.</p>
+  table:
+    name: Nom
+    description: Descripció
+  form:
+    name: Nom
+    description: Descripció
+    text: Texte
+    name_required: El nom és obligatori
+    text_required: El texte és obligatori 
 #
 # Views management
 #

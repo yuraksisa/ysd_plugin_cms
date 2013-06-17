@@ -1,11 +1,13 @@
-require 'tempfile'
-require 'mime/types'
+require 'uri'
 
 #
 # Routes
 #
 module Sinatra
   module YSD
+    #
+    # REST API to manage comments
+    #
     module CommentRESTApi
     
       def self.registered(app)
