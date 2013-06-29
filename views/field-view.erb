@@ -2,7 +2,7 @@
                     <a href="<%=view_field.evaluate_link(element)%>" <%unless view_field.link_class.to_s.empty?%>class="<%= view_field.link_class%>"<%end%>>
                   <% end %>
                   <% if view_field.image %>
-                       <img src="<%=view_field.field.split(".").inject(element){|result, method| result.send(method.to_sym)}%>" <%unless view_field.image_class.to_s.empty?%>class="<%= view_field.image_class%>"<%end%> <%unless view_field.image_alt.empty?%>alt="<%=view_field.evaluate_image_alt(element)%>"<%end%>/>
+                       <img src="<%=view_field.field.split(".").inject(element){|result, method| result.send(method.to_sym)}%>" <%unless view_field.image_class.to_s.empty?%>class="<%= view_field.image_class%>"<%end%> <%if view_field.image_alt and (not view_field.image_alt.empty?)%>alt="<%=view_field.evaluate_image_alt(element)%>"<%end%>/>
                   <% else %>
                        <% result = view_field.field.split(".").inject(element){|result, method| result.send(method.to_sym)}
                           if result.is_a?Time

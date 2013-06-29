@@ -7,11 +7,9 @@ module Sinatra
         #
         # Taxonomies management page
         #        
-        app.get "/taxonomy-management/?*" do
-          puts "Llego a /taxonomy-management"
-          load_page 'taxonomy_management'.to_sym
+        app.get "/taxonomy-management/?*", :allowed_usergroups => ['staff']  do
+          load_page :taxonomy_management
         end
-        
       
       end
     

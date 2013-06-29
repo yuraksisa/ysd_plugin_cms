@@ -1,0 +1,15 @@
+          <%% if (entity) { %>     
+            <div id="tabs_above" style="display:none">
+              <ul>
+                <%= edit_element_form_above_ingroup_tab%>
+              </ul>
+              <%= edit_element_form_above_ingroup %>
+            </div>
+          <%% } else { %>          
+            <div id="tabs_above" style="display:none">
+              <ul>
+                <%= new_element_form_above_ingroup_tab%>
+              </ul>
+              <%= new_element_form_above_ingroup %>
+            </div>
+          <%% } %>

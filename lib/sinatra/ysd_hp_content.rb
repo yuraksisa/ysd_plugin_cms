@@ -18,6 +18,7 @@ module Sinatra
                                    :language => content.language, 
                                    :description => content.description, 
                                    :summary => content.summary,
+                                   :type => (content.content_type.nil?)?nil:content.content_type.id,
                                    :content => CMSRenders::ContentRender.new(content, self).render(options[:locals]))
       
        page(content_page, options)   

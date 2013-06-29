@@ -10,11 +10,10 @@ module Sinatra
         #
         # View management page
         #
-        app.get "/block-management", :allowed_usergroups => ['staff'] do
+        app.get "/admin/blocks", :allowed_usergroups => ['staff'] do
 
           ContentManagerSystem::Block.rehash_blocks( Plugins::Plugin.plugin_invoke_all('block_list', {:app => self}) )
           
-          # Build the regions (theme manager + plugins) 
           regions = Themes::ThemeManager.instance.selected_theme.regions
           regions.concat Plugins::Plugin.plugin_invoke_all(:apps_regions, {:app => self})
 

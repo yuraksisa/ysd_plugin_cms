@@ -24,9 +24,14 @@ module Sinatra
         ["/blocks","/blocks/page/:page"].each do |path|
           app.post path, :allowed_usergroups => ['staff'] do
 
+            page = params[:page].to_i || 1
+            limit = settings.contents_page_size
+            offset = (page-1) * settings.contents_page_size
             total = 0
             
-            data=ContentManagerSystem::Block.all(:conditions => {:theme => Themes::ThemeManager.instance.selected_theme.name}, :order => [:name.asc])              
+            data=ContentManagerSystem::Block.all(:conditions => 
+               {:theme => Themes::ThemeManager.instance.selected_theme.name}, 
+              :limit => limit, :offset => offset, :order => [:name.asc])              
 
             begin
               total=ContentManagerSystem::Block.count(:theme => Themes::ThemeManager.instance.selected_theme.name)
@@ -58,11 +63,13 @@ module Sinatra
           
           block_request = body_as_json(ContentManagerSystem::Block)      
           block_id = block_request.delete(:id)
+          if block_request.has_key?(:region) and block_request[:region] == 'null'
+            block_request[:region] = nil
+          end
 
           if block = ContentManagerSystem::Block.get(block_id)         
             block.attributes=(block_request)
             block.save
-            puts "ERRORS : #{block.errors.inspect}"
           end
 
           content_type :json

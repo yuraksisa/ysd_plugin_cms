@@ -15,7 +15,7 @@ require(['jquery', 'YSDEntityManagementComplementHooks', 'ysdtemplate'],
 
     this.onAction = function(the_model, data) { /* When an action is executed */
 
-      $('#publishing_actions_tmpl').load('/publishing-actions/' + data.key, function() {
+      $('#publishing_actions_tmpl').load('/publishing-actions/' + data.publication_info.id, function() {
 
         if ($('#publishing_form')) {
           $('#publishing_form').replaceWith(tmpl('publishing_actions_tmpl')({entity: data, self: the_model.entityView}));

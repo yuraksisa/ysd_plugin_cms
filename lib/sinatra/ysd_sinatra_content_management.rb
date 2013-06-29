@@ -64,18 +64,19 @@ module Sinatra
             if content_type = ContentManagerSystem::ContentType.get(content_type_id)
               aspects = []
               aspects.concat(content_type.aspects)
-              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::AnonymousPublishing.new, 99, false, true, false, false, 100, true )               
-              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::PostPublishing.new, 99, false, true, true, false, 100, true )                     
+              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::AnonymousPublishing.new, {:weight => 99, :in_group => false, :show_on_edit => false})               
+              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::PostPublishing.new, {:weight => 99, :in_group => false})                     
               unless content.nil? or content.new?
-                aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::ResourceAccessControl.new(content), 100, true, false, true, true, 100, true )   
-                aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::PublishingActions.new(content), 99, false, false, true, false, 100, true )      
+                aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::ResourceAccessControl.new(content), {:weight => 100, :in_group => true, :show_on_new => false})   
+                aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::PublishingActions.new(content), {:weight => -5, :in_group => false, :show_on_new => false})      
               end
-              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::Meta.new, 101, true, false, true, true, 100, true )                               
-              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::Audit.new, 102, true, false, true, true, 100, true )                              
-              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::ContentOther.new, 103, true, false, true, true, 100, true)
+              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::Meta.new, {:weight => 101, :in_group => true, :show_on_new => false})                               
+              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::Audit.new, {:weight => 102, :in_group => true, :show_on_new => false})                              
+              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::ContentOther.new, {:weight => -1, :in_group => false, :show_on_new => false})
               
               aspects_render = UI::EntityManagementAspectRender.new(context, aspects) 
               result = aspects_render.render(content_type)
+
             end            
 
             return result
@@ -203,7 +204,7 @@ module Sinatra
            if content 
              if content.can_write?(user)
                aspects = []
-               aspects << GuiBlock::PublishingActions.new(content)
+               aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::PublishingActions.new(content))
                aspects_render=UI::EntityManagementAspectRender.new({:app => self}, aspects) 
                aspects_render.render(content.content_type)[:edit_element_form]
              else

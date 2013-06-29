@@ -1,3 +1,3 @@
-<a href="<%=(content.link.empty?)?(content.path):(content.link)%>">
+<a href="<%=((not content.link) or content.link.empty?)?(content.path):(content.link)%>">
   <img class="content-photo-img" src="<%=content.photo_url_full%>" <%if content.body and not content.body.empty?%>title="<%=content.body%>"<%end%>/>
 </a>

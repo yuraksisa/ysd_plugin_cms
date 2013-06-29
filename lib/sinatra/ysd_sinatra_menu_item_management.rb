@@ -12,13 +12,12 @@ module Sinatra
         #
         # Menu item management page
         #        
-        app.get "/menu-item-management/:menu_name/?*" do
+        app.get "/menu-item-management/:menu_name/?*", :allowed_usergroups => ['staff']  do
 
           if menu = ::Site::Menu.get(params[:menu_name])
             
             aspects = [UI::GuiBlockEntityAspectAdapter.new(
-              GuiBlock::MenuItemTranslate.new, 
-              100, false, false, true, true, 100, true )]
+              GuiBlock::MenuItemTranslate.new, {:show_on_new => false})]
 
             aspects_render = UI::EntityManagementAspectRender.new({app:self}, 
               aspects) 

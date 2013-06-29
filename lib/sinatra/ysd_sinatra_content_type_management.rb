@@ -14,12 +14,12 @@ module Sinatra
         #
         # Content types management page
         #
-        app.get "/mctypes/?*" do
+        app.get "/mctypes/?*", :allowed_usergroups => ['staff']  do
           
           context = {:app => self}
 
           aspects = []
-          aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::Aspects.new('/mctype', 'content'), 99, false, true, true, false, 100, true)
+          aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::Aspects.new('/mctype', 'content'), {:render_in_group => true})
           
           aspects_render=UI::EntityManagementAspectRender.new(context, aspects) 
           locals = aspects_render.render(nil)
@@ -31,7 +31,7 @@ module Sinatra
         #
         # Configuration of a content type aspect (to set up the aspect attributes)
         #
-        app.get "/mctype/:content_type/aspect/:aspect" do
+        app.get "/mctype/:content_type/aspect/:aspect", :allowed_usergroups => ['staff']  do
           
           context = {:app => self}
                   

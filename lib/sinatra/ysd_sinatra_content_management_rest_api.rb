@@ -146,12 +146,13 @@ module Sinatra
         #
         app.post "/content/publish/:id" do
 
-          content = ContentManagerSystem::Content.get(params[:id])
-          content.publish_publication
-          
-          content_type :json
-          content.to_json
-
+          if content = ContentManagerSystem::Content.get(params[:id])
+            content.publish_publication
+            content_type :json
+            content.to_json
+          else
+            status 404 
+          end
         end
 
         #
@@ -166,24 +167,27 @@ module Sinatra
         #
         app.post "/content/confirm/:id" do
 
-          content = ContentManagerSystem::Content.get(params[:id])
-          content.confirm_publication
-          
-          content_type :json
-          content.to_json
-
+          if content = ContentManagerSystem::Content.get(params[:id])
+            content.confirm_publication
+            content_type :json
+            content.to_json
+          else
+            status 404
+          end
         end
 
         #
         # Validate a content
         #
-        app.post "/content/publish/:id" do
+        app.post "/content/validate/:id" do
 
-          content = ContentManagerSystem::Content.get(params[:id])
-          content.validate_publication
-          
-          content_type :json
-          content.to_json
+          if content = ContentManagerSystem::Content.get(params[:id])
+            content.validate_publication
+            content_type :json
+            content.to_json
+          else
+            status 404
+          end
 
         end
 
@@ -199,11 +203,13 @@ module Sinatra
         #
         app.post "/content/ban/:id" do
 
-          content = ContentManagerSystem::Content.get(params[:id])
-          content.ban_publication
-          
-          content_type :json
-          content.to_json
+          if content = ContentManagerSystem::Content.get(params[:id])
+            content.ban_publication
+            content_type :json
+            content.to_json
+          else
+            status 404
+          end
 
         end
         
@@ -219,11 +225,13 @@ module Sinatra
         #
         app.post "/content/allow/:id" do
 
-          content = ContentManagerSystem::Content.get(params[:id])
-          content.allow_publication
-          
-          content_type :json
-          content.to_json
+          if content = ContentManagerSystem::Content.get(params[:id])
+            content.allow_publication
+            content_type :json
+            content.to_json
+          else
+            status 404
+          end
 
         end
 

@@ -15,6 +15,58 @@ site_admin_menu:
   admin_menu: Admin
   menu_management: Menus
 #
+# Block management
+#
+block_management:
+  title: Blocks
+  description: >
+               <p>Esta página proporciona una interfaz para conocer los bloques disponibles, asignarlos a una región y controlar 
+               el orden de los bloques dentro de las regiones.</p>
+  table:
+    name: Name
+    description: Description
+    module: Module
+    region: Region
+  form:
+    name:
+      label: Name
+      description:
+    module:
+      label: Module
+      description: 
+    theme:
+      label: Theme
+      description:
+    region:
+      label: Region
+      description:
+    weight: 
+      label: Weight
+      description:
+    title:
+      label: Title
+      description:
+    visibility_condition:
+      label: Visibility condition
+      description:      
+    users_allowed:
+      label: Users
+      description: Show the block to the following users
+    content_type_allowed:
+      label: Content types
+      description: Show the block on the following content types
+    pages_allowed:
+      label: Pages
+      description: Show the block on the following pages
+    pages_allowed_but:
+      label: Show the block on all pages but
+    pages_allowed_only:
+      label: Show the block only on the listed pages
+    pages_description:
+      label: Type one entry per line in the form of a regular expression which matches the URL to apply
+    show_title:
+      label: Show title
+#
 # Taxonomy management
 #
 taxonomy_management:
@@ -276,6 +328,16 @@ guiblock:
     description: Audit
   others:
     description: Others
+    form:
+      alias:
+        label: Alias
+        description: An optional URL, human readable, which can be used to access the content.
+      link:
+        label: Link
+        description: A link to other page (internal or external).
+      block:
+        label: Use the content as a block
+        description:    
 #
 # Breadcrumb
 #

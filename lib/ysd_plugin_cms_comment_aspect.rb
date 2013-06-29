@@ -18,7 +18,7 @@ module Huasi
       
       # Prepare the comments aspects (ATTENTION ONLY is anonymous publishing is available)
       comments_aspects = []
-      comments_aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::AnonymousPublishing.new, 99, false, false, false, false, 100, true )  
+      comments_aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::AnonymousPublishing.new, {:render_in_group => true})  
       comments_aspects_render = UI::EntityAspectRender.new(context, comments_aspects) 
       locals.merge!(comments_aspects_render.render(element, aspect_model))
       

@@ -7,12 +7,12 @@ module Sinatra
         #
         # Term management page
         #        
-        app.get "/term-management/:taxonomy_id/?*" do
+        app.get "/term-management/:taxonomy_id/?*", :allowed_usergroups => ['staff']  do
           
           if taxonomy = ContentManagerSystem::Taxonomy.get(params[:taxonomy_id])
 
             aspects = []
-            aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::TermTranslate.new, 100, false, false, true, true, 100, true )
+            aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::TermTranslate.new, {:show_on_new => false} )
             aspects_render = UI::EntityManagementAspectRender.new({app:self}, aspects) 
             
             locals = aspects_render.render(ContentManagerSystem::Term)#content_type)

@@ -1,13 +1,13 @@
 <div class="entry clearfix">
     
-    <div class="grid_12">
+    <div class="grid_3">
       <% if content and content.photo_url_full %>
          <img class="rounded top-margin" style="width:100%" src="<%=content.photo_url_full%>"/>
       <% end %> 
     </div>
 
-    <div class="grid_12">
-      <div class="top-margin">
+    <div class="grid_9">
+      <div class="left-space">
       <% if content and content.title and not content.title.empty? %>
         <h3 class="content-teaser-title"><a href="<%=content.path%>"><%= content.title %></a></h3>
       <% end %>

@@ -2,14 +2,11 @@
 
 <!-- Renders the element description -->
 <script type="text/tmpl" id="elements_title">
-  <h2 class="entity-title">Bloques</h2>
+  <h2 class="entity-title"><%=t.block_management.title%></h2>
 </script>
 
 <script type="text/tmpl" id="elements_description">
-
- <p>Esta página proporciona una interfaz para conocer los bloques disponibles, asignarlos a una región y controlar 
-    el orden de los bloques dentro de las regiones.</p>
-
+  <%=t.block_management.description%>
 </script>
 
 <!-- Renders the elements container -->
@@ -18,9 +15,10 @@
   <table id="elements_table" class="table">
      <thead class="table-header">
        <tr>
-         <th class="table-header-title" scope="col" style="width:30%">Block</th>
-         <th class="table-header-title" scope="col" style="width:30%">Module</th>
-         <th class="table-header-title" scope="col" style="width:20%">Region</th>
+         <th class="table-header-title" scope="col" style="width:20%"><%=t.block_management.table.name%></th>
+         <th class="table-header-title" scope="col" style="width:20%"><%=t.block_management.table.description%></th>
+         <th class="table-header-title" scope="col" style="width:20%"><%=t.block_management.table.module%></th>
+         <th class="table-header-title" scope="col" style="width:20%"><%=t.block_management.table.region%></th>
        </tr>
      </thead>
      <tbody id="elements_tbody" class="table-tbody">             
@@ -35,6 +33,7 @@
 
     <tr class="table-row element-navigation-detail" rel="<%%= index %>" id="element_row_<%%=index%>">
       <td class="table-cell"><%%= entity.name %></td>
+      <td class="table-cell"><%%= entity.description %></td>
       <td class="table-cell"><%%= entity.module_name %></td>
       <td class="table-cell"><%%= entity.region %></td> 
     </tr>
@@ -59,70 +58,89 @@
         <div class="form-fields">
                 
           <div class="formrow">
-            <label for="name" class="fieldtitle">Name</label>
+            <label for="name" class="fieldtitle"><%=t.block_management.form.name.label%></label>
             <input type="text" maxlength="32" id="name" name="name" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.name%>" <%% } %> />
           </div>
 
           <div class="formrow">
-            <label for="module_name" class="fieldtitle">Module</label>
+            <label for="module_name" class="fieldtitle"><%=t.block_management.form.module.label%></label>
             <input type="text" maxlength="64" id="module_name" name="module_name" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.module_name%>" <%% } %> />
           </div>
 
           <div class="formrow">
-            <label for="theme" class="fieldtitle">Theme</label>
+            <label for="theme" class="fieldtitle"><%=t.block_management.form.theme.label%></label>
             <input type="text" maxlength="64" id="theme" name="theme" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.theme%>" <%% } %> />
           </div>
 
           <div class="formrow">
-            <label for="region" class="fieldtitle">Region</label>
+            <label for="region" class="fieldtitle"><%=t.block_management.form.region.label%></label>
             <select name="region" id="region" class="fieldcontrol"></select>
           </div>
 
           <div class="formrow">
-            <label for="weight" class="fieldtitle">Weight</label>
+            <label for="weight" class="fieldtitle"><%=t.block_management.form.weight.label%></label>
             <select name="weight" id="weight" class="fieldcontrol"></select>
           </div>
 
           <div class="formrow">
-            <label for="name" class="fieldtitle">Title</label>
+            <label for="show_title" class="fieldtitle"><%=t.block_management.form.show_title.label%></label>
+            <input type="radio" name="show_title" id="show_title_true" value="true" <%%if (entity && entity.show_title) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_yes.label%>
+            <input type="radio" name="show_title" id="show_title_false" value="false" <%%if (entity && !entity.show_title) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_no.label%>
+          </div> 
+
+          <div class="formrow">
+            <label for="name" class="fieldtitle"><%=t.block_management.form.title.label%></label>
             <input type="text" maxlength="64" id="title" name="title" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.title%>" <%% } %> />
           </div>          
           
-          <fieldset class="fieldcontrol">
-            <legend>Show the block to the following users</legend>
-            <div id="user_groups">
-            </div>
-          </fieldset>  
+          <div class="formrow">
+            <label for="visibility_condition" class="fieldtitle"><%=t.block_management.form.visibility_condition.label%></label>
+            <input type="text" maxlength="80" id="visibility_condition" name="visibility_condition" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.visibility_condition%>" <%% } %> />
+          </div>  
+
+          <div id="tabs">
+            <ul>
+              <%= render_tab('tab_user_groups', t.block_management.form.users_allowed.label) %>
+              <%= render_tab('tab_content_types', t.block_management.form.content_type_allowed.label) %>
+              <%= render_tab('tab_pages', t.block_management.form.pages_allowed.label) %>          
+            </ul>
           
-          <fieldset class="fieldcontrol">
-            <legend>Show the block on the following pages</legend>
-            <div>
+            <div id="tab_user_groups">
+              <p><%=t.block_management.form.users_allowed.description%></p>
+              <div id="user_groups">
+              </div>
+            </div>  
+
+            <div id="tab_content_types">
+              <p><%=t.block_management.form.content_type_allowed.description%></p>
+              <div id="block_content_types">
+              </div>
+            </div> 
+          
+            <div id="tab_pages">
+              <p><%=t.block_management.form.pages_allowed.description%></p>
+              <div class="formrow">
                 <input type="radio" name="show_block_on_page" value="1" <%% if (entity && entity.show_block_on_page == 1) { %> checked="true" <%% } %>>
-                  Show the block on all pages but</input>
-            </div>
-            <div>
+                 <%=t.block_management.form.pages_allowed_but.label%></input>
+              </div>
+              <div class="formrow">
                 <input type="radio" name="show_block_on_page" value="2" <%% if (entity && entity.show_block_on_page == 2) { %> checked="true" <%% } %>>
-                  Show the block only on the listed pages</input>
+                  <%=t.block_management.form.pages_allowed_only.label%></input>
+              </div>
+              <div class="formrow">
+                <textarea id="show_block_on_page_list" name="show_block_on_page_list" class="fieldcontrol"><%% if (entity) {%><%%= entity.show_block_on_page_list%><%% } %></textarea>
+                <div class="fielddescription"><%=t.block_management.form.pages_description.label%></div>
+              </div>            
             </div>
-            <div class="formrow">
-              <textarea id="show_block_on_page_list" name="show_block_on_page_list" class="fieldcontrol"><%% if (entity) {%><%%= entity.show_block_on_page_list%><%% } %></textarea>
-              <div class="fielddescription">Type one entry per line in the form of a regular expression which matches the URL to apply</div>
-            </div>
-            <div class="formrow">
-              <label for="show_title" class="fieldtitle">Show title</label>
-              <input type="radio" name="show_title" id="show_title_true" value="true" <%%if (entity && entity.show_title) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_yes.label%>
-              <input type="radio" name="show_title" id="show_title_false" value="false" <%%if (entity && !entity.show_title) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_no.label%>
-            </div>              
-        </div>
-        
+          </div>
+
         <div class="bottom-navigation-bar navigation-bar">
              <div class="navigation-bar-nav-buttons">
-                <input type="button" class="cancel-entity-button action-button entity-management-button" value="Cancel"/>
                 <%% if (entity) { %>
-                  <input type="submit" class="update-entity-button action-button entity-management-button" value="Update"/>
+                  <input type="submit" class="update-entity-button action-button entity-management-button" value="<%=t.entitymanagement.update%>"/>
                 <%% } 
                    else { %>
-                  <input type="submit" class="create-entity-button action-button entity-management-button" value="Create"/>
+                  <input type="submit" class="create-entity-button action-button entity-management-button" value="<%=t.entitymanagement.create%>"/>
                 <%% } %>
              </div>
         </div>
@@ -172,12 +190,19 @@ require(['jquery','YSDEntityManagement', 'YSDMemoryDataSource', 'YSDRemoteDataSo
     this.adaptFormData = function(data) { // Adapt the form data before it's sent to backend
       
       var adaptedUsergroups = [];
+      var adaptedContentTypes = [];
 
       for (idx in data['usergroups']) {
         adaptedUsergroups.push({'group': data['usergroups'][idx]});
       }
 
+      for (idx in data['content_types']) {
+        adaptedContentTypes.push({'id' : data['content_types'][idx]});
+      }
+
+
       data['usergroups'] = adaptedUsergroups;
+      data['content_types'] = adaptedContentTypes;
 
   	  return data;
     };
@@ -204,6 +229,11 @@ require(['jquery','YSDEntityManagement', 'YSDMemoryDataSource', 'YSDRemoteDataSo
          var ugValue = (entity&&entity.usergroups)?entity.usergroups.map(function(item){return item.group;}):[]; 
          var ugSelector = new ListSelector('user_groups', 'usergroups[]', ugDataSource, ugValue );
 
+         // Configure the content types
+         var ctDataSource = new RemoteDataSource('/ctypes',{id:'id', description:'name'});
+         var ctValue = (entity&&entity.content_types)?entity.content_types.map(function(item){return item.id;}):[];
+         var ctSelector = new ListSelector('block_content_types','content_types[]', ctDataSource, ctValue);
+
     }
     
     this.preview = function(entity) { /* preview the block */
@@ -225,7 +255,7 @@ require(['jquery','YSDEntityManagement', 'YSDMemoryDataSource', 'YSDRemoteDataSo
   	         };
 
   var blockHook = new BlockHook();
-  var blocksManager = new EntityManagement(urls, 'block', 12, blockHook);
+  var blocksManager = new EntityManagement(urls, 'block', 12, blockHook, {prefix:'/admin'});
  
   $('.entity-title').html('Blocks');
 

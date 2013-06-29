@@ -40,33 +40,34 @@
           <%% } %>
 
           <input type="hidden" id="content_type[id]" name="content_type[id]" value="<%= content_type %>"/>
-                
-          <div class="formrow">
-            <label for="title" class="fieldtitle"><%= t.content_management.form.title.label %> <span class="mandatoryfield">*</span></label>
-            <input type="text" maxlength="120" id="title" name="title" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.title %>" <%% } %>/>
-            <div class="fielddescription"><%= t.content_management.form.title.description %></div>
-          </div>
-              
-          <div id="content_taxonomies" class="formrow" style="display:none">
-             <label class="fieldtitle"><%= t.content_management.form.categories.label %></label>
-             <div id="taxonomies">            
-             </div>
-             <div class="fielddescription">
-               <%= t.content_management.form.categories.description %>
-             </div>
-          </div>
-
-          <%= include('entity-tabs-above', {:edit_element_form_above => edit_element_form_above,
-                                            :edit_element_form_above_ingroup_tab => edit_element_form_above_ingroup_tab,
-                                            :edit_element_form_above_ingroup => edit_element_form_above_ingroup,
-                                            :new_element_form_above => new_element_form_above,
-                                            :new_element_form_above_ingroup_tab => new_element_form_above_ingroup_tab,
-                                            :new_element_form_above_ingroup => new_element_form_above_ingroup}) %>          
-           
-          <div id="content_body" class="formrow">
-              <label for="body" class="fieldtitle"><%= t.content_management.form.body.label %> <span class="mandatoryfield">*</span></label>
-              <textarea rows="20" cols="50" id="body" name="body" class="fieldcontrol texteditor"><%% if (entity) {%><%%=entity.body %><%% } %></textarea>
-              <div class="fielddescription"><%= t.content_management.form.body.description %></div>
+                           
+          <div class="container_12"> 
+            <div class="grid_8">
+              <div class="formrow">
+                <input type="text" maxlength="120" id="title" name="title" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.title %>" <%% } %>/>
+              </div>
+              <%= include('entity-tabs-above-group', {:edit_element_form_above_ingroup_tab => edit_element_form_above_ingroup_tab,
+                                                      :edit_element_form_above_ingroup => edit_element_form_above_ingroup,
+                                                      :new_element_form_above_ingroup_tab => new_element_form_above_ingroup_tab,
+                                                      :new_element_form_above_ingroup => new_element_form_above_ingroup}) %>   
+              <div id="content_body" class="formrow">
+                 <textarea rows="20" cols="50" id="body" name="body" class="fieldcontrol texteditor"><%% if (entity) {%><%%=entity.body %><%% } %></textarea>
+              </div>
+            </div>
+            <div class="grid_4">
+              <div class="left-margin">  
+                <%= include('entity-tabs-above-no-group', {:edit_element_form_above=> edit_element_form_above,
+                                                           :new_element_form_above=> new_element_form_above}) %>                         
+                <div id="content_taxonomies" class="formrow" style="display:none">
+                  <label class="fieldtitle"><%= t.content_management.form.categories.label %></label>
+                  <div id="taxonomies">            
+                  </div>
+                  <div class="fielddescription">
+                    <%= t.content_management.form.categories.description %>
+                  </div>
+                </div>   
+              </div>
+            </div>
           </div>
 
           <%= include('entity-tabs-below', {:edit_element_form => edit_element_form,

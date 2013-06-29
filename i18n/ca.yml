@@ -17,6 +17,58 @@ site_admin_menu:
   admin_menu: Admin
   menu_management: Menus
 #
+# Block management
+#
+block_management:
+  title: Blocs
+  description: >
+               <p>Esta pàgina permet conèixer els blocs disponibles, assignar-los a una regió i 
+               controlar l\'ordre dels blocs dins de les regions.</p>
+  table:
+    name: Nom
+    description: Descripció
+    module: Mòdul
+    region: Regió
+  form:
+    name:
+      label: Nom
+      description:
+    module:
+      label: Mòdul
+      description: 
+    theme:
+      label: Tema
+      description:
+    region:
+      label: Regió
+      description:
+    weight: 
+      label: Pes
+      description:
+    title:
+      label: Títol
+      description:
+    visibility_condition:
+      label: Condició visibilitat
+      description:      
+    users_allowed:
+      label: Usuaris
+      description: Mostrar el bloc als següents usuaris
+    content_type_allowed:
+      label: Tipus contingut
+      description: Mostrar el bloc per als següents tipus de contigut
+    pages_allowed:
+      label: Pàgines
+      description: Mostrar el bloc a les següents pàgines
+    pages_allowed_but:
+      label: A totes les pàgines excepte
+    pages_allowed_only:
+      label: Només a aquestes pàgines
+    pages_description:
+      label: Una entrada per linea amb l\'expressió regular que valida la URL
+    show_title:
+      label: Mostrar títol
+#
 # Taxonomy management
 #
 taxonomy_management:
@@ -279,6 +331,16 @@ guiblock:
     description: Auditoria  
   others:
     description: Altres
+    form:
+      alias:
+        label: Alias
+        description: URL opcional, que es pot utilitzar per accedir al contigut
+      link:
+        label: Enllaç
+        description: Enllaç a altre contingut (intern o extern)
+      block:
+        label: Utilitzar el contigut com a bloc
+        description:    
 #
 # Breadcrumb
 #

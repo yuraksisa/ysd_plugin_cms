@@ -1,16 +1,16 @@
             <div id="content_others_form" class="guiblock">
               <div class="formrow">
-                <label for="key" class="fieldtitle">Alias</label>
+                <label for="key" class="fieldtitle"><%=t.guiblock.others.form.alias.label%></label>
                 <input type="text" id="alias" name="alias" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.alias %>" <%% } %> />
-                <div class="fielddescription">An optional URL, human readable, which can be used to access the content.</div>
+                <div class="fielddescription"><%=t.guiblock.others.form.alias.description%></div>
               </div>
               <div class="formrow">
-                <label for="key" class="fieldtitle">Link</label>
+                <label for="key" class="fieldtitle"><%=t.guiblock.others.form.link.label%></label>
                 <input type="text" id="link" name="link" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.link %>" <%% } %> />
-                <div class="fielddescription">A link to other page (internal or external).</div>
+                <div class="fielddescription"><%=t.guiblock.others.form.link.description%></div>
               </div>
               <div class="formrow">
-                <label for="block" class="fieldtitle">Use the content as a block</label>
+                <label for="block" class="fieldtitle"><%=t.guiblock.others.form.block.label%></label>
                 <input type="radio" name="block" id="block_true" value="true" <%%if (entity && entity.block) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_yes.label%>
                 <input type="radio" name="block" id="block_false" value="false" <%%if (entity && !entity.block) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_no.label%>
               </div>              

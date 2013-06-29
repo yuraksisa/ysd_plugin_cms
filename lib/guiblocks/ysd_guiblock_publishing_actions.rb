@@ -95,15 +95,15 @@ module GuiBlock
       publishable.publishing_actions.each do |pub_action| 
         if url = case pub_action
                 when ContentManagerSystem::PublishingAction::CONFIRM
-                   "/content/confirm/#{publishable.key}"
+                   "/content/confirm/#{publishable.publication_info[:id]}"
                 when ContentManagerSystem::PublishingAction::VALIDATE
-                   "/content/validate/#{publishable.key}"
+                   "/content/validate/#{publishable.publication_info[:id]}"
                 when ContentManagerSystem::PublishingAction::PUBLISH
-                   "/content/publish/#{publishable.key}"
+                   "/content/publish/#{publishable.publication_info[:id]}"
                 when ContentManagerSystem::PublishingAction::BAN
-                   "/content/ban/#{publishable.key}"
+                   "/content/ban/#{publishable.publication_info[:id]}"
                 when ContentManagerSystem::PublishingAction::ALLOW
-                  "/content/allow/#{publishable.key}"
+                  "/content/allow/#{publishable.publication_info[:id]}"
               end
           actions << {:id => pub_action.id, 
                       :title => app.t.publishing.action[pub_action.id.downcase.to_sym], 

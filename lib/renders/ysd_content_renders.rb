@@ -194,12 +194,14 @@ module CMSRenders
           Themes::ThemeManager.instance.selected_theme,
           Plugins::Plugin.plugin_invoke(:cms, :apps_regions, context),
           context.user,
-          context.request.path_info)
+          context.request.path_info,
+          (content.content_type.nil?)?nil:content.content_type.id)
         
         # To avoid circular
         blocks_hash = blocks_hash.inject({}) do |result, element| 
            result[element[0]] = element[1].select do |block| 
-              block.can_be_shown?(context.user, content.alias || content.path) 
+              block.can_be_shown?(context.user, content.alias || content.path, 
+                (content.content_type.nil?)?nil:content.content_type.id) 
            end 
            result 
         end

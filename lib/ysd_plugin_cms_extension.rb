@@ -39,17 +39,65 @@ module Huasi
         ContentManagerSystem::ContentType.first_or_create({:id => 'story'},
                                                           {:name => 'Articulo', :description => 'Tiene una estructura similar a la página y permite crear y mostrar contenido que informa a los visitantes del sitio. Notas de prensa, anuncios o entradas informales de blog son creadas como páginas.'})
     
-        # Create the primary links menu
         Site::Menu.first_or_create({:name => 'primary_links'},
                                    {:title => 'Primary links menus', :description => 'Primary links menu'})
 
-        # Create the secondary links menu
         Site::Menu.first_or_create({:name => 'secondary_links'},
                                    {:title => 'Secondary links menu', :description => 'Secondary links menu'})
 
-        # Create the members menu
         Site::Menu.first_or_create({:name => 'members'},
                                    {:title => 'Members menu', :description => 'Members menu'})
+
+        ContentManagerSystem::View.first_or_create({:view_name => 'stories'},
+        {
+         :description => 'Published stories',
+         :model_name => 'content',
+         :query_conditions => {:operator => '$and', :conditions => [
+            {:field => 'type', :operator => '$eq', :value => 'story'},
+            {:field => 'publishing_state_id', :operator => '$eq', :value => 'PUBLISHED'}
+          ]},
+         :query_order => [{:field => 'publishing_date', :order => :desc}],
+         :query_arguments => [],
+         :style => :teaser,
+         :v_fields => [],
+         :render => :div,
+         :render_options => {},
+         :view_limit => 0,
+         :pagination => true,
+         :ajax_pagination => false,
+         :page_size => 10,
+         :pager => :default,
+         :block => false
+        })
+        
+        ContentManagerSystem::View.first_or_create({:view_name => 'last_stories'},
+        {
+         :description => 'Last published stories',
+         :model_name => 'content',
+         :query_conditions => {:operator => '$and', :conditions => [
+            {:field => 'type', :operator => '$eq', :value => 'story'},
+            {:field => 'publishing_state_id', :operator => '$eq', :value => 'PUBLISHED'}
+          ]},
+         :query_order => [{:field => 'publishing_date', :order => :desc}],
+         :query_arguments => [],
+         :style => :fields,
+         :v_fields => [
+            {:field => 'photo_url_small', :image => true, :link => '#{element.path}', 
+             :image_alt => '#{element.summary}', :image_class => 'view_div_mini_youtube_img'},
+            {:field => 'title', :link => '#{element.path}',
+             :class => 'view_div_mini_youtube_title'},
+            {:field => 'summary', :class => 'view_div_mini_youtube_body'}
+            ],
+         :render => :div,
+         :render_options => {:container_class => 'view_div_mini_youtube_container',
+          :container_element_class => 'view_div_mini_youtube_element'},
+         :view_limit => 5,
+         :pagination => false,
+         :ajax_pagination => false,
+         :page_size => 0,
+         :pager => :default,
+         :block => true
+        })
 
 
     end
@@ -204,7 +252,7 @@ module Huasi
                                   :weight => 9 }},
                     {:path => '/sbm/blocks',              
                      :options => {:title => app.t.cms_admin_menu.block_management,
-                                  :link_route => "/block-management",
+                                  :link_route => "/admin/blocks",
                                   :description => 'Manage the blocks. It allows to discover and configure modules blocks.',
                                   :module => 'cms',
                                   :weight => 6}},
@@ -297,8 +345,8 @@ module Huasi
                  :description => 'Manages templates: creation and update of templates',
                  :fit => 1,
                  :module => :cms },                 
-                {:path => '/block-management',
-                 :regular_expression => /^\/block-management/, 
+                {:path => '/admin/blocks',
+                 :regular_expression => /^\/admin\/blocks/, 
                  :title => 'Block', 
                  :description => 'Manage the blocks. It allows to discover and configure modules blocks',
                  :fit => 1,
@@ -367,7 +415,7 @@ module Huasi
     #
     #  A Hash where each key represents a variable, the region to insert the content, and the value is an array of blocks
     #
-    def page_preprocess(context={})
+    def page_preprocess(page, context={})
     
       app = context[:app]
             
@@ -387,7 +435,7 @@ module Huasi
           result.store(key, [])      
         end
 
-        if block.can_be_shown?(app.user, app.request.path_info) # Add the block only if can be shown
+        if block.can_be_shown?(app.user, app.request.path_info, page.type) 
 
           block_render = CMSRenders::BlockRender.new(block, app).render || ''
           
