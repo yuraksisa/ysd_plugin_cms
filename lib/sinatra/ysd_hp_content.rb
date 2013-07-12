@@ -32,13 +32,17 @@ module Sinatra
 
       # Creates a content using the view information
       begin
-        content = ContentManagerSystem::Content.new 
-        content.title = view.title
-        content.alias = request.path_info
-        content.description = view.description       
-        content.body = CMSRenders::ViewRender.new(view, self).render(page, arguments)
-        
-        page_from_content(content, nil, options) 
+        view_page = UI::Page.new(:title => view.title,
+                                 :author => view.page_author,
+                                 :keywords => view.page_keywords,
+                                 :language => view.page_language,
+                                 :description => view.page_description,
+                                 :summary => view.page_summary,
+                                 :content => CMSRenders::ViewRender.new(view, self).render(page, arguments))
+
+        page(view_page, options)
+
+
       rescue ContentManagerSystem::ViewArgumentNotSupplied
         status 404
       end
