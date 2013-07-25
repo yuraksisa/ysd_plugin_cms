@@ -67,7 +67,7 @@ module GuiBlock
       app = context[:app]
 
       renderer = ::UI::FieldSetRender.new('publishing', app)      
-      renderer.render('form', 'em', {:publishing_buttons => publishing_buttons(context)}) 
+      renderer.render('form', 'em', {:publishing_buttons => publishing_buttons(context, aspect_model)}) 
 
     end
 
@@ -77,42 +77,56 @@ module GuiBlock
     def element_form_extension(context={}, aspect_model)
     
       app = context[:app]
-
+      
       renderer = ::UI::FieldSetRender.new('publishing', app)      
-      renderer.render('formextension', 'em')      
+      renderer.render('formextension', 'em', {:model => aspect_model.aspect_target_model.name.split('::').last.downcase })      
 
     end   
 
 
     private
 
-    def publishing_buttons(context={})
+    def publishing_buttons(context={}, aspect_model)
+
+     if publishable.nil?
+       return ''
+     end
 
      app = context[:app]
 
       actions = []
+      action_url = nil
+      action_class = nil
+      
+      model = aspect_model.aspect_target_model.name.split('::').last.downcase
 
       publishable.publishing_actions.each do |pub_action| 
-        if url = case pub_action
+         
+         case pub_action
                 when ContentManagerSystem::PublishingAction::CONFIRM
-                   "/content/confirm/#{publishable.publication_info[:id]}"
+                  action_url   = "/api/#{model}/confirm/#{publishable.publication_info[:id]}"
+                  action_class = "black-button"
                 when ContentManagerSystem::PublishingAction::VALIDATE
-                   "/content/validate/#{publishable.publication_info[:id]}"
+                  action_url = "/api/#{model}/validate/#{publishable.publication_info[:id]}"
+                  action_class = "green-button"
                 when ContentManagerSystem::PublishingAction::PUBLISH
-                   "/content/publish/#{publishable.publication_info[:id]}"
+                  action_url = "/api/#{model}/publish/#{publishable.publication_info[:id]}"
+                  action_class = "blue-button"
                 when ContentManagerSystem::PublishingAction::BAN
-                   "/content/ban/#{publishable.publication_info[:id]}"
+                  action_url = "/api/#{model}/ban/#{publishable.publication_info[:id]}"
+                  action_class = "red-button"
                 when ContentManagerSystem::PublishingAction::ALLOW
-                  "/content/allow/#{publishable.publication_info[:id]}"
-              end
+                  action_url = "/api/#{model}/allow/#{publishable.publication_info[:id]}"
+                  action_class = "blue-button"
+          end
+
           actions << {:id => pub_action.id, 
                       :title => app.t.publishing.action[pub_action.id.downcase.to_sym], 
                       :text => app.t.publishing.action[pub_action.id.downcase.to_sym], 
                       :action_method => :POST, 
-                      :action_url => url, 
+                      :action_url => action_url, 
                       :confirm_message => app.t.guiblock.publishing[pub_action.id.downcase.to_sym].message,
-                      :class=>"publishing-button publishing-button-#{pub_action.id.downcase}"}
-        end
+                      :class=>"publishing-button #{action_class}"}
       end
 
       buttons = ''

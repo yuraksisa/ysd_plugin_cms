@@ -1,0 +1,156 @@
+<%= include('entity-management') %>
+
+<!-- Renders the element description -->
+<script type="text/tmpl" id="elements_title">
+  <h2 class="entity-title"><%=t.comment_management.title%></h2>
+</script>
+
+<script type="text/tmpl" id="elements_description">
+ <%= t.comment_management.description %>
+</script>
+
+<script type="text/tmpl" id="elements_search">
+</script>
+
+<!-- Renders the elements container -->
+<script type="text/tmpl" id="elements_container_template">
+    
+  <form name="bulk_actions" id="bulk_actions">
+  <div class="table-container">
+    <table id="elements_table" class="table">
+       <thead class="table-header">
+         <tr>
+           <th class="table-header-title" scope="col" style="width:2%"></th>
+           <th class="table-header-title" scope="col" style="width:15%"><%=t.comment_management.table.date.label%></th>
+           <th class="table-header-title" scope="col" style="width:65%"><%=t.comment_management.table.message.label%></th>
+           <th class="table-header-title" scope="col" style="width:10%"><%=t.comment_management.table.published_state_id.label%></th>
+         </tr>
+       </thead>
+       <tbody id="elements_tbody" class="table-tbody">             
+       </tbody>
+    </table>
+  </div>
+  </form>
+
+</script>
+
+<!-- Renders one element in the elements list view -->
+        
+<script type="text/tmpl" id="elements_list_template">
+
+    <tr class="table-row element-navigation-detail" rel="<%%= index %>" id="element_row_<%%=index%>">
+      <td class="table-cell selectable-entity"><input type="checkbox" name="id[]" value="<%%=entity.id%>"/></td>
+      <td class="table-cell" rel="<%%= index %>"><%%= self.formatDate(entity.date) %></td>
+      <td class="table-cell element-row-selector" rel="<%%= index %>"><%%= entity.message %></td> 
+      <td class="table-cell" rel="<%%= index %>"><span class="content-status <%%=self.model.entityHooks[0].formatPublishingStateClass(entity)%>"><%%=self.model.entityHooks[0].formatPublishingState(entity)%></span></td>
+    </tr>
+
+</script>
+
+<!-- Renders one element in the element view (full detailed) -->
+
+<script type="text/tmpl" id="element_template">
+   
+</script>
+
+<!-- Renders the form to edit an element -->
+
+<script type="text/tmpl" id="element_template_form">
+              
+   <form name="element" method="POST">              
+      <div class="container_12">
+        <div class="grid_8">
+          <div class="formrow">
+            <label for="date" class="fieldtitle"><%=t.comment_management.form.date.label%></label>
+            <input type="text" maxlength="120" id="date" name="date" class="fieldcontrol" readonly="readonly"<%% if (entity) {%> value="<%%=self.formatDate(entity.date)%>" <%% } %>/>
+          </div>         
+          <div class="formrow">
+            <label for="message" class="fieldtitle"><%=t.comment_management.form.message.label%></label>
+            <textarea rows="20" cols="50" id="message" name="message" class="fieldcontrol"><%% if (entity) {%><%%=entity.message%><%% } %></textarea>
+          </div>
+        </div>
+        <div class="grid_4">
+          <div class="left-margin"> 
+            <%= include('entity-tabs-above-no-group', 
+                {:edit_element_form_above=> edit_element_form_above,
+                 :new_element_form_above=> new_element_form_above}) %>  
+          </div>
+        </div>
+      </div>
+   </form>
+
+</script>
+
+<%= element_form_extension %>
+<%= element_action_extension %>
+
+<!-- It's used to show the content detail -->
+
+<!--iframe id="content_detail" class="content_detail" style="padding:5px; border: none; width: 98%">
+</iframe-->
+
+<script type="text/javascript">
+ 
+require(["YSDEntityManagement", "YSDEntityManagementComplementHooks", "jquery"], 
+        function(YSDEntityManagement, EntityManagementComplementHooks, $) {
+ 
+  var commentsHook = {
+    	     
+    publishingStates: JSON.parse('<%=publishing_states%>'),
+ 
+    entityKey : function(entity) {
+      return entity.id;
+    },
+
+    onRenderEntities : function(entities) {
+    
+      $('.new-entity-button').hide();
+      $('.edit-entity-button').hide();
+                 
+    },
+
+    formatPublishingStateClass : function(entity) {
+     
+      var text='';
+
+      if (entity && entity.publishing_state_id) {
+        text = 'content-status-' + entity.publishing_state_id.toLowerCase().replace('_','-');
+      }
+
+      return text;
+
+    },
+
+    formatPublishingState: function(entity) {
+     
+      var text='';
+      if (entity && entity.publishing_state_id) {
+        text= this.publishingStates[entity.publishing_state_id];
+      }
+
+      return text;
+
+    }    
+
+  };
+
+  //$('#content_detail').dialog({title: 'Content', width: 480, height: 480, autoOpen: false})
+
+  var urls = { query_url  : '/api/comments',
+    	         create_url : '/api/comment',
+  	           update_url : '/api/comment',
+  	           delete_url : '/api/comment',
+  	           get_url    : '/api/comment'
+  	         };
+  
+  var hooks = [commentsHook];
+  hooks = hooks.concat(EntityManagementComplementHooks.complements);
+  
+     	           
+  var commentsManager = new YSDEntityManagement(urls, 'comment', 
+      <%=comments_page_size%>, hooks,
+      {prefix: '/admin'});
+
+});
+  
+</script>

@@ -25,6 +25,7 @@ module Sinatra
         
           if content.can_read?(user) and (not content.is_banned?)
             @current_content = content
+            last_modified content.last_update || content.creation_date if user and user.belongs_to?('anonymous') #Cache control
             page_from_content(content)
           else
             status 404
@@ -36,16 +37,12 @@ module Sinatra
         # Load a content by its id
         # 
         app.get '/content/:id' do
-            
-           if not request.accept?'text/html'
-             pass
-           end
-           
-           content = ContentManagerSystem::Content.get(params[:id])
 
-           if content and (not content.is_banned?)
+           if content = ContentManagerSystem::Content.get(params[:id]) and 
+              (not content.is_banned?)
              if content.can_read?(user)
                @current_content = content
+               last_modified content.last_update || content.creation_date if user and user.belongs_to?('anonymous')  #Cache control
                page_from_content(content)
              else
                status 401

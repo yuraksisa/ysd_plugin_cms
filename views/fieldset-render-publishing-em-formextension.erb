@@ -15,15 +15,30 @@ require(['jquery', 'YSDEntityManagementComplementHooks', 'ysdtemplate'],
 
     this.onAction = function(the_model, data) { /* When an action is executed */
 
-      $('#publishing_actions_tmpl').load('/publishing-actions/' + data.publication_info.id, function() {
+      $('#publishing_actions_tmpl').load('/publishing-actions/<%=model%>/' + data.publication_info.id, function() {
 
         if ($('#publishing_form')) {
-          $('#publishing_form').replaceWith(tmpl('publishing_actions_tmpl')({entity: data, self: the_model.entityView}));
+          $('#publishing_form').replaceWith(tmpl($('#publishing_actions_tmpl').html())({entity: data, self: the_model.entityView}));
           the_model.entityView.configureElementEvents('.publishing-button');
         }
 
       });
       
+    }
+
+    this.onEdit = function(entity) { /* When the element is edited */ 
+      
+      var self = this;
+
+      $('#publishing_actions_tmpl').load('/publishing-actions/<%=model%>/' + entity.publication_info.id, function() {
+
+        if ($('#publishing_form')) {
+          $('#publishing_form').replaceWith(tmpl($('#publishing_actions_tmpl').html())({entity: entity, self: self.manager.view}));
+          self.manager.view.configureElementEvents('.publishing-button');
+        }
+
+      });
+
     }
 
   }

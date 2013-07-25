@@ -13,7 +13,7 @@ module Sinatra
         #                    
         # Query contents
         #
-        ["/contents","/contents/page/:page"].each do |path|
+        ["/api/contents","/api/contents/page/:page"].each do |path|
           
           app.post path do
 
@@ -55,7 +55,7 @@ module Sinatra
         #
         # Get a content
         #
-        app.get "/content/:id" do
+        app.get "/api/content/:id" do
         
           content = ContentManagerSystem::Content.get(params['id'])
           
@@ -73,7 +73,7 @@ module Sinatra
         #  /content?op=creation-step : Just save
         #
         #
-        app.post "/content" do
+        app.post "/api/content" do
         
           options = extract_request_query_string
           
@@ -102,7 +102,7 @@ module Sinatra
         #
         # Updates a content
         #
-        app.put "/content" do
+        app.put "/api/content" do
           
           content_request = body_as_json(ContentManagerSystem::Content)
                               
@@ -119,7 +119,7 @@ module Sinatra
         #
         # Deletes a content
         #
-        app.delete "/content" do
+        app.delete "/api/content" do
         
           content_request = body_as_json(ContentManagerSystem::Content)
           
@@ -135,16 +135,12 @@ module Sinatra
         
         
         end
-      
-        #
-        # -------- Publishing ---------
-        #
         
 
         #
         # Publish a content
         #
-        app.post "/content/publish/:id" do
+        app.post "/api/content/publish/:id", :allowed_usergroups => ['staff','editor'] do
 
           if content = ContentManagerSystem::Content.get(params[:id])
             content.publish_publication
@@ -156,16 +152,9 @@ module Sinatra
         end
 
         #
-        # Publish multiple contents
-        #
-        app.post "/contents/publish" do
-
-        end
-
-        #
         # Confirm a content
         #
-        app.post "/content/confirm/:id" do
+        app.post "/api/content/confirm/:id", :allowed_usergroups => ['staff','editor'] do
 
           if content = ContentManagerSystem::Content.get(params[:id])
             content.confirm_publication
@@ -179,7 +168,7 @@ module Sinatra
         #
         # Validate a content
         #
-        app.post "/content/validate/:id" do
+        app.post "/api/content/validate/:id", :allowed_usergroups => ['staff','editor'] do
 
           if content = ContentManagerSystem::Content.get(params[:id])
             content.validate_publication
@@ -192,16 +181,9 @@ module Sinatra
         end
 
         #
-        # Validate multiple contents
-        #
-        app.post "/contents/validate" do
-
-        end
-
-        #
         # Ban a content
         #
-        app.post "/content/ban/:id" do
+        app.post "/api/content/ban/:id", :allowed_usergroups => ['staff','editor'] do
 
           if content = ContentManagerSystem::Content.get(params[:id])
             content.ban_publication
@@ -214,16 +196,9 @@ module Sinatra
         end
         
         #
-        # Bans multiples contents
-        #
-        app.post "/contents/ban" do
-
-        end
-
-        #
         # Allow a content
         #
-        app.post "/content/allow/:id" do
+        app.post "/api/content/allow/:id", :allowed_usergroups => ['staff','editor'] do
 
           if content = ContentManagerSystem::Content.get(params[:id])
             content.allow_publication
@@ -232,13 +207,6 @@ module Sinatra
           else
             status 404
           end
-
-        end
-
-        #
-        # Allow multiples contents
-        #
-        app.post "/contents/allow" do
 
         end
 

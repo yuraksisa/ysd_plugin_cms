@@ -6,6 +6,7 @@ cms_admin_menu:
   contenttype_management: Content type
   content_new: New content  
   content_management: Admin content
+  comment_management: Admin comments
   taxonomy_management: Taxonomies
   template_management: Templates  
   build_site_menu: Build site
@@ -123,6 +124,17 @@ content_management:
       label: Categories
     search_button:
       label: Filter
+  table:
+    title:
+      label: Title
+    type:
+      label: Type
+    state:
+      label: Status
+    author:
+      label: Author
+    created:
+      label: Created      
   form:
     content:
       label: Content
@@ -324,6 +336,22 @@ guiblock:
         description: Your web site    
   meta:
     description: Meta
+    form:
+      subtitle:
+        label: Subtitle
+        description: 
+      description:
+        label: Description
+        description: Meta tag
+      summary:
+        label: Summary
+        description: Meta tag
+      keywords:
+        label: Key words
+        description: Meta tag
+      language:
+        label: Language
+        description: Meta tag    
   audit:
     description: Audit
   others:
@@ -335,6 +363,9 @@ guiblock:
       link:
         label: Link
         description: A link to other page (internal or external).
+      cache_life:
+        label: Page cache life time (in seconds)
+        description: How long the content page is hold on the cache         
       block:
         label: Use the content as a block
         description:    

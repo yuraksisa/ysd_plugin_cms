@@ -6,6 +6,7 @@ cms_admin_menu:
   contenttype_management: Tipos de contenido
   content_new: Nuevo contenido  
   content_management: Contenidos
+  comment_management: Comentarios
   taxonomy_management: Taxonomías
   template_management: Plantillas
   build_site_menu: Construir sitio
@@ -115,6 +116,8 @@ view_management:
       label: Resultado
     page_block:
       label: Página
+    meta_block:
+      meta: Meta
     extras_block:
       label: Más opciones
     name:
@@ -177,6 +180,9 @@ view_management:
     url:
       label: Url
       description: Url en la que estará disponible la vista
+    cache_life:
+      label: Cache de página (en segundos)
+      description: Tiempo que se mantiene la caché de página de la vista
     show_number_of_results:
       label: Mostrar el número de resultados
       description: Mostrar el número de resultados en la vista
@@ -196,6 +202,16 @@ view_management:
       label: Si
     rb_no:
       label: No
+    page_author:
+      label: Autor
+    page_description:
+      label: Descripción
+    page_summary:
+      label: Sumario
+    page_keywords:
+      label: Palabras clave
+    page_language:
+      label: Idioma
   view_preview:
     title: Previsualización
     arguments: Argumentos
@@ -221,6 +237,17 @@ content_management:
       label: Categorías
     search_button:
       label: Filtrar
+  table:
+    title:
+      label: Título
+    type:
+      label: Tipo
+    state:
+      label: Estado
+    author:
+      label: Autor
+    created:
+      label: Creado
   form:
     content:
       label: Contenido
@@ -237,6 +264,25 @@ content_management:
     show_tabs: Más información
     complements: 
       label: Más      
+#
+# Comments management
+#
+comment_management:
+  title: Comentarios
+  description: >
+               <p>Esta página proporciona una interfaz para moderar los comentarios de su sitio web.</p>
+  table:
+    date:
+      label: Fecha
+    published_state_id:
+      label: Estado  
+    message:
+      label: Comentario
+  form:
+    date:
+      label: Fecha
+    message:
+      label: Comentario
 #
 # Content render
 #
@@ -424,6 +470,24 @@ guiblock:
     description: Meta
   audit:
     description: Auditoría
+  meta:
+    description: Metadatos
+    form:
+      subtitle:
+        label: Subtítulo
+        description: 
+      description:
+        label: Descripción
+        description: Se usa como etiqueta meta
+      summary:
+        label: Resumen
+        description: Se usa  como etiqueta meta
+      keywords:
+        label: Palabras clave
+        description: Se usa como etiqueta meta
+      language:
+        label: Idioma
+        description: Se usa como etiqueta meta
   others:
     description: Otros
     form:
@@ -433,6 +497,9 @@ guiblock:
       link:
         label: Enlace
         description: Enlace a otro contenido (interno o externo)
+      cache_life:
+        label: Cache de página (en segundos)
+        description: Tiempo que se mantiene la caché de página del contenido 
       block:
         label: Usar el contenido como bloque
         description:

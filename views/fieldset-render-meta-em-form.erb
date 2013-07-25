@@ -1,27 +1,27 @@
             <div id="meta_form" class="guiblock">           
               <div class="formrow">
-                <label for="subtitle" class="fieldtitle">Subtitle</label>
+                <label for="subtitle" class="fieldtitle"><%=t.guiblock.meta.form.subtitle.label%></label>
                 <input type="text" maxlength="80" id="subtitle" name="subtitle" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.subtitle%>" <%% } %>/>
-                <div class="fielddescription">The subtitle of the content</div>
+                <div class="fielddescription"><%=t.guiblock.meta.form.subtitle.description%></div>
               </div>
               <div class="formrow">
-                <label for="description" class="fieldtitle">Description</label>
-                <textarea rows="4" id="description" name="description" class="fieldcontrol"><%% if(entity) {%><%%=entity.description %> <%% } %></textarea>
-                <div class="fielddescription">The content description. It's used as a metatag when the page is rendered.</div>
+                <label for="description" class="fieldtitle"><%=t.guiblock.meta.form.description.label%></label>
+                <textarea rows="4" id="description" name="description" class="fieldcontrol"><%% if(entity) {%><%%=entity.description%> <%% } %></textarea>
+                <div class="fielddescription"><%=t.guiblock.meta.form.description.description%></div>
               </div>
               <div class="formrow">
-                <label for="summary" class="fieldtitle">Summary</label>
-                <textarea rows="4" id="summary" name="summary" class="fieldcontrol"><%% if (entity) {%><%%=entity.summary %> <%% } %></textarea>
-                <div class="fielddescription">The content summary. It's used in when render a set of contents in one page.</div>
+                <label for="summary" class="fieldtitle"><%=t.guiblock.meta.form.summary.label%></label>
+                <textarea rows="4" id="summary" name="summary" class="fieldcontrol"><%% if (entity) {%><%%=entity.summary %><%%}%></textarea>
+                <div class="fielddescription"><%=t.guiblock.meta.form.summary.description%></div>
               </div>
               <div class="formrow">
-                <label for="keywords" class="fieldtitle">Keywords</label>
-                <textarea rows="3" id="keywords" name="keywords" class="fieldcontrol"><%% if (entity) {%><%%=entity.keywords %> <%% } %></textarea>
-                <div class="fielddescription">Meta keywords</div>
+                <label for="keywords" class="fieldtitle"><%=t.guiblock.meta.form.keywords.label%></label>
+                <textarea rows="3" id="keywords" name="keywords" class="fieldcontrol"><%% if (entity) {%><%%=entity.keywords%> <%% } %></textarea>
+                <div class="fielddescription"><%=t.guiblock.meta.form.keywords.description%></div>
               </div>
               <div class="formrow">
-                <label for="language" class="fieldtitle">Language</label>
+                <label for="language" class="fieldtitle"><%=t.guiblock.meta.form.language.label%></label>
                 <input type="text" maxlength="3" id="language" name="language" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.language %>"<%% } %>/>
-                <div class="fielddescription">The language in which the content has been written.</div>
+                <div class="fielddescription"><%=t.guiblock.meta.form.language.description%></div>
               </div>
             </div>  

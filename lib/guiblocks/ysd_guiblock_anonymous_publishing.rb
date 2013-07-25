@@ -32,7 +32,7 @@ module GuiBlock
 
       app = context[:app]
       
-      if app.user.belongs_to?(Users::Group.get('anonymous'))
+      if app.user.nil? or app.user.belongs_to?('anonymous')
         renderer = ::UI::FieldSetRender.new('anonymouspublishing', app)      
         renderer.render('form') 
       else
@@ -47,8 +47,9 @@ module GuiBlock
     def custom_extension(context={}, element, aspect_model)
 
       app = context[:app]
+
       
-      if app.user.belongs_to?(Users::Group.get('anonymous'))
+      if app.user.nil? or app.user.belongs_to?('anonymous')
         renderer = ::UI::FieldSetRender.new('anonymouspublishing', app)      
         renderer.render('formextension') 
       else

@@ -7,6 +7,7 @@ cms_admin_menu:
   contenttype_management: Tipus de contigut
   content_new: Nou contigut  
   content_management: Continguts
+  comment_management: Comentaris
   taxonomy_management: Vocabularis
   template_management: Plantilles    
   build_site_menu: Construir site
@@ -125,6 +126,17 @@ content_management:
       label: Categories
     search_button:
       label: Filtrar
+  table:
+    title:
+      label: Títol
+    type:
+      label: Tipus
+    state:
+      label: Estat
+    author:
+      label: Autor
+    created:
+      label: Creat      
   form:
     content:
       label: Contingut
@@ -327,6 +339,22 @@ guiblock:
         description: La seva web o blog
   meta:
     description: Meta
+    form:
+      subtitle:
+        label: Subtítol
+        description: 
+      description:
+        label: Descripció
+        description: S\'utilitza com etiqueta meta
+      summary:
+        label: Resum
+        description: S\'utilitza com etiqueta meta
+      keywords:
+        label: Paraules clau
+        description: S\'utilitza com etiqueta meta
+      language:
+        label: Idioma
+        description: S\'utilitza com etiqueta meta   
   audit:
     description: Auditoria  
   others:

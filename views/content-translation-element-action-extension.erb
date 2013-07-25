@@ -6,7 +6,7 @@ require(['jquery', 'YSDEntityManagementComplementHooks'],
    ContentTranslatePlugin = function() {
 
      this.onEdit = function(entity) {
-       $('#content_translate a').attr('href', '/translate/content/' + entity.id + '?destination=/mcontent/edit/' + entity.id );
+       $('#content_translate a').attr('href', '/translate/content/' + entity.id + '?destination=/edit/content/' + entity.id );
      }
 
    }

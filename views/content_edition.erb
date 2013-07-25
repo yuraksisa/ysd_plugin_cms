@@ -137,7 +137,7 @@ require(["jquery", "YSDEntityManagement", "YSDEntityManagementComplementHooks", 
       var publishingAction  = this.publishingActions[data.publishing_state_id];
       
       if (publishingAction) {
-        var command = postPublishing(publishingAction.action, publishingAction.url_prefix + data.key);
+        var command = postPublishing(publishingAction.action, publishingAction.url_prefix + data.id);
         if (command) {
           command.execute();
         }
@@ -248,11 +248,11 @@ require(["jquery", "YSDEntityManagement", "YSDEntityManagementComplementHooks", 
 
   };
 
-  var urls = { query_url  : '/contents',
-    	         create_url : '/content',
-  	           update_url : '/content',
-  	           delete_url : '/content',
-  	           get_url    : '/content'
+  var urls = { query_url  : '/api/contents',
+    	         create_url : '/api/content',
+  	           update_url : '/api/content',
+  	           delete_url : '/api/content',
+  	           get_url    : '/api/content'
   	         };
   
   var hooks = [contentsHook];
@@ -261,7 +261,9 @@ require(["jquery", "YSDEntityManagement", "YSDEntityManagementComplementHooks", 
   hooks = hooks.concat(EntityManagementComplementHooks.complements);
      	           
   var contentsManager = new EntityManagement(urls, 'content', <%=settings.contents_page_size%>, hooks,
-                                             {url_base: '<%= url_base %>', action: '<%= action %>', id: '<%= id %>', hold_form_after_action: ('<%=action%>' == 'edit')});
+    {url_base: '<%= url_base %>', action: '<%= action %>', id: '<%= id %>', 
+     hold_form_after_action: ('<%=action%>' == 'edit')});
+
   
 });
   

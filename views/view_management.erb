@@ -86,6 +86,7 @@
               <%= render_tab('view_query', t.view_management.form.query_block.label) %>
               <%= render_tab('view_result', t.view_management.form.result_block.label) %>
               <%= render_tab('view_page', t.view_management.form.page_block.label) %>
+              <%= render_tab('view_meta', t.view_management.form.meta_block.label) %>
               <%= render_tab('view_extras', t.view_management.form.extras_block.label) %>
             </ul>
 
@@ -199,24 +200,31 @@
                 <div class="fielddescription"><%=t.view_management.form.url.description%></div>
               </div>
               <div class="formrow">
-                <label for="page_author" class="fieldtitle">Author</label>
+                <label for="cache_life" class="fieldtitle"><%=t.view_management.form.cache_life.label%></label>
+                <input type="text" maxlength="10" id="cache_life" name="cache_life" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.cache_life%>" <%% } %> />
+                <div class="fielddescription"><%=t.view_management.form.cache_life.description%></div>
+              </div>
+            </div>
+
+            <div id="view_meta">
+              <div class="formrow">
+                <label for="page_author" class="fieldtitle"><%=t.view_management.form.page_author.label%></label>
                 <input type="text" maxlength="256" id="page_author" name="page_author" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.page_author%>" <%% } %> />
-                <div class="fielddescription"><%=t.view_management.form.url.description%></div>
               </div>              
               <div class="formrow">
-                <label for="page_description" class="fieldtitle">Description</label>
+                <label for="page_description" class="fieldtitle"><%=t.view_management.form.page_description.label%></label>
                 <textarea rows="4" id="page_description" name="page_description" class="fieldcontrol"><%% if(entity) {%><%%=entity.page_description %> <%% } %></textarea>
               </div>
               <div class="formrow">
-                <label for="page_summary" class="fieldtitle">Summary</label>
+                <label for="page_summary" class="fieldtitle"><%=t.view_management.form.page_summary.label%></label>
                 <textarea rows="3" id="page_summary" name="page_summary" class="fieldcontrol"><%% if (entity) {%><%%=entity.page_summary %> <%% } %></textarea>
               </div>              
               <div class="formrow">
-                <label for="page_keywords" class="fieldtitle">Keywords</label>
+                <label for="page_keywords" class="fieldtitle"><%=t.view_management.form.page_keywords.label%></label>
                 <textarea rows="3" id="page_keywords" name="page_keywords" class="fieldcontrol"><%% if (entity) {%><%%=entity.page_keywords %> <%% } %></textarea>
               </div>
               <div class="formrow">
-                <label for="page_language" class="fieldtitle">Language</label>
+                <label for="page_language" class="fieldtitle"><%=t.view_management.form.page_language.label%></label>
                 <input type="text" maxlength="3" id="page_language" name="page_language" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.page_language %>"<%% } %>/>
               </div>
             </div>

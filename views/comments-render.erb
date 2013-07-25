@@ -57,9 +57,9 @@
     <div class="container_12 conversation_item conversation_item_other">
       <div class="grid_1">
         <%% if (comment.composer_user && comment.composer_user.photo_url_tiny) { %>
-        <img class="rounded profile-img-tiny" src="<%%=comment.composer_user.photo_url_tiny%>"/>
+        <img class="rounded profile-img-tiny fullbox" src="<%%=comment.composer_user.photo_url_tiny%>"/>
         <%% } else { %>
-        <img class="rounded profile-img-tiny" src="<%=settings.profile_default_photo%>"/>
+        <img class="rounded profile-img-tiny fullbox" src="<%=settings.profile_default_photo%>"/>
         <%% } %>
       </div>
       <div class="grid_11">

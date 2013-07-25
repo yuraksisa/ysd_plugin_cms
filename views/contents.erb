@@ -31,11 +31,11 @@
        <thead class="table-header">
          <tr>
            <th class="table-header-title" scope="col" style="width:1em"></th>
-           <th class="table-header-title" scope="col" style="width:30%">Title</th>
-           <th class="table-header-title" scope="col" style="width:15%">Type</th>
-           <th class="table-header-title" scope="col" style="width:15%">State</th>
-           <th class="table-header-title" scope="col" style="width:15%">Author</th>
-           <th class="table-header-title" scope="col" style="width:20%">Created</th>
+           <th class="table-header-title" scope="col" style="width:30%"><%=t.content_management.table.title.label%></th>
+           <th class="table-header-title" scope="col" style="width:15%"><%=t.content_management.table.type.label%></th>
+           <th class="table-header-title" scope="col" style="width:15%"><%=t.content_management.table.state.label%></th>
+           <th class="table-header-title" scope="col" style="width:15%"><%=t.content_management.table.author.label%></th>
+           <th class="table-header-title" scope="col" style="width:20%"><%=t.content_management.table.created.label%></th>
          </tr>
        </thead>
        <tbody id="elements_tbody" class="table-tbody">             
@@ -115,14 +115,14 @@ require(["YSDEntityManagement", "YSDSelectSelector", "YSDRemoteDataSource", "YSD
     loadContent: function(entity) {
       
       var return_url = window.location.href;
-      window.location.href = '/mcontent/' + entity.id + '?destination=/mcontents';
+      window.location.href = '/edit/content/' + entity.id + '?destination=/admin/contents';
 
     },
 
     loadContentForEdit: function(entity) {
 
       var return_url = window.location.href;
-      window.location.href = '/mcontent/edit/' + entity.id + '?destination=/mcontents';
+      window.location.href = '/edit/content/' + entity.id + '?destination=/admin/contents';
 
     },
 
@@ -164,17 +164,17 @@ require(["YSDEntityManagement", "YSDSelectSelector", "YSDRemoteDataSource", "YSD
 
   //$('#content_detail').dialog({title: 'Content', width: 480, height: 480, autoOpen: false})
 
-  var urls = { query_url  : '/contents',
-    	         create_url : '/content',
-  	           update_url : '/content',
-  	           delete_url : '/content',
-  	           get_url    : '/content'
+  var urls = { query_url  : '/api/contents',
+    	         create_url : '/api/content',
+  	           update_url : '/api/content',
+  	           delete_url : '/api/content',
+  	           get_url    : '/api/content'
   	         };
   
   var hooks = [contentsHook];
   
      	           
-  var contentsManager = new YSDEntityManagement(urls, 'content', <%=settings.contents_page_size%>, hooks);
+  var contentsManager = new YSDEntityManagement(urls, 'content', <%=settings.contents_page_size%>, hooks, {prefix: '/admin'});
   
   contentsHook.manager = contentsManager;
 

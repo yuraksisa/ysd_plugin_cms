@@ -229,7 +229,7 @@ module CMSRenders
                        
        result = if content and content.publishing_state and content.can_write?(context.user)   #(not content.new?)  
 
-                 edit_content_url = "/mcontent/edit/#{content.id}"
+                 edit_content_url = "/edit/content/#{content.id}"
       
                  if context and context.respond_to?(:request) and context.request.respond_to?(:path_info)
                    edit_content_url << "?destination=#{context.request.path_info}"

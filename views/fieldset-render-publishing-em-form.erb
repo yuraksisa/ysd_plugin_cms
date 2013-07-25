@@ -6,12 +6,15 @@
 
   <div class="formrow">
 
-   <div class="entity-field"><span class="entity-fieldlabel"><%=t.guiblock.publishing.status.title%></span> <span class="entity-fieldvalue content-status content-status-<%%=entity.publishing_state_id.toLowerCase().replace('_','-')%>" style="display:inline"> <%% if (entity) { %>
-     <%%= self.model.entityHooks[0].formatPublishingState(entity) %> <%% } %></span> </div>
+   <div class="entity-field" style="border-bottom: none">
+     <span class="entity-fieldlabel"><%=t.guiblock.publishing.status.title%></span> 
+     <span class="entity-fieldvalue content-status <%% if (entity && entity.publishing_state_id) { %>content-status-<%%=entity.publishing_state_id.toLowerCase().replace('_','-')%> <%% } %>" style="display:inline"> <%% if (entity) { %>
+     <%%= self.model.entityHooks[0].formatPublishingState(entity) %> <%% } %></span> 
+   </div>
 
   </div>
 
-  <div class="form-row">
+  <div class="formrow-botonera top-separator top-space right_text">
     <%= publishing_buttons %>
   </div>
 

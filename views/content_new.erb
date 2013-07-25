@@ -30,7 +30,7 @@
 <script type="text/tmpl" id="elements_list_template">
 
     <tr class="table-row" rel="<%%= index %>" id="element_row_<%%=index%>">
-      <td class="table-cell"><a href="/mcontent/new/<%%= entity.id %>"><%%= entity.name %></a></td>
+      <td class="table-cell"><a href="/new/content/<%%= entity.id %>"><%%= entity.name %></a></td>
       <td class="table-cell"><%%= entity.description %></td>
     </tr>
 
@@ -76,7 +76,7 @@
 
     var newContentHook = new NewContentHook();
     var newContentManager = new EntityManagement(urls, 'content', 20, newContentHook,
-                                                {url_base: '/mcontent/new', action: 'list'});
+                                                {url_base: '/new/content', action: 'list'});
   
   });
 </script>
