@@ -263,11 +263,10 @@ aspect:
 # Comments
 #  
 comments:
-  title: !!pl
-    1: <span class="number_of">1</span> Comment
-    n: <span class="number_of">%1</span> Comments
+  title: Comments
   message: Type your comment
   post: Post
+  validation_pending: Your comment is awaiting moderation
 #
 # Translation
 #
@@ -295,6 +294,7 @@ publishing:
     published: Published
     banned: Banned
   action:
+    save: Save
     confirm: Confirm
     validate: Validate
     publish: Publish
@@ -309,6 +309,8 @@ guiblock:
     description: Publish
     status:
       title: State
+    save:
+      message: Do you want to save the publication?      
     confirm:
       message: Do you want to confirm the publication?
     validate:

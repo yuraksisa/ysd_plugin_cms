@@ -27,10 +27,10 @@ module SiteRenders
     
       start_menu    = "<ul id=\"menu_<%=root[:id]%>\" class=\"menu\">"
       start_submenu = "<li class=\"menuitem\"><a href=\"<%=branch[:link_route]%>\"><%=branch[:title]%></a><ul class=\"submenu submenu-level<%=branch[:level]%>\">"
-      menu_item     = "<li class=\"menuitem\"><a href=\"<%=leaf[:link_route]%>\"><%=leaf[:title]%></a></li>"
+      menu_item     = "<li id=\"menu_item_<%=leaf[:id]%>\"class=\"menuitem\"><a href=\"<%=leaf[:link_route]%>\"><%=leaf[:title]%></a></li>"
       end_submenu   = "</ul></li>"
       end_menu      = "</ul>"    
-      separator     = "&nbsp;&middot;&nbsp;"
+      separator     = "<span class=\"menuitem_separator\">&nbsp;&middot;&nbsp;</span>"
       
       menu = {:id       => @menu.name,
               :title    => @menu.title,

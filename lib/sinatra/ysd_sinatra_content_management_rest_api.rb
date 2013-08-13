@@ -26,12 +26,12 @@ module Sinatra
                 search.each do |property, value| 
                   case property
                     when 'publishing_state_id'
-                      conditions[:publishing_state_id] = value
+                      conditions[:publishing_state_id] = value unless value.empty?
                     when 'content_type_id'
-                      conditions[:content_type] = {:id => value}  
+                      conditions[:content_type] = {:id => value} unless value.empty?
                     when 'categories'
                       unless value.nil?
-                        conditions[:categories] = value.map {|element| element.to_i}
+                        conditions[:categories] = value.map {|element| element.to_i} unless value.empty?
                       end
                   end
                 end

@@ -1,6 +1,6 @@
   <div class="comments content_data_block">
      
-     <h3 class="content_data_block_title"><%= t.comments.title(comment_set.comments_count)%></h3>
+     <h3 class="content_data_block_title"><%= t.comments.title%></h3>
      
      <div id="comment_form_container">
   
@@ -70,13 +70,17 @@
           <div class="conversation_item_body">
              <%%= self.format_message(comment) %>
           </div>
+          <%% if (comment.publishing_state_id != 'PUBLISHED') { %>
+            <div class="top-margin bottom-margin">
+              <span class="less_contrast_text italic_text"><%= t.comments.validation_pending %></span>
+            </div>
+          <%% } %>           
           <div class="conversation_item_footer">
             <span class="message_detail_date smaller_text less_contrast_text"><%%= self.format_message_date_time(comment) %></span>
           </div>
         </div>
       </div>
     </div>
-  
   </script>
 
 

@@ -69,14 +69,31 @@ module Sinatra
            
            app.post path, :allowed_usergroups => ['staff','editor'] do
            
+            conditions = {}         
+            
+             if request.media_type == "application/x-www-form-urlencoded" # Just the text
+               request.body.rewind
+               search = JSON.parse(URI.unescape(request.body.read))
+               if search.is_a?(Hash)
+                 search.each do |property, value| 
+                 case property
+                     when 'publishing_state_id'
+                       conditions[:publishing_state_id] = value unless value.empty?
+                   end
+                 end
+               end
+             end
+
              page = [params[:page].to_i, 1].max
              page_size = SystemConfiguration::Variable.get_value('cms.comments.page_size', '10').to_i
              limit  = page_size
              offset = (page - 1) * page_size
             
              data, total = ::ContentManagerSystem::Comment.all_and_count(
-                {:limit => limit, :offset => offset, 
-                 :order => [:date.desc]})
+                :conditions => conditions,
+                :limit => limit, 
+                :offset => offset, 
+                :order => [:date.desc])
            
              status 200
              content_type :json

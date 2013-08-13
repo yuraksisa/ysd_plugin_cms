@@ -11,13 +11,12 @@
 
 <script type="text/tmpl" id="elements_search">
   <form name="contents_search" id="contents_search" style="overflow:visible">
-    <div class="formrow" style="overflow:visible">
-      <select name="content_type_id" id="content_type_id" class="combo"/>
-      <select name="publishing_state_id" id="publishing_state_id" class="combo"/>
-      <!--div id="categories_container" style="display:inline-block">
-        <select name="categories[]" id="categories" multiple="multiple" style="display:none"/>
-      </div-->
-      <input type="button"  class="action-button entity-management-button search-entity-button" value="<%=t.content_management.search_form.search_button.label%>">
+    <div style="overflow:visible">
+      <select name="content_type_id" id="content_type_id" class="combo high_select"/>
+      <select name="publishing_state_id" id="publishing_state_id" class="combo high_select"/>
+      <input type="button" 
+             class="form-button action-button entity-management-button search-entity-button" 
+             value="<%=t.content_management.search_form.search_button.label%>">
     </div>
   </form>
 </script>
@@ -153,10 +152,10 @@ require(["YSDEntityManagement", "YSDSelectSelector", "YSDRemoteDataSource", "YSD
       
       // content type search
       var contentTypesDataSource = new RemoteDataSource("/ctypesuser",{'id':'id','description':'name'});
-      var contentTypesListSelector = new SelectSelector("content_type_id", contentTypesDataSource, null, true, '- View all content types -');
+      var contentTypesListSelector = new SelectSelector("content_type_id", contentTypesDataSource, null, true, '- All content types -');
       
       var publishingStateDataSource = new RemoteDataSource("/publishing/states");
-      var publishingStateListSelector = new SelectSelector("publishing_state_id", publishingStateDataSource, null, true, '- View all publishing states -');
+      var publishingStateListSelector = new SelectSelector("publishing_state_id", publishingStateDataSource, null, true, '- All status -');
       
     }
   	

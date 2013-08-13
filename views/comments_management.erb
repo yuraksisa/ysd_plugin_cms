@@ -10,6 +10,14 @@
 </script>
 
 <script type="text/tmpl" id="elements_search">
+  <form name="contents_search" id="contents_search" style="overflow:visible">
+    <div style="overflow:visible">
+      <select name="publishing_state_id" id="publishing_state_id" class="combo high_select"/>
+      <input type="button" 
+             class="form-button action-button entity-management-button search-entity-button" 
+             value="<%=t.content_management.search_form.search_button.label%>">
+    </div>
+  </form>
 </script>
 
 <!-- Renders the elements container -->
@@ -91,8 +99,10 @@
 
 <script type="text/javascript">
  
-require(["YSDEntityManagement", "YSDEntityManagementComplementHooks", "jquery"], 
-        function(YSDEntityManagement, EntityManagementComplementHooks, $) {
+require(["YSDEntityManagement", "YSDEntityManagementComplementHooks",
+         "YSDSelectSelector", "YSDRemoteDataSource", "jquery"], 
+        function(YSDEntityManagement, EntityManagementComplementHooks,
+          SelectSelector, RemoteDataSource, $) {
  
   var commentsHook = {
     	     
@@ -107,6 +117,12 @@ require(["YSDEntityManagement", "YSDEntityManagementComplementHooks", "jquery"],
       $('.new-entity-button').hide();
       $('.edit-entity-button').hide();
                  
+    },
+
+    onRenderSearch : function() {
+    
+      this.configSearchForm();
+  
     },
 
     formatPublishingStateClass : function(entity) {
@@ -130,7 +146,14 @@ require(["YSDEntityManagement", "YSDEntityManagementComplementHooks", "jquery"],
 
       return text;
 
-    }    
+    },    
+
+    configSearchForm : function() {
+            
+      var publishingStateDataSource = new RemoteDataSource("/publishing/states");
+      var publishingStateListSelector = new SelectSelector("publishing_state_id", publishingStateDataSource, null, true, '- All status -');
+      
+    }
 
   };
 

@@ -266,11 +266,10 @@ aspect:
 # Comments
 #    
 comments:
-  title: !!pl
-    1: <span class="number_of">1</span> Comentari
-    n: <span class="number_of">%1</span> Comentaris
+  title: Comentaris
   message: Escriu el comentari
   post: Publicar
+  validation_pending: El seu comentari està pendent de validació
 #
 # Translation
 #
@@ -298,6 +297,7 @@ publishing:
     published: Publicat
     banned: Bloquejat
   action:
+    save: Desar
     confirm: Confirmar
     validate: Validar
     publish: Publicar
@@ -312,6 +312,8 @@ guiblock:
     description: Publicació
     status:
       title: Estat
+    save:
+      message: Vol desar la publicació?      
     confirm:
       message: Vol confirmar la publicació?
     validate:

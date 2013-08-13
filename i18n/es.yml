@@ -117,7 +117,7 @@ view_management:
     page_block:
       label: Página
     meta_block:
-      meta: Meta
+      label: Meta
     extras_block:
       label: Más opciones
     name:
@@ -396,11 +396,10 @@ aspect:
 # Comments
 #        
 comments:
-  title: !!pl
-    1: <span class="number_of">1</span> Comentario
-    n: <span class="number_of">%1</span> Comentarios
+  title: Comentarios
   message: Escribe el comentario
   post: Publicar
+  validation_pending: Su comentario está pendiente de validación
 #
 # Translation
 #
@@ -428,6 +427,7 @@ publishing:
     published: Publicado
     banned: Bloqueado
   action:
+    save: Guardar
     confirm: Confirmar
     validate: Validar
     publish: Publicar
@@ -442,6 +442,8 @@ guiblock:
     description: Publicación
     status:
       title: Estado
+    save:
+      message: ¿Desea guardar la publicación?
     confirm:
       message: ¿Desea confirmar la publicación?
     validate:

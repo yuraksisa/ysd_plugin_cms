@@ -1,19 +1,22 @@
     <div class="view_body">
-       <table class="view_table">
+      <div class="elements-list">
+       <table class="view_table table">
          <% if view.render_options['show_column_titles'] %>
-         <thead>  
+         <thead class="table-header">  
            <tr class="view_table_header_row">
              <% view.view_fields.each do |view_field| %>
-               <th class="view_table_header_cell" scope="col"><%= (view.render_options['table_column_titles'])?(view.render_options['table_column_titles'][view_field.field] || view_field.field):(view_field.field) %></th>
+               <th class="table-header-title view_table_header_cell <%= view_field.title_class unless view_field.title_class.empty?%>" scope="col">
+                 <%= (view.render_options['table_column_titles'])?(view.render_options['table_column_titles'][view_field.field] || view_field.field):(view_field.field) %>
+               </th>
              <% end %>
            </tr>
          </thead>
          <% end %>
-         <tbody>
+         <tbody class="table-tbody">
            <% view_data[:data].each do |element| %>
-           <tr class="view_table_body_row">
+           <tr class="table-row view_table_body_row">
              <% view.view_fields.each do |view_field| %>
-             <td class="view_table_body_cell <%= view_field.class if view_field.class.to_s.strip.length > 0 %>">
+             <td class="table-cell view_table_body_cell <%= view_field.class if view_field.class.to_s.strip.length > 0 %>">
                 <%= include 'field-view', {:view_field => view_field, :element => element} %>
              </td>
              <% end %>
@@ -21,4 +24,5 @@
            <% end %>
          </tbody>
        </table>
+      </div>
      </div>
