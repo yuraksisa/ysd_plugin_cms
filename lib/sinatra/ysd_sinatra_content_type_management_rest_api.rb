@@ -15,7 +15,9 @@ module Sinatra
         #        
         app.get "/ctypesuser/?" do
           
-          data = ContentManagerSystem::ContentType.all(:content_type_user_groups => { :usergroup => user.usergroups })
+          data = ContentManagerSystem::ContentType.all(
+            :content_type_user_groups => { :usergroup => user.usergroups },
+            :order => [:name.asc ])
           
           content_type :json
           data.to_json
@@ -28,7 +30,9 @@ module Sinatra
         ["/ctypesuser/?","/ctypesuser/page/:page"].each do |path|
           app.post path do       
       
-            data = ContentManagerSystem::ContentType.all(:content_type_user_groups => { :usergroup => user.usergroups })
+            data = ContentManagerSystem::ContentType.all(
+               :content_type_user_groups => { :usergroup => user.usergroups},
+               :order => [:name.asc ])
           
             begin # Count does not work for all adapters
               total=ContentManagerSystem::ContentType.count
@@ -47,7 +51,7 @@ module Sinatra
         #
         app.get "/ctypes" do
           content_type :json
-          ContentManagerSystem::ContentType.all.to_json
+          ContentManagerSystem::ContentType.all(:order => [:name.asc ]).to_json
         end
       
         #
@@ -69,7 +73,7 @@ module Sinatra
         ["/ctypes","/ctypes/page/:page"].each do |path|
           app.post path do
           
-            data=ContentManagerSystem::ContentType.all
+            data=ContentManagerSystem::ContentType.all(:order => [:name.asc ])
             
             begin # Count does not work for all adapters
               total=ContentManagerSystem::ContentType.count

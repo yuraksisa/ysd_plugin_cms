@@ -196,6 +196,8 @@ content_type_management:
       label: Editing content message
     display_prop:
       label: Display 
+    display_css_class:
+      label: Display css classes      
     max_length:
       label: Max length           
     template:

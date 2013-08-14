@@ -1,4 +1,4 @@
-<div class="entry clearfix">
+<div class="entry clearfix <%="content-type-#{content.content_type.id}" if content.content_type%> <%=content.content_type.display_css_class if content.content_type%>">
     
     <div class="grid_12">
       <% if content and content.photo_url_full %>

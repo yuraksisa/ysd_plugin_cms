@@ -225,7 +225,7 @@ require(['jquery','YSDEntityManagement', 'YSDMemoryDataSource', 'YSDRemoteDataSo
          var selectRegion = new SelectSelector('region', regionsDataSource, regionValue);        
      	
      	   // Configure the user groups
-         var ugDataSource = new RemoteDataSource('/usergroups',{id:'group', description:'name'});
+         var ugDataSource = new RemoteDataSource('/api/usergroups',{id:'group', description:'name'});
          var ugValue = (entity&&entity.usergroups)?entity.usergroups.map(function(item){return item.group;}):[]; 
          var ugSelector = new ListSelector('user_groups', 'usergroups[]', ugDataSource, ugValue );
 

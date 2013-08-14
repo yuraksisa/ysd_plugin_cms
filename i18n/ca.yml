@@ -199,6 +199,8 @@ content_type_management:
       label: Missatge a l\'editar contingut
     display_prop:
       label: Display
+    display_css_class:
+      label: Classes css      
     max_length:
       label: Tamany màxim
     template:

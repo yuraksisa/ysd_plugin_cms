@@ -10,6 +10,20 @@ module Sinatra
                             
         app.set :contents_page_size, 10                    
         
+        #
+        # Retrieve the content render templates
+        #
+        app.get "/api/displays/content" do 
+
+          resources = find_resources(/^render-content-.+\.erb/).map do |item|
+            {:id => (value=item[15..-5]), :description => value}
+          end
+
+          content_type :json
+          resources.to_json
+
+        end
+
         #                    
         # Query contents
         #

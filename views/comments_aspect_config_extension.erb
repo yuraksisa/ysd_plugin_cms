@@ -29,7 +29,7 @@
          var wfValue = (entity && entity.aspect_attributes.publishing_workflow_id)?entity.aspect_attributes.publishing_workflow_id:null;;
          var wfSelector = new SelectSelector('aspect_attributes[publishing_workflow_id]', wfDataSource, wfValue); 
 
-         var ugDataSource = new RemoteDataSource('/usergroups',{id:'group', description:'name'});
+         var ugDataSource = new RemoteDataSource('/api/usergroups',{id:'group', description:'name'});
          var ugValue = (entity&&entity.aspect_attributes.usergroups)?entity.aspect_attributes.usergroups.split(','):[]; 
          var ugSelector = new ListSelector('user_groups', 'aspect_attributes[usergroups]', ugDataSource, ugValue );
 

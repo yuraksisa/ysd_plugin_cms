@@ -329,6 +329,8 @@ content_type_management:
       label: Mensaje al editar contenido      
     display_prop:
       label: Display
+    display_css_class:
+      label: Clase(s) css
     max_length:
       label: Tamaño máximo
     template:

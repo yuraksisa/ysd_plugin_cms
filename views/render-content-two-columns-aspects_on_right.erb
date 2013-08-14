@@ -1,16 +1,16 @@
-<div class="content-leftextras-wrapper">
+<div class="content-rightextras-wrapper <%="content-type-#{content.content_type.id}" if content.content_type%> <%=content.content_type.display_css_class if content.content_type%>">
 
   <% if defined?element_custom_above and element_custom_above.strip.length > 0%>
-  <div class="content-custom">
+  <div class="content-custom content-custom-above">
     <%= element_custom_above %>
   </div>
   <% end %>
 
   <div class="content-body">
-    <% if content and content.title and not content.title.empty? %>
+    <% if content and not content.title.empty? %>
       <h2 class="content-title"><a href="<%= (content.alias.strip.length>0)?(content.alias):(content.path)%>"><%= content.title%></a></h2>
     <% end %>
-    <% if content and content.subtitle and not content.subtitle.empty? %>
+    <% if content and not content.subtitle.empty? %>
       <div class="content-header">
          <h3 class="content-subtitle"><%=content.subtitle%></h3>
       </div>
@@ -33,7 +33,7 @@
   </div>
   
   <% if defined?element_custom and element_custom.strip.length > 0 %>
-  <div class="content-custom">
+  <div class="content-custom content-custom-below">
     <%= element_custom %>
   </div>
   <% end %>
@@ -42,13 +42,13 @@
   <div class="content-custom-nogroup">
     <%= element_custom_nogroup %>
   </div>
-  <% end %>
-  
+  <% end %>  
+
   <% if defined?content_above_actions and content_above_actions %>
     <div class="content-above-actions">
       <% content_above_actions.each do |c| %>
         <%= c[:body] %>
-      <% end %>   
+      <% end %>           
     </div>
   <% end %>
 

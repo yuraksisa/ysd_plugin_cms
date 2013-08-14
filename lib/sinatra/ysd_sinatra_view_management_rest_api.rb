@@ -69,7 +69,7 @@ module Sinatra
         #
         app.get "/views", :allowed_usergroups => ['staff'] do
 
-            data = ContentManagerSystem::View.all
+            data = ContentManagerSystem::View.all(:order => [:view_name.asc])
             content_type :json
             data.to_json        
 
@@ -79,7 +79,7 @@ module Sinatra
         ["/views","/views/page/:page"].each do |path|
           app.post path, :allowed_usergroups => ['staff'] do
 
-            data=ContentManagerSystem::View.all              
+            data=ContentManagerSystem::View.all(:order => [:view_name.asc])              
 
             total = 0            
             begin
@@ -121,7 +121,9 @@ module Sinatra
         
         end
         
+        #
         # Updates a view
+        #
         app.put "/view", :allowed_usergroups => ['staff'] do
         
           request.body.rewind

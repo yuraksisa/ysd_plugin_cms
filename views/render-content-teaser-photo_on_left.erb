@@ -1,4 +1,4 @@
-<div class="entry clearfix">
+<div class="entry clearfix <%="content-type-#{content.content_type.id}" if content.content_type%> <%=content.content_type.display_css_class if content.content_type%>">
     
     <div class="grid_3">
       <% if content and content.photo_url_full %>
@@ -32,7 +32,7 @@
           </span>
         <% end %> 
       </div>
-      <div class="content-teaser-body">
+      <div class="top-margin top-space content-teaser-body">
         <%= content.body if content and content.body and not content.body.empty?%>
       </div> 
       </div>      

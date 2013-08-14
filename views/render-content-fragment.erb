@@ -1,4 +1,4 @@
-<div class="content-wrapper">
+<div class="content-wrapper <%="content-type-#{content.content_type.id}" if content.content_type%> <%=content.content_type.display_css_class if content.content_type%>">
 
   <% if defined?element_custom_above and element_custom_above.strip.length > 0%>
   <div class="content-custom">

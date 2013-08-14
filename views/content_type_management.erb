@@ -94,8 +94,14 @@
             <div id="ctype_presentation">
               <div class="formrow">
                 <label for="display" class="fieldtitle"><%=t.content_type_management.form.display_prop.label%></label>
-                <input type="text" name="display" id="display" maxlength="40" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.display%>" <%%}%> />
+                <select name="display" id="display" class="fieldcontrol"/>
               </div>
+              <div class="formrow">
+                <label for="display_css_class" class="fieldtitle"><%=t.content_type_management.form.display_css_class.label%></label>
+                <textarea name="display_css_class" id="display_css_class" 
+                  class="fieldcontrol" rows="3"><%% if (entity) { %><%%=entity.display_css_class%><%% } %></textarea>
+              </div>
+              <p style="text-align:right"> <span id="display_css_class_length"></span> <%= t.available_chars %> </p>              
               <div class="formrow">
                 <label for="max_length" class="fieldtitle"><%=t.content_type_management.form.max_length.label%></label>
                 <input type="text" name="max_length" id="max_length" maxlength="4" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.max_length%>" <%%}%> />
@@ -215,7 +221,7 @@
          $('#tabs').tabs();
 
          // Configure the usergroups
-         var ugDataSource = new RemoteDataSource('/usergroups',{id:'group', description:'name'});
+         var ugDataSource = new RemoteDataSource('/api/usergroups',{id:'group', description:'name'});
          var ugValue = (entity&&entity.usergroups)?entity.usergroups.map(function(item){return item.group;}):[]; 
          var ugSelector = new ListSelector('content_type_usergroups', 'usergroups[]', ugDataSource, ugValue );
         
@@ -223,6 +229,11 @@
          var wfDataSource = new RemoteDataSource('/workflows');
          var wfValue = (entity && entity.publishing_workflow_id)?entity.publishing_workflow_id:null;
          var wfSelector = new SelectSelector('publishing_workflow_id', wfDataSource, wfValue); 
+
+         // Configure displays
+         var displayDataSource = new RemoteDataSource('/api/displays/content');
+         var displayValue = (entity && entity.display)?entity.display:null;
+         var displaySelector = new SelectSelector('display', displayDataSource, displayValue, true, ''); 
 
          // Limit the text area length
          YSDForms.limit_text_area_content_size(document.getElementById('description'), 256, 
@@ -246,6 +257,12 @@
             }
          );      	
 
+         // Limit the text area length
+         YSDForms.limit_text_area_content_size(document.getElementById('display_css_class'), 256, 
+            function (content_remain) {
+              document.getElementById('display_css_class_length').innerHTML = '<strong>' + content_remain + '</strong>';
+            }
+         ); 
 
     }
 
