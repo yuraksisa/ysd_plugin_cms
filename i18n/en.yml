@@ -91,6 +91,28 @@ menu_management:
   description: >
                <p>Esta página muestra los menús. Un <strong>menú</strong> es una herramienta para navegar por el sitio web. Los menús se organizan siguiendo el principio de los árboles, esto quiere decir que un menú puede tener menús hijos y menús padres.</p>
                <p>Puede utilizar <em>bloques</em> para activar los menus.</p> 
+  table:
+    name: Name
+    title: Title
+    description: Description
+    menu_items_list: Menu items
+    add_menu_item: Add a new menu item
+  form:
+    name:
+      label: Name
+      description:
+    title:
+      label: Title
+      description:
+    description:
+      label: Description
+      description:
+    render_css_class:
+      label: Css class
+      description:
+    render_item_separator:
+      label: Menu item separator
+      description:               
 #
 # Menu item management
 #
@@ -159,6 +181,7 @@ content:
   by: by
   published: published
   categories: categories
+  read_more: Read more
 #
 # Content Type management
 #

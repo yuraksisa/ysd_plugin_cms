@@ -46,6 +46,9 @@
               <div class="formrow">
                 <input type="text" maxlength="120" id="title" name="title" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.title %>" <%% } %>/>
               </div>
+              <div class="formrow">
+                <input type="text" maxlength="80" id="subtitle" name="subtitle" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.subtitle%>" <%% } %>/>
+              </div>              
               <%= include('entity-tabs-above-group', {:edit_element_form_above_ingroup_tab => edit_element_form_above_ingroup_tab,
                                                       :edit_element_form_above_ingroup => edit_element_form_above_ingroup,
                                                       :new_element_form_above_ingroup_tab => new_element_form_above_ingroup_tab,

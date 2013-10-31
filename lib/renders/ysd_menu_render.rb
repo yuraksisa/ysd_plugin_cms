@@ -25,12 +25,16 @@ module SiteRenders
     #
     def render
     
-      start_menu    = "<ul id=\"menu_<%=root[:id]%>\" class=\"menu\">"
+      start_menu    = "<ul id=\"menu_<%=root[:id]%>\" class=\"menu #{menu.render_css_class}\">"
       start_submenu = "<li class=\"menuitem\"><a href=\"<%=branch[:link_route]%>\"><%=branch[:title]%></a><ul class=\"submenu submenu-level<%=branch[:level]%>\">"
       menu_item     = "<li id=\"menu_item_<%=leaf[:id]%>\"class=\"menuitem\"><a href=\"<%=leaf[:link_route]%>\"><%=leaf[:title]%></a></li>"
       end_submenu   = "</ul></li>"
       end_menu      = "</ul>"    
-      separator     = "<span class=\"menuitem_separator\">&nbsp;&middot;&nbsp;</span>"
+      separator     = if menu.render_item_separator.nil? or menu.render_item_separator.empty?
+                        "<span class=\"menuitem_separator\">&nbsp;&middot;&nbsp;</span>"
+                      else
+                        "<span class=\"menuitem_separator\">&nbsp;#{menu.render_item_separator}&nbsp;</span>"
+                      end
       
       menu = {:id       => @menu.name,
               :title    => @menu.title,

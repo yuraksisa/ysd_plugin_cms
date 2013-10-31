@@ -1,4 +1,5 @@
 require 'sinatra/ysd_sinatra_cms'
+require 'sinatra/ysd_sinatra_cms_css_theme'
 require 'sinatra/ysd_sinatra_pages'
 
 require 'ysd_plugin_cms_comment_aspect'

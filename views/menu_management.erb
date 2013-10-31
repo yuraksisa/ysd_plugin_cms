@@ -16,9 +16,9 @@
   <table id="elements_table" class="table">
      <thead class="table-header">
        <tr>
-         <th class="table-header-title" scope="col" style="width:20%">Name</th>
-         <th class="table-header-title" scope="col" style="width:20%">Title</th>
-         <th class="table-header-title" scope="col" style="width:30%">Description</th>
+         <th class="table-header-title" scope="col" style="width:20%"><%=t.menu_management.table.name%></th>
+         <th class="table-header-title" scope="col" style="width:20%"><%=t.menu_management.table.title%></th>
+         <th class="table-header-title" scope="col" style="width:30%"><%=t.menu_management.table.description%></th>
          <th class="table-header-title" scope="col" style="width:30%"></th>
        </tr>
      </thead>
@@ -37,8 +37,8 @@
       <td class="table-cell element-navigation-detail" rel="<%%= index %>"><%%= entity.title %></td>
       <td class="table-cell element-navigation-detail" rel="<%%= index %>"><%%= entity.description %></td>
       <td class="table-cell">
-         <a href="/menu-item-management/<%%=entity.name%>" style="display:block">List of menu items</a>
-         <a href="/menu-item-management/<%%=entity.name%>/new" style="display:block">Add menu item</a>
+         <a href="/menu-item-management/<%%=entity.name%>" style="display:block"><%=t.menu_management.table.menu_items_list%></a>
+         <a href="/menu-item-management/<%%=entity.name%>/new" style="display:block"><%=t.menu_management.table.add_menu_item%></a>
       </td>
     </tr>
 
@@ -65,33 +65,50 @@
         <div class="form-fields">
         
           <div class="formrow">
-            <label for="name" class="fieldtitle">Name <span class="mandatoryfield">*</span></label>
+            <label for="name" class="fieldtitle"><%=t.menu_management.form.name.label%> <span class="mandatoryfield">*</span></label>
             <input type="text" maxlength="32" id="name" name="name" class="fieldcontrol" <%% if (entity) { %> value="<%%= entity.name %>" <%% } %> />
-            <div class="fielddescription">The menu name. Each menu has its unique name which allows to identify it.</div>
+            <div class="fielddescription"><%=t.menu_management.form.name.description%></div>
           </div>
 
           <div class="formrow">
-            <label for="title" class="fieldtitle">Title</label>
+            <label for="title" class="fieldtitle"><%=t.menu_management.form.title.label%></label>
             <input type="text" maxlength="80" id="title" name="title" class="fieldcontrol" <%% if (entity) { %> value="<%%= entity.title %>" <%% } %> />
-            <div class="fielddescription">The menu title.</div>
+            <div class="fielddescription"><%=t.menu_management.form.title.description%></div>
           </div>
 
           <div class="formrow">
-            <label for="description" class="fieldtitle">Description</label>
-            <textarea name="description" id="description" class="fieldcontrol"><%% if (entity) { %> <%%= entity.description %> <%% } %></textarea>
-            <div class="fielddescription">Explain what does the menu represents.</div>
+            <label for="description" class="fieldtitle"><%=t.menu_management.form.description.label%></label>
+            <textarea name="description" id="description" class="fieldcontrol"><%% if (entity) { %><%%=entity.description %><%% } %></textarea>
+            <div class="fielddescription"><%=t.menu_management.form.description.description%></div>
           </div>
           <p style="text-align:right"> <span id="description_length"></span> <%= t.available_chars %> </p>
-                
+
+          <div class="formrow">
+            <label for="render_css_class" class="fieldtitle"><%=t.menu_management.form.render_css_class.label%></label>
+              <textarea name="render_css_class" id="render_css_class" 
+               class="fieldcontrol" rows="3"><%% if (entity) { %><%%=entity.render_css_class%><%% } %></textarea>
+          </div>
+          <p style="text-align:right"> <span id="render_css_class_length"></span> <%= t.available_chars %> </p> 
+          
+          <div class="formrow">
+            <label for="render_item_separator" class="fieldtitle"><%=t.menu_management.form.render_item_separator.label%></label>
+            <input type="text" maxlength="80" id="render_item_separator" 
+                   name="render_item_separator" class="fieldcontrol" 
+                   <%% if (entity) { %> 
+                     value="<%%= entity.render_item_separator %>" 
+                   <%% } %> />
+            <div class="fielddescription"><%=t.menu_management.form.render_item_separator.description%></div>
+          </div>                
+
         </div>
         
         <div class="bottom-navigation-bar navigation-bar">
              <div class="navigation-bar-crud-buttons">
                 <%% if (entity) { %>
-                  <input type="submit" class="update-entity-button action-button entity-management-button" value="Update"/>
+                  <input type="submit" class="update-entity-button action-button entity-management-button" value="<%= t.entitymanagement.update%>"/>
                 <%% } 
                    else { %>
-                  <input type="submit" class="create-entity-button action-button entity-management-button" value="Create"/>
+                  <input type="submit" class="create-entity-button action-button entity-management-button" value="<%= t.entitymanagement.create%>"/>
                 <%% } %>
              </div>
         </div>

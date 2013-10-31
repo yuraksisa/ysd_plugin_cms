@@ -1,10 +1,5 @@
             <div id="meta_form" class="guiblock">           
               <div class="formrow">
-                <label for="subtitle" class="fieldtitle"><%=t.guiblock.meta.form.subtitle.label%></label>
-                <input type="text" maxlength="80" id="subtitle" name="subtitle" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.subtitle%>" <%% } %>/>
-                <div class="fielddescription"><%=t.guiblock.meta.form.subtitle.description%></div>
-              </div>
-              <div class="formrow">
                 <label for="description" class="fieldtitle"><%=t.guiblock.meta.form.description.label%></label>
                 <textarea rows="4" id="description" name="description" class="fieldcontrol"><%% if(entity) {%><%%=entity.description%> <%% } %></textarea>
                 <div class="fielddescription"><%=t.guiblock.meta.form.description.description%></div>

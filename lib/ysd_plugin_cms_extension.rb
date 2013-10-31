@@ -138,7 +138,7 @@ module Huasi
                             end
 
       slider_preprocessor = Proc.new do |data, context, render_options|
-                              data.map { |element| CMSRenders::Factory.get_render(element, context, 'slider').render({}, [:ignore_complements, :ignore_blocks]) }
+                              data.map { |element| CMSRenders::Factory.get_render(element, context, 'justphoto').render({}, [:ignore_complements, :ignore_blocks]) }
                             end
 
       term_hierarchy_preprocessor = Proc.new do |data, context, render_options|
@@ -168,13 +168,41 @@ module Huasi
 
     end
 
-     # ========= Application regions ======
+    # ========= Page Building ============
+
+    #
+    # It gets the style sheets defined in the module
+    #
+    # @param [Context]
+    #
+    # @return [Array]
+    #   An array which contains the css resources used by the module
+    #
+    #def page_style(context={})
+    #  [
+    #    '/css/style.css'         
+    #  ]       
+    #end
+
+    #
+    # Hook to ignore static resources serving
+    #
+    # @return [Array] the static resources paths to be ignored
+    #
+    def ignore_static_resources(context={})
+      
+      ['/css/style.css']
+
+    end
+
+    # ========= Application regions ======
     
     #
     # Retrieve the regions used by the apps 
     #
     def apps_regions(context={})
-      [:content_custom, :content_above_body, :content_below_body, :content_left_body, 
+      [:content_custom, 
+       :content_above_body, :content_below_body, :content_left_body, 
        :content_right_body, :content_above_actions]
     end
 

@@ -5,7 +5,7 @@
          <thead class="table-header">  
            <tr class="view_table_header_row">
              <% view.view_fields.each do |view_field| %>
-               <th class="table-header-title view_table_header_cell <%= view_field.title_class unless view_field.title_class.empty?%>" scope="col">
+               <th class="table-header-title view_table_header_cell <%= view_field.title_class if view_field.title_class and not view_field.title_class.empty?%>" scope="col">
                  <%= (view.render_options['table_column_titles'])?(view.render_options['table_column_titles'][view_field.field] || view_field.field):(view_field.field) %>
                </th>
              <% end %>
