@@ -1,6 +1,6 @@
            <div id="audit_template">
-             <div class="entity-field"><span class="entity-fieldlabel">Creation date</span> <span class="entity-fieldvalue"><%%= self.formatDate(entity.creation_date) %></span> </div>
-             <div class="entity-field"><span class="entity-fieldlabel">Creation user</span> <span class="entity-fieldvalue"><%%= entity.creation_user %></span> </div>
-             <div class="entity-field"><span class="entity-fieldlabel">Last update</span> <span class="entity-fieldvalue"><%%= self.formatDate(entity.last_update) %></span> </div>      
-             <div class="entity-field"><span class="entity-fieldlabel">Last update user</span> <span class="entity-fieldvalue"><%%= entity.last_update_user %></span> </div>
+             <div class="entity-field"><span class="entity-fieldlabel less_contrast_text"><%=t.guiblock.audit.form.create_date.label%></span> <span class="entity-fieldvalue"><%%= self.formatDate(entity.creation_date) %></span> </div>
+             <div class="entity-field"><span class="entity-fieldlabel less_contrast_text"><%=t.guiblock.audit.form.create_user.label%></span> <span class="entity-fieldvalue"><%%= entity.creation_user %></span> </div>
+             <div class="entity-field"><span class="entity-fieldlabel less_contrast_text"><%=t.guiblock.audit.form.update_date.label%></span> <span class="entity-fieldvalue"><%%= self.formatDate(entity.last_update) %></span> </div>      
+             <div class="entity-field"><span class="entity-fieldlabel less_contrast_text"><%=t.guiblock.audit.form.update_user.label%></span> <span class="entity-fieldvalue"><%%= entity.last_update_user %></span> </div>
            </div>

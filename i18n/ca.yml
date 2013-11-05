@@ -158,7 +158,7 @@ content_management:
     author:
       label: Autor
     created:
-      label: Creat      
+      label: Darrera actualització      
   form:
     content:
       label: Contingut
@@ -337,6 +337,10 @@ guiblock:
     description: Publicació
     status:
       title: Estat
+    publishing_date:
+      title: Publicat
+    publisher:
+      title: Publicat per
     save:
       message: Vol desar la publicació?      
     confirm:
@@ -383,15 +387,29 @@ guiblock:
         label: Idioma
         description: S\'utilitza com etiqueta meta   
   audit:
-    description: Auditoria  
+    description: Auditoria
+    form:
+      create_date:
+        label: Data creació
+      create_user:
+        label: Usuari creació
+      update_date:
+        label: Data darrera actualització
+      update_user:
+        label: Usuari darrera actualització
+  script_style:
+    description: Programació
+    form:
+      script: Script (Javascript)
+      style: Style (Css)  
   others:
     description: Altres
     form:
       alias:
-        label: Alias
-        description: URL opcional, que es pot utilitzar per accedir al contigut
+        label: Enllaç permanent
+        description: URL permanent que es pot utilitzar per accedir al contigut
       link:
-        label: Enllaç
+        label: Enllaç a altre contingut (intern o extern)
         description: Enllaç a altre contingut (intern o extern)
       block:
         label: Utilitzar el contigut com a bloc

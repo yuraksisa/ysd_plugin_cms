@@ -56,6 +56,11 @@
               <div id="content_body" class="formrow">
                  <textarea rows="20" cols="50" id="body" name="body" class="fieldcontrol texteditor"><%% if (entity) {%><%%=entity.body %><%% } %></textarea>
               </div>
+              <div class="formrow">
+                <label for="key" class="fieldtitle"><%=t.guiblock.others.form.alias.label%></label>
+                <input type="text" id="alias" name="alias" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.alias %>" <%% } %> />
+                <div class="fielddescription"><%=t.guiblock.others.form.alias.description%></div>
+              </div>              
             </div>
             <div class="grid_4">
               <div class="left-margin">  

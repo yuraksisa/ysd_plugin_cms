@@ -269,7 +269,7 @@ content_management:
     author:
       label: Autor
     created:
-      label: Creado
+      label: Última actualización
   form:
     content:
       label: Contenido
@@ -467,6 +467,10 @@ guiblock:
     description: Publicación
     status:
       title: Estado
+    publishing_date:
+      title: Publicado
+    publisher:
+      title: Publicado por
     save:
       message: ¿Desea guardar la publicación?
     confirm:
@@ -497,6 +501,22 @@ guiblock:
     description: Meta
   audit:
     description: Auditoría
+    form:
+      create_date:
+        label: Fecha creación
+      create_user:
+        label: Usuario creación
+      update_date:
+        label: Fecha última actualización
+      update_user:
+        label: Usuario última actualización    
+  script_style:
+    description: Programación
+    form:
+      script:
+        label: Script (Javascript)
+      style: 
+        label: Style (Css)        
   meta:
     description: Metadatos
     form:
@@ -519,10 +539,10 @@ guiblock:
     description: Otros
     form:
       alias:
-        label: Alias
-        description: URL opcional, más legible, que puede usarse para acceder al contenido
+        label: Enlace permanente
+        description: URL permanente que puede usarse para acceder al contenido
       link:
-        label: Enlace
+        label: Enlace a otro contenido (interno o externo)
         description: Enlace a otro contenido (interno o externo)
       cache_life:
         label: Cache de página (en segundos)

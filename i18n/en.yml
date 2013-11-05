@@ -156,7 +156,7 @@ content_management:
     author:
       label: Author
     created:
-      label: Created      
+      label: Last update      
   form:
     content:
       label: Content
@@ -334,6 +334,10 @@ guiblock:
     description: Publish
     status:
       title: State
+    publishing_date:
+      title: Published
+    publisher:
+      title: Publisher
     save:
       message: Do you want to save the publication?      
     confirm:
@@ -381,14 +385,30 @@ guiblock:
         description: Meta tag    
   audit:
     description: Audit
+    form:
+      create_date:
+        label: Creation date
+      create_user:
+        label: Creatin user
+      update_date:
+        label: Last update
+      update_user:
+        label: Last update user
+  script_style:
+    description: Programming
+    form:
+      script: 
+        label: Script (Javascript)
+      style: 
+        label: Style (Css)       
   others:
     description: Others
     form:
       alias:
-        label: Alias
+        label: Permanent link
         description: An optional URL, human readable, which can be used to access the content.
       link:
-        label: Link
+        label: Link to other page (internal or external)
         description: A link to other page (internal or external).
       cache_life:
         label: Page cache life time (in seconds)

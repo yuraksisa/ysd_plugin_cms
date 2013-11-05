@@ -7,9 +7,21 @@
   <div class="formrow">
 
    <div class="entity-field" style="border-bottom: none">
-     <span class="entity-fieldlabel"><%=t.guiblock.publishing.status.title%></span> 
-     <span class="entity-fieldvalue content-status <%% if (entity && entity.publishing_state_id) { %>content-status-<%%=entity.publishing_state_id.toLowerCase().replace('_','-')%> <%% } %>" style="display:inline"> <%% if (entity) { %>
+     <span class="entity-fieldlabel smaller_text less_contrast_text"><%=t.guiblock.publishing.status.title%></span> 
+     <span class="entity-fieldvalue smaller_text" style="display:inline"> <%% if (entity) { %>
      <%%= self.model.entityHooks[0].formatPublishingState(entity) %> <%% } %></span> 
+   </div>
+
+   <div class="entity-field" style="border-bottom: none">
+     <span class="entity-fieldlabel smaller_text less_contrast_text"><%=t.guiblock.publishing.publishing_date.title%></span> 
+     <span class="entity-fieldvalue smaller_text" style="display:inline"> <%% if (entity) { %>
+     <%%= self.formatDate(entity.publishing_date) %> <%% } %></span> 
+   </div>
+
+   <div class="entity-field" style="border-bottom: none">
+     <span class="entity-fieldlabel smaller_text less_contrast_text"><%=t.guiblock.publishing.publisher.title%></span> 
+     <span class="entity-fieldvalue smaller_text" style="display:inline"> <%% if (entity) { %>
+     <%%= entity.publishing_publisher %> <%% } %></span> 
    </div>
 
   </div>

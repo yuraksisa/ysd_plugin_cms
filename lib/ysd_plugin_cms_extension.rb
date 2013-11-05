@@ -5,6 +5,7 @@ require 'ui/ysd_ui_page_component' unless defined?UI::PageComponent
 require 'fieldsets/ysd_md_commentable'
 require 'ysd_md_view_model'
 require 'ysd_md_view_model_field'
+require 'ysd_md_cms' unless defined?ContentManagerSystem::Template
 
 #
 # Huasi CMS Extension
@@ -192,6 +193,21 @@ module Huasi
     def ignore_static_resources(context={})
       
       ['/css/style.css']
+
+    end
+
+    #
+    # Hook the retrieve a layout
+    #
+    # @return [Array] the layout
+    # 
+    def page_layout(context={}, layout_name)
+      
+      if template = ContentManagerSystem::Template.find_by_name(layout_name)
+        [template.text]
+      else
+        ['']
+      end
 
     end
 

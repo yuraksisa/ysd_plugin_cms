@@ -67,8 +67,8 @@ module Sinatra
               end
               aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::Meta.new, {:weight => 101, :in_group => true, :show_on_new => false})                               
               aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::Audit.new, {:weight => 102, :in_group => true, :show_on_new => false})                              
-              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::ContentOther.new, {:weight => -1, :in_group => false, :show_on_new => false})
-              
+              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::ScriptStyle.new, {:weight => 103, :in_group => true, :show_on_new => false})
+              aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::ContentOther.new, {:weight => 104, :in_group => true, :show_on_new => false})
               aspects_render = UI::EntityManagementAspectRender.new(context, aspects) 
               result = aspects_render.render(content_type)
 

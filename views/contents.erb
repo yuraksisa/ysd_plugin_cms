@@ -52,10 +52,10 @@
     <tr class="table-row" rel="<%%= index %>" id="element_row_<%%=index%>">
       <td class="table-cell selectable-entity"><input type="checkbox" name="id[]" value="<%%=entity.id%>"/></td>
       <td class="table-cell"><a href="<%%='/content/'+entity.id%>" target="_blank"><%%=entity.title %></a></td>
-      <td class="table-cell element-row-selector" rel="<%%= index %>"><%%= entity.type %></td>
-      <td class="table-cell element-row-selector" rel="<%%= index %>"><span class="content-status <%%=self.model.entityHooks[0].formatPublishingStateClass(entity)%>"><%%=self.model.entityHooks[0].formatPublishingState(entity)%></span></td>
-      <td class="table-cell element-row-selector" rel="<%%= index %>"><%%= entity.creation_user %></td>
-      <td class="table-cell element-row-selector" rel="<%%= index %>"><%%= self.formatDate(entity.creation_date) %></td>    
+      <td class="table-cell element-own-row-selector" rel="<%%= index %>"><%%= entity.type %></td>
+      <td class="table-cell element-own-row-selector" rel="<%%= index %>"><span class="content-status <%%=self.model.entityHooks[0].formatPublishingStateClass(entity)%>"><%%=self.model.entityHooks[0].formatPublishingState(entity)%></span></td>
+      <td class="table-cell element-own-row-selector" rel="<%%= index %>"><%%= entity.creation_user %></td>
+      <td class="table-cell element-own-row-selector" rel="<%%= index %>"><%%= self.formatDate(entity.last_update || entity.creation_date) %></td>    
     </tr>
 
 </script>
@@ -97,7 +97,7 @@ require(["YSDEntityManagement", "YSDSelectSelector", "YSDRemoteDataSource", "YSD
       $('.edit-entity-button').hide();
       
       var self = this;
-      $('.element-row-selector').bind('click',
+      $('.element-own-row-selector').bind('click',
                function() {                   
                  var index = new Number($(this).attr('rel'));
                  self.loadContentForEdit(self.manager.model.getEntities()[index]);

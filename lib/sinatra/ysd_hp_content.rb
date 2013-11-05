@@ -19,6 +19,8 @@ module Sinatra
                                    :description => content.description, 
                                    :summary => content.summary,
                                    :type => (content.content_type.nil?)?nil:content.content_type.id,
+                                   :scripts_source => content.script,
+                                   :styles_source => content.style,
                                    :content => CMSRenders::ContentRender.new(content, self).render(options[:locals]))
       
        page(content_page, options)   
@@ -38,6 +40,8 @@ module Sinatra
                                  :language => view.page_language,
                                  :description => view.page_description,
                                  :summary => view.page_summary,
+                                 :scripts_source => view.script,
+                                 :styles_source => view.page_style,
                                  :content => CMSRenders::ViewRender.new(view, self).render(page, arguments))
 
         page(view_page, options)
