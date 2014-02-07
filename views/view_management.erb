@@ -181,19 +181,24 @@
               </div>
               <div class="formrow">
                 <label for="header" class="fieldtitle"><%=t.view_management.form.header.label%></label>
-                <textarea name="header" id="view_header" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.header%><%% } %></textarea>
+                <textarea name="header" id="view_header" class="fieldcontrol editable_text" rows="5"><%% if (entity) { %><%%=entity.header%><%% } %></textarea>
                 <div class="fielddescription"><%=t.view_management.form.header.description%></div>
               </div>
               <div class="formrow">
                 <label for="footer" class="fieldtitle"><%=t.view_management.form.footer.label%></label>
-                <textarea name="footer" id="description" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.footer%><%% } %></textarea>
+                <textarea name="footer" id="description" class="fieldcontrol editable_text" rows="5"><%% if (entity) { %><%%=entity.footer%><%% } %></textarea>
                 <div class="fielddescription"><%=t.view_management.form.footer.description%></div>
               </div>               
               <div class="formrow">
                 <label for="script" class="fieldtitle"><%=t.view_management.form.script.label%></label>
-                <textarea name="script" id="script" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.script%><%% } %></textarea>
+                <textarea name="script" id="script" class="fieldcontrol editable_text" rows="5"><%% if (entity) { %><%%=entity.script%><%% } %></textarea>
                 <div class="fielddescription"><%=t.view_management.form.script.description%></div>
-              </div>                                          
+              </div>              
+              <div class="formrow">
+                <label for="page_style" class="fieldtitle"><%=t.view_management.form.style.label%></label>
+                <textarea name="page_style" id="page_style" class="fieldcontrol editable_text" rows="5"><%% if (entity) { %><%%=entity.page_style%><%% } %></textarea>
+                <div class="fielddescription"><%=t.view_management.form.style.description%></div>
+              </div>                                                                      
               <div class="formrow">
                 <label for="url" class="fieldtitle"><%=t.view_management.form.url.label%></label>
                 <input type="text" maxlength="256" id="url" name="url" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.url%>" <%% } %> />

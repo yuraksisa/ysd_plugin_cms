@@ -199,6 +199,9 @@ view_management:
     script:
       label: Script
       description: Código js a incluir para mejorar Gui
+    style:
+      label: CSS style
+      description: Estilos CSS a incluir para mejorar Gui
     url:
       label: Url
       description: Url en la que estará disponible la vista

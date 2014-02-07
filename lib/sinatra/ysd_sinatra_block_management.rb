@@ -4,8 +4,6 @@ module Sinatra
     module BlockManagement
    
       def self.registered(app)
-        
-        puts "Registering Sinatra::YSD::BlockManagement"
                     
         #
         # View management page
