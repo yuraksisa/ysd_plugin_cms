@@ -58,13 +58,16 @@ module SiteRenders
       
       menu_items.each do |menu_item|
       
+        menu_item_link_route = menu_item.link_route || "/"
+
         if app.respond_to?(:session)
            menu_item = menu_item.translate(app.session[:locale])
+           menu_item_link_route = File.join(menu_item_link_route, app.session[:locale])
         end
-      
+
         result << {:id       => menu_item.id,
                    :title    => menu_item.title,
-                   :link_route => menu_item.link_route,
+                   :link_route => menu_item_link_route,
                    :children => adapt_children(menu_item.children.sort{|x,y| y.weight<=>x.weight})}
       
       end
