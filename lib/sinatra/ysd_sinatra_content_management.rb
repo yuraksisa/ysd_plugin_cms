@@ -10,7 +10,16 @@ module Sinatra
     module ContentManagement
    
       def self.registered(app)
-               
+        
+        #
+        # CMS Console 
+        #       
+        app.get "/admin/console/cms", :allowed_usergroups => ['staff'] do
+       
+          load_page(:console_cms)
+
+        end
+
         #
         # Contents management
         #

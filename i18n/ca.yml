@@ -17,6 +17,14 @@ cms_admin_menu:
 site_admin_menu:
   admin_menu: Admin
   menu_management: Menus
+console_cms:
+  title: Gestió de continguts
+  description: Descripció
+  content_types: Tipus de continguts
+  contents: Continguts
+  comments: Comentaris
+  taxonomies: Taxonomies
+  new_content: Nou contingut
 #
 # Block management
 #

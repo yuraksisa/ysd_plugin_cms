@@ -15,6 +15,14 @@ cms_admin_menu:
 site_admin_menu:
   admin_menu: Admin
   menu_management: Menus
+console_cms:
+  title: Contents management
+  description: Description
+  content_types: Content types
+  contents: Contents
+  comments: Comments
+  taxonomies: Taxonomies
+  new_content: New content
 #
 # Block management
 #
