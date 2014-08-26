@@ -13,7 +13,7 @@
 
        this.configForm = function(entity) {
 
-         var ctDataSource = new RemoteDataSource('/ctypes',{id:'id', description:'name'});
+         var ctDataSource = new RemoteDataSource('/api/content-types',{id:'id', description:'name'});
          var ctValue = (entity&&entity.aspect_attributes.type)?entity.aspect_attributes.type:null; 
          var ctSelector = new SelectSelector('aspect_attributes[type]', ctDataSource, ctValue );
 

@@ -30,7 +30,7 @@
 <script type="text/tmpl" id="elements_list_template">
 
     <tr class="table-row" rel="<%%= index %>" id="element_row_<%%=index%>">
-      <td class="table-cell"><a href="/new/content/<%%= entity.id %>"><%%= entity.name %></a></td>
+      <td class="table-cell"><a href="/admin/site/cms/new/content/<%%= entity.id %>"><%%= entity.name %></a></td>
       <td class="table-cell"><%%= entity.description %></td>
     </tr>
 
@@ -71,12 +71,12 @@
     };
   
     var urls = { 
-    	           query_url  : '/ctypesuser'
+    	           query_url  : '/api/user-content-types'
   	           };
 
     var newContentHook = new NewContentHook();
     var newContentManager = new EntityManagement(urls, 'content', 20, newContentHook,
-                                                {url_base: '/new/content', action: 'list'});
+                                                {prefix:'/admin/site/cms', url_base: '/admin/site/cms/new/content', action: 'list'});
   
   });
 </script>

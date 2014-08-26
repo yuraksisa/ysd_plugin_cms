@@ -172,7 +172,7 @@
     this.configForm = function(entity) {
     
          // Configure the available types
-         var dataSource = new RemoteDataSource('/ctypes',{id:'id', description:'name'});
+         var dataSource = new RemoteDataSource('/api/content-types',{id:'id', description:'name'});
          var value = [];
          if (entity && entity.taxonomy_content_types) {
            for (index in entity.taxonomy_content_types) {

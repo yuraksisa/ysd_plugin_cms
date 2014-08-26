@@ -40,7 +40,7 @@ module Sinatra
         #
         # Show all content types the user can create
         #
-        app.get "/new/content/?" do
+        app.get "/admin/site/cms/new/content/?" do
         
           load_em_page(:content_new, nil, false)
         
@@ -49,7 +49,7 @@ module Sinatra
         #
         # Create a new content 
         #      
-        app.get "/new/content/:content_type/?*" do
+        app.get "/admin/site/cms/new/content/:content_type/?*" do
                     
           if content_type = ContentManagerSystem::ContentType.get(params[:content_type])
             if content_type.can_be_created_by?(user)

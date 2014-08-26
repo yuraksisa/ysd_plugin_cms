@@ -310,11 +310,11 @@
   };
   
   var urls = { 
-  	           query_url  : '/ctypes',
-    	         create_url : '/ctype',
-  	           update_url : '/ctype',
-  	           delete_url : '/ctype',
-  	           get_url    : '/ctype'
+  	           query_url  : '/api/content-types',
+    	         create_url : '/api/content-type',
+  	           update_url : '/api/content-type',
+  	           delete_url : '/api/content-type',
+  	           get_url    : '/api/content-type'
   	         };
 
   var contentTypeHook = new ContentTypeHook();
@@ -324,7 +324,7 @@
   // Add the complement hooks
   hooks = hooks.concat(EntityManagementComplementHooks.complements);
 
-  var contentsTypeManager = new EntityManagement(urls, 'content type', 12, hooks);
+  var contentsTypeManager = new EntityManagement(urls, 'content type', 12, hooks, {prefix:'/admin/site/cms'});
   
  });
   

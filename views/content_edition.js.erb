@@ -16,10 +16,7 @@ require(["jquery", "YSDEntityManagement", "YSDEntityManagementComplementHooks", 
       this.entity = entity;
       $('#title').focus();
       this.configForm(); 
-      this.buildCategories(entity.type); 	   
-      // Integration with insert picture
-      insertPictureModel.insertPictureDelegate = this;
-      insertPictureView.init();           
+      this.buildCategories(entity.type); 	          
     },
 
     insertPhoto: function(img,attrs) {
@@ -87,7 +84,10 @@ require(["jquery", "YSDEntityManagement", "YSDEntityManagementComplementHooks", 
     /* ------- Internal function --------- */
     
     configForm : function() {
-      $('.top-navigation-bar').hide();      
+      $('.top-navigation-bar').hide();
+      // Integration with insert picture
+      insertPictureModel.insertPictureDelegate = this;
+      insertPictureView.init();          
     },
   	  
   	buildCategories : function(contentType) {

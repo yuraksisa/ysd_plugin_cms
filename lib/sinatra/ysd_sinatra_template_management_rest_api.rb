@@ -29,7 +29,7 @@ module Sinatra
             page = [params[:page].to_i, 1].max  
 
             data, total = ContentManagerSystem::Template.all_and_count(
-              query_options.merge({:offset => (page - 1)  * page_size, :limit => page_size}) )
+              query_options.merge({:order => :name.asc, :offset => (page - 1)  * page_size, :limit => page_size}) )
             
             content_type :json
             {:data => data, :summary => {:total => total}}.to_json
@@ -69,6 +69,26 @@ module Sinatra
             status 404
           end
 
+        end
+
+        #
+        # Updates multiple templates
+        #
+        app.put "/templates" do
+      
+          request.body.rewind
+          templates = JSON.parse(URI.unescape(request.body.read))      
+          
+          templates.each do |key, value|
+            if template = ContentManagerSystem::Template.first({:name => key})
+              template.text = value
+              template.save
+            end         
+          end
+          
+          content_type :json
+          true.to_json
+      
         end
 
         #

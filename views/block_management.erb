@@ -230,7 +230,7 @@ require(['jquery','YSDEntityManagement', 'YSDMemoryDataSource', 'YSDRemoteDataSo
          var ugSelector = new ListSelector('user_groups', 'usergroups[]', ugDataSource, ugValue );
 
          // Configure the content types
-         var ctDataSource = new RemoteDataSource('/ctypes',{id:'id', description:'name'});
+         var ctDataSource = new RemoteDataSource('/api/content-types',{id:'id', description:'name'});
          var ctValue = (entity&&entity.content_types)?entity.content_types.map(function(item){return item.id;}):[];
          var ctSelector = new ListSelector('block_content_types','content_types[]', ctDataSource, ctValue);
 

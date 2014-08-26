@@ -39,6 +39,10 @@ module Huasi
                                                                   
         ContentManagerSystem::ContentType.first_or_create({:id => 'story'},
                                                           {:name => 'Articulo', :description => 'Tiene una estructura similar a la página y permite crear y mostrar contenido que informa a los visitantes del sitio. Notas de prensa, anuncios o entradas informales de blog son creadas como páginas.'})
+
+        ContentManagerSystem::ContentType.first_or_create({:id => 'fragment'},
+                                                           {:name => 'Fragmento', :description => 'Representan bloques de información que se pueden mostrar en diferentes páginas. Banners son creados como fragmentos.'})
+
     
         Site::Menu.first_or_create({:name => 'primary_links'},
                                    {:title => 'Primary links menus', :description => 'Primary links menu'})
@@ -246,6 +250,30 @@ module Huasi
        
     end
     
+    # ========= Pages ====================
+
+    #
+    # Return the pages managed by the module
+    # @return [Hash] Name - Url
+    #
+    def public_pages
+
+      pages = {}
+
+      # Add page contents
+      ContentManagerSystem::Content.all(:type => {:id => 'page'}).map do |content| 
+        pages.store(content.title, content.alias)
+      end  
+
+      # Add views
+      ContentManagerSystem::View.all(:block => false).map do |view|
+        pages.store(view.title, view.url)
+      end
+
+      return pages
+
+    end
+
     # ========= Menu =====================
     
     #
@@ -265,13 +293,13 @@ module Huasi
                                   :weight => 10}},
                     {:path => '/cms/newcontent',
                      :options => {:title => app.t.cms_admin_menu.content_new,
-                                  :link_route => "/new/content",
+                                  :link_route => "/admin/site/cms/new/content",
                                   :description => 'Creates a new content.',
                                   :module => 'cms',
                                   :weight => 6}},                                    
                     {:path => '/cms/contenttypes',
                      :options => {:title => app.t.cms_admin_menu.contenttype_management,
-                                  :link_route => "/mctypes",
+                                  :link_route => "/admin/site/cms/content-types",
                                   :description => 'Manages the content types: creation and update of content types.',
                                   :module => 'cms',
                                   :weight => 5}},                                
@@ -336,15 +364,15 @@ module Huasi
     #
     def routes(context={})
     
-      routes = [{:path => '/mctypes',
-      	         :regular_expression => /^\/mctypes/, 
+      routes = [{:path => '/admin/site/cms/content-types',
+      	         :regular_expression => /^\/admin\/site\/cms\/content-types/, 
                  :title => 'Content type' , 
                  :description => 'Manages the content types: creation and update of content types.',
                  :fit => 1,
                  :module => :cms},
-                {:path => '/mctype/:type/aspect/:aspect',
+                {:path => '/mctype/:type/:aspect',
                  :parent_path => "/mctypes",
-                 :regular_expression => /^\/mctype\/.+\/aspect\/.+/, 
+                 :regular_expression => /^\/mctype\/.+\/.+/, 
                  :title => 'Content type aspect configuration', 
                  :description => 'Edit the content type/aspect configuration',
                  :fit => 1,
@@ -355,15 +383,15 @@ module Huasi
                  :description => 'Manages the contents',
                  :fit => 1,
                  :module => :cms},
-                {:path => '/new/content',
-                 :regular_expression => /^\/new\/content/, 
+                {:path => '/admin/site/cms/new/content',
+                 :regular_expression => /^\/admin\/site\/cms\/new\/content/, 
                  :title => 'New content', 
                  :description => 'Create a new content: Choose the content type.',
                  :fit => 2,
                  :module => :cms},
-                {:path => '/new/content/:content_type',
-                 :parent_path => "/new/content",
-                 :regular_expression => /^\/new\/content\/.+/, 
+                {:path => '/admin/site/cms/new/content/:content_type',
+                 :parent_path => "/admin/site/cms/new/content",
+                 :regular_expression => /^\/admin\/site\/cms\/new\/content\/.+/, 
                  :title => 'New content', 
                  :description => 'Create a new content: Complete data.',
                  :fit => 1,

@@ -24,7 +24,7 @@ module Sinatra
 
           unless style_template = ContentManagerSystem::Template.
           	 find_by_name("#{Themes::ThemeManager.instance.selected_theme.name}_theme_style")
-        	serve_static_resource(request.path_info, File.join(File.dirname(__FILE__), '..', '..', 'static') )
+        	  serve_static_resource(request.path_info, File.join(File.dirname(__FILE__), '..', '..', 'static') )
           end
 
           dates = [File.mtime(theme_style_path)]

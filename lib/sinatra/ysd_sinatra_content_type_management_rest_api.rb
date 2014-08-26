@@ -13,7 +13,7 @@ module Sinatra
         #
         # Retrieve the content types the user can create (GET)
         #        
-        app.get "/ctypesuser/?" do
+        app.get "/api/user-content-types/?" do
           
           data = ContentManagerSystem::ContentType.all(
             :content_type_user_groups => { :usergroup => user.usergroups },
@@ -27,7 +27,7 @@ module Sinatra
         #
         # Retrieve the content types the user can create (POST)
         #
-        ["/ctypesuser/?","/ctypesuser/page/:page"].each do |path|
+        ["/api/user-content-types/?","/api/user-content-types/page/:page"].each do |path|
           app.post path do       
       
             data = ContentManagerSystem::ContentType.all(
@@ -49,7 +49,7 @@ module Sinatra
         #
         # Retrive all content types (GET)
         #
-        app.get "/ctypes" do
+        app.get "/api/content-types" do
           content_type :json
           ContentManagerSystem::ContentType.all(:order => [:name.asc ]).to_json
         end
@@ -57,7 +57,7 @@ module Sinatra
         #
         # Retrieve a content type (GET)
         #
-        app.get "/ctype/:id" do
+        app.get "/api/content-type/:id" do
         
           the_content_type = ContentManagerSystem::ContentType.get(params[:id])
           
@@ -70,7 +70,7 @@ module Sinatra
         #
         # Retrieve content types (POST)
         #
-        ["/ctypes","/ctypes/page/:page"].each do |path|
+        ["/api/content-types","/api/content-types/page/:page"].each do |path|
           app.post path do
           
             data=ContentManagerSystem::ContentType.all(:order => [:name.asc ])
@@ -91,7 +91,7 @@ module Sinatra
         #
         # Create a new content type
         #
-        app.post "/ctype" do
+        app.post "/api/content-type" do
           
           content_type_request = body_as_json(ContentManagerSystem::ContentType)
 
@@ -105,7 +105,7 @@ module Sinatra
         #
         # Updates a content type
         #
-        app.put "/ctype" do
+        app.put "/api/content-type" do
           
           content_type_request = body_as_json(ContentManagerSystem::ContentType)
           content_type_id = content_type_request.delete(:id)
@@ -123,7 +123,7 @@ module Sinatra
         #
         # Deletes a content type
         #
-        app.delete "/ctype" do
+        app.delete "/api/content-type" do
            
           content_type_request = body_as_json(ContentManagerSystem::ContentType)
           content_type_id = content_type_request.delete(:id)
@@ -141,7 +141,7 @@ module Sinatra
         #
         # Get the content type aspect configuration attributes
         #
-        app.get "/ctype/:content_type/aspect/:aspect/config" do
+        app.get "/api/content-type/:content_type/:aspect/config" do
           
           c_type = ::ContentManagerSystem::ContentType.get(params['content_type'])
           c_type_aspect = c_type.aspect(params['aspect'])
@@ -159,7 +159,7 @@ module Sinatra
         #
         # Update the content type aspect configuration attributes
         #
-        app.put "/ctype/:content_type/aspect/:aspect/config" do
+        app.put "/api/content-type/:content_type/:aspect/config" do
                              
           c_type = ::ContentManagerSystem::ContentType.get(params[:content_type])
           c_type_aspect = c_type.aspect(params[:aspect])

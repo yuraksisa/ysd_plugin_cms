@@ -24,6 +24,33 @@ module Sinatra
       content_button
     
     end
-  
+
+    #
+    # Render a textarea for editing a template
+    #
+    # @param [String] The template name
+    # @param [String] The label
+    # @param [String] class name      
+    #
+    def render_template_editor(template_name, label, class_name='', rows=15)
+
+       template = ContentManagerSystem::Template.first({:name => template_name})
+
+       value = if template
+                 template.text
+               else
+                 ''
+               end
+
+       editor = <<-EDITOR 
+              <div class="formrow">
+                <label for="#{template_name}" class="fieldtitle">#{label}</label>
+                <textarea name="#{template_name}" id="#{template_name}" 
+                class="fieldcontrol editable_text #{class_name}" rows="#{rows}">#{value}</textarea>
+              </div>
+       EDITOR
+
+    end
+
   end
 end

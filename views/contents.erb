@@ -151,7 +151,7 @@ require(["YSDEntityManagement", "YSDSelectSelector", "YSDRemoteDataSource", "YSD
     configSearchForm : function() {
       
       // content type search
-      var contentTypesDataSource = new RemoteDataSource("/ctypesuser",{'id':'id','description':'name'});
+      var contentTypesDataSource = new RemoteDataSource("/api/user-content-types",{'id':'id','description':'name'});
       var contentTypesListSelector = new SelectSelector("content_type_id", contentTypesDataSource, null, true, '- All content types -');
       
       var publishingStateDataSource = new RemoteDataSource("/publishing/states");
