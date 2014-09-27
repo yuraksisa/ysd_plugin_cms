@@ -1,0 +1,121 @@
+require(["YSDEntityManagement",  "YSDSelectSelector", "YSDRemoteDataSource", 
+         "YSDListSelector",
+         "YSDDataAdapter", "YSDHierachyListAdapter", 
+         "YSDSelectHierarchicalSelector", 
+         "YSDGui", "jquery", "jquery.fcbkcomplete"], 
+        function(YSDEntityManagement, SelectSelector, RemoteDataSource,
+         ListSelector,
+         DataAdapter, YSDHierachyListAdapter, YSDSelectHierarchicalSelector, YSDGui, $) {
+ 
+  var contentsHook = {
+    	   
+    manager: null,
+    publishingStates: JSON.parse('<%=publishing_states%>'),    
+
+    entityKey : function(entity) {
+      return entity.id;
+    },
+
+    onRenderEntities : function(entities) {
+    
+      $('.new-entity-button').hide();
+      $('.edit-entity-button').hide();
+      
+      var self = this;
+      $('.element-own-row-selector').bind('click',
+               function() {                   
+                 var index = new Number($(this).attr('rel'));
+                 self.loadContentForEdit(self.manager.model.getEntities()[index]);
+               });               
+
+    }, 
+
+    onRenderSearch : function() {
+    
+      this.configSearchForm();
+  
+    },
+  
+    onRenderAdvancedSearch: function() {
+
+      this.configAdvancedSearch();
+
+    },
+
+    loadContent: function(entity) {
+      
+      var return_url = window.location.href;
+      window.location.href = '/edit/content/' + entity.id + '?destination=/admin/contents';
+
+    },
+
+    loadContentForEdit: function(entity) {
+
+      var return_url = window.location.href;
+      window.location.href = '/edit/content/' + entity.id + '?destination=/admin/contents';
+
+    },
+
+    formatPublishingStateClass : function(entity) {
+     
+      var text='';
+
+      if (entity && entity.publishing_state_id) {
+        text = 'content-status-' + entity.publishing_state_id.toLowerCase().replace('_','-');
+      }
+
+      return text;
+
+    },
+
+    formatPublishingState: function(entity) {
+
+      var text='';
+      if (entity) {
+        text= this.publishingStates[entity.publishing_state_id];
+      }
+
+      return text;
+
+    },
+
+    configSearchForm : function() {
+      
+      // content type search
+      var contentTypesDataSource = new RemoteDataSource("/api/user-content-types",{'id':'id','description':'name'});
+      var contentTypesListSelector = new SelectSelector("content_type_id", contentTypesDataSource, null, true, '- All content types -');
+      
+      var publishingStateDataSource = new RemoteDataSource("/publishing/states");
+      var publishingStateListSelector = new SelectSelector("publishing_state_id", publishingStateDataSource, null, true, '- All status -');
+    
+
+    },
+
+    configAdvancedSearch : function() {
+      
+      var contentTypesDataSource = new RemoteDataSource("/api/user-content-types",{'id':'id','description':'name'});      
+      var selectSelector = new ListSelector("content_types", "content_type_id", contentTypesDataSource, null, true);
+
+      var publishingStateDataSource = new RemoteDataSource("/publishing/states");
+      var stateSelector = new ListSelector("content_states", "publishing_state_id", publishingStateDataSource, null, true);
+    }
+  	
+  };
+
+  //$('#content_detail').dialog({title: 'Content', width: 480, height: 480, autoOpen: false})
+
+  var urls = { query_url  : '/api/contents',
+    	         create_url : '/api/content',
+  	           update_url : '/api/content',
+  	           delete_url : '/api/content',
+  	           get_url    : '/api/content'
+  	         };
+  
+  var hooks = [contentsHook];
+  
+     	           
+  var contentsManager = new YSDEntityManagement(urls, 'content', <%=settings.contents_page_size%>, hooks, {prefix: '/admin'});
+  
+  contentsHook.manager = contentsManager;
+
+});

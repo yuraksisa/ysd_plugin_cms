@@ -62,7 +62,9 @@ module SiteRenders
 
         if app.respond_to?(:session)
            menu_item = menu_item.translate(app.session[:locale])
-           menu_item_link_route = File.join(menu_item_link_route, app.session[:locale])
+           if menu_item.menu.language_in_routes
+             menu_item_link_route = File.join(menu_item_link_route, app.session[:locale])
+           end
         end
 
         result << {:id       => menu_item.id,

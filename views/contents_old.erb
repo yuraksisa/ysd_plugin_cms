@@ -9,7 +9,7 @@
  <%= t.content_management.description %>
 </script>
 
-<script type="text/tmpl" id="elements_search_">
+<script type="text/tmpl" id="elements_search">
   <form name="contents_search" id="contents_search" style="overflow:visible">
     <div style="overflow:visible">
       <select name="content_type_id" id="content_type_id" class="combo high_select"/>
@@ -21,42 +21,11 @@
   </form>
 </script>
 
-<script type="text/tmpl" id="advanced_search">
-  <form name="contents_search" id="contents_search" style="overflow:visible">
-  <div class="">
-    <div class="container_12">
-      <h3>Filtrar</h3>
-      <div class="grid_4">
-         <div class="right-margin">
-         <h4>Tipo de contenido</h4>
-         <div id="content_types">
-         </div>
-         </div>
-      </div>
-      <div class="grid_4">
-         <h4>Estado</h4>
-         <div id="content_states">
-         </div>
-      </div>
-    </div>
-    <div class="container_12 top-border-solid top-margin top-space">
-      <div class="prefix_11 grid_1">
-        <input type="button" 
-             class="form-button blue-button action-button entity-management-button search-entity-button" 
-             value="<%=t.content_management.search_form.search_button.label%>">  
-      </div>
-    </div>
-  </div>
-  </form>
-</script>
-
 <!-- Renders the elements container -->
 <script type="text/tmpl" id="elements_container_template">
-
-
+    
   <form name="bulk_actions" id="bulk_actions">
   <div class="table-container">
-   
     <table id="elements_table" class="table">
        <thead class="table-header">
          <tr>
@@ -107,3 +76,107 @@
 
 <!--iframe id="content_detail" class="content_detail" style="padding:5px; border: none; width: 98%">
 </iframe-->
+
+<script type="text/javascript">
+ 
+require(["YSDEntityManagement", "YSDSelectSelector", "YSDRemoteDataSource", "YSDDataAdapter", "YSDHierachyListAdapter", "YSDSelectHierarchicalSelector", "YSDGui", "jquery", "jquery.fcbkcomplete"], 
+        function(YSDEntityManagement, SelectSelector, RemoteDataSource, DataAdapter, YSDHierachyListAdapter, YSDSelectHierarchicalSelector, YSDGui, $) {
+ 
+  var contentsHook = {
+    	   
+    manager: null,
+    publishingStates: JSON.parse('<%=publishing_states%>'),    
+
+    entityKey : function(entity) {
+      return entity.id;
+    },
+
+    onRenderEntities : function(entities) {
+    
+      $('.new-entity-button').hide();
+      $('.edit-entity-button').hide();
+      
+      var self = this;
+      $('.element-own-row-selector').bind('click',
+               function() {                   
+                 var index = new Number($(this).attr('rel'));
+                 self.loadContentForEdit(self.manager.model.getEntities()[index]);
+               });               
+
+    }, 
+
+    onRenderSearch : function() {
+    
+      this.configSearchForm();
+  
+    },
+  
+    loadContent: function(entity) {
+      
+      var return_url = window.location.href;
+      window.location.href = '/edit/content/' + entity.id + '?destination=/admin/contents';
+
+    },
+
+    loadContentForEdit: function(entity) {
+
+      var return_url = window.location.href;
+      window.location.href = '/edit/content/' + entity.id + '?destination=/admin/contents';
+
+    },
+
+    formatPublishingStateClass : function(entity) {
+     
+      var text='';
+
+      if (entity && entity.publishing_state_id) {
+        text = 'content-status-' + entity.publishing_state_id.toLowerCase().replace('_','-');
+      }
+
+      return text;
+
+    },
+
+    formatPublishingState: function(entity) {
+
+      var text='';
+      if (entity) {
+        text= this.publishingStates[entity.publishing_state_id];
+      }
+
+      return text;
+
+    },
+
+    configSearchForm : function() {
+      
+      // content type search
+      var contentTypesDataSource = new RemoteDataSource("/api/user-content-types",{'id':'id','description':'name'});
+      var contentTypesListSelector = new SelectSelector("content_type_id", contentTypesDataSource, null, true, '- All content types -');
+      
+      var publishingStateDataSource = new RemoteDataSource("/publishing/states");
+      var publishingStateListSelector = new SelectSelector("publishing_state_id", publishingStateDataSource, null, true, '- All status -');
+      
+    }
+  	
+  };
+
+  //$('#content_detail').dialog({title: 'Content', width: 480, height: 480, autoOpen: false})
+
+  var urls = { query_url  : '/api/contents',
+    	         create_url : '/api/content',
+  	           update_url : '/api/content',
+  	           delete_url : '/api/content',
+  	           get_url    : '/api/content'
+  	         };
+  
+  var hooks = [contentsHook];
+  
+     	           
+  var contentsManager = new YSDEntityManagement(urls, 'content', <%=settings.contents_page_size%>, hooks, {prefix: '/admin'});
+  
+  contentsHook.manager = contentsManager;
+
+});
+  
+</script>
