@@ -19,6 +19,15 @@ module Sinatra
         #
         app.get /^[^.]*$/ do
           
+          p "Checking content: #{request.path_info}" 
+
+          preffixes = Plugins::Plugin.plugin_invoke_all('ignore_path_prefix_cms', {:app => self})
+          if request.path_info.empty? or request.path_info.start_with?(*preffixes)
+            pass
+          end
+
+          p "Querying content for *#{request.path_info}*"
+
           unless content = ContentManagerSystem::Content.first(:alias => request.path_info)
              pass
           end

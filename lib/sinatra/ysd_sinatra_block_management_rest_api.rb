@@ -13,7 +13,7 @@ module Sinatra
         #
         # Retrieve all blocks
         #
-        app.get "/blocks" do
+        app.get "/api/blocks" do
 
           content_type :json
           ContentManagerSystem::Block.all.to_json        
@@ -21,7 +21,7 @@ module Sinatra
         end
         
         # Retrive the blocks
-        ["/blocks","/blocks/page/:page"].each do |path|
+        ["/api/blocks","/api/blocks/page/:page"].each do |path|
           app.post path, :allowed_usergroups => ['staff'] do
 
             page = params[:page].to_i || 1
@@ -47,7 +47,7 @@ module Sinatra
         end
         
         # Create a block
-        app.post "/block", :allowed_usergroups => ['staff'] do
+        app.post "/api/block", :allowed_usergroups => ['staff'] do
           
           body_request = body_as_json(ContentManagerSystem::Block)
 
@@ -59,7 +59,7 @@ module Sinatra
         end
         
         # Updates a block
-        app.put "/block", :allowed_usergroups => ['staff'] do
+        app.put "/api/block", :allowed_usergroups => ['staff'] do
           
           block_request = body_as_json(ContentManagerSystem::Block)      
           block_id = block_request.delete(:id)
@@ -78,7 +78,7 @@ module Sinatra
         end
         
         # Deletes a block
-        app.delete "/block" do
+        app.delete "/api/block" do
         
         end
             

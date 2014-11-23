@@ -12,7 +12,7 @@ module Sinatra
         #
         # Menu item management page
         #        
-        app.get "/menu-item-management/:menu_name/?*", :allowed_usergroups => ['staff']  do
+        app.get "/admin/cms/menu-item-management/:menu_name/?*", :allowed_usergroups => ['staff']  do
 
           if menu = ::Site::Menu.get(params[:menu_name])
             

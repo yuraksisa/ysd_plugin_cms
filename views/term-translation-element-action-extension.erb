@@ -7,7 +7,7 @@ require(['jquery', 'YSDEntityManagementComplementHooks'],
 
      this.onEdit = function(entity) {
      
-       $('#term_translate a').attr('href', '/translate/term/' + entity.id + '?destination=/term-management/' + entity.taxonomy_id + '/' + entity.id); //TODO Taxonomy id 
+       $('#term_translate a').attr('href', '/admin/cms/translate/term/' + entity.id + '?destination=/admin/cms/terms/' + entity.taxonomy_id + '/' + entity.id); //TODO Taxonomy id 
      	
      }
 

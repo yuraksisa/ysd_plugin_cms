@@ -149,7 +149,7 @@
          var selectWeight = new SelectSelector('weight', weightDataSource, weightValue);
          
          // Configure parents
-         var parentsDataSource = new RemoteDataSource('/terms-parent-candidate/'+termsManager.model.configuration.parentId,null,[HierachyListAdapter]);
+         var parentsDataSource = new RemoteDataSource('/api/terms-parent-candidate/'+termsManager.model.configuration.parentId,null,[HierachyListAdapter]);
          var parentValue = (entity && entity.parent_id)?entity.parent_id:null;
          var parentTerms = new SelectHierarchicalSelector('parent[id]', parentsDataSource, parentValue, true);
     	
@@ -159,11 +159,11 @@
   };
     
   var urls = { 
-  	          query_url  : '/terms',
-    	        create_url : '/term',
-  	          update_url : '/term',
-  	          delete_url : '/term',
-  	          get_url    : '/term'
+  	          query_url  : '/api/terms',
+    	        create_url : '/api/term',
+  	          update_url : '/api/term',
+  	          delete_url : '/api/term',
+  	          get_url    : '/api/term'
   	         };
       
   var termHook = new TermHook();
@@ -173,7 +173,7 @@
   // Add the complement hooks
   termHooks = termHooks.concat(EntityManagementComplementHooks.complements);
   
-  var termsManager = new TreeEntityManagement(urls, 'term', 12, termHooks, {parent_filtered:true});
+  var termsManager = new TreeEntityManagement(urls, 'term', 12, termHooks, {parent_filtered:true, prefix:'/admin/cms'});
   
 });
 

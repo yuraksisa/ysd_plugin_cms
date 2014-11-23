@@ -37,8 +37,8 @@
       <td class="table-cell element-navigation-detail" rel="<%%= index %>"><%%= entity.title %></td>
       <td class="table-cell element-navigation-detail" rel="<%%= index %>"><%%= entity.description %></td>
       <td class="table-cell">
-         <a href="/menu-item-management/<%%=entity.name%>" style="display:block"><%=t.menu_management.table.menu_items_list%></a>
-         <a href="/menu-item-management/<%%=entity.name%>/new" style="display:block"><%=t.menu_management.table.add_menu_item%></a>
+         <a href="/admin/cms/menu-item-management/<%%=entity.name%>" style="display:block"><%=t.menu_management.table.menu_items_list%></a>
+         <a href="/admin/cms/menu-item-management/<%%=entity.name%>/new" style="display:block"><%=t.menu_management.table.add_menu_item%></a>
       </td>
     </tr>
 
@@ -156,15 +156,15 @@ require(['YSDEntityManagement','YSDForms','jquery'], function(EntityManagement, 
   };
     
   var urls = { 
-  	           query_url  : '/menus',
-    	         create_url : '/menu',
-  	           update_url : '/menu',
-  	           delete_url : '/menu',
-  	           get_url    : '/menu'
+  	           query_url  : '/api/menus',
+    	         create_url : '/api/menu',
+  	           update_url : '/api/menu',
+  	           delete_url : '/api/menu',
+  	           get_url    : '/api/menu'
   	         };
   
   var menuHook = new MenuHook();
-  var menusManager = new EntityManagement(urls, 'menu', 12, menuHook);  
+  var menusManager = new EntityManagement(urls, 'menu', 12, menuHook,{prefix:'/admin/cms'});  
 
 });
   

@@ -37,8 +37,8 @@
       <td class="table-cell element-navigation-detail" rel="<%%= index %>"><%%= self.model.entityHooks[0].formatContentTypes(entity) %></td>
       <td class="table-cell element-navigation-detail" rel="<%%= index %>"><%%= entity.description %></td>
       <td class="table-cell">
-        <a href="/term-management/<%%= entity.id%>" style="display:block">List of terms</a>
-        <a href="/term-management/<%%= entity.id%>/new" style="display:block">Add terms</a>
+        <a href="/admin/cms/terms/<%%= entity.id%>" style="display:block">List of terms</a>
+        <a href="/admin/cms/terms/<%%= entity.id%>/new" style="display:block">Add terms</a>
       </td>
     </tr>
 
@@ -195,15 +195,15 @@
   };
     
   var urls = { 
-  	          query_url  : '/taxonomies',
-    	      create_url : '/taxonomy',
-  	          update_url : '/taxonomy',
-  	          delete_url : '/taxonomy',
-  	          get_url    : '/taxonomy'
+  	          query_url  : '/api/taxonomies',
+    	        create_url : '/api/taxonomy',
+  	          update_url : '/api/taxonomy',
+  	          delete_url : '/api/taxonomy',
+  	          get_url    : '/api/taxonomy'
   	        };
   
   var taxonomyHook = new TaxonomyHook();
-  var taxonomiesManager = new EntityManagement(urls, 'taxonomy', 12, taxonomyHook);
+  var taxonomiesManager = new EntityManagement(urls, 'taxonomy', 12, taxonomyHook, {prefix: '/admin/cms'});
   
  });
 </script>

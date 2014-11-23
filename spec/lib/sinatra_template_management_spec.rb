@@ -11,7 +11,7 @@ describe Sinatra::YSD::TemplateManagement do
     TestingSinatraApp
   end
 
-  describe '/admin/templates' do
+  describe '/admin/cms/templates' do
    
    before :each do
      app.any_instance.should_receive(:load_page).
@@ -20,7 +20,7 @@ describe Sinatra::YSD::TemplateManagement do
    end
 
    subject do 
-     get '/admin/templates'
+     get '/admin/cms/templates'
      last_response       
    end
 

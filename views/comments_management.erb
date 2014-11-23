@@ -150,7 +150,7 @@ require(["YSDEntityManagement", "YSDEntityManagementComplementHooks",
 
     configSearchForm : function() {
             
-      var publishingStateDataSource = new RemoteDataSource("/publishing/states");
+      var publishingStateDataSource = new RemoteDataSource("/api/publishing/states");
       var publishingStateListSelector = new SelectSelector("publishing_state_id", publishingStateDataSource, null, true, '- All status -');
       
     }
@@ -172,7 +172,7 @@ require(["YSDEntityManagement", "YSDEntityManagementComplementHooks",
      	           
   var commentsManager = new YSDEntityManagement(urls, 'comment', 
       <%=comments_page_size%>, hooks,
-      {prefix: '/admin'});
+      {prefix: '/admin/cms'});
 
 });
   

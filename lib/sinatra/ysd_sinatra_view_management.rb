@@ -30,7 +30,7 @@ module Sinatra
         #
         # View management page
         #
-        app.get "/view-management", :allowed_usergroups => ['staff'] do
+        app.get "/admin/cms/views", :allowed_usergroups => ['staff'] do
           
           locals = {}
 
@@ -38,7 +38,7 @@ module Sinatra
           import_extension << partial(:import_em_extension)
 
           locals.store(:pagers, UI::Pager.all.to_json)
-          locals.store(:import_form, partial(:import, :locals => {:action => '/import/view', :accept_import_file => 'text/plain'}))
+          locals.store(:import_form, partial(:import, :locals => {:action => '/api/view/import', :accept_import_file => 'text/plain'}))
           locals.store(:import_form_extension, import_extension )
           load_em_page('view_management'.to_sym, :view, false, :locals => locals)
 
@@ -70,8 +70,8 @@ module Sinatra
         #
         # Gets a view preview
         #
-        ["/preview/view/:view_name/page/:page/?*",
-         "/preview/view/:view_name/?*"].each do |path|
+        ["/admin/cms/view/preview/:view_name/page/:page/?*",
+         "/admin/cms/view/preview/:view_name/?*"].each do |path|
           
           app.get path do
         
@@ -98,6 +98,17 @@ module Sinatra
         
           app.get path do
           
+            if params[:view_name] =~ /^[^.]*$/
+              pass
+            end
+
+            preffixes = Plugins::Plugin.plugin_invoke_all('ignore_path_prefix_cms', {:app => self})
+            if params[:view_name].start_with?(*preffixes)
+              pass
+            end
+             
+            p "Querying view for #{request.path_info}"
+
             view = ContentManagerSystem::View.first(:url => params['view_name'])
             pass unless view
             page, arguments = extract_view_arguments(params[:page].to_i, 4, 2)

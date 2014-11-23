@@ -6,7 +6,7 @@ require(['jquery', 'YSDEntityManagementComplementHooks'],
    MenuItemTranslatePlugin = function() {
 
      this.onEdit = function(entity) {
-       $('#menu_item_translate a').attr('href', '/translate/menuitem/' + entity.id + '?destination=/menu-item-management/' + entity.menu_name + '/' + entity.id); 
+       $('#menu_item_translate a').attr('href', '/admin/cms/translate/menuitem/' + entity.id + '?destination=/admin/cms/menu-item-management/' + entity.menu_name + '/' + entity.id); 
      }
    }
              

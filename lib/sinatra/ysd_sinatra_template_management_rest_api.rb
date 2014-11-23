@@ -8,7 +8,7 @@ module Sinatra
 
       def self.registered(app)
    
-        ['/templates','/templates/page/:page'].each do |path|
+        ['/api/templates','/api/templates/page/:page'].each do |path|
           app.post path do
             
             query_options = {}
@@ -40,7 +40,7 @@ module Sinatra
         #
         # Creates a new template
         #
-        app.post '/template' do
+        app.post '/api/template' do
         
           template_request = body_as_json(ContentManagerSystem::Template)
           created_template = ContentManagerSystem::Template.create(template_request)
@@ -54,7 +54,7 @@ module Sinatra
         #
         # Updates a template
         #
-        app.put '/template' do
+        app.put '/api/template' do
 
           template_request = body_as_json(ContentManagerSystem::Template)
           template_id = template_request.delete(:id)
@@ -74,7 +74,7 @@ module Sinatra
         #
         # Updates multiple templates
         #
-        app.put "/templates" do
+        app.put "/api/templates" do
       
           request.body.rewind
           templates = JSON.parse(URI.unescape(request.body.read))      
@@ -94,7 +94,7 @@ module Sinatra
         #
         # Delete a template
         #
-        app.delete '/template' do
+        app.delete '/api/template' do
 
           template_request = body_as_json(ContentManagerSystem::Template)
           template_id = template_request.delete(:id)

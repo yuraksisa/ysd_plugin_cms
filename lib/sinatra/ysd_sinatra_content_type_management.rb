@@ -14,12 +14,12 @@ module Sinatra
         #
         # Content types management page
         #
-        app.get "/admin/site/cms/content-types/?*", :allowed_usergroups => ['staff']  do
+        app.get "/admin/cms/content-types/?*", :allowed_usergroups => ['staff']  do
           
           context = {:app => self}
 
           aspects = []
-          aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::Aspects.new('/admin/site/cms/content-type', 'content'), {:render_in_group => true})
+          aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::Aspects.new('/admin/cms/content-type', 'content'), {:render_in_group => true})
           
           aspects_render=UI::EntityManagementAspectRender.new(context, aspects) 
           locals = aspects_render.render(nil)
@@ -31,7 +31,7 @@ module Sinatra
         #
         # Configuration of a content type aspect (to set up the aspect attributes)
         #
-        app.get "/admin/site/cms/content-type/:content_type/:aspect", :allowed_usergroups => ['staff']  do
+        app.get "/admin/cms/content-type/:content_type/:aspect", :allowed_usergroups => ['staff']  do
           
           context = {:app => self}
                   
@@ -48,7 +48,7 @@ module Sinatra
             locals.store(:update_url, "/api/content-type/#{content_type.id}/#{params[:aspect]}/config")
             locals.store(:get_url,    "/api/content-type/#{content_type.id}/#{params[:aspect]}/config")
             locals.store(:url_base,   "/api/content-type/#{content_type.id}/#{params[:aspect]}")
-            locals.store(:url_destination, "/admin/site/cms/content-types/#{content_type.id}")
+            locals.store(:url_destination, "/admin/cms/content-types/#{content_type.id}")
             locals.store(:description, "#{params[:aspect]} - #{content_type.id}")
                     
             if aspect.gui_block.respond_to?(:config)

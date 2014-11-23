@@ -34,7 +34,7 @@ module Sinatra
         #
         # Retrieve a content translation
         #
-        app.get "/translation/:language/content/:content_id" do
+        app.get "/api/translation/:language/content/:content_id" do
           
           result = {:language => params[:language], :content_id => params[:content_id] }
           
@@ -51,7 +51,7 @@ module Sinatra
         #
         # Updates contents translation
         #
-        app.put "/translation/content" do
+        app.put "/api/translation/content" do
         
           request.body.rewind
           translation_request = JSON.parse(URI.unescape(request.body.read))
@@ -70,7 +70,7 @@ module Sinatra
         #
         # Retrieves a term translation
         #
-        app.get "/translation/:language/term/:term_id" do
+        app.get "/api/translation/:language/term/:term_id" do
         
           result = {:language => params[:language], :term_id => params[:term_id]}
           
@@ -87,7 +87,7 @@ module Sinatra
         #
         # Updates a term translation
         #       
-        app.put "/translation/term" do
+        app.put "/api/translation/term" do
         
           request.body.rewind
           translation_request = JSON.parse(URI.unescape(request.body.read))
@@ -106,7 +106,7 @@ module Sinatra
         #
         # Retrieves a menu item translation
         #
-        app.get "/translation/:language/menuitem/:menu_item_id" do
+        app.get "/api/translation/:language/menuitem/:menu_item_id" do
         
           result = {:language => params[:language], :menu_item_id => params[:menu_item_id]}
           
@@ -123,7 +123,7 @@ module Sinatra
         #
         # Updates a menu item translation
         #
-        app.put "/translation/menuitem" do
+        app.put "/api/translation/menuitem" do
         
           request.body.rewind
           translation_request = JSON.parse(URI.unescape(request.body.read))

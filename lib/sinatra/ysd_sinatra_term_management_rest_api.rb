@@ -13,7 +13,7 @@ module Sinatra
         #
         # Retrieve terms
         #
-        app.get "/terms/?" do
+        app.get "/api/terms/?" do
           
           search_term_request = extract_request_query_string
           
@@ -32,7 +32,7 @@ module Sinatra
         #
         # Retrieve the list of terms which belongs to a taxonomy
         #
-        app.get "/terms/:taxonomy_id" do
+        app.get "/api/terms/:taxonomy_id" do
           
           data=ContentManagerSystem::Term.all({:conditions => {:taxonomy => {:id => params['taxonomy_id']}}, :order => [:parent_id.desc,:weight.desc]})
           
@@ -44,7 +44,7 @@ module Sinatra
         #
         # Retrive the term parent candidadates
         #
-        ["/terms-parent-candidate/:taxonomy_id","/terms-parent-candidate/:taxonomy_id/:term_id"].each do |path|
+        ["/api/terms-parent-candidate/:taxonomy_id","/api/terms-parent-candidate/:taxonomy_id/:term_id"].each do |path|
         
           app.get path do
             data=ContentManagerSystem::Term.all({:conditions => {:taxonomy => {:id => params['taxonomy_id']}}, :order => [:parent_id.desc,:weight.desc]})
@@ -58,7 +58,7 @@ module Sinatra
         #
         # Retrive terms
         #
-        ["/terms/:taxonomy_id","/terms/:taxonomy_id/page/:page"].each do |path|
+        ["/api/terms/:taxonomy_id","/api/terms/:taxonomy_id/page/:page"].each do |path|
           app.post path do
           
             data=ContentManagerSystem::Term.all({:conditions => {:taxonomy => {:id => params['taxonomy_id']}}, :order => [:parent_id.desc,:weight.desc]})
@@ -79,13 +79,9 @@ module Sinatra
         #
         # Retrieve a term
         #
-        app.get "/term/:id" do
-          
-          puts "Getting term"
+        app.get "/api/term/:id" do
           
           term = ContentManagerSystem::Term.get(params['id'])
-          
-          puts "term loaded : #{term}"
           
           status 200
           content_type :json
@@ -96,19 +92,15 @@ module Sinatra
         #
         # Create a new term
         #
-        app.post "/term" do
-        
-          puts "Creating term"
-          
+        app.post "/api/term" do
+                  
           request.body.rewind
           term_request = JSON.parse(URI.unescape(request.body.read))
           
           # Creates the new content
           term = ContentManagerSystem::Term.new(term_request)
           term.save
-          
-          puts "created term : #{term.to_json}"
-          
+                    
           # Return          
           status 200
           content_type :json
@@ -119,10 +111,8 @@ module Sinatra
         #
         # Updates a term
         #
-        app.put "/term" do
-        
-          puts "Updating term"
-        
+        app.put "/api/term" do
+               
           request.body.rewind
           term_request = JSON.parse(URI.unescape(request.body.read))
           
@@ -130,9 +120,7 @@ module Sinatra
           term = ContentManagerSystem::Term.get(term_request['id'])
           term.attributes=(term_request)
           term.save
-          
-          puts "updated term : #{term}"
-                   
+                             
           # Return          
           status 200
           content_type :json
@@ -142,7 +130,7 @@ module Sinatra
         end
         
         # Deletes a content
-        app.delete "/term" do
+        app.delete "/api/term" do
         
         end
       

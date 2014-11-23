@@ -113,13 +113,13 @@ require(['jquery','YSDEntityManagement', 'YSDRemoteDataSource', 'YSDSelectSelect
   };
   
   var urls = {
-               get_url        : '/translation/<%=language%>/menuitem/<%=menu_item_id%>',
-               update_url     : '/translation/menuitem'
+               get_url        : '/api/translation/<%=language%>/menuitem/<%=menu_item_id%>',
+               update_url     : '/api/translation/menuitem'
              };
              
   var menuItemTranslationHook = new MenuItemTranslationHook();
   var menuItemTranslation = new EntityManagement(urls, 'content translation', 1, menuItemTranslationHook, 
-                                               {url_base: '/translate/menuitem', action: 'edit', hold_form_after_action: true});
+                                               {url_base: '/admin/cms/translate/menuitem', action: 'edit', hold_form_after_action: true});
  
   $('.entity-title').html('Menu item translation');
   

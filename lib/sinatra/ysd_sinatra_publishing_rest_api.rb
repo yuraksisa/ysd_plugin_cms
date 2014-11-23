@@ -8,7 +8,7 @@ module Sinatra
         #
         # Retrieve the configured workflows
         #
-        app.get '/workflows' do
+        app.get '/api/publishing/workflows' do
 
           data=ContentManagerSystem::PublishingWorkFlow.all
           
@@ -19,7 +19,7 @@ module Sinatra
         #
         # Retrieve the states
         #
-        app.get '/publishing/states' do
+        app.get '/api/publishing/states' do
 
           data=ContentManagerSystem::PublishingState.all
           
@@ -30,7 +30,7 @@ module Sinatra
         #
         # Retrieve the actions
         #
-        app.get '/publishing/actions' do
+        app.get '/api/publishing/actions' do
 
           data= ContentManagerSystem::PublishingAction.all
 

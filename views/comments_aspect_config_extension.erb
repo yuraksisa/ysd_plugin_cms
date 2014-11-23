@@ -25,7 +25,7 @@
 
        this.configForm = function(entity) {
         
-         var wfDataSource = new RemoteDataSource('/workflows');
+         var wfDataSource = new RemoteDataSource('/api/publishing/workflows');
          var wfValue = (entity && entity.aspect_attributes.publishing_workflow_id)?entity.aspect_attributes.publishing_workflow_id:null;;
          var wfSelector = new SelectSelector('aspect_attributes[publishing_workflow_id]', wfDataSource, wfValue); 
 

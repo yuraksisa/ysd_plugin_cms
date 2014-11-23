@@ -304,7 +304,7 @@
         </div>
         <div class="form-row">
            <div class="form-button">
-             <a href="/export/view/<%%=entity.view_name%>"><%=t.view_management.export_clone.export.title%></a>
+             <a href="/api/view/export/<%%=entity.view_name%>"><%=t.view_management.export_clone.export.title%></a>
            </div>
         </div>
     </div>     
@@ -402,12 +402,12 @@
        $('#tabs li').removeClass("ui-corner-top").addClass( "ui-corner-left" );
 
        // Configure the models
-       var dataSourceModel = new RemoteDataSource('/view-models',{'id':'view_entity_model','description':'view_entity_description'});
+       var dataSourceModel = new RemoteDataSource('/api/view-models',{'id':'view_entity_model','description':'view_entity_description'});
        var valueModel = (entity && entity.model_name)?entity.model_name:null; 
        var selectorModel = new SelectSelector('model_name', dataSourceModel, valueModel, false );             
 
        // Configure the styles
-       var dataSourceStyles = new RemoteDataSource('/view-styles',{'id':'id','description':'description'});
+       var dataSourceStyles = new RemoteDataSource('/api/view-styles',{'id':'id','description':'description'});
        var valueStyles = (entity && entity.style)?entity.style:null; 
        var selectorStyles = new SelectSelector('style', dataSourceStyles, valueStyles, false );             
        var self = this;
@@ -476,7 +476,7 @@
 
     this.buildViewRenders = function(viewStyle) {
 
-      var dataSourceRenders = new RemoteDataSource('/view-renders/'+viewStyle,{'id':'id','description':'description'});
+      var dataSourceRenders = new RemoteDataSource('/api/view-renders/'+viewStyle,{'id':'id','description':'description'});
       var valueRenders = (this.entity && this.entity.render)?this.entity.render:null; 
       var selectorRenders = new SelectSelector('render', dataSourceRenders, valueRenders, false );     
                
@@ -521,7 +521,7 @@
       var doPreview = function() {
 
         var view = entity;  
-        var url = '/preview/view/'+view.view_name;
+        var url = '/admin/cms/view/preview/'+view.view_name;
       
         if (args.length > 0) {
           url += '/' + args;
@@ -552,18 +552,18 @@
   };
   
   var urls = { 
-  	      query_url  : '/views',
-    	    create_url : '/view',
-  	      update_url : '/view',
-  	      delete_url : '/view',
-  	      get_url    : '/view'
+  	      query_url  : '/api/views',
+    	    create_url : '/api/view',
+  	      update_url : '/api/view',
+  	      delete_url : '/api/view',
+  	      get_url    : '/api/view'
   	     };
   
   var viewHook = new ViewHook();
   var hooks = [viewHook];
   hooks = hooks.concat(EntityManagementComplementHooks.complements);  
 
-  var viewsManager = new EntityManagement(urls, 'view', 12, hooks, {hold_form_after_action:true});
+  var viewsManager = new EntityManagement(urls, 'view', 12, hooks, {hold_form_after_action:true, prefix:'/admin/cms'});
    
   viewHook.manager = viewsManager;
 

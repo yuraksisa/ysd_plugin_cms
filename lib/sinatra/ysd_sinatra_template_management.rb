@@ -6,7 +6,7 @@ module Sinatra
   	module TemplateManagement
       def self.registered(app)
         
-        app.get '/admin/templates' do
+        app.get '/admin/cms/templates' do
 
           load_page :template_management, 
             :locals => {:template_page_size => 20}

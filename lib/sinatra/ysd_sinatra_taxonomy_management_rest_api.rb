@@ -17,7 +17,7 @@ module Sinatra
         #
         # Retrieve all taxonomies
         #
-        app.get "/taxonomies" do
+        app.get "/api/taxonomies" do
           data = ContentManagerSystem::Taxonomy.all
           
           content_type :json
@@ -27,7 +27,7 @@ module Sinatra
         #
         # Retrieve the taxonomies which are asigned to a content type
         #
-        app.get "/taxonomy-content-type/:content_type_id" do
+        app.get "/api/taxonomy-content-type/:content_type_id" do
         
           data = ContentManagerSystem::TaxonomyContentType.all(:content_type => {:id => params['content_type_id']}) 
           # The following 4 lines are necessary to work on YAML
@@ -45,7 +45,7 @@ module Sinatra
         #
         # Retrive taxonomies
         #
-        ["/taxonomies","/taxonomies/page/:page"].each do |path|
+        ["/api/taxonomies","/api/taxonomies/page/:page"].each do |path|
           app.post path do
           
             data=ContentManagerSystem::Taxonomy.all
@@ -70,7 +70,7 @@ module Sinatra
         #
         # Retrieve a taxonomy
         #
-        app.get "/taxonomy/:id" do
+        app.get "/api/taxonomy/:id" do
           
           taxonomy = ContentManagerSystem::Taxonomy.get(params['id'])
           taxonomy = prepare_taxonomy(taxonomy) if taxonomy
@@ -84,7 +84,7 @@ module Sinatra
         #
         # Create a new taxonomy
         #
-        app.post "/taxonomy" do
+        app.post "/api/taxonomy" do
           
           request.body.rewind
           taxonomy_request = JSON.parse(URI.unescape(request.body.read))
@@ -103,7 +103,7 @@ module Sinatra
         #
         # Updates a taxonomy
         #
-        app.put "/taxonomy" do
+        app.put "/api/taxonomy" do
                 
           request.body.rewind
           taxonomy_request = JSON.parse(URI.unescape(request.body.read))
@@ -125,7 +125,7 @@ module Sinatra
         end
         
         # Deletes a content
-        app.delete "/taxonomy" do
+        app.delete "/api/taxonomy" do
         
         end
       

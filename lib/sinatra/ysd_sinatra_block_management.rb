@@ -8,7 +8,7 @@ module Sinatra
         #
         # View management page
         #
-        app.get "/admin/blocks", :allowed_usergroups => ['staff'] do
+        app.get "/admin/cms/blocks", :allowed_usergroups => ['staff'] do
 
           ContentManagerSystem::Block.rehash_blocks( Plugins::Plugin.plugin_invoke_all('block_list', {:app => self}) )
           
@@ -22,7 +22,7 @@ module Sinatra
         #
         # Gets a block preview
         #
-        ["/preview/block/:block_id"].each do |path|
+        ["/admin/cms/block/preview/:block_id"].each do |path|
           
           app.get path, :allowed_usergroups => ['staff'] do
         

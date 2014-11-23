@@ -23,7 +23,7 @@ module Sinatra
           def build_post_publishing_actions
 
             publishing_actions = {}
-            publishing_actions.store('PEND_CONF', {:action => 'REDIRECT_TO_STATUS' , :url_prefix => '/status/content'})
+            publishing_actions.store('PEND_CONF', {:action => 'REDIRECT_TO_STATUS' , :url_prefix => '/render/status/content'})
             publishing_actions.store('PUBLISHED', {:action => 'REDIRECT_TO_PUBLICATION', :url_prefix => '/content/'})
 
             return publishing_actions

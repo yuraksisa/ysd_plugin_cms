@@ -11,7 +11,7 @@ module Sinatra
         #
         # Retrieve the menu_items which belongs to a menu
         #
-        app.get "/menu-items/:menu_name" do
+        app.get "/api/menu-items/:menu_name" do
           
           data=::Site::MenuItem.all(:menu => {:name => params['menu_name']}, :order => [:parent_id.desc,:weight.desc])
           
@@ -23,7 +23,8 @@ module Sinatra
         #
         # Retrive the menu item parent candidadates
         #
-        ["/menu-items-parent-candidate/:menu_name","/menu-items-parent-candidate/:menu_name/:menu_item_id"].each do |path|
+        ["/api/menu-items-parent-candidate/:menu_name",
+         "/api/menu-items-parent-candidate/:menu_name/:menu_item_id"].each do |path|
         
           app.get path do
             data=::Site::MenuItem.all(:menu => {:name => params['menu_name']}, :order => [:parent_id.desc,:weight.desc])
@@ -37,7 +38,7 @@ module Sinatra
         #
         # Retrive menu items
         #
-        ["/menu-items/:menu_name","/menu-items/:menu_name/page/:page"].each do |path|
+        ["/api/menu-items/:menu_name","/api/menu-items/:menu_name/page/:page"].each do |path|
           app.post path do
           
             data=::Site::MenuItem.all(:menu => {:name => params['menu_name']}, :order => [:parent_id.desc,:weight.desc])
@@ -58,7 +59,7 @@ module Sinatra
         #
         # Retrieve a menu item
         #
-        app.get "/menu-item/:id" do
+        app.get "/api/menu-item/:id" do
           
           menu_item = ::Site::MenuItem.get(params['id'])
           
@@ -71,7 +72,7 @@ module Sinatra
         #
         # Create a new term
         #
-        app.post "/menu-item" do
+        app.post "/api/menu-item" do
         
           request.body.rewind
           menu_item_request = JSON.parse(URI.unescape(request.body.read))
@@ -90,7 +91,7 @@ module Sinatra
         #
         # Updates a term
         #
-        app.put "/menu-item" do
+        app.put "/api/menu-item" do
         
           request.body.rewind
           menu_item_request = JSON.parse(URI.unescape(request.body.read))
@@ -109,7 +110,7 @@ module Sinatra
         end
         
         # Deletes a content
-        app.delete "/menu-item" do
+        app.delete "/api/menu-item" do
         
           request.body.rewind
           menu_item_request = JSON.parse(URI.unescape(request.body.read))

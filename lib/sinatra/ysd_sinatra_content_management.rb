@@ -14,7 +14,7 @@ module Sinatra
         #
         # CMS Console 
         #       
-        app.get "/admin/console/cms", :allowed_usergroups => ['staff'] do
+        app.get "/admin/cms", :allowed_usergroups => ['staff'] do
        
           load_page(:console_cms)
 
@@ -23,7 +23,7 @@ module Sinatra
         #
         # Contents management
         #
-        app.get "/admin/contents/?*" do
+        app.get "/admin/cms/contents/?*" do
         
           if not request.accept?'text/html'
             pass
@@ -40,7 +40,7 @@ module Sinatra
         #
         # Show all content types the user can create
         #
-        app.get "/admin/site/cms/new/content/?" do
+        app.get "/admin/cms/content/new/?" do
         
           load_em_page(:content_new, nil, false)
         
@@ -49,7 +49,7 @@ module Sinatra
         #
         # Create a new content 
         #      
-        app.get "/admin/site/cms/new/content/:content_type/?*" do
+        app.get "/admin/cms/content/new/:content_type/?*" do
                     
           if content_type = ContentManagerSystem::ContentType.get(params[:content_type])
             if content_type.can_be_created_by?(user)
@@ -82,7 +82,7 @@ module Sinatra
         #
         # Edit a content
         #
-        app.get "/edit/content/:id/?*" do
+        app.get "/admin/cms/content/edit/:id/?*" do
 
           content = ContentManagerSystem::Content.get(params[:id])
 
@@ -90,7 +90,7 @@ module Sinatra
             if content.can_write?(user)            
 
               locals = render_content_type_aspects(content.content_type.id, content)
-              locals.store(:url_base, "/edit/content/params[:id]")
+              locals.store(:url_base, "/admin/cms/content/edit/params[:id]")
               locals.store(:action, 'edit')
               locals.store(:id, params[:id])          
               locals.store(:content_type, content.content_type.id)
@@ -112,7 +112,7 @@ module Sinatra
         #
         # Get the Gui with the publishing actions 
         #
-        app.get "/publishing-actions/content/:id", :allowed_usergroups => ['staff', 'editor'] do
+        app.get "/render/publishing-actions/content/:id", :allowed_usergroups => ['staff', 'editor'] do
  
            content = ContentManagerSystem::Content.get(params[:id])
 
@@ -134,7 +134,7 @@ module Sinatra
         #
         # Load the content status page
         #
-        app.get "/status/content/:id" do
+        app.get "/render/status/content/:id" do
           
           content = ContentManagerSystem::Content.get(params[:id])
           
@@ -154,7 +154,7 @@ module Sinatra
               load_page(template, :locals => {:element => t.content.title.downcase, 
                                               :publication => content, 
                                               :publishing_address => "/content/#{content.id}" , 
-                                              :management_address => "/edit/content/#{content.id}"})
+                                              :management_address => "/admin/cms/content/edit/#{content.id}"})
             else
               status 401
             end
@@ -175,7 +175,7 @@ module Sinatra
             content.confirm_publication           
           end
 
-          call! env.merge("PATH_INFO" => "/status/content/#{params[:id]}")
+          call! env.merge("PATH_INFO" => "/render/status/content/#{params[:id]}")
 
         end
 

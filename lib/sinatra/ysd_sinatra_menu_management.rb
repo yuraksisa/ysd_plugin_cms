@@ -7,7 +7,7 @@ module Sinatra
         #
         # Taxonomies management page
         #        
-        app.get "/menu-management/?*", :allowed_usergroups => ['staff'] do
+        app.get "/admin/cms/menu-management/?*", :allowed_usergroups => ['staff'] do
           load_page :menu_management
         end
               

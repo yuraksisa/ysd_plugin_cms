@@ -100,7 +100,7 @@ require(["jquery", "YSDEntityManagement", "YSDEntityManagementComplementHooks", 
   	
 	    var self = this;
   	  
-  	  $.getJSON('/taxonomy-content-type/'+contentType,
+  	  $.getJSON('/api/taxonomy-content-type/'+contentType,
   	        function success_handler(data) {
   	          if (data.length == 0) {
   	            $('#content_taxonomies').hide();	
@@ -127,7 +127,7 @@ require(["jquery", "YSDEntityManagement", "YSDEntityManagementComplementHooks", 
       select.setAttribute('multiple', true);
       container.appendChild(select);
       
-      var dataSource = new YSDRemoteDataSource('/terms/'+taxonomy_id,null,[YSDHierachyListAdapter]);
+      var dataSource = new YSDRemoteDataSource('/api/terms/'+taxonomy_id,null,[YSDHierachyListAdapter]);
       var value = null;
       if (this.entity && this.entity.categories_by_taxonomy && this.entity.categories_by_taxonomy[taxonomy_id]) {
         value = this.entity.categories_by_taxonomy[taxonomy_id]; 

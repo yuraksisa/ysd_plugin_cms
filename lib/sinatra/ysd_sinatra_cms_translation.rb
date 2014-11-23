@@ -14,7 +14,7 @@ module Sinatra
         #
         # Content traslation page
         #
-        app.get "/translate/content/:content_id" do
+        app.get "/admin/cms/translate/content/:content_id" do
 
           language_code = if language = ::Model::Translation::TranslationLanguage.find_translatable_languages.first
                             language.code
@@ -27,7 +27,7 @@ module Sinatra
         #
         # Term traslation page
         #
-        app.get "/translate/term/:term_id" do
+        app.get "/admin/cms/translate/term/:term_id" do
       
           language_code = if language = ::Model::Translation::TranslationLanguage.find_translatable_languages.first
                             language.code
@@ -40,7 +40,7 @@ module Sinatra
         #
         # Menu item traslation page
         #
-        app.get "/translate/menuitem/:menu_item_id" do
+        app.get "/admin/cms/translate/menuitem/:menu_item_id" do
                 
           language_code = if language = ::Model::Translation::TranslationLanguage.find_translatable_languages.first
                             language.code

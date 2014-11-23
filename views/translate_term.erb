@@ -107,13 +107,13 @@ require(['jquery','YSDEntityManagement', 'YSDRemoteDataSource', 'YSDSelectSelect
   };
   
   var urls = {
-               get_url        : '/translation/<%=language%>/term/<%=term_id%>',
-               update_url     : '/translation/term'
+               get_url        : '/api/translation/<%=language%>/term/<%=term_id%>',
+               update_url     : '/api/translation/term'
              };
              
   var termTranslationHook = new TermTranslationHook();
   var termTranslation = new EntityManagement(urls, 'term translation', 1, termTranslationHook, 
-                                            {url_base: '/translate/term', action: 'edit', hold_form_after_action: true});
+                                            {url_base: '/admin/cms/translate/term', action: 'edit', hold_form_after_action: true});
  
   $('.entity-title').html('Term translation');
   

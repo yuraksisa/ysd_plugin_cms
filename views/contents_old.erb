@@ -114,14 +114,14 @@ require(["YSDEntityManagement", "YSDSelectSelector", "YSDRemoteDataSource", "YSD
     loadContent: function(entity) {
       
       var return_url = window.location.href;
-      window.location.href = '/edit/content/' + entity.id + '?destination=/admin/contents';
+      window.location.href = '/admin/cms/content/edit/' + entity.id + '?destination=/admin/cms/contents';
 
     },
 
     loadContentForEdit: function(entity) {
 
       var return_url = window.location.href;
-      window.location.href = '/edit/content/' + entity.id + '?destination=/admin/contents';
+      window.location.href = '/admin/cms/content/edit/' + entity.id + '?destination=/admin/cms/contents';
 
     },
 
@@ -154,7 +154,7 @@ require(["YSDEntityManagement", "YSDSelectSelector", "YSDRemoteDataSource", "YSD
       var contentTypesDataSource = new RemoteDataSource("/api/user-content-types",{'id':'id','description':'name'});
       var contentTypesListSelector = new SelectSelector("content_type_id", contentTypesDataSource, null, true, '- All content types -');
       
-      var publishingStateDataSource = new RemoteDataSource("/publishing/states");
+      var publishingStateDataSource = new RemoteDataSource("/api/publishing/states");
       var publishingStateListSelector = new SelectSelector("publishing_state_id", publishingStateDataSource, null, true, '- All status -');
       
     }

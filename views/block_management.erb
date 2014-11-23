@@ -238,7 +238,7 @@ require(['jquery','YSDEntityManagement', 'YSDMemoryDataSource', 'YSDRemoteDataSo
     
     this.preview = function(entity) { /* preview the block */
 
-      var url = '/preview/block/' + entity.id;
+      var url = '/admin/cms/block/preview/' + entity.id;
       
       $('#block-preview-result').load(url);
       
@@ -247,15 +247,15 @@ require(['jquery','YSDEntityManagement', 'YSDMemoryDataSource', 'YSDRemoteDataSo
   	
   };
   
-  var urls = { query_url  : '/blocks',
-    	       create_url : '/block',
-  	           update_url : '/block',
-  	           delete_url : '/block',
-  	           get_url    : '/block'
+  var urls = { query_url  : '/api/blocks',
+    	         create_url : '/api/block',
+  	           update_url : '/api/block',
+  	           delete_url : '/api/block',
+  	           get_url    : '/api/block'
   	         };
 
   var blockHook = new BlockHook();
-  var blocksManager = new EntityManagement(urls, 'block', 12, blockHook, {prefix:'/admin'});
+  var blocksManager = new EntityManagement(urls, 'block', 12, blockHook, {prefix:'/admin/cms'});
  
   $('.entity-title').html('Blocks');
 

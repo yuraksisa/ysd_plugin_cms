@@ -16,7 +16,7 @@ module GuiBlock
            
       result = if element and (not element.new?) and element.can_write?(app.user)      
 
-                 translate_url = "/translate/content/#{element.id}"
+                 translate_url = "/admin/cms/translate/content/#{element.id}"
       
                  if app and app.respond_to?(:request) and app.request.respond_to?(:path_info)
                    translate_url << "?destination=#{app.request.path_info}"

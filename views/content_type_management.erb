@@ -226,7 +226,7 @@
          var ugSelector = new ListSelector('content_type_usergroups', 'usergroups[]', ugDataSource, ugValue );
         
          // Configure the workflows
-         var wfDataSource = new RemoteDataSource('/workflows');
+         var wfDataSource = new RemoteDataSource('/api/publishing/workflows');
          var wfValue = (entity && entity.publishing_workflow_id)?entity.publishing_workflow_id:null;
          var wfSelector = new SelectSelector('publishing_workflow_id', wfDataSource, wfValue); 
 
@@ -324,7 +324,7 @@
   // Add the complement hooks
   hooks = hooks.concat(EntityManagementComplementHooks.complements);
 
-  var contentsTypeManager = new EntityManagement(urls, 'content type', 12, hooks, {prefix:'/admin/site/cms'});
+  var contentsTypeManager = new EntityManagement(urls, 'content type', 12, hooks, {prefix:'/admin/cms'});
   
  });
   

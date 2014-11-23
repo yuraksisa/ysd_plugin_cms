@@ -149,16 +149,16 @@
   };
   
   var urls = { 
-  	           query_url  : '/templates',
-    	         create_url : '/template',
-  	           update_url : '/template',
-  	           delete_url : '/template',
-  	           get_url    : '/template'
+  	           query_url  : '/api/templates',
+    	         create_url : '/api/template',
+  	           update_url : '/api/template',
+  	           delete_url : '/api/template',
+  	           get_url    : '/api/template'
   	         };
   
   var templateHook = new TemplateHook();
   var templateManager = new EntityManagement(urls, 
-     'template', <%=template_page_size%>, templateHook, {prefix: '/admin'});
+     'template', <%=template_page_size%>, templateHook, {prefix: '/admin/cms'});
  
  });
   

@@ -156,7 +156,7 @@ require(['YSDTreeEntityManagement', 'YSDMemoryDataSource',  'YSDRemoteDataSource
          var selectWeight = new SelectSelector('weight', weightDataSource, weightValue);
          
          // Configure parents
-         var parentsDataSource = new RemoteDataSource('/menu-items-parent-candidate/'+ menuItemsManager.model.configuration.parentId,null,[HierachyListAdapter]);
+         var parentsDataSource = new RemoteDataSource('/api/menu-items-parent-candidate/'+ menuItemsManager.model.configuration.parentId,null,[HierachyListAdapter]);
          var parentValue = (entity && entity.parent_id)?entity.parent_id:null;
          var parentTerms = new SelectHierarchicalSelector('parent[id]', parentsDataSource, parentValue, true);
     	
@@ -166,11 +166,11 @@ require(['YSDTreeEntityManagement', 'YSDMemoryDataSource',  'YSDRemoteDataSource
   };
     
   var urls = { 
-  	           query_url  : '/menu-items',
-    	       create_url : '/menu-item',
-  	           update_url : '/menu-item',
-  	           delete_url : '/menu-item',
-  	           get_url    : '/menu-item'
+  	           query_url  : '/api/menu-items',
+    	         create_url : '/api/menu-item',
+  	           update_url : '/api/menu-item',
+  	           delete_url : '/api/menu-item',
+  	           get_url    : '/api/menu-item'
   	         };
   
   var menuItemHook = new MenuItemHook();
@@ -180,7 +180,7 @@ require(['YSDTreeEntityManagement', 'YSDMemoryDataSource',  'YSDRemoteDataSource
   // Add the complement hooks
   menuItemHooks = menuItemHooks.concat(EntityManagementComplementHooks.complements);
       
-  var menuItemsManager = new TreeEntityManagement(urls, 'menu item', 12, menuItemHooks, {parent_filtered:true});
+  var menuItemsManager = new TreeEntityManagement(urls, 'menu item', 12, menuItemHooks, {parent_filtered:true, prefix: '/admin/cms'});
   
 });
 
