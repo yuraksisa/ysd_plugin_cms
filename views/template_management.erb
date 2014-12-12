@@ -1,4 +1,4 @@
-<%= include('entity-management') %>
+<%= include('entity-management', {:element_action => element_action}) %>
 
 <!-- Renders the element description -->
 
@@ -73,10 +73,13 @@
      </form>
 </script>
 
+<%= element_form_extension if defined?element_form_extension %>
+<%= element_extension if defined?element_extension %>
+<%= element_action_extension if defined?element_action_extension %>
 
 <script type="text/javascript">
  
- require(['jquery', 'YSDEntityManagement', 'YSDForms', 'jquery.validate'], function($, EntityManagement, YSDForms) {
+ require(['jquery', 'YSDEntityManagement', 'YSDEntityManagementComplementHooks', 'YSDForms', 'jquery.validate'], function($, EntityManagement, EntityManagementComplementHooks, YSDForms) {
 
  
   function TemplateHook() {
@@ -157,8 +160,12 @@
   	         };
   
   var templateHook = new TemplateHook();
+  var templateHooks = [templateHook];
+  // Add the complement hooks
+  templateHooks = templateHooks.concat(EntityManagementComplementHooks.complements);
+
   var templateManager = new EntityManagement(urls, 
-     'template', <%=template_page_size%>, templateHook, {prefix: '/admin/cms'});
+     'template', <%=template_page_size%>, templateHooks, {prefix: '/admin/cms'});
  
  });
   

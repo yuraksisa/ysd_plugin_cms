@@ -31,6 +31,7 @@ module Sinatra
 
         end
       
+
         #
         # Retrieve a content translation
         #
@@ -66,6 +67,43 @@ module Sinatra
           prepare_translation(content_translation, language_code).to_json
         
         end
+
+        #
+        # Retrieve a template translation
+        #
+        app.get "/api/translation/:language/template/:template_id" do
+          
+          result = {:language => params[:language], :template_id => params[:template_id] }
+          
+          if ct=::ContentManagerSystem::Translation::TemplateTranslation.get(params[:template_id])
+            result.merge!(prepare_translation(ct, params[:language]))
+          end
+          
+          status 200
+          content_type :json
+          result.to_json
+                
+        end
+        
+        #
+        # Updates template translation
+        #
+        app.put "/api/translation/template" do
+        
+          request.body.rewind
+          translation_request = JSON.parse(URI.unescape(request.body.read))
+          
+          language_code = translation_request.delete('language')
+          template_id = translation_request.delete('template_id')
+          
+          template_translation = ::ContentManagerSystem::Translation::TemplateTranslation.create_or_update(template_id, language_code, translation_request)
+          
+          status 200
+          content_type :json
+          prepare_translation(template_translation, language_code).to_json
+        
+        end
+
       
         #
         # Retrieves a term translation

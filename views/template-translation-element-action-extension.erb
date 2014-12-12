@@ -1,0 +1,21 @@
+<script type="text/javascript">
+
+require(['jquery', 'YSDEntityManagementComplementHooks'],
+        function($, EntityManagementComplementHooks) {
+
+   TemplateTranslatePlugin = function() {
+
+     this.onEdit = function(entity) {
+     
+       $('#template_translate a').attr('href', '/admin/cms/translate/template/' + entity.id + '?destination=/admin/cms/templates/' + entity.id);  
+     	
+     }
+
+   }
+             	
+   var templateTranslatePlugin = new TemplateTranslatePlugin();
+   EntityManagementComplementHooks.register(templateTranslatePlugin);	
+   
+});          
+       
+</script>

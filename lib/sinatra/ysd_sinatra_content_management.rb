@@ -59,7 +59,7 @@ module Sinatra
                                :publishing_workflow_id => content_type.publishing_workflow_id})
 
               locals = render_content_type_aspects(params[:content_type], blank_content)
-              locals.store(:url_base, "/new/content/#{params[:content_type]}")
+              locals.store(:url_base, "/admin/cms/content/new/#{params[:content_type]}")
               locals.store(:action, 'new')
               locals.store(:id, nil)
               locals.store(:content_type, params[:content_type])

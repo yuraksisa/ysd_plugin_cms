@@ -15,6 +15,7 @@ require 'guiblocks/ysd_guiblock_post_publishing'
 require 'guiblocks/ysd_guiblock_script_style'
 require 'guiblocks/ysd_guiblock_translation_content'
 require 'guiblocks/ysd_guiblock_translation_menu_item'
+require 'guiblocks/ysd_guiblock_translation_template'
 require 'guiblocks/ysd_guiblock_translation_term'
 
 require 'renders/ysd_ui_cms_render_factory'

@@ -98,9 +98,11 @@ module Sinatra
         
           app.get path do
           
-            if params[:view_name] =~ /^[^.]*$/
-              pass
-            end
+            p "Checking view #{request.path_info}"
+
+            #if params[:view_name] =~ /^[^.]*$/
+            #  pass
+            #end
 
             preffixes = Plugins::Plugin.plugin_invoke_all('ignore_path_prefix_cms', {:app => self})
             if params[:view_name].start_with?(*preffixes)

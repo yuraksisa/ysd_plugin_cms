@@ -408,8 +408,10 @@ guiblock:
   script_style:
     description: Programació
     form:
-      script: Script (Javascript)
-      style: Style (Css)  
+      script:
+        label: Script (Javascript)
+      style: 
+        label: Style (Css)        
   others:
     description: Altres
     form:
