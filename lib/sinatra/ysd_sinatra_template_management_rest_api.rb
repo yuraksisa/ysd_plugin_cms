@@ -36,6 +36,21 @@ module Sinatra
 
           end
         end   
+
+        #
+        # Creates a new template
+        #
+        app.get '/api/template/:id' do
+        
+          if template = ContentManagerSystem::Template.get(params[:id])
+            status 200
+            content_type :json
+            template.to_json
+          else
+            status 404
+          end
+          
+        end
         
         #
         # Creates a new template

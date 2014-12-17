@@ -98,8 +98,11 @@ module Sinatra
         
           app.get path do
           
-            p "Checking view #{request.path_info}"
+            #p "Checking view #{request.path_info}"
 
+            if request.path_info.match(/\/api\//) or request.path_info.match("\\.")
+              pass
+            end
             #if params[:view_name] =~ /^[^.]*$/
             #  pass
             #end
@@ -109,7 +112,7 @@ module Sinatra
               pass
             end
              
-            p "Querying view for #{request.path_info}"
+            #p "Querying view for #{request.path_info}"
 
             view = ContentManagerSystem::View.first(:url => params['view_name'])
             pass unless view
