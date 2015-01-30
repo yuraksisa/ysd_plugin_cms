@@ -25,8 +25,8 @@ module Sinatra
           app.post path, :allowed_usergroups => ['staff'] do
 
             page = params[:page].to_i || 1
-            limit = settings.contents_page_size
-            offset = (page-1) * settings.contents_page_size
+            limit = 20
+            offset = (page-1) * 20
             total = 0
             
             data=ContentManagerSystem::Block.all(:conditions => 

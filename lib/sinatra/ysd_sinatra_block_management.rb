@@ -15,7 +15,7 @@ module Sinatra
           regions = Themes::ThemeManager.instance.selected_theme.regions
           regions.concat Plugins::Plugin.plugin_invoke_all(:apps_regions, {:app => self})
 
-          load_page 'block_management'.to_sym, :locals => {:regions => regions}
+          load_page 'block_management'.to_sym, :locals => {:regions => regions, :blocks_page_size => 20}
           
         end
                 

@@ -255,7 +255,7 @@ require(['jquery','YSDEntityManagement', 'YSDMemoryDataSource', 'YSDRemoteDataSo
   	         };
 
   var blockHook = new BlockHook();
-  var blocksManager = new EntityManagement(urls, 'block', 12, blockHook, {prefix:'/admin/cms'});
+  var blocksManager = new EntityManagement(urls, 'block', <%= blocks_page_size %>, blockHook, {prefix:'/admin/cms'});
  
   $('.entity-title').html('Blocks');
 
