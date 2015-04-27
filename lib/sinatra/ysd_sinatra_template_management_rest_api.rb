@@ -58,8 +58,14 @@ module Sinatra
         app.post '/api/template' do
         
           template_request = body_as_json(ContentManagerSystem::Template)
-          created_template = ContentManagerSystem::Template.create(template_request)
-
+          
+          created_template = ContentManagerSystem::Template.new(template_request)
+          begin
+            created_template.save
+          rescue DataMapper::SaveFailureError => error
+             p "Error saving template #{error} #{created_template.inspect} #{created_template.errors.inspect}"
+             raise error 
+          end
           status 200
           content_type :json
           created_template.to_json
