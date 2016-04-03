@@ -584,11 +584,43 @@ module Huasi
       
         when 'site_breadcrumb'
           
-          breadcrumb = Site::BreadcrumbBuilder.build(app.request.path_info, context)         
-          bc_render = SiteRenders::BreadcrumbRender.new(breadcrumb, context)
+          #breadcrumb = Site::BreadcrumbBuilder.build(app.request.path_info, context)         
+          #bc_render = SiteRenders::BreadcrumbRender.new(breadcrumb, context)
+          #bc_result = bc_render.render
           
-          bc_render.render
-        
+          path = app.request.path_info
+          if path.match /\/page\/\d+/
+            path.sub!(/\/page\/\d+/,'')
+          end
+          
+          home_page_path = SystemConfiguration::Variable.get_value('site.anonymous_front_page', nil)
+          bc = app.t.breadcrumb.home
+
+          if home_page_path != path
+            path_array = path.split('/')
+            result = ""
+            summary = "\\"
+
+            bc = path_array.slice(0, path_array.size-1).inject("") do |result, item| 
+                   if item.empty?
+                     result << "<a href=\"/\">#{app.t.breadcrumb.home}</a>"
+                     result
+                   else 
+                     result << "<span class=\"breadcrumb_separator\"> &gt; </span> " unless result.empty?
+                     result << "<a href=\"#{summary}#{item}\">#{item.capitalize.gsub(/-/,' ')}</a>"
+                     summary << "#{item}\\" 
+                     result
+                   end
+                 end
+            if path_array.size > 1
+              bc << " <span class=\"breadcrumb_separator\"> &gt; </span> <span class=\"breadcrumb_last\">#{path_array.last.capitalize.gsub(/-/,' ')}</span>"
+            end
+
+          end          
+
+          bc
+
+
         when 'site_adminmenu'
           
           if app.user and app.user.is_superuser?

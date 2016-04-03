@@ -206,7 +206,7 @@
               </div>
               <div class="formrow">
                 <label for="cache_life" class="fieldtitle"><%=t.view_management.form.cache_life.label%></label>
-                <input type="text" maxlength="10" id="cache_life" name="cache_life" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.cache_life%>" <%% } %> />
+                <input type="text" maxlength="10" id="cache_life" name="cache_life" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.cache_life%>" <%% } else { %> value="180" <%% } %> />
                 <div class="fielddescription"><%=t.view_management.form.cache_life.description%></div>
               </div>
             </div>

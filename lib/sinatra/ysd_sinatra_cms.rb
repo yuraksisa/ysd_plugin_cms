@@ -15,7 +15,7 @@ module Sinatra
         app.set :cms_author_url, '' # It represents the author url
         
         #
-        # Load a content (by its alias)
+        # Load a content or view (by its alias)
         #
         app.get /^[^.]*$/ do
           
@@ -26,19 +26,31 @@ module Sinatra
             pass
           end
 
-          #p "Querying content for *#{request.path_info}*"
-
-          unless content = ContentManagerSystem::Content.first(:alias => request.path_info)
-             pass
+          # Query content or view
+          if content = ContentManagerSystem::Content.first(:alias => request.path_info)
+            if content.can_read?(user) and (not content.is_banned?)
+              @current_content = content
+              last_modified content.last_update || content.creation_date if user and user.belongs_to?('anonymous') #Cache control
+              page_from_content(content)
+            else
+              status 404
+            end          
+          else
+             path = request.path_info.sub(/\/page\/\d+/, '') 
+             if view = ContentManagerSystem::View.first(:url => path)
+               page, arguments = extract_view_path_arguments(view)
+               begin
+                 result = CMSRenders::ViewRender.new(view, self).render(page, arguments)
+                 page_from_view(view, page, arguments)
+               rescue ContentManagerSystem::ViewArgumentNotSupplied
+                 status 404
+               end                
+             else
+               pass
+             end
           end
         
-          if content.can_read?(user) and (not content.is_banned?)
-            @current_content = content
-            last_modified content.last_update || content.creation_date if user and user.belongs_to?('anonymous') #Cache control
-            page_from_content(content)
-          else
-            status 404
-          end
+
 
         end
                       

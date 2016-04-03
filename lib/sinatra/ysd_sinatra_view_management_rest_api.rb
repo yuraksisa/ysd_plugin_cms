@@ -106,11 +106,13 @@ module Sinatra
           # Creates the new content
           view = ContentManagerSystem::View.new(view_request)
           
-          if not view.save 
-            view.errors.each do |e|
-              puts e
-            end                 
-          end       
+          begin
+            view.save
+          rescue
+            p "Error saving view. #{view.inspect} #{view.errors.inspect}"
+            raise error
+          end
+                 
                     
           # Return          
           status 200

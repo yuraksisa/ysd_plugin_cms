@@ -9,6 +9,27 @@ module Sinatra
         
         app.helpers do
 
+          def extract_view_path_arguments(view)
+            path = request.path_info
+            if !view.url.nil? or !view.url.empty?
+              if path.start_with?(view.url)
+                length = path.length-1
+                arguments = path[view.url.length, length]
+                # No arguments
+                if arguments.nil?
+                  return [1, '']
+                end
+                if arguments.match /\/page\/\d+/
+                  arguments_array = arguments.split('/')
+                  arguments_array.delete_at(0) if arguments_array.size > 0 #First element empty
+                  return [arguments_array[arguments_array.index('page')+1].to_i, arguments.sub(/\/page\/\d+/,'')]
+                else 
+                  return [1, arguments]
+                end
+              end
+            end
+          end 
+
           def extract_view_arguments(page_num, arguments_page, arguments_no_page)
 
             page = [page_num, 1].max

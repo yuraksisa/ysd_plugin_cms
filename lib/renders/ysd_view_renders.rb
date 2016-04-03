@@ -33,11 +33,12 @@ module CMSRenders
         
         view_data = get_view_data(page, arguments)
         
-        view_url = '/'
+        view_url = '' #/'
         
         if view.url.to_s.strip.length > 0
           view_url << view.url
         else
+          view_url << '/'
           view_url << view.view_name
         end
 

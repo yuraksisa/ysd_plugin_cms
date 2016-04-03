@@ -141,7 +141,7 @@ module Sinatra
           key = content_request.delete(:id)
           
           if content = ContentManagerSystem::Content.get(key)
-            content.delete
+            content.destroy
           end
           
           content_type :json
