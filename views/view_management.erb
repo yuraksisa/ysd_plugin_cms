@@ -528,15 +528,7 @@
         }
       
         $("#view-preview-result").load(url);
-/*
-        $.ajax({url: url,
-              success: function(data, textStatus, jqXHR) { 
-                $('#view-preview-result').html(data); 
-              },
-              error: function(data, textStatus, jqXHR) {
-                viewsManager.view.notify_user('Error retrieving data', 'Server error retrieving data');
-              }
-        }); */
+
       };
 
       if (this.manager.view.isFormElementMode()) {

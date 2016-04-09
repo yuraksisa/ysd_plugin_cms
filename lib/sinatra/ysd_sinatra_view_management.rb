@@ -111,39 +111,6 @@ module Sinatra
           
         end
       
-        #
-        # Loads a view as a page by its url
-        #
-        ["/:view_name/page/:page/*",
-         "/:view_name/?*"].each do |path|
-        
-          app.get path do
-          
-            #p "Checking view #{request.path_info}"
-
-            if request.path_info.match(/\/api\//) or request.path_info.match("\\.")
-              pass
-            end
-            #if params[:view_name] =~ /^[^.]*$/
-            #  pass
-            #end
-
-            preffixes = Plugins::Plugin.plugin_invoke_all('ignore_path_prefix_cms', {:app => self})
-            if params[:view_name].start_with?(*preffixes)
-              pass
-            end
-             
-            #p "Querying view for #{request.path_info}"
-
-            view = ContentManagerSystem::View.first(:url => params['view_name'])
-            pass unless view
-            page, arguments = extract_view_arguments(params[:page].to_i, 4, 2)
-
-            page_from_view(view, page, arguments)
-
-          end
-        end
-
       end
     
     end #ViewManagement
