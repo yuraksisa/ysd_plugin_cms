@@ -584,38 +584,41 @@ module Huasi
       
         when 'site_breadcrumb'
           
-          #breadcrumb = Site::BreadcrumbBuilder.build(app.request.path_info, context)         
-          #bc_render = SiteRenders::BreadcrumbRender.new(breadcrumb, context)
-          #bc_result = bc_render.render
+          preffixes = Plugins::Plugin.plugin_invoke_all('ignore_path_prefix_breadcrumb', {:app => self})
           
-          path = app.request.path_info
-          if path.match /\/page\/\d+/
-            path.sub!(/\/page\/\d+/,'')
-          end
-          
-          home_page_path = SystemConfiguration::Variable.get_value('site.anonymous_front_page', nil)
-          bc = app.t.breadcrumb.home
-
-          if home_page_path != path
-            path_array = path.split('/')
-            result = ""
-            summary = "\\"
-
-            bc = path_array.slice(0, path_array.size-1).inject("") do |result, item| 
-                   if item.empty?
-                     result << "<a href=\"/\">#{app.t.breadcrumb.home}</a>"
-                     result
-                   else 
-                     result << "<span class=\"breadcrumb_separator\"> &gt; </span> " unless result.empty?
-                     result << "<a href=\"#{summary}#{item}\">#{item.capitalize.gsub(/-/,' ')}</a>"
-                     summary << "#{item}\\" 
-                     result
-                   end
-                 end
-            if path_array.size > 1
-              bc << " <span class=\"breadcrumb_separator\"> &gt; </span> <span class=\"breadcrumb_last\">#{path_array.last.capitalize.gsub(/-/,' ')}</span>"
+          if !app.request.path_info.empty? and app.request.path_info.start_with?('/admin')
+            breadcrumb = Site::BreadcrumbBuilder.build(app.request.path_info, context)         
+            bc_render = SiteRenders::BreadcrumbRender.new(breadcrumb, context)
+            bc = bc_render.render          
+          elsif app.request.path_info.empty? or app.request.path_info.start_with?(*preffixes)
+            bc = ''
+          else
+            path = app.request.path_info
+            if path.match /\/page\/\d+/
+              path.sub!(/\/page\/\d+/,'')
             end
+            home_page_path = SystemConfiguration::Variable.get_value('site.anonymous_front_page', nil)
+            bc = app.t.breadcrumb.home
 
+            if home_page_path != path
+              path_array = path.split('/')
+              result = ""
+              summary = "\\"
+              bc = path_array.slice(0, path_array.size-1).inject("") do |result, item| 
+                     if item.empty?
+                       result << "<a href=\"/\">#{app.t.breadcrumb.home}</a>"
+                       result
+                     else 
+                       result << "<span class=\"breadcrumb_separator\"> &gt; </span> " unless result.empty?
+                       result << "<a href=\"#{summary}#{item}\">#{item.capitalize.gsub(/-/,' ')}</a>"
+                       summary << "#{item}\\" 
+                       result
+                     end
+                   end
+              if path_array.size > 1
+                bc << " <span class=\"breadcrumb_separator\"> &gt; </span> <span class=\"breadcrumb_last\">#{path_array.last.capitalize.gsub(/-/,' ')}</span>"
+              end
+            end
           end          
 
           bc
