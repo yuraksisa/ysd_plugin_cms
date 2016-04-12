@@ -17,37 +17,14 @@ site_admin_menu:
   menu_management: Menus
 console_cms:
   title: Gestor de contenidos
-  description: >
-               <p class="top-margin-1line">Las páginas que forman su sitio web y los artículos que publica son contenidos.</p>
-               <p>Desde aquí podrá gestionar la páginas que componen su sitio web</p>
-               <div class="container_12">
-                 <div class="grid_6">
-                   <div class="content_data_box">
-                   <p>Por defecto se incluyen tres tipos de contenidos:</p>
-                   <ul>
-                     <li><strong>Página:</strong> Representa una página web</li>
-                     <li><strong>Artículo:</strong> Representa un post o una entrada de un blog</li>
-                     <li><strong>Fragmento:</strong> Representa un bloque que puede utilizar para componer páginas complejas</li>
-                   </ul> 
-                   </div>
-                 </div>
-                 <div class="grid_6">
-                   <div class="left-margin content_data_box">
-                   <p>El gestor de contenidos le permite:</p>
-                   <ul>
-                     <li>Crear nuevos tipos de contenidos</li>
-                     <li>Gestionar sus contenidos</li>
-                     <li>Clasificar los contenidos utilizando taxonomías</li>
-                     <li>Gestionar los comentarios de sus visitantes</li>
-                   </ul>
-                   </div>
-                 </div>
-               </div>
   content_types: Tipos contenidos
   contents: Contenidos
   comments: Comentarios
   taxonomies: Taxonomías
   new_content: Nuevo contenido
+  templates: Plantillas
+  blocks: Bloques  
+  views: Vistas
 #
 # Block management
 #
@@ -297,22 +274,32 @@ content_management:
       label: Filtrar
   table:
     title:
-      label: Título
+      label: Nombre
     type:
       label: Tipo
     state:
       label: Estado
     author:
       label: Autor
+    published:
+      label: Fecha publicación
     created:
       label: Última actualización
+    view_page:
+      label: Ver página
   form:
     content:
       label: Contenido
       description: El texto a publicar
+    name:
+      label: Nombre (identificador interno)
+      description: El nombre del contenido (interno)
     title:
       label: Título
       description: El título del contenido      
+    subtitle:
+      label: Subtítulo
+      description: El subtítulo del contenido
     categories:
       label: Categorías
       description: Permiten clasificar y etiquetar el contenido

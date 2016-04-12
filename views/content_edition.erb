@@ -48,7 +48,7 @@
               </div>
               <div class="formrow">
                 <input type="text" maxlength="80" id="subtitle" name="subtitle" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.subtitle%>" <%% } %>/>
-              </div>              
+              </div>                           
               <%= include('entity-tabs-above-group', {:edit_element_form_above_ingroup_tab => edit_element_form_above_ingroup_tab,
                                                       :edit_element_form_above_ingroup => edit_element_form_above_ingroup,
                                                       :new_element_form_above_ingroup_tab => new_element_form_above_ingroup_tab,
@@ -57,6 +57,10 @@
               <div id="content_body" class="formrow">
                  <textarea rows="20" cols="50" id="body" name="body" class="fieldcontrol texteditor"><%% if (entity) {%><%%=entity.body %><%% } %></textarea>
               </div>
+              <div class="formrow">
+                <label for="key" class="fieldtitle"><%=t.content_management.form.name.label%></label>
+                <input type="text" maxlength="120" id="name" name="name" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.name %>" <%% } %>/>
+              </div>              
               <div class="formrow">
                 <label for="key" class="fieldtitle"><%=t.guiblock.others.form.alias.label%></label>
                 <input type="text" id="alias" name="alias" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.alias %>" <%% } %> />

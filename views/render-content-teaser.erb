@@ -32,6 +32,11 @@
           </span>
         <% end %> 
       </div>
+      <% if content and content.cover and !content.cover.empty? %>
+      <div class="top-margin top-space content-cover-body">
+        <%= content.cover %>
+      </div>
+      <% end %>
       <div class="top-margin top-space content-teaser-body">
         <p><%= content.excerpt if content and content.body and not content.body.empty?%> ... <a class="read-more" href="<%=content.path%>"><%=t.content.read_more%></a></p>
       </div> 

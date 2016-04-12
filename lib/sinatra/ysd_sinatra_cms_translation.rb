@@ -20,8 +20,10 @@ module Sinatra
                             language.code
                           end
                           
-          load_page 'translate_content', :locals => {:content_id => params[:content_id], :language => language_code}
-        
+          #load_page 'translate_content', :locals => {:content_id => params[:content_id], :language => language_code}
+          locals = {:content_id => params[:content_id], :language => [:language_code]}
+          load_em_page(:translate_content, nil, false, :locals => locals)
+
         end
                 
         #

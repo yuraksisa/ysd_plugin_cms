@@ -13,5 +13,8 @@
                 <label for="block" class="fieldtitle"><%=t.guiblock.others.form.block.label%></label>
                 <input type="radio" name="block" id="block_true" value="true" <%%if (entity && entity.block) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_yes.label%>
                 <input type="radio" name="block" id="block_false" value="false" <%%if (entity && !entity.block) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_no.label%>
-              </div>              
+              </div>    
+              <div id="cover_body" class="formrow">
+                 <textarea rows="5" cols="50" id="cover" name="cover" class="fieldcontrol texteditor"><%% if (entity) {%><%%=entity.cover %><%% } %></textarea>
+              </div>                         
             </div>    

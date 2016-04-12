@@ -25,6 +25,8 @@ console_cms:
   comments: Comentaris
   taxonomies: Taxonomies
   new_content: Nou contingut
+  blocks: Blocs
+  views: Vistes    
 #
 # Block management
 #
@@ -158,22 +160,32 @@ content_management:
       label: Filtrar
   table:
     title:
-      label: Títol
+      label: Nom
     type:
       label: Tipus
     state:
       label: Estat
     author:
       label: Autor
+    published:
+      label: Data de publicació      
     created:
-      label: Darrera actualització      
+      label: Darrera actualització
+    view_page:
+      label: Veure pàgina            
   form:
     content:
       label: Contingut
       description: El texte a publicar
+    name:
+      label: Nom (identificador intern)
+      description: El nom del contingut (intern)
     title:
       label: Titol
       description: El titol del contingut
+    subtitle:
+      label: Subtitol
+      description: El subtitol del contingut
     categories:
       label: Categories
       description: Et permeten classificar i etiquetar el contingut

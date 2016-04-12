@@ -23,6 +23,8 @@ console_cms:
   comments: Comments
   taxonomies: Taxonomies
   new_content: New content
+  blocks: Blocks
+  views: Views  
 #
 # Block management
 #
@@ -156,22 +158,32 @@ content_management:
       label: Filter
   table:
     title:
-      label: Title
+      label: Name
     type:
       label: Type
     state:
       label: Status
     author:
       label: Author
+    published:
+      label: Publishing date     
     created:
-      label: Last update      
+      label: Last update
+    view_page:
+      label: View page            
   form:
     content:
       label: Content
       description: The text you wish to publish
+    name:
+      label: Name (internal identifier)
+      description: The content name (internal)
     title:
       label: Title
-      description: The content title      
+      description: The content title    
+    subtitle:
+      label: Subtitle
+      description: The content subtitle  
     categories:
       label: Categories
       description: To classify or tag the content

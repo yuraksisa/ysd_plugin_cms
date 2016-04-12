@@ -17,7 +17,7 @@ require(["YSDEntityManagement",  "YSDSelectSelector", "YSDRemoteDataSource",
     },
 
     onRenderEntities : function(entities) {
-    
+      
       $('.new-entity-button').hide();
       $('.edit-entity-button').hide();
       
@@ -29,16 +29,10 @@ require(["YSDEntityManagement",  "YSDSelectSelector", "YSDRemoteDataSource",
                });               
 
     }, 
-
-    onRenderSearch : function() {
-    
-      this.configSearchForm();
-  
-    },
   
     onRenderAdvancedSearch: function() {
 
-      this.configAdvancedSearch();
+      this.configSearchForm();
 
     },
 
@@ -81,28 +75,44 @@ require(["YSDEntityManagement",  "YSDSelectSelector", "YSDRemoteDataSource",
 
     configSearchForm : function() {
       
-      // content type search
+      var contentTypeValue = null;
+      if (typeof(Storage) !== "undefined") {
+        contentTypeValue = localStorage.getItem("content_type_id");
+      }
       var contentTypesDataSource = new RemoteDataSource("/api/user-content-types",{'id':'id','description':'name'});
-      var contentTypesListSelector = new SelectSelector("content_type_id", contentTypesDataSource, null, true, '- All content types -');
-      
-      var publishingStateDataSource = new RemoteDataSource("/api/publishing/states");
-      var publishingStateListSelector = new SelectSelector("publishing_state_id", publishingStateDataSource, null, true, '- All status -');
-    
+      var contentTypesListSelector = new SelectSelector("content_type_id", contentTypesDataSource, contentTypeValue, true, '<%=t.entitymanagement.all%>');
+
+      var publishingStateValue = null;
+      if (typeof(Storage) !== "undefined") {
+        publishingStateValue = localStorage.getItem("publishing_state_id");
+      }
+      var publishingStateDataSource = new RemoteDataSource("/api/publishing/states",{'id':'id','description':function(data){return contentsHook.publishingStates[data.id]}});
+      var publishingStateListSelector = new SelectSelector("publishing_state_id", publishingStateDataSource, publishingStateValue, true, '<%=t.entitymanagement.all%>');
 
     },
 
-    configAdvancedSearch : function() {
-      
-      var contentTypesDataSource = new RemoteDataSource("/api/user-content-types",{'id':'id','description':'name'});      
-      var selectSelector = new ListSelector("content_types", "content_type_id", contentTypesDataSource, null, true);
+    setFilters: function(filters) {
+      if (typeof(Storage) !== "undefined") {
+        if (localStorage.getItem('content_type_id')) {
+          filters['content_type_id'] = localStorage.getItem('content_type_id');
+        }
+        if (localStorage.getItem('publishing_state_id')) {
+          filters['publishing_state_id'] = localStorage.getItem('publishing_state_id');
+        }        
+      }
+      return filters;
+    },
 
-      var publishingStateDataSource = new RemoteDataSource("/api/publishing/states");
-      var stateSelector = new ListSelector("content_states", "publishing_state_id", publishingStateDataSource, null, true);
+    adaptSearchFormData : function(data) {
+
+      if (typeof(Storage) !== "undefined") {
+        localStorage.setItem("content_type_id", $('#content_type_id').val());
+        localStorage.setItem("publishing_state_id", $('#publishing_state_id').val());
+      }
+      return data;
     }
   	
   };
-
-  //$('#content_detail').dialog({title: 'Content', width: 480, height: 480, autoOpen: false})
 
   var urls = { query_url  : '/api/contents',
     	         create_url : '/api/content',

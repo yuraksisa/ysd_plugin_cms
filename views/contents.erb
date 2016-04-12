@@ -9,34 +9,20 @@
  <%= t.content_management.description %>
 </script>
 
-<script type="text/tmpl" id="elements_search_">
-  <form name="contents_search" id="contents_search" style="overflow:visible">
-    <div style="overflow:visible">
-      <select name="content_type_id" id="content_type_id" class="combo high_select"/>
-      <select name="publishing_state_id" id="publishing_state_id" class="combo high_select"/>
-      <input type="button" 
-             class="form-button action-button entity-management-button search-entity-button" 
-             value="<%=t.content_management.search_form.search_button.label%>">
-    </div>
-  </form>
-</script>
-
 <script type="text/tmpl" id="advanced_search">
-  <form name="contents_search" id="contents_search" style="overflow:visible">
+  <form name="contents_search" id="contents_search" style="overflow:visible%">
   <div class="">
     <div class="container_12">
       <h3>Filtrar</h3>
       <div class="grid_4">
          <div class="right-margin">
          <h4>Tipo de contenido</h4>
-         <div id="content_types">
-         </div>
+         <select name="content_type_id" id="content_type_id" class="combo high_select"/>
          </div>
       </div>
       <div class="grid_4">
          <h4>Estado</h4>
-         <div id="content_states">
-         </div>
+         <select name="publishing_state_id" id="publishing_state_id" class="combo high_select"/>
       </div>
     </div>
     <div class="container_12 top-border-solid top-margin top-space">
@@ -53,26 +39,29 @@
 <!-- Renders the elements container -->
 <script type="text/tmpl" id="elements_container_template">
 
-
   <form name="bulk_actions" id="bulk_actions">
-  <div class="table-container">
-   
-    <table id="elements_table" class="table">
-       <thead class="table-header">
-         <tr>
-           <th class="table-header-title" scope="col" style="width:1em"></th>
-           <th class="table-header-title" scope="col" style="width:30%"><%=t.content_management.table.title.label%></th>
-           <th class="table-header-title" scope="col" style="width:15%"><%=t.content_management.table.type.label%></th>
-           <th class="table-header-title" scope="col" style="width:15%"><%=t.content_management.table.state.label%></th>
-           <th class="table-header-title" scope="col" style="width:15%"><%=t.content_management.table.author.label%></th>
-           <th class="table-header-title" scope="col" style="width:20%"><%=t.content_management.table.created.label%></th>
-         </tr>
-       </thead>
-       <tbody id="elements_tbody" class="table-tbody">             
-       </tbody>
-    </table>
-  </div>
+    <div class="table-container">
+      <table id="elements_table" class="table">
+        <thead class="table-header">
+          <tr>
+            <th class="table-header-title" scope="col" style="width:25%"><%=t.content_management.table.title.label%></th>
+            <th class="table-header-title" scope="col" style="width:10%"><%=t.content_management.table.type.label%></th>
+            <th class="table-header-title" scope="col" style="width:10%"><%=t.content_management.table.state.label%></th>
+            <th class="table-header-title" scope="col" style="width:12%"><%=t.content_management.table.author.label%></th>
+            <th class="table-header-title" scope="col" style="width:14%"><%=t.content_management.table.published.label%></th>
+            <th class="table-header-title" scope="col" style="width:14%"><%=t.content_management.table.created.label%></th>
+            <th class="table-header-title" scope="col" style="width:10%"></th>            
+          </tr>
+        </thead>
+        <tbody id="elements_tbody" class="table-tbody">             
+        </tbody>
+      </table>
+    </div>
   </form>
+  
+  <div id="content_edition_container" style="width:90%; height: 600px; display:none">
+    <iframe id="content_edition_iframe" width="100%" height="100%" style="background-color:white"></iframe>
+  </div>
 
 </script>
 
@@ -81,12 +70,13 @@
 <script type="text/tmpl" id="elements_list_template">
 
     <tr class="table-row" rel="<%%= index %>" id="element_row_<%%=index%>">
-      <td class="table-cell selectable-entity"><input type="checkbox" name="id[]" value="<%%=entity.id%>"/></td>
-      <td class="table-cell"><a href="<%%='/content/'+entity.id%>" target="_blank"><%%=entity.title %></a></td>
+      <td class="table-cell element-own-row-selector" rel="<%%= index %>"><%%=entity.name%></td>
       <td class="table-cell element-own-row-selector" rel="<%%= index %>"><%%= entity.type %></td>
       <td class="table-cell element-own-row-selector" rel="<%%= index %>"><span class="content-status <%%=self.model.entityHooks[0].formatPublishingStateClass(entity)%>"><%%=self.model.entityHooks[0].formatPublishingState(entity)%></span></td>
       <td class="table-cell element-own-row-selector" rel="<%%= index %>"><%%= entity.creation_user %></td>
-      <td class="table-cell element-own-row-selector" rel="<%%= index %>"><%%= self.formatDate(entity.last_update || entity.creation_date) %></td>    
+      <td class="table-cell element-own-row-selector" rel="<%%= index %>"><%%= self.formatDate(entity.publishing_date || '') %></td>       
+      <td class="table-cell element-own-row-selector" rel="<%%= index %>"><%%= self.formatDate(entity.last_update || entity.creation_date) %></td>
+      <td class="table-cell" rel="<%%= index %>"><a href="<%%='/content/'+entity.id%>" target="_blank"><%=t.content_management.table.view_page.label%></a></td>    
     </tr>
 
 </script>
@@ -100,7 +90,6 @@
 <!-- Renders the form to edit an element -->
 
 <script type="text/tmpl" id="element_template_form">
-              
 </script>
 
 <!-- It's used to show the content detail -->

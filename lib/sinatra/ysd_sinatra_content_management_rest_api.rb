@@ -56,7 +56,7 @@ module Sinatra
             limit = settings.contents_page_size
             offset = (page-1) * settings.contents_page_size
             
-            data  = ContentManagerSystem::Content.all(:conditions => conditions, :limit => limit, :offset => offset)
+            data  = ContentManagerSystem::Content.all(:conditions => conditions, :limit => limit, :offset => offset, :order => :name.asc)
             total = ContentManagerSystem::Content.count(conditions)
           
             content_type :json
