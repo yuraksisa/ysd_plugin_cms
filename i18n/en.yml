@@ -24,7 +24,8 @@ console_cms:
   taxonomies: Taxonomies
   new_content: New content
   blocks: Blocks
-  views: Views  
+  views: Views 
+  menus: Menus 
 #
 # Block management
 #

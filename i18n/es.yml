@@ -25,6 +25,7 @@ console_cms:
   templates: Plantillas
   blocks: Bloques  
   views: Vistas
+  menus: Menús
 #
 # Block management
 #

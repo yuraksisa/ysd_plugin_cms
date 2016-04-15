@@ -26,7 +26,8 @@ console_cms:
   taxonomies: Taxonomies
   new_content: Nou contingut
   blocks: Blocs
-  views: Vistes    
+  views: Vistes 
+  menus: Menus   
 #
 # Block management
 #

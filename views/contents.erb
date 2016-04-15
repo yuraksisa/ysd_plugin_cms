@@ -70,7 +70,7 @@
 <script type="text/tmpl" id="elements_list_template">
 
     <tr class="table-row" rel="<%%= index %>" id="element_row_<%%=index%>">
-      <td class="table-cell element-own-row-selector" rel="<%%= index %>"><%%=entity.name%></td>
+      <td class="table-cell element-own-row-selector" rel="<%%= index %>"><%%=entity.content_name%></td>
       <td class="table-cell element-own-row-selector" rel="<%%= index %>"><%%= entity.type %></td>
       <td class="table-cell element-own-row-selector" rel="<%%= index %>"><span class="content-status <%%=self.model.entityHooks[0].formatPublishingStateClass(entity)%>"><%%=self.model.entityHooks[0].formatPublishingState(entity)%></span></td>
       <td class="table-cell element-own-row-selector" rel="<%%= index %>"><%%= entity.creation_user %></td>
