@@ -25,7 +25,10 @@ module Sinatra
           end
 
           # Query content or view
-          if content = ContentManagerSystem::Content.first(:alias => request.path_info)
+          content = ContentManagerSystem::Content.first(:alias => request.path_info)
+          content = ContentManagerSystem::Content.content_by_translation_alias(request.path_info) if content.nil?
+
+          if content              
             if content.can_read?(user) and (not content.is_banned?)
               @current_content = content
               last_modified content.last_update || content.creation_date if user and user.belongs_to?('anonymous') #Cache control

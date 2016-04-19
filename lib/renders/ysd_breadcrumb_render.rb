@@ -20,12 +20,12 @@ module SiteRenders
     #
     def render
     
-       breadcrumb_template_path = find_template
-
-       template = Tilt.new(breadcrumb_template_path)
-       breadcrumb_render = template.render(context, :breadcrumb => @breadcrumb)                        
-           
-       breadcrumb_render
+      if @breadcrumb.is_a?Array and @breadcrumb.size > 0
+         breadcrumb_template_path = find_template
+         template = Tilt.new(breadcrumb_template_path)
+         breadcrumb_render = template.render(context, :breadcrumb => @breadcrumb)                             
+         breadcrumb_render
+      end
            
     end
 

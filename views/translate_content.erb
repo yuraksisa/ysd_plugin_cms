@@ -50,10 +50,15 @@
       </div>
       <div id="meta_form">
         <div class="formrow">
+          <label for="subtitle" class="fieldtitle"><%=t.guiblock.others.form.alias.label%></label>
+          <input type="text" maxlength="80" id="alias" name="alias" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.alias%>" <%% } %>/>
+          <div class="fielddescription"><%=t.guiblock.others.form.alias.description%></div>
+        </div>        
+        <div class="formrow">
           <label for="subtitle" class="fieldtitle">Subtitle</label>
           <input type="text" maxlength="80" id="subtitle" name="subtitle" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.subtitle%>" <%% } %>/>
           <div class="fielddescription">The subtitle of the content</div>
-        </div>
+        </div>        
         <div class="formrow">
           <label for="description" class="fieldtitle">Description</label>
           <textarea rows="4" id="description" name="description" class="fieldcontrol"><%% if(entity) {%><%%=entity.description %> <%% } %></textarea>
@@ -88,6 +93,7 @@ require(['jquery','YSDEntityManagement', 'YSDRemoteDataSource', 'YSDSelectSelect
   function ContentTranslationHook() {
  	  
     this.language = '<%=language%>';
+    this.firstLoad = true;
 
   	this.onEdit = function(entity) {
   	  this.configForm(entity);	
@@ -112,14 +118,27 @@ require(['jquery','YSDEntityManagement', 'YSDRemoteDataSource', 'YSDSelectSelect
       var dataSource = new RemoteDataSource('/api/translationlanguages',{id:'code', description:'description'});
       var value = (this.entity && this.entity.language)?this.entity.language:this.language; 
       var selector = new SelectSelector('language', dataSource, value );
-      
+    
       var self = this;
 
+      dataSource.addListener('data_available', function(event) {
+        if (self.firstLoad && event.data.length > 0) {
+           var newLanguage = event.data[0].id;
+           if (self.language != newLanguage) {
+             self.manager.model.urls.get_url = self.manager.model.urls.get_url.replace('/'+self.language+'/', '/'+newLanguage+'/');
+             self.language = newLanguage;
+             self.firstLoad = false;
+             self.manager.model.get();
+           }
+         }      
+      });
+
       $('#language').change(function(event) { 
-      	  self.changeLanguage(event) 
+      	  self.changeLanguage(event); 
       	 });    	
     }
     
+
     this.changeLanguage = function(event) {
       
       var newLanguage = $('#language option:selected').val();	

@@ -477,29 +477,38 @@ module Huasi
                 {:path => '/admin/cms/menu-item-management/:menu_name',
                  :parent_path => '/admin/cms/menu-management',
                  :regular_expression => /^\/admin\/cms\/menu-item-management\/.+/,                  
-                 :title => 'Menu item',
+                 :title => 'Elemento de menú',
                  :description => 'Manage the items of a menu.',
                  :fit => 1,
                  :module => :cms },
                 {:path => '/admin/cms/translate/content/:content_id',
                  :parent_path => '/admin/cms/contents',
                  :regular_expression => /^\/admin\/cms\/translate\/content\/.+/, 
-                 :title => 'Content translation', 
+                 :title => 'Traducir contenido', 
                  :description => 'Translate a content',
                  :fit => 1,
                  :module => :translation },
                 {:path => '/admin/cms/translate/menuitem/:menuitem_id',
+                 :parent_path => '/admin/cms/menu-management',
                  :regular_expression => /^\/admin\/cms\/translate\/menuitem\/.+/, 
-                 :title => 'Menu item translation', 
+                 :title => 'Traducir elemento de menu', 
                  :description => 'Translate a menu item',
                  :fit => 1,
                  :module => :translation },                 
                 {:path => '/admin/cms/translate/term/:term_id',
+                 :parent_path => '/admin/cms/taxonomy',
                  :regular_expression => /^\/admin\/cms\/translate\/term\/.+/,                  
-                 :title => 'Term translation',
+                 :title => 'Traducir término',
                  :description => 'Translate a term.',
                  :fit => 1,
-                 :module => :translation }                 
+                 :module => :translation },
+                {:path => '/admin/cms/translate/template/:template_id',
+                 :parent_path => '/admin/cms/templates',
+                 :regular_expression => /^\/admin\/cms\/translate\/template\/.+/,                  
+                 :title => 'Traducir plantilla',
+                 :description => 'Translate a term.',
+                 :fit => 1,
+                 :module => :translation }                                   
                ]
         
     end
@@ -576,6 +585,7 @@ module Huasi
       blocks = []
       blocks.concat(get_menus_as_blocks(context))
       blocks.concat(get_breadcrumb_as_block(context))
+      blocks.concat(get_public_breadcrumb_as_block(context))
       blocks.concat(get_views_as_blocks(context))
       blocks.concat(get_contents_as_blocks(context))
       
@@ -600,15 +610,11 @@ module Huasi
     
       result = case block_name
       
-        when 'site_breadcrumb'
-          preffixes = Plugins::Plugin.plugin_invoke_all('ignore_path_prefix_breadcrumb', {:app => self})
-          
-          if !app.request.path_info.empty? and app.request.path_info.start_with?('/admin')
+        when 'site_breadcrumb_public'
 
-            breadcrumb = Site::BreadcrumbBuilder.build(app.request.path_info, context)         
-            bc_render = SiteRenders::BreadcrumbRender.new(breadcrumb, context)
-            bc = bc_render.render          
-          elsif app.request.path_info.empty? or app.request.path_info.start_with?(*preffixes)
+          preffixes = Plugins::Plugin.plugin_invoke_all('ignore_path_prefix_breadcrumb', {:app => self})
+
+          if app.request.path_info.empty? or app.request.path_info.start_with?(*preffixes)
             bc = ''
           else
             path = app.request.path_info
@@ -637,7 +643,21 @@ module Huasi
                 bc << " <span class=\"breadcrumb_separator\"> &gt; </span> <span class=\"breadcrumb_last\">#{path_array.last.capitalize.gsub(/-/,' ')}</span>"
               end
             end
-          end          
+          end  
+
+          bc == app.t.breadcrumb.home ? '' : bc
+
+
+        when 'site_breadcrumb'
+          preffixes = Plugins::Plugin.plugin_invoke_all('ignore_path_prefix_breadcrumb', {:app => self})
+          
+          if app.request.path_info.empty? or app.request.path_info.start_with?(*preffixes)
+            bc = ''
+          else
+            breadcrumb = Site::BreadcrumbBuilder.build(app.request.path_info, context)         
+            bc_render = SiteRenders::BreadcrumbRender.new(breadcrumb, context)
+            bc = bc_render.render          
+          end    
 
           bc
 
@@ -733,6 +753,20 @@ module Huasi
       return blocks
     
     end
+    
+    #
+    # Retrieve the public breadcrumb as a block
+    #
+    def get_public_breadcrumb_as_block(context)
+  
+      blocks = [{:name => 'site_breadcrumb_public',
+                 :module_name => :cms,
+                 :theme => Themes::ThemeManager.instance.selected_theme.name}]
+
+      return blocks
+    
+    end
+
 
     # Retrive the views as blocks
     # 

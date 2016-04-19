@@ -8,7 +8,7 @@ module Sinatra
         # Taxonomies management page
         #        
         app.get "/admin/cms/taxonomy/?*", :allowed_usergroups => ['staff']  do
-          load_page :taxonomy_management
+          load_em_page :taxonomy_management, nil, false
         end
       
       end

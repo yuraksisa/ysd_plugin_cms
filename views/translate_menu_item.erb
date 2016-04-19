@@ -48,9 +48,14 @@
         <input type="text" maxlength="256" id="description" name="description" class="fieldcontrol" <%% if (entity) { %> value="<%%= entity.description %>" <%% } %> />
       </div>
     
+      <div class="formrow">
+        <label for="name" class="fieldtitle">Link route</label>
+        <input type="text" maxlength="128" id="link_route" name="link_route" class="fieldcontrol" <%% if (entity) { %> value="<%%= entity.link_route %>" <%% } %> />
+      </div>
+
       </div>
       <div class="bottom-navigation-bar navigation-bar">
-        <div class="navigation-bar-nav-buttons">
+        <div class="navigation-bar-crud-buttons">
            <input type="submit" class="update-entity-button action-button entity-management-button" value="Update"/>
         </div>
       </div>
@@ -67,6 +72,7 @@ require(['jquery','YSDEntityManagement', 'YSDRemoteDataSource', 'YSDSelectSelect
   function MenuItemTranslationHook() {
  	  
     this.language = '<%=language%>';
+    this.firstLoad = true;
 
   	this.onEdit = function(entity) {
   	  this.configForm(entity);	
@@ -93,6 +99,19 @@ require(['jquery','YSDEntityManagement', 'YSDRemoteDataSource', 'YSDSelectSelect
       var selector = new SelectSelector('language', dataSource, value );
       
       var self = this;
+
+      dataSource.addListener('data_available', function(event) {
+        if (self.firstLoad && event.data.length > 0) {
+           var newLanguage = event.data[0].id;
+           if (self.language != newLanguage) {
+             self.manager.model.urls.get_url = self.manager.model.urls.get_url.replace('/'+self.language+'/', '/'+newLanguage+'/');
+             self.language = newLanguage;
+             self.firstLoad = false;
+             self.manager.model.get();
+           }
+         }      
+      });
+      
       $('#language').change(function(event) { 
       	  self.changeLanguage(event) 
       	 });    	
