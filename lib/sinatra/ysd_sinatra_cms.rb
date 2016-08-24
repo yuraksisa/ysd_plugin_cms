@@ -56,19 +56,13 @@ module Sinatra
         end
                       
         #  
-        # Load a content by its id
+        # Load a content by its id (redirect to the url to avoid duplicate urls)
         # 
         app.get '/content/:id' do
 
-           if content = ContentManagerSystem::Content.get(params[:id]) and 
-              (not content.is_banned?)
-             if content.can_read?(user)
-               @current_content = content
-               last_modified content.last_update || content.creation_date if user and user.belongs_to?('anonymous')  #Cache control
-               page_from_content(content)
-             else
-               status 401
-             end
+           if content = ContentManagerSystem::Content.get(params[:id]) and
+              not content.alias.empty?
+              redirect content.alias, 301
            else
              status 404
            end        
