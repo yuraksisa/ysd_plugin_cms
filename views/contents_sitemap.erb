@@ -1,0 +1,19 @@
+<div id="contents_site_map">
+  <form>
+  	<div class="formrow">
+      <textarea rows="15" class="fieldcontrol editable_text" >
+        <% content_type = nil %>
+        <% @contents.each do |content| %>
+          <% if content_type != content.type %>
+          <!-- <%=content.type%> -->
+            <% content_type = content.type %> 
+          <% end %>
+          <url>
+            <loc><%=@domain%><%=content.alias%></loc>
+            <lastmod><%=[content.creation_date, content.last_update].max.to_s%></lastmod>
+          </url>
+        <% end %>
+      </textarea>
+    </div>
+  </form>
+</div>

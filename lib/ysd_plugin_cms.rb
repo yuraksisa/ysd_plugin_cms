@@ -2,6 +2,7 @@ require 'sinatra/ysd_sinatra_cms'
 require 'sinatra/ysd_sinatra_cms_css_theme'
 require 'sinatra/ysd_sinatra_cms_robots_sitemap'
 require 'sinatra/ysd_sinatra_pages'
+require 'sinatra/ysd_sinatra_cms_webmaster'
 
 require 'ysd_plugin_cms_comment_aspect'
 require 'ysd_plugin_cms_translation_aspect'

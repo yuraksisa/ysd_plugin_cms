@@ -56,6 +56,9 @@ module Huasi
         Users::Group.first_or_create({:group => 'editor'},
           {:name => 'Editor', :description => 'Web content editor'})
 
+        Users::Group.first_or_create({:group => 'webmaster'},
+          {:name => 'Webmaster', :description => 'Webmaster'})
+
         ContentManagerSystem::View.first_or_create({:view_name => 'stories'},
         {
          :description => 'Published stories',

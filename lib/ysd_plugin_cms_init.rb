@@ -12,7 +12,8 @@ Plugins::SinatraAppPlugin.register :cms do
    sinatra_helper    Sinatra::YSD::ContentBuilderHelper   
    sinatra_helper    Sinatra::YSD::ContentManagementHelper
    sinatra_extension Sinatra::YSD::CssTheme
-   sinatra_extension Sinatra::YSD::RobotsSitemap           
+   sinatra_extension Sinatra::YSD::RobotsSitemap
+   sinatra_extension Sinatra::YSD::Webmaster                 
    sinatra_extension Sinatra::YSD::CommentManagement              
    sinatra_extension Sinatra::YSD::ContentManagement              
    sinatra_extension Sinatra::YSD::CMS                            

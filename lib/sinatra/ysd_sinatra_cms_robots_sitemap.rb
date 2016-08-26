@@ -5,7 +5,7 @@ require 'tempfile'
 module Sinatra
   module YSD
     #
-    # Serves the theme css joined with the personalization
+    # Serves /robots.txt and /sitemap.xml
     #
   	module RobotsSitemap
 
