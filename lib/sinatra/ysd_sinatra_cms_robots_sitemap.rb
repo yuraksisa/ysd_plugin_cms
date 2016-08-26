@@ -19,8 +19,8 @@ module Sinatra
           if robots_txt_template = ContentManagerSystem::Template.
                 find_by_name("robots_txt")
             dates = []
-            dates << robot_txt_template.creation_date.to_time unless robot_txt_template.creation_date.nil?
-            dates << robot_txt_template.last_update.to_time unless robot_txt_template.last_update.nil?
+            dates << robots_txt_template.creation_date.to_time unless robots_txt_template.creation_date.nil?
+            dates << robots_txt_template.last_update.to_time unless robots_txt_template.last_update.nil?
             content_type 'text/plain'
             robots_txt_template.text
           else
