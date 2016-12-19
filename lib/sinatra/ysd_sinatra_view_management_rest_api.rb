@@ -15,7 +15,7 @@ module Sinatra
         # Retrieve the view models
         #
         #
-        app.get "/api/view-models/?" do
+        app.get "/api/view-models/?", :allowed_usergroups => ['staff','webmaster'] do
         
           view_models = ::Model::ViewModel.all
 
@@ -28,7 +28,7 @@ module Sinatra
         #
         # Retrieve the view styles
         # 
-        app.get "/api/view-styles/?" do
+        app.get "/api/view-styles/?", :allowed_usergroups => ['staff','webmaster'] do
           
           context = {:app => self}
           
@@ -46,7 +46,7 @@ module Sinatra
         ["/api/view-renders/:view_style",
          "/api/view-renders/:view_style/:view_model"].each do |path|
           
-          app.get path do
+          app.get path, :allowed_usergroups => ['staff','webmaster'] do
             
             view_style = ::Model::ViewStyle.get(params[:view_style].to_sym)
             view_model = if params[:view_model]
@@ -67,7 +67,7 @@ module Sinatra
         #
         # Retrieve all views
         #
-        app.get "/api/views", :allowed_usergroups => ['staff'] do
+        app.get "/api/views", :allowed_usergroups => ['staff','webmaster'] do
 
             data = ContentManagerSystem::View.all(:order => [:view_name.asc])
             content_type :json
@@ -77,7 +77,7 @@ module Sinatra
         
         # Retrive views
         ["/api/views","/api/views/page/:page"].each do |path|
-          app.post path, :allowed_usergroups => ['staff'] do
+          app.post path, :allowed_usergroups => ['staff','webmaster'] do
 
             data=ContentManagerSystem::View.all(:order => [:view_name.asc])              
 
@@ -98,7 +98,7 @@ module Sinatra
         #
         # Create a view
         #
-        app.post "/api/view", :allowed_usergroups => ['staff'] do
+        app.post "/api/view", :allowed_usergroups => ['staff','webmaster'] do
            
           request.body.rewind
           view_request = JSON.parse(URI.unescape(request.body.read))
@@ -124,7 +124,7 @@ module Sinatra
         #
         # Updates a view
         #
-        app.put "/api/view", :allowed_usergroups => ['staff'] do
+        app.put "/api/view", :allowed_usergroups => ['staff','webmaster'] do
         
           request.body.rewind
           view_request = JSON.parse(URI.unescape(request.body.read))
@@ -143,7 +143,7 @@ module Sinatra
         #
         # Deletes a view
         #
-        app.delete "/api/view", :allowed_usergroups => ['staff'] do
+        app.delete "/api/view", :allowed_usergroups => ['staff','webmaster'] do
 
           request.body.rewind
           view_request = JSON.parse(URI.unescape(request.body.read))
@@ -161,7 +161,7 @@ module Sinatra
         #
         # Exports a view
         #
-        app.get '/api/view/export/:view_name', :allowed_usergroups => ['staff'] do
+        app.get '/api/view/export/:view_name', :allowed_usergroups => ['staff','webmaster'] do
 
           if view = ContentManagerSystem::View.get(params[:view_name])
             file_name = "#{view.view_name}.txt"
@@ -179,7 +179,7 @@ module Sinatra
         #
         # Imports view
         #
-        app.post '/api/view/import', :allowed_usergroups => ['staff'] do
+        app.post '/api/view/import', :allowed_usergroups => ['staff','webmaster'] do
 
            import_file = params['import_file'][:tempfile]
            view_to_import = JSON.parse(import_file.read)
@@ -199,7 +199,7 @@ module Sinatra
         #
         # Clone a view
         #
-        app.post '/api/view/clone/:view_name/:new_name', :allowed_usergroups => ['staff'] do
+        app.post '/api/view/clone/:view_name/:new_name', :allowed_usergroups => ['staff','webmaster'] do
 
            if view = ContentManagerSystem::View.get(params[:view_name])
 

@@ -59,8 +59,6 @@ module Sinatra
             data  = ContentManagerSystem::Content.all(:conditions => conditions, :limit => limit, :offset => offset, :order => :content_name.asc)
             total = ContentManagerSystem::Content.count(conditions)
           
-            p "data: #{data.first.inspect}"
-
             content_type :json
             {:data => data, :summary => {:total => total}}.to_json
           

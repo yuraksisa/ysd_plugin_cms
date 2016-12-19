@@ -8,7 +8,7 @@ module Sinatra
         #
         # View management page
         #
-        app.get "/admin/cms/blocks", :allowed_usergroups => ['staff'] do
+        app.get "/admin/cms/blocks", :allowed_usergroups => ['staff','webmaster'] do
 
           ContentManagerSystem::Block.rehash_blocks( Plugins::Plugin.plugin_invoke_all('block_list', {:app => self}) )
           

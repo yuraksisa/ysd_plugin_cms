@@ -11,7 +11,7 @@ module Sinatra
         #
         # Retrieve all menus
         #
-        app.get "/api/menus", :allowed_usergroups => ['staff'] do
+        app.get "/api/menus", :allowed_usergroups => ['staff','webmaster'] do
           data = ::Site::Menu.all
           
           content_type :json
@@ -22,7 +22,7 @@ module Sinatra
         # Retrive menus
         #
         ["/api/menus","/api/menus/page/:page"].each do |path|
-          app.post path, :allowed_usergroups => ['staff'] do
+          app.post path, :allowed_usergroups => ['staff','webmaster'] do
           
             data=::Site::Menu.all
             begin
@@ -41,7 +41,7 @@ module Sinatra
         #
         # Retrieve a menu
         #
-        app.get "/api/menu/:name", :allowed_usergroups => ['staff'] do
+        app.get "/api/menu/:name", :allowed_usergroups => ['staff','webmaster'] do
 
           menu = ::Site::Menu.get(params['name'])
           
@@ -54,7 +54,7 @@ module Sinatra
         #
         # Create a new menu
         #
-        app.post "/api/menu", :allowed_usergroups => ['staff'] do
+        app.post "/api/menu", :allowed_usergroups => ['staff','webmaster'] do
         
           request.body.rewind
           menu_request = JSON.parse(URI.unescape(request.body.read))
@@ -73,7 +73,7 @@ module Sinatra
         #
         # Updates a menu
         #
-        app.put "/api/menu", :allowed_usergroups => ['staff'] do
+        app.put "/api/menu", :allowed_usergroups => ['staff','webmaster'] do
         
           request.body.rewind
           menu_request = JSON.parse(URI.unescape(request.body.read))
@@ -91,7 +91,7 @@ module Sinatra
         end
         
         # Deletes a menu
-        app.delete "/api/menu", :allowed_usergroups => ['staff'] do
+        app.delete "/api/menu", :allowed_usergroups => ['staff','webmaster'] do
         
         end
       

@@ -56,8 +56,19 @@ module Huasi
         Users::Group.first_or_create({:group => 'editor'},
           {:name => 'Editor', :description => 'Web content editor'})
 
+        SystemConfiguration::Variable.first_or_create({:name => 'site.editor_front_page'},
+                                                      {:value => '', 
+                                                       :description => 'Editor front page (dashboard)', 
+                                                       :module => :cms})
+
         Users::Group.first_or_create({:group => 'webmaster'},
           {:name => 'Webmaster', :description => 'Webmaster'})
+
+        SystemConfiguration::Variable.first_or_create({:name => 'site.webmaster_front_page'},
+                                                      {:value => '', 
+                                                       :description => 'Webmaster front page (dashboard)', 
+                                                       :module => :cms})
+
 
         ContentManagerSystem::View.first_or_create({:view_name => 'stories'},
         {
@@ -372,7 +383,7 @@ module Huasi
                  :regular_expression => /^\/admin\/cms/,
                  :title => 'Gestor contenidos',
                  :description => 'Gestiona los contenidos',
-                 :fit => 1,
+                 :fit => 2,
                  :module => :cms},
                 {:path => '/admin/cms/content-types',
                  :parent_path => '/admin/cms',

@@ -11,7 +11,7 @@ module Sinatra
         #
         # Retrieve the menu_items which belongs to a menu
         #
-        app.get "/api/menu-items/:menu_name" do
+        app.get "/api/menu-items/:menu_name", :allowed_usergroups => ['staff','webmaster'] do
           
           data=::Site::MenuItem.all(:menu => {:name => params['menu_name']}, :order => [:parent_id.desc,:weight.desc])
           
@@ -26,7 +26,7 @@ module Sinatra
         ["/api/menu-items-parent-candidate/:menu_name",
          "/api/menu-items-parent-candidate/:menu_name/:menu_item_id"].each do |path|
         
-          app.get path do
+          app.get path, :allowed_usergroups => ['staff','webmaster'] do
             data=::Site::MenuItem.all(:menu => {:name => params['menu_name']}, :order => [:parent_id.desc,:weight.desc])
           
             content_type :json
@@ -39,7 +39,7 @@ module Sinatra
         # Retrive menu items
         #
         ["/api/menu-items/:menu_name","/api/menu-items/:menu_name/page/:page"].each do |path|
-          app.post path do
+          app.post path, :allowed_usergroups => ['staff','webmaster'] do
           
             data=::Site::MenuItem.all(:menu => {:name => params['menu_name']}, :order => [:parent_id.desc,:weight.desc])
             
@@ -59,7 +59,7 @@ module Sinatra
         #
         # Retrieve a menu item
         #
-        app.get "/api/menu-item/:id" do
+        app.get "/api/menu-item/:id", :allowed_usergroups => ['staff','webmaster'] do
           
           menu_item = ::Site::MenuItem.get(params['id'])
           
@@ -72,7 +72,7 @@ module Sinatra
         #
         # Create a new term
         #
-        app.post "/api/menu-item" do
+        app.post "/api/menu-item", :allowed_usergroups => ['staff','webmaster'] do
         
           request.body.rewind
           menu_item_request = JSON.parse(URI.unescape(request.body.read))
@@ -91,7 +91,7 @@ module Sinatra
         #
         # Updates a term
         #
-        app.put "/api/menu-item" do
+        app.put "/api/menu-item", :allowed_usergroups => ['staff','webmaster'] do
         
           request.body.rewind
           menu_item_request = JSON.parse(URI.unescape(request.body.read))
@@ -110,7 +110,7 @@ module Sinatra
         end
         
         # Deletes a content
-        app.delete "/api/menu-item" do
+        app.delete "/api/menu-item", :allowed_usergroups => ['staff','webmaster'] do
         
           request.body.rewind
           menu_item_request = JSON.parse(URI.unescape(request.body.read))

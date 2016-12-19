@@ -14,7 +14,7 @@ module Sinatra
         #
         # CMS Console 
         #       
-        app.get "/admin/cms", :allowed_usergroups => ['staff'] do
+        app.get "/admin/cms", :allowed_usergroups => ['staff','editor','webmaster'] do
        
           load_page(:console_cms)
 
@@ -23,7 +23,7 @@ module Sinatra
         #
         # Contents management
         #
-        app.get "/admin/cms/contents/?*" do
+        app.get "/admin/cms/contents/?*", :allowed_usergroups => ['staff','editor','webmaster'] do
         
           if not request.accept?'text/html'
             pass
@@ -112,7 +112,7 @@ module Sinatra
         #
         # Get the Gui with the publishing actions 
         #
-        app.get "/render/publishing-actions/content/:id", :allowed_usergroups => ['staff', 'editor'] do
+        app.get "/render/publishing-actions/content/:id", :allowed_usergroups => ['staff', 'editor', 'webmaster'] do
  
            content = ContentManagerSystem::Content.get(params[:id])
 

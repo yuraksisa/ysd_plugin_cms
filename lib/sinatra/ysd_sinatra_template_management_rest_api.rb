@@ -9,7 +9,7 @@ module Sinatra
       def self.registered(app)
    
         ['/api/templates','/api/templates/page/:page'].each do |path|
-          app.post path do
+          app.post path, :allowed_usergroups => ['staff','webmaster'] do
             
             query_options = {}
             
@@ -40,7 +40,7 @@ module Sinatra
         #
         # Creates a new template
         #
-        app.get '/api/template/:id' do
+        app.get '/api/template/:id', :allowed_usergroups => ['staff','webmaster'] do
         
           if template = ContentManagerSystem::Template.get(params[:id])
             status 200
@@ -55,7 +55,7 @@ module Sinatra
         #
         # Creates a new template
         #
-        app.post '/api/template' do
+        app.post '/api/template', :allowed_usergroups => ['staff','webmaster'] do
         
           template_request = body_as_json(ContentManagerSystem::Template)
           
@@ -75,7 +75,7 @@ module Sinatra
         #
         # Updates a template
         #
-        app.put '/api/template' do
+        app.put '/api/template', :allowed_usergroups => ['staff','webmaster'] do
 
           template_request = body_as_json(ContentManagerSystem::Template)
           template_id = template_request.delete(:id)
@@ -95,7 +95,7 @@ module Sinatra
         #
         # Updates multiple templates
         #
-        app.put "/api/templates" do
+        app.put "/api/templates", :allowed_usergroups => ['staff','webmaster'] do
       
           request.body.rewind
           templates = JSON.parse(URI.unescape(request.body.read))      
@@ -115,7 +115,7 @@ module Sinatra
         #
         # Delete a template
         #
-        app.delete '/api/template' do
+        app.delete '/api/template', :allowed_usergroups => ['staff','webmaster'] do
 
           template_request = body_as_json(ContentManagerSystem::Template)
           template_id = template_request.delete(:id)

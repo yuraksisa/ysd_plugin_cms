@@ -14,7 +14,7 @@ module Sinatra
         #
         # Content types management page
         #
-        app.get "/admin/cms/content-types/?*", :allowed_usergroups => ['staff']  do
+        app.get "/admin/cms/content-types/?*", :allowed_usergroups => ['staff','webmaster']  do
           
           context = {:app => self}
 
@@ -31,7 +31,7 @@ module Sinatra
         #
         # Configuration of a content type aspect (to set up the aspect attributes)
         #
-        app.get "/admin/cms/content-type/:content_type/:aspect", :allowed_usergroups => ['staff']  do
+        app.get "/admin/cms/content-type/:content_type/:aspect", :allowed_usergroups => ['staff','webmaster']  do
           
           context = {:app => self}
                   

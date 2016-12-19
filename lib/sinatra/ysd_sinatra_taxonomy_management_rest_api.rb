@@ -17,7 +17,7 @@ module Sinatra
         #
         # Retrieve all taxonomies
         #
-        app.get "/api/taxonomies" do
+        app.get "/api/taxonomies", :allowed_usergroups => ['staff','webmaster'] do
           data = ContentManagerSystem::Taxonomy.all
           
           content_type :json
@@ -27,7 +27,7 @@ module Sinatra
         #
         # Retrieve the taxonomies which are asigned to a content type
         #
-        app.get "/api/taxonomy-content-type/:content_type_id" do
+        app.get "/api/taxonomy-content-type/:content_type_id", :allowed_usergroups => ['staff','webmaster'] do
         
           data = ContentManagerSystem::TaxonomyContentType.all(:content_type => {:id => params['content_type_id']}) 
           # The following 4 lines are necessary to work on YAML
@@ -46,7 +46,7 @@ module Sinatra
         # Retrive taxonomies
         #
         ["/api/taxonomies","/api/taxonomies/page/:page"].each do |path|
-          app.post path do
+          app.post path, :allowed_usergroups => ['staff','webmaster'] do
           
             data=ContentManagerSystem::Taxonomy.all
             begin
@@ -70,7 +70,7 @@ module Sinatra
         #
         # Retrieve a taxonomy
         #
-        app.get "/api/taxonomy/:id" do
+        app.get "/api/taxonomy/:id", :allowed_usergroups => ['staff','webmaster'] do
           
           taxonomy = ContentManagerSystem::Taxonomy.get(params['id'])
           taxonomy = prepare_taxonomy(taxonomy) if taxonomy
@@ -84,7 +84,7 @@ module Sinatra
         #
         # Create a new taxonomy
         #
-        app.post "/api/taxonomy" do
+        app.post "/api/taxonomy", :allowed_usergroups => ['staff','webmaster'] do
           
           request.body.rewind
           taxonomy_request = JSON.parse(URI.unescape(request.body.read))
@@ -103,7 +103,7 @@ module Sinatra
         #
         # Updates a taxonomy
         #
-        app.put "/api/taxonomy" do
+        app.put "/api/taxonomy", :allowed_usergroups => ['staff','webmaster'] do
                 
           request.body.rewind
           taxonomy_request = JSON.parse(URI.unescape(request.body.read))
@@ -125,7 +125,7 @@ module Sinatra
         end
         
         # Deletes a content
-        app.delete "/api/taxonomy" do
+        app.delete "/api/taxonomy", :allowed_usergroups => ['staff','webmaster'] do
         
         end
       

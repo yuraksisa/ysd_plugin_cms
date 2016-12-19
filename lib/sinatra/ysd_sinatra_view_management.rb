@@ -51,7 +51,7 @@ module Sinatra
         #
         # View management page
         #
-        app.get "/admin/cms/views", :allowed_usergroups => ['staff'] do
+        app.get "/admin/cms/views", :allowed_usergroups => ['staff','webmaster'] do
           
           locals = {}
 
@@ -94,7 +94,7 @@ module Sinatra
         ["/admin/cms/view/preview/:view_name/page/:page/?*",
          "/admin/cms/view/preview/:view_name/?*"].each do |path|
           
-          app.get path do
+          app.get path, :allowed_usergroups => ['staff','webmaster'] do
         
             if view = ContentManagerSystem::View.get(params[:view_name])      
               page, arguments = extract_view_arguments(params[:page].to_i, 6, 4)   

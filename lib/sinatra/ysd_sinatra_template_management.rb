@@ -9,7 +9,7 @@ module Sinatra
         #
         # Templates manager
         #
-        app.get '/admin/cms/templates/?*' do
+        app.get '/admin/cms/templates/?*', :allowed_usergroups => ['staff'] do
 
           aspects = []
           aspects << UI::GuiBlockEntityAspectAdapter.new(GuiBlock::TemplateTranslate.new, {:show_on_new => false} )
@@ -26,7 +26,7 @@ module Sinatra
         #
         # Template traslation page
         #
-        app.get "/admin/cms/translate/template/:template_id" do
+        app.get "/admin/cms/translate/template/:template_id", :allowed_usergroups => ['staff'] do
       
           language_code = if language = ::Model::Translation::TranslationLanguage.find_translatable_languages.first
                             language.code

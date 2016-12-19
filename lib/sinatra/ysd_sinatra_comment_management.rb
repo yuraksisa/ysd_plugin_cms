@@ -9,7 +9,7 @@ module Sinatra
   		#
         # Comments management page
         #
-        app.get "/admin/cms/comments", :allowed_usergroups => ['staff', 'editor'] do
+        app.get "/admin/cms/comments", :allowed_usergroups => ['staff', 'editor', 'webmaster'] do
           
           context = {:app => self}          
           aspects = []
@@ -29,7 +29,7 @@ module Sinatra
         #
         # Get the Gui with the publishing actions 
         #
-        app.get "/render/publishing-actions/comment/:id", :allowed_usergroups => ['staff', 'editor'] do
+        app.get "/render/publishing-actions/comment/:id", :allowed_usergroups => ['staff', 'editor','webmaster'] do
  
            if comment = ContentManagerSystem::Comment.get(params[:id])
              aspects = []

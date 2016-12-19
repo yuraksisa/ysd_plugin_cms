@@ -22,7 +22,7 @@ module Sinatra
         
         # Retrive the blocks
         ["/api/blocks","/api/blocks/page/:page"].each do |path|
-          app.post path, :allowed_usergroups => ['staff'] do
+          app.post path, :allowed_usergroups => ['staff','webmaster'] do
 
             page = params[:page].to_i || 1
             limit = 20
@@ -47,7 +47,7 @@ module Sinatra
         end
         
         # Create a block
-        app.post "/api/block", :allowed_usergroups => ['staff'] do
+        app.post "/api/block", :allowed_usergroups => ['staff','webmaster'] do
           
           body_request = body_as_json(ContentManagerSystem::Block)
 
@@ -59,7 +59,7 @@ module Sinatra
         end
         
         # Updates a block
-        app.put "/api/block", :allowed_usergroups => ['staff'] do
+        app.put "/api/block", :allowed_usergroups => ['staff','webmaster'] do
           
           block_request = body_as_json(ContentManagerSystem::Block)      
           block_id = block_request.delete(:id)

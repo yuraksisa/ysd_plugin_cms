@@ -7,7 +7,7 @@ module Sinatra
         #
         # Term management page
         #        
-        app.get "/admin/cms/terms/:taxonomy_id/?*", :allowed_usergroups => ['staff']  do
+        app.get "/admin/cms/terms/:taxonomy_id/?*", :allowed_usergroups => ['staff','webmaster']  do
           
           if taxonomy = ContentManagerSystem::Taxonomy.get(params[:taxonomy_id])
 

@@ -67,7 +67,7 @@ module Sinatra
         ["/api/comments",
          "/api/comments/page/:page"].each do |path|
            
-           app.post path, :allowed_usergroups => ['staff','editor'] do
+           app.post path, :allowed_usergroups => ['staff','editor','webmaster'] do
            
             conditions = {}         
             
@@ -106,7 +106,7 @@ module Sinatra
         #
         # Updates a comment
         #
-        app.put "/api/comment", :allowed_usergroups => ['staff','editor'] do
+        app.put "/api/comment", :allowed_usergroups => ['staff','editor','webmaster'] do
            comment_request = body_as_json(ContentManagerSystem::Comment)
            if comment = ContentManagerSystem::Comment.get(comment_request.delete(:id))
              comment.attributes = comment_request
@@ -121,7 +121,7 @@ module Sinatra
         #
         # Deletes a comment
         #
-        app.delete "/api/comment", :allowed_usergroups => ['staff','editor'] do
+        app.delete "/api/comment", :allowed_usergroups => ['staff','editor','webmaster'] do
            comment_request = body_as_json(ContentManagerSystem::Comment)
            if comment = ContentManagerSystem::Comment.get(comment_request.delete(:id))
              comment.destroy
@@ -135,7 +135,7 @@ module Sinatra
         #
         # Deletes a comment
         #
-        app.delete "/api/comment/:id", :allowed_usergroups => ['staff','editor'] do
+        app.delete "/api/comment/:id", :allowed_usergroups => ['staff','editor','webmaster'] do
            if comment = ContentManagerSystem::Comment.get(params[:id])
              comment.destroy
              content_type :json
@@ -148,7 +148,7 @@ module Sinatra
         #
         # Publish a comment
         #
-        app.post "/api/comment/publish/:id", :allowed_usergroups => ['staff','editor'] do
+        app.post "/api/comment/publish/:id", :allowed_usergroups => ['staff','editor','webmaster'] do
 
           if comment = ContentManagerSystem::Comment.get(params[:id])
             comment.publish_publication
@@ -162,7 +162,7 @@ module Sinatra
         #
         # Confirm a comment
         #
-        app.post "/api/comment/confirm/:id", :allowed_usergroups => ['staff','editor'] do
+        app.post "/api/comment/confirm/:id", :allowed_usergroups => ['staff','editor','webmaster'] do
 
           if comment = ContentManagerSystem::Comment.get(params[:id])
             comment.confirm_publication
@@ -176,7 +176,7 @@ module Sinatra
         #
         # Validate a comment
         #
-        app.post "/api/comment/validate/:id", :allowed_usergroups => ['staff','editor'] do
+        app.post "/api/comment/validate/:id", :allowed_usergroups => ['staff','editor','webmaster'] do
 
           if comment = ContentManagerSystem::Comment.get(params[:id])
             comment.validate_publication
@@ -191,7 +191,7 @@ module Sinatra
         #
         # Ban a comment
         #
-        app.post "/api/comment/ban/:id", :allowed_usergroups => ['staff','editor'] do
+        app.post "/api/comment/ban/:id", :allowed_usergroups => ['staff','editor','webmaster'] do
 
           if comment = ContentManagerSystem::Comment.get(params[:id])
             comment.ban_publication
@@ -206,7 +206,7 @@ module Sinatra
         #
         # Allow a content
         #
-        app.post "/api/comment/allow/:id", :allowed_usergroups => ['staff','editor'] do
+        app.post "/api/comment/allow/:id", :allowed_usergroups => ['staff','editor','webmaster'] do
 
           if comment = ContentManagerSystem::Comment.get(params[:id])
             comment.allow_publication
