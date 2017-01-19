@@ -1,6 +1,6 @@
 module Sinatra
   module YitoExtension
-    module PagesSupportManagementRESTApi
+    module RedirectManagementRESTApi
 
       def self.registered(app)
 
@@ -9,7 +9,7 @@ module Sinatra
         #
         ["/api/cms/redirects","/api/cms/redirects/page/:page"].each do |path|
           
-          app.post path do
+          app.post path, :allowed_usergroups => ['editor', 'staff','webmaster'] do
 
             page = params[:page].to_i || 1
             limit = 20
@@ -45,7 +45,7 @@ module Sinatra
         #
         # Get redirects
         #
-        app.get "/api/cms/redirects" do
+        app.get "/api/cms/redirects", :allowed_usergroups => ['editor', 'staff','webmaster'] do
 
           data = ContentManagerSystem::Redirect.all
 
@@ -58,7 +58,7 @@ module Sinatra
         #
         # Get redirect
         #
-        app.get "/api/cms/redirect/:id" do
+        app.get "/api/cms/redirect/:id", :allowed_usergroups => ['editor', 'staff','webmaster'] do
         
           data = ContentManagerSystem::Redirect.get(params[:id].to_i)
           
@@ -71,7 +71,7 @@ module Sinatra
         #
         # Create redirect
         #
-        app.post "/api/cms/redirect/" do
+        app.post "/api/cms/redirect/?", :allowed_usergroups => ['editor', 'staff','webmaster'] do
         
           data_request = body_as_json(ContentManagerSystem::Redirect)
           data = ContentManagerSystem::Redirect.create(data_request)
@@ -85,7 +85,7 @@ module Sinatra
         #
         # Updates redirect
         #
-        app.put "/api/cms/redirect/" do
+        app.put "/api/cms/redirect/?", :allowed_usergroups => ['editor', 'staff','webmaster'] do
           
           data_request = body_as_json(ContentManagerSystem::Redirect)
                               
@@ -102,7 +102,7 @@ module Sinatra
         #
         # Deletes redirect 
         #
-        app.delete "/api/cms/redirect/" do
+        app.delete "/api/cms/redirect/?", :allowed_usergroups => ['editor', 'staff','webmaster'] do
         
           data_request = body_as_json(ContentManagerSystem::Redirect)
           

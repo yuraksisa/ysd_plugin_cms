@@ -341,7 +341,12 @@ module Huasi
                                   :description => 'Manages template: creation and update of template.',
                                   :module => 'cms',
                                   :weight => 1}},       
-
+                    {:path => '/cms/redirects',
+                     :options => {:title => app.t.cms_admin_menu.redirects_management,
+                                  :link_route => "/admin/cms/redirects",
+                                  :description => 'Redirects a content',
+                                  :module => 'cms',
+                                  :weight => 12}}, 
                     {:path => '/sbm',
                      :options => {:title => app.t.cms_admin_menu.build_site_menu,
                                   :description => 'Site building',

@@ -1,0 +1,98 @@
+<%= include('entity-management') %>
+
+<!-- Renders the element description -->
+<script type="text/tmpl" id="elements_title">
+  <h2 class="entity-title"><%=t.redirect_management.title%></h2> 
+</script>
+
+<!-- Renders the element description -->
+<script type="text/tmpl" id="elements_description">
+</script>
+
+<!-- Renders the elements container -->
+<script type="text/tmpl" id="elements_container_template">
+  <table id="elements_table" class="table">
+     <thead class="table-header">
+       <tr>
+         <th class="table-header-title" scope="col" style="width:25%">
+            <%= t.redirect_management.table.source %>
+         </th>
+         <th class="table-header-title" scope="col" style="width:25%">
+            <%= t.redirect_management.table.destination %>
+         </th>
+         <th class="table-header-title" scope="col" style="width:10%">
+            <%= t.redirect_management.table.redirection_type %>
+         </th>       
+         <th class="table-header-title" scope="col" style="width:40%">
+         </th>         
+       </tr>
+     </thead>
+     <tbody id="elements_tbody" class="table-tbody">             
+     </tbody>
+  </table>
+</script>
+
+<!-- Renders one element in the elements list view -->
+        
+<script type="text/tmpl" id="elements_list_template">
+    <tr class="table-row" id="element_row_<%%=index%>">
+      <td class="table-cell element-navigation-detail" rel="<%%= index %>">
+         <%%= entity.source %>
+      </td>
+      <td class="table-cell element-navigation-detail" rel="<%%= index %>">
+         <%%= entity.destination %>
+      </td> 
+      <td class="table-cell element-navigation-detail" rel="<%%= index %>">
+         <%%= entity.redirection_type %>
+      </td>
+      <td class="table-cell">
+      </td>
+    </tr>
+</script>
+
+<!-- Renders one element in the element view (full detailed) -->
+
+<script type="text/tmpl" id="element_template">
+   
+</script>
+
+<!-- Renders the form to edit an element -->
+
+<script type="text/tmpl" id="element_template_form">
+        
+
+     <form name="element" method="POST">
+        <div class="form-fields">
+          <div class="container_12"> 
+            <div class="grid_6">
+              <div class="formrow">
+                <label class="fieldtitle"><%= t.redirect_management.form.source.label %></label>
+                <input type="text" maxlength="255" id="source" name="source" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.source %>" <%% } %>/>
+              </div>
+              <div class="formrow">
+                <label class="fieldtitle"><%= t.redirect_management.form.destination.label %></label>
+                <input type="text" maxlength="255" id="destination" name="destination" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.source %>" <%% } %>/>
+              </div>              
+              <div class="formrow">
+                <label for="category[code]" class="fieldtitle"><%=t.redirect_management.form.redirection_type.label%></label>
+                <select name="redirection_type" id="redirection_type" class="fieldcontrol">
+                </select>
+              </div>              
+            </div>
+
+            <div class="bottom-navigation-bar navigation-bar">
+             <div class="navigation-bar-crud-buttons">
+                <%% if (entity) { %>
+                  <input type="submit" class="update-entity-button action-button entity-management-button" value="<%=t.entitymanagement.update%>"/>
+                <%% } 
+                   else { %>
+                  <input type="submit" class="create-entity-button action-button entity-management-button" value="<%=t.entitymanagement.create%>"/>
+                <%% } %>
+             </div>
+            </div> 
+          </div>          
+        </div>
+      </form>
+
+     
+</script>

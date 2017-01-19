@@ -125,6 +125,7 @@ require(["jquery", "YSDEntityManagement", "YSDEntityManagementComplementHooks", 
       select.setAttribute('class', 'fieldcontrol');
       select.setAttribute('size', 10);
       select.setAttribute('multiple', true);
+      select.style.height = '200px';
       container.appendChild(select);
       
       var dataSource = new YSDRemoteDataSource('/api/terms/'+taxonomy_id,null,[YSDHierachyListAdapter]);

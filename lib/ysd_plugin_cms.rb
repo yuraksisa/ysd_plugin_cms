@@ -55,6 +55,8 @@ require 'sinatra/ysd_sinatra_cms_translation'
 require 'sinatra/ysd_sinatra_cms_translation_rest_api'
 require 'sinatra/ysd_sinatra_template_management'
 require 'sinatra/ysd_sinatra_template_management_rest_api'
+require 'sinatra/ysd_sinatra_redirects_management'
+require 'sinatra/ysd_sinatra_redirect_management_rest_api'
 require 'support/ysd_cms_support'
 
 require 'ysd_plugin_cms_extension'

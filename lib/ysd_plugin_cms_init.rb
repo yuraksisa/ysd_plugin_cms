@@ -40,4 +40,6 @@ Plugins::SinatraAppPlugin.register :cms do
    sinatra_extension Sinatra::YSD::CMSTranslationRESTApi
    sinatra_extension Sinatra::YSD::TemplateManagement
    sinatra_extension Sinatra::YSD::TemplateManagementRESTApi
+   sinatra_extension Sinatra::YitoExtension::RedirectManagement
+   sinatra_extension Sinatra::YitoExtension::RedirectManagementRESTApi
 end

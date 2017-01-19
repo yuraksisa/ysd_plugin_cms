@@ -1,0 +1,49 @@
+
+require(["jquery", "YSDEntityManagement", 
+         "YSDMemoryDataSource", "YSDSelectSelector", "YSDjson2"],
+         function($, EntityManagement, 
+          MemoryDataSource, SelectSelector) {
+    
+  var redirectHook = {
+     
+    entity: null,
+       
+    entityKey : function(entity) {
+      return entity.reference;
+    },
+
+    onEdit : function(entity) {
+      this.entity = entity;
+      $('#source').focus();
+      this.configForm(entity);
+    },
+  
+    onNew : function() {
+      this.entity = null;
+      $('#destination').focus();
+      this.configForm(null);
+    },
+              
+    configForm: function(entity) {
+      var redirects = [301,302];
+      var redirectsDataSource = new MemoryDataSource(redirects);
+      var redirectValue = (entity && entity.redirection_type)?entity.redirection_type:redirects[0];
+      var redirectionSelect = new SelectSelector('redirection_type',
+         redirectsDataSource, redirectValue);
+    }          
+
+  };
+
+  var urls = { query_url  : '/api/cms/redirects',
+               create_url : '/api/cms/redirect',
+               update_url : '/api/cms/redirect',
+               delete_url : '/api/cms/redirect',
+               get_url    : '/api/cms/redirect'
+             };
+  
+                 
+  var redirectManager = new EntityManagement(urls, 'redirect', 
+      20, redirectHook, 
+      {prefix: '/admin/cms'});
+  
+});

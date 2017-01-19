@@ -15,7 +15,7 @@ module Sinatra
         app.set :cms_author_url, '' # It represents the author url
         
         #
-        # Load a content or view (by its alias)
+        # Load a content, view (by its alias) or redirect
         #
         app.get /^[^.]*$/ do
           
@@ -47,7 +47,11 @@ module Sinatra
                  status 404
                end                
              else
-               pass
+               if http_redir = ContentManagerSystem::Redirect.first(:source => request.path_info)
+                 redirect http_redir.destination, http_redir.redirection_type
+               else
+                 pass
+               end
              end
           end
         

@@ -35,7 +35,7 @@ module Sinatra
           def build_creation_buttons(available_actions)
 
             creation_buttons = []
-            
+
             if available_actions.any? { |action| action == ContentManagerSystem::PublishingAction::SAVE}
               creation_buttons << {:id => 'save_content', :text => 'Save', :url => '/api/content?op=save', :class => 'publishing-button-save'} 
             end

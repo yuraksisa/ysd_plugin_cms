@@ -12,6 +12,7 @@ cms_admin_menu:
   build_site_menu: Construir sitio
   block_management: Bloques
   view_management: Vistas
+  redirects_management: Redirecciones HTTP
 site_admin_menu:
   admin_menu: Admin
   menu_management: Menus
@@ -579,3 +580,21 @@ guiblock:
 #
 breadcrumb:
   home: Inicio
+#
+# Redirect management
+#
+redirect_management:
+  title: Redirecciones HTTP
+  description: >
+               <p>Esta página proporciona una interfaz para definir redirecciones.</p>
+  table:
+    source: Origen
+    destination: Destino
+    redirection_type: Tipo
+  form:
+    source: 
+      label: Origen
+    destination: 
+      label: Destino
+    redirection_type:
+      label: Tipo
