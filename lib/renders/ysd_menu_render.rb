@@ -26,7 +26,7 @@ module SiteRenders
     def render
     
       start_menu    = "<ul id=\"menu_<%=root[:id]%>\" class=\"menu #{menu.render_css_class}\">"
-      start_submenu = "<li class=\"menuitem\"><a href=\"<%=branch[:link_route]%>\"><%=branch[:title]%></a><ul class=\"submenu submenu-level<%=branch[:level]%>\">"
+      start_submenu = "<li class=\"menuitem\"><a href=\"<%=branch[:link_route]%>\" title=\"branch[:description]\"><%=branch[:title]%></a><ul class=\"submenu submenu-level<%=branch[:level]%>\">"
       menu_item     = "<li id=\"menu_item_<%=leaf[:id]%>\" class=\"menuitem\"><a href=\"<%=leaf[:link_route]%>\"><%=leaf[:title]%></a></li>"
       end_submenu   = "</ul></li>"
       end_menu      = "</ul>"    
@@ -63,12 +63,13 @@ module SiteRenders
         if app.respond_to?(:session)
            menu_item = menu_item.translate(app.session[:locale])
            if menu_item.menu.language_in_routes
-             menu_item_link_route = File.join(menu_item_link_route, app.session[:locale])
+             menu_item_link_route = File.join('/', app.session[:locale], menu_item_link_route)
            end
         end
 
         result << {:id       => menu_item.id,
                    :title    => menu_item.title,
+                   :description => menu_item.description,
                    :link_route => menu_item_link_route,
                    :children => adapt_children(menu_item.children.sort{|x,y| y.weight<=>x.weight})}
       

@@ -19,4 +19,9 @@
                 <input type="text" maxlength="3" id="language" name="language" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.language %>"<%% } %>/>
                 <div class="fielddescription"><%=t.guiblock.meta.form.language.description%></div>
               </div>
+              <div class="formrow">
+                <label for="title_anchor_link" class="fieldtitle"><%=t.guiblock.meta.form.title_anchor_link.label%></label>
+                <input type="text" maxlength="80" id="title_anchor_link" name="title_anchor_link" class="fieldcontrol" <%% if(entity) {%>value="<%%=entity.title_anchor_link%>" <%% } %></>
+                <div class="fielddescription"><%=t.guiblock.meta.form.title_anchor_link.description%></div>
+              </div>              
             </div>  

@@ -560,6 +560,9 @@ guiblock:
       language:
         label: Idioma
         description: Se usa como etiqueta meta
+      title_anchor_link:
+        label: Atributo link del h1
+        description: Se usa como el atributo title al mostrar el titulo
   others:
     description: Otros
     form:

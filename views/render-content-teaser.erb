@@ -2,14 +2,14 @@
     
     <div class="grid_12">
       <% if content and content.photo_url_total_full %>
-         <img class="rounded top-margin" style="width:100%" src="<%=content.photo_url_total_full%>"/>
+         <img class="top-margin" style="width:100%" src="<%=content.photo_url_total_full%>"/>
       <% end %> 
     </div>
 
     <div class="grid_12">
       <div class="top-margin">
       <% if content and content.title and not content.title.empty? %>
-        <h3 class="content-teaser-title"><a href="<%=content.path%>"><%= content.title %></a></h3>
+        <h3 class="content-teaser-title"><a href="<%=content.alias%>" <%if content and content.title_anchor_link and !content.title_anchor_link.empty?%> title="<%=content.title_anchor_link%>"<%end%>><%= content.title %></a></h3>
       <% end %>
       <div class="top-separator bottom-separator">
         <% if content and content.creation_date and not content.creation_date.nil? %>
