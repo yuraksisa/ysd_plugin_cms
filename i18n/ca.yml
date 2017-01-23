@@ -206,6 +206,12 @@ content:
   categories: categories
   read_more: Llegir més
 #
+# View render
+#
+view:
+  back_page: Anterior
+  next_page: Següent  
+#
 # Content Type management
 #
 content_type_management:

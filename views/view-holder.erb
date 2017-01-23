@@ -26,7 +26,21 @@
   <% end %>
 
   <% if view.pagination and view_data[:summary][:total_pages] > 1 %>
-    <div id="<%="view_#{view.view_name}_pagination"%>" class="view_pagination">
+    <div id="<%="view_#{view.view_name}_pagination"%>" class="view_pagination top-margin-1line bottom-margin-1line">
+      <% unless view.ajax_pagination %>
+        <% if view.pagination and view_data[:summary][:total_pages] > 1 %>
+
+           <% if view_data[:summary][:current_page] > 1 %>
+
+             <a class="form-button" href="<%=format_url_with_language("#{view_url}/page/#{view_data[:summary][:current_page]-1}")%><%=view_arguments and !view_arguments.empty? ? "/#{view_arguments}" : ''%>"><%=t.view.back_page%></a>
+           <% end %>
+
+           <% if view_data[:summary][:current_page] < view_data[:summary][:total_pages] %>
+             <a class="form-button" href="<%=format_url_with_language("#{view_url}/page/#{view_data[:summary][:current_page]+1}")%><%=view_arguments and !view_arguments.empty? ? "/#{view_arguments}" : ''%>"><%=t.view.next_page%></a>
+           <% end %>
+
+        <% end %>
+      <% end %>
     </div>
   <% end %>
 
@@ -38,7 +52,8 @@
 
 </div>
 
-<% if view.pagination and view_data[:summary][:total_pages] > 1 %>
+
+<% if view.ajax_pagination and view.pagination and view_data[:summary][:total_pages] > 1 %>
 
   <script type="text/javascript">
 
@@ -52,11 +67,7 @@
       pager      = new Pager(<%=view.page_size%>, <%=view_data[:summary][:current_page]%>, <%=view_data[:summary][:total_records]%>, controller, view);
       pager.model.setTotal(<%=view_data[:summary][:total_records]%>);
       pager.addListener('navigate', function(data) {
-      	<% if view.ajax_pagination %>
-          $('#<%="view_#{view.view_name}"%>').load('/view/<%=view.view_name%>/page/'+ data.page +'/<%=view_arguments%>');
-        <% else %>
-          window.location.href = '<%=view_url%>/page/' + data.page + '/<%=view_arguments%>';
-        <% end %>
+          $('#<%="view_#{view.view_name}"%>').load('<%=view_url%>/page/' + data.page + '<%=view_arguments and !view_arguments.empty? ? "/#{view_arguments}" : ''%>');
       });
 
     });

@@ -338,7 +338,13 @@ content:
   by: por
   published: publicado
   categories: categorías
-  read_more: Leer más  
+  read_more: Leer más
+#
+# View render
+#
+view:
+  back_page: Anterior
+  next_page: Siguiente
 #
 # Content Type management
 #  

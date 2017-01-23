@@ -204,6 +204,12 @@ content:
   categories: categories
   read_more: Read more
 #
+# View render
+#
+view:
+  back_page: Back
+  next_page: Next  
+#
 # Content Type management
 #
 content_type_management:
