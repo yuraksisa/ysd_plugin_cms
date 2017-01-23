@@ -38,7 +38,7 @@
       </div>
       <% end %>
       <div class="top-margin top-space content-teaser-body">
-        <p><%= content.excerpt if content and content.body and not content.body.empty?%> ... <a class="read-more" href="<%=content.path%>"><%=t.content.read_more%></a></p>
+        <p><%= content.excerpt if content and content.body and not content.body.empty?%> ... <a class="read-more" href="<%=content.alias%>"><%=t.content.read_more%></a></p>
       </div> 
       </div>      
     </div>
