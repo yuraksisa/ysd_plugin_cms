@@ -4,7 +4,8 @@
            <li class="view_list_item">
              <% view.view_fields.each do |view_field| %>
                 <span <%if view_field.class.to_s.strip.length > 0%>class="<%= view_field.class%>"<%end%>>
-                   <%= include 'field-view', {:view_field => view_field, :element => element} %>
+                   <%= include 'field-view', {:view_field => view_field, :element => element, :multilanguage_site => multilanguage_site,
+                        :locale => locale} %>
                 </span>
              <% end %>
            </li>

@@ -9,7 +9,7 @@
     <div class="grid_12">
       <div class="top-margin">
       <% if content and content.title and not content.title.empty? %>
-        <h3 class="content-teaser-title"><a href="<%=content.alias%>" <%if content and content.title_anchor_link and !content.title_anchor_link.empty?%> title="<%=content.title_anchor_link%>"<%end%>><%= content.title %></a></h3>
+        <h3 class="content-teaser-title"><a href="<%=format_url_with_language(content.alias) %>" <%if content and content.title_anchor_link and !content.title_anchor_link.empty?%> title="<%=content.title_anchor_link%>"<%end%>><%= content.title %></a></h3>
       <% end %>
       <div class="top-separator bottom-separator">
         <% if content and content.creation_date and not content.creation_date.nil? %>

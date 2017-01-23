@@ -17,7 +17,8 @@
            <tr class="table-row view_table_body_row">
              <% view.view_fields.each do |view_field| %>
              <td class="table-cell view_table_body_cell <%= view_field.class if view_field.class.to_s.strip.length > 0 %>">
-                <%= include 'field-view', {:view_field => view_field, :element => element} %>
+                <%= include 'field-view', {:view_field => view_field, :element => element,:multilanguage_site => multilanguage_site,
+                        :locale => locale} %>
              </td>
              <% end %>
            </tr>

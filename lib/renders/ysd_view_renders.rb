@@ -76,7 +76,9 @@ module CMSRenders
         end
        
         template = Tilt.new(find_view_render_template(view))
-        result = template.render(context, {:view => @view, :view_data => view_data})
+        result = template.render(context, {:view => @view, :view_data => view_data,
+          :multilanguage_site => context.settings.multilanguage_site,
+          :locale => context.session[:locale]})
         
         if String.method_defined?(:force_encoding)
           result.force_encoding('utf-8')

@@ -3,7 +3,7 @@
       <div class="view_div_thumb_container">
          <div class="view_div_thumb_element <%= view.render_options['container_element_class'] if view.render_options.has_key?('container_element_class')%>">
            <% if view.view_fields.first.link %>
-             <a href="<%=view.view_fields.first.evaluate_link(element)%>" <%unless view.view_fields.first.link_class.to_s.empty?%>class="<%=view.view_fields.first.link_class%>"<%end%>>
+             <a href="<%=view.view_fields.first.evaluate_link(element, multilanguage_site, locale)%>" <%unless view.view_fields.first.link_class.to_s.empty?%>class="<%=view.view_fields.first.link_class%>"<%end%>>
            <% end %>
            <% if view.view_fields.first.image %>
              <img src="<%=view.view_fields.first.field.split(".").inject(element){|result, method| result.send(method.to_sym)}%>" <%unless view.view_fields.first.image_class.to_s.empty?%>class="<%= view.view_fields.first.image_class%>"<%end%>/>
@@ -11,7 +11,10 @@
              <span>
                   <div class="view_div_thumb_element_info">
                     <% view.view_fields[1, view.view_fields.length-1].each do |view_field| %>
-                       <%= include 'field-view', {:view_field => view_field, :element => element} %>
+                       <%= include 'field-view', {:view_field => view_field, 
+                        :element => element, 
+                        :multilanguage_site => multilanguage_site,
+                        :locale => locale} %>
                     <% end %>
                   </div>
              </span>
