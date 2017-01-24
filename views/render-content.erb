@@ -7,9 +7,7 @@
   <% end %>
   
   <% if content and not content.title.empty? %>
-    <h2 class="content-title">
-        <a href="<%= (content.alias.strip.length>0)?(format_url_with_language(content.alias)):(format_url_with_language(content.path))%>"><%= content.title%></a>
-    </h2>
+    <h1 class="content-title"><%= content.title%></h1>
   <% end %>
 
   <% if content and content.subtitle and not content.subtitle.empty? %>
