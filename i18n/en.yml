@@ -395,6 +395,9 @@ guiblock:
   meta:
     description: Meta
     form:
+      page_title:
+        label: Page title
+        descripción: Meta tag title of the head    
       subtitle:
         label: Subtitle
         description: 

@@ -551,6 +551,9 @@ guiblock:
   meta:
     description: Metadatos
     form:
+      page_title:
+        label: Título de la página
+        descripción: Se usa como etiqueta title del head    
       subtitle:
         label: Subtítulo
         description: 

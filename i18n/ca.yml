@@ -398,6 +398,9 @@ guiblock:
   meta:
     description: Meta
     form:
+      page_title:
+        label: Títol de la pàgina
+        descripción: S\utilitza com etiqueta title del head
       subtitle:
         label: Subtítol
         description: 

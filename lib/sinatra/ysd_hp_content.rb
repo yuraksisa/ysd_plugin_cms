@@ -12,7 +12,7 @@ module Sinatra
     #
     def page_from_content(content, display=nil, options={})
     
-       content_page = UI::Page.new(:title => content.title, 
+       content_page = UI::Page.new(:title => content.page_title, 
                                    :author => content.author, 
                                    :keywords => content.keywords, 
                                    :language => content.language, 
