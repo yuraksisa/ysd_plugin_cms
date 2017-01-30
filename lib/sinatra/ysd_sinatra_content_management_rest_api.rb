@@ -34,18 +34,21 @@ module Sinatra
             conditions = {}         
             if request.media_type == "application/json" # Just the text
               request.body.rewind
-              search = JSON.parse(URI.unescape(request.body.read) || '{}')
-              if search.is_a?(Hash)
-                search.each do |property, value| 
-                  case property
-                    when 'publishing_state_id'
-                      conditions[:publishing_state_id] = value unless value.empty?
-                    when 'content_type_id'
-                      conditions[:content_type] = {:id => value} unless value.empty?
-                    when 'categories'
-                      unless value.nil?
-                        conditions[:categories] = value.map {|element| element.to_i} unless value.empty?
-                      end
+              search_params = URI.unescape(request.body.read)
+              unless search_params.empty?
+                search = JSON.parse(search_params)
+                if search.is_a?(Hash)
+                  search.each do |property, value| 
+                    case property
+                      when 'publishing_state_id'
+                        conditions[:publishing_state_id] = value unless value.empty?
+                      when 'content_type_id'
+                        conditions[:content_type] = {:id => value} unless value.empty?
+                      when 'categories'
+                        unless value.nil?
+                          conditions[:categories] = value.map {|element| element.to_i} unless value.empty?
+                        end
+                    end
                   end
                 end
               end
