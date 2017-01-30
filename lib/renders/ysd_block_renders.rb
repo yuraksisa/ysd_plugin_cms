@@ -56,7 +56,7 @@ module CMSRenders
          block_template_path = Themes::ThemeManager.instance.selected_theme.resource_path('render-block.erb','template','cms') 
          
          # Search in the project
-         if not block_template_path
+         if block_template_path.nil? or block_template_path.empty?
            path = context.get_path('render-block') #File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'views', 'render-block.erb'))                                 
            block_template_path = path if not path.nil? and File.exist?(path)
          end

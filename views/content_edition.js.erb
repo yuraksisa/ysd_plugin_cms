@@ -30,6 +30,10 @@ require(["jquery", "YSDEntityManagement", "YSDEntityManagementComplementHooks", 
   	  this.configForm();
   	  this.buildCategories('<%=content_type%>');
     },
+
+    onDelete: function(data) { /* On delete hook */
+      window.location.href = '/admin/cms/contents';
+    },
     
     onCreate: function(data) { /* onCreate hook */
       

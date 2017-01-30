@@ -34,7 +34,7 @@ module Sinatra
             conditions = {}         
             if request.media_type == "application/json" # Just the text
               request.body.rewind
-              search = JSON.parse(URI.unescape(request.body.read))
+              search = JSON.parse(URI.unescape(request.body.read) || '{}')
               if search.is_a?(Hash)
                 search.each do |property, value| 
                   case property
