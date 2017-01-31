@@ -62,8 +62,14 @@ module SiteRenders
 
         if app.respond_to?(:session)
            menu_item = menu_item.translate(app.session[:locale])
-           if menu_item.menu.language_in_routes
-             menu_item_link_route = File.join('/', app.session[:locale], menu_item_link_route)
+           if app.settings.multilanguage_site and 
+              app.settings.default_locale != app.session[:locale]
+              menu_item.menu.language_in_routes
+             if menu_item.link_route == "/"
+               menu_item_link_route = File.join('/', app.session[:locale])
+             else 
+               menu_item_link_route = File.join('/', app.session[:locale], menu_item_link_route)
+             end
            end
         end
 
