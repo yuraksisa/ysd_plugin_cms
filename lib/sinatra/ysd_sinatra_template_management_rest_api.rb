@@ -13,13 +13,11 @@ module Sinatra
             
             query_options = {}
             
-            if request.media_type == "application/x-www-form-urlencoded"
-              if params[:search]
-                query_options[:conditions] = {:name.like => "%#{params[:search]}%"} 
-              else
-                request.body.rewind
-                search_text=request.body.read
-                query_options[:conditions] = {:name.like => "%#{search_text}%"} 
+            if request.media_type == "application/json"
+              request.body.rewind
+              search_request = JSON.parse(URI.unescape(request.body.read))
+              if search_request.has_key?('search')
+                query_options[:conditions] = {:name.like => "%#{search_request['search']}%"}
               end
             end
 

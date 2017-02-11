@@ -71,7 +71,7 @@ module Sinatra
            
             conditions = {}         
             
-             if request.media_type == "application/x-www-form-urlencoded" # Just the text
+             if request.media_type == "application/json"
                request.body.rewind
                search = JSON.parse(URI.unescape(request.body.read))
                if search.is_a?(Hash)

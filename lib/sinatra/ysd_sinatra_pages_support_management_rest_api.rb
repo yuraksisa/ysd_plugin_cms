@@ -17,14 +17,11 @@ module Sinatra
 
             conditions = {}         
             
-            if request.media_type == "application/x-www-form-urlencoded" # Just the text
-              search_text = if params[:search]
-                              params[:search]
-                            else
-                              request.body.rewind
-                              request.body.read
-                            end
-              conditions = Conditions::Comparison.new(:id, '$eq', search_text.to_i)
+            if request.media_type == "application/json"
+              request.body.rewind
+              search_request = JSON.parse(URI.unescape(request.body.read))
+              search_text = search_request['search']
+              conditions = Conditions::Comparison.new(:title, '$like', "%#{search_text}%")
 
               total = conditions.build_datamapper(ContentManagerSystem::PageSupport).all.count 
               data = conditions.build_datamapper(ContentManagerSystem::PageSupport).all(:limit => limit, :offset => offset) 
