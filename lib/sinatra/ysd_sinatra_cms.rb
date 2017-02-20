@@ -37,7 +37,7 @@ module Sinatra
               status 404
             end          
           else
-             path = request.path_info.sub(/\/page\/\d+/, '') 
+             path = request.path_info.sub(/\/page\/\d+/, '').sub(/\/\d+$/,'')
              if view = ContentManagerSystem::View.first(:url => path)
                page, arguments = extract_view_path_arguments(view)
                begin
