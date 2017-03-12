@@ -85,7 +85,10 @@ module Sinatra
             content_type :json
             updatable_template.to_json
           else
-            status 404
+            created_template = ContentManagerSystem::Template.create(template_request)
+            status 200
+            content_type :json
+            created_template.to_json
           end
 
         end

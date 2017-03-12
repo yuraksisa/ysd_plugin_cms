@@ -197,22 +197,34 @@ module Huasi
     # @return [Array]
     #   An array which contains the css resources used by the module
     #
-    #def page_style(context={})
-    #  [
-    #    '/css/style.css'         
-    #  ]       
-    #end
+    def page_style(context={}, page)
+      
+      # Front-end custom resources
+      unless page.admin_page
+        if template=ContentManagerSystem::Template.find_by_name('css_resources') && 
+           !template.text.empty?
+          scripts.concat(template.text.split(','))
+        end   
+        if template =ContentManagerSystem::Template.find_by_name('css_app') and 
+          !template.text.empty?
+          ['css/app.js']
+        else
+          []
+        end     
+      end
+
+    end
 
     #
     # Hook to ignore static resources serving
     #
     # @return [Array] the static resources paths to be ignored
     #
-    def ignore_static_resources(context={})
-      
-      ['/css/style.css']
-
-    end
+    #def ignore_static_resources(context={})
+    #  
+    #  ['/css/style.css']
+    #  
+    #end
 
     #
     # Hook the retrieve a layout
@@ -228,6 +240,35 @@ module Huasi
       end
 
     end
+
+    #
+    # It gets the scripts used by the module
+    #
+    # @param [Context]
+    #
+    # @return [Array]
+    #   An array which contains the css resources used by the module
+    #
+    def page_script(context={}, page)
+    
+      scripts = []
+
+      # Front-end custom resources
+      unless page.admin_page
+        if template=ContentManagerSystem::Template.find_by_name('javascript_resources') && 
+           !template.text.empty?
+          scripts.concat(template.text.split(','))
+        end    
+        if template=ContentManagerSystem::Template.find_by_name('javascript_app') && 
+           !template.text.empty?
+          scripts << '/js/app.js'
+        end
+      end
+        
+      return scripts
+
+    end  
+
 
     # ========= Application regions ======
     
