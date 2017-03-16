@@ -2,7 +2,10 @@
     
     <div class="grid_12">
       <% if content and content.photo_url_total_full %>
-         <img class="top-margin" style="width:100%" src="<%=content.photo_url_total_full%>"/>
+          <img class="top-margin" style="width:100%" src="<%=content.photo_url_total_full%>"
+            <% if content.album && content.album.image_cover %>
+               alt="<%=content.album.image_cover.description%>"
+            <%end%>/>
       <% end %> 
     </div>
 
