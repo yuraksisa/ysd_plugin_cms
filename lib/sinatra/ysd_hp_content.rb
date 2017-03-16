@@ -32,20 +32,29 @@ module Sinatra
     #
     def page_from_view(view, page, arguments, options={})
 
-      # Creates a content using the view information
       begin
-        view_page = UI::Page.new(:title => view.title,
+
+        # SEO : Adds the page number to the title and description and summary meta
+        title = view.title || ''
+        title.strip!
+        title << " - #{t.view.page_number(page)}" if page > 1
+        description = view.page_description || ''
+        description.strip!
+        description << " - #{t.view.page_number(page)}" if page > 1
+        summary = view.page_summary || ''
+        summary.strip!
+        summary << " - #{t.view.page_number(page)}" if page > 1
+
+        view_page = UI::Page.new(:title => title,
                                  :author => view.page_author,
                                  :keywords => view.page_keywords,
                                  :language => view.page_language,
-                                 :description => view.page_description,
-                                 :summary => view.page_summary,
+                                 :description => description,
+                                 :summary => summary,
                                  :scripts_source => view.script,
                                  :styles_source => view.page_style,
                                  :content => CMSRenders::ViewRender.new(view, self).render(page, arguments))
-
         page(view_page, options)
-
 
       rescue ContentManagerSystem::ViewArgumentNotSupplied
         status 404

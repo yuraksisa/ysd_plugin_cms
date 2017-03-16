@@ -345,6 +345,7 @@ content:
 view:
   back_page: Anterior
   next_page: Siguiente
+  page_number: Página %1
 #
 # Content Type management
 #  

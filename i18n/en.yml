@@ -208,7 +208,8 @@ content:
 #
 view:
   back_page: Back
-  next_page: Next  
+  next_page: Next
+  page_number: Page %1
 #
 # Content Type management
 #

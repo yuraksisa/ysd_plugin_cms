@@ -210,7 +210,8 @@ content:
 #
 view:
   back_page: Anterior
-  next_page: Següent  
+  next_page: Següent
+  page_number: Pàgina %1
 #
 # Content Type management
 #
