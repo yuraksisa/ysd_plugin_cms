@@ -8,7 +8,27 @@ module Sinatra
     module MenuItemManagement
        
       def self.registered(app)
-                       
+
+        #
+        # New menu item
+        # 
+        app.get "/admin/cms/menu/:menu_id/menu-item/new", :allowed_usergroups => ['staff','webmaster']  do
+
+          @menu = ::Site::Menu.get(params[:menu_id])
+          load_page(:basic_new_menu_item)
+          
+        end
+
+        #
+        # Edit menu item
+        # 
+        app.get "/admin/cms/menu/:menu_id/menu-item/:id/edit", :allowed_usergroups => ['staff','webmaster']  do
+
+          @menu_item = ::Site::MenuItem.get(params[:id])
+          load_page(:basic_edit_menu_item)
+          
+        end
+        
         #
         # Menu item management page
         #        
@@ -30,7 +50,7 @@ module Sinatra
           end
 
         end
-              
+        
       end
     
     end #MenuItemManagement

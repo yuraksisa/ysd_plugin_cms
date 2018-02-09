@@ -10,6 +10,21 @@ module Sinatra
     module ContentManagement
    
       def self.registered(app)
+
+        #
+        # New menu item
+        # 
+        app.get "/admin/cms/page-content/new", :allowed_usergroups => ['staff','webmaster']  do
+           load_page(:basic_new_page)
+        end
+
+        #
+        # Edit menu item
+        # 
+        app.get "/admin/cms/page-content/:id/edit", :allowed_usergroups => ['staff','webmaster']  do
+           @page = ContentManagerSystem::Content.first(type: 'page', id: params[:id])
+           load_page(:basic_edit_page)
+        end
         
         #
         # CMS Console 

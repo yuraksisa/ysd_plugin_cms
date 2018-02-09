@@ -1,0 +1,89 @@
+<form class="form-horizontal">
+  <input type="hidden" id="id" name="id" <% if @page %>value="<%=@page.id%>"<%end%>/>
+  <div class="block">
+    <ul class="nav nav-tabs" data-toggle="tabs">
+      <li class="active">
+        <a href="#btabs-static-page">Página</a>
+      </li>
+      <li class="">
+        <a href="#btabs-static-seo">SEO</a>
+      </li>
+      <% if user and user.superuser %>
+      <li class="">
+        <a href="#btabs-static-programming">Programación</a>
+      </li>
+      <% end %>
+      <li class="">
+        <a href="#btabs-static-others">Otros</a>
+      </li>
+    </ul>
+    <div class="block-content tab-content">
+      <div class="tab-pane active" id="btabs-static-page">
+        <div class="form-group">
+          <label class="col-xs-12" for="title">Título</label>
+          <div class="col-sm-12">
+            <input class="form-control" type="text" id="title" name="title" placeholder="Título" <% if @page %>value="<%=@page.title%>"<%end%>>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-12" for="example-textarea-input">Contenido</label>
+          <div class="col-xs-12">
+            <textarea class="form-control texteditor" id="body" name="body" rows="6" placeholder="Content.."><% if @page %><%=@page.body%><%end%></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="btabs-static-seo">
+        <div class="form-group">
+          <label class="col-xs-12" for="example-textarea-input">Título SEO</label>
+          <div class="col-xs-12">
+            <textarea class="form-control" id="page_title" name="page_title" rows="3" placeholder="Etiqueta title del head"><% if @page %><%=@page.page_title%><%end%></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-12" for="example-textarea-input">META descripción</label>
+          <div class="col-xs-12">
+            <textarea class="form-control" id="description" name="description" rows="3" placeholder="META description"><% if @page %><%=@page.description%><%end%></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-12" for="example-textarea-input">META resumen</label>
+          <div class="col-xs-12">
+            <textarea class="form-control" id="summary" name="summary" rows="3" placeholder="META summary"><% if @page %><%=@page.summary%><%end%></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-12" for="example-textarea-input">META palabras clave</label>
+          <div class="col-xs-12">
+            <textarea class="form-control" id="keywords" name="keywords" rows="3" placeholder="META keywords"><% if @page %><%=@page.summary%><%end%></textarea>
+          </div>
+        </div>
+      </div>
+      <% if user and user.superuser %>
+      <div class="tab-pane" id="btabs-static-programming">
+        <div class="form-group">
+          <label class="col-xs-12" for="example-textarea-input">JS</label>
+          <div class="col-xs-12">
+            <textarea class="form-control editable_text" id="script" name="script" rows="20" placeholder="Código javascript"><% if @page %><%=@page.script%><%end%></textarea>
+          </div>
+        </div>
+      </div>
+      <% end %>
+      <div class="tab-pane" id="btabs-static-others">
+        <div class="form-group">
+          <label class="col-xs-12" for="title">Enlace permanente</label>
+          <div class="col-sm-12">
+            <input class="form-control" type="text" id="alias" name="alias" placeholder="Enlace permanente" <% if @page %>value="<%=@page.alias%>"<%end%>>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-xs-12">
+      <button class="button btn btn-sm btn-primary pull-right" type="button"><i class="fa fa-save push-5-r"></i><% if @page%>Actualizar<%else%>Crear<%end%></button>
+    </div>
+  </div>
+
+
+</form>
