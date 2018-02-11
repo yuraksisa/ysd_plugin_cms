@@ -23,19 +23,6 @@ module Sinatra
         end
 
 
-        #
-        # Template traslation page
-        #
-        app.get "/admin/cms/translate/template/:template_id", :allowed_usergroups => ['staff'] do
-      
-          language_code = if language = ::Model::Translation::TranslationLanguage.find_translatable_languages.first
-                            language.code
-                          end      
-      
-          load_page :translate_template, :locals => {:template_id => params[:template_id], :language => language_code}
-      
-        end        
-
       end
   	end
   end

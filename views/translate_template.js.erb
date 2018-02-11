@@ -1,0 +1,147 @@
+require(['jquery','ysdhtmleditor','ysdtemplate','YSDGui',
+        'YSDRemoteDataSource', 'YSDSelectSelector','jquery.formparams', 'jquery.toast'],
+    function($,htmlEditor, tmpl, YSDGui, RemoteDataSource, SelectSelector) {
+
+
+        templateTranslationModel = { /** The model **/
+
+            language: '<%=language%>',
+            templateId: '<%=template_id%>',
+            firstLoad: true,
+            data: null,
+
+            loadTranslation: function (language) {
+                if (language) {
+                    this.language = language;
+                }
+                var self = this;
+                if (YSDGui.lockBackground) {
+                    YSDGui.lockBackground("#000000", false);
+                }
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/translation/' + this.language + '/template/' + this.templateId,
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data, textStatus, jqXHR) {
+                        self.data = data;
+                        templateTranslationView.updateData('loaded');
+                    },
+                    error: function (data, textStatus, jqXHR) {
+                        alert('Error cargando traducción');
+                    },
+                    complete: function (jqXHR, textStatus) {
+                        if (YSDGui.unLockBackground) {
+                            YSDGui.unLockBackground();
+                        }
+                    }
+                });
+            },
+
+            updateTranslation: function (data) {
+
+                var self = this;
+                var the_data = encodeURIComponent(JSON.stringify(data));
+                if (YSDGui.lockBackground) {
+                    YSDGui.lockBackground("#000000", false);
+                }
+                $.ajax({
+                    type: 'PUT',
+                    url: '/api/translation/template',
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data: the_data,
+                    success: function (data, textStatus, jqXHR) {
+                        self.data = data;
+                        templateTranslationView.updateData('updated');
+                    },
+                    error: function (data, textStatus, jqXHR) {
+                        alert('Error actualizando traducción');
+                    },
+                    complete: function (jqXHR, textStatus) {
+                        if (YSDGui.unLockBackground) {
+                            YSDGui.unLockBackground();
+                        }
+                    }
+                });
+
+            }
+
+        };
+
+        templateTranslationController = { /** The controller **/
+
+            languageChanged: function (language) {
+                templateTranslationModel.loadTranslation(language);
+            },
+
+            updateTranslationClick: function () {
+                var data = $('#template_translation').formParams(true);
+                templateTranslationModel.updateTranslation(data);
+            }
+
+        };
+
+        templateTranslationView = { /** The view **/
+
+            dataSource: null,
+
+            init: function () {
+                this.dataSource = new RemoteDataSource('/api/translationlanguages', {
+                    id: 'code', description: 'description' });
+                templateTranslationModel.loadTranslation();
+            },
+
+            updateData: function (event) {
+
+                switch (event) {
+                    case 'loaded':
+                        $('#language').unbind('change');
+                        var html = tmpl('template_translation_template_form',
+                            {
+                                entity: templateTranslationModel.data,
+                                templateId: templateTranslationModel.templateId,
+                                language: templateTranslationModel.language
+                            });
+                        $('#template_container').html(html);
+                        this.setupForm();
+                        break;
+                    case 'updated':
+                        $.toast({
+                            heading: 'Plantilla',
+                            text: 'Plantilla traducida',
+                            position: 'top-right',
+                            bgColor: 'rgb(56, 154, 56)',
+                            textColor: 'white',
+                            loader: false,
+                            stack: false
+                        });
+                        break;
+                }
+
+            },
+
+            setupForm: function() {
+
+                htmlEditor('form[name=template_translation_template_form] .texteditor'); // HTML editor
+
+                var selector = new SelectSelector('language', this.dataSource,
+                    templateTranslationModel.language);
+
+                $('#language').change(function (event) {
+                    if ($(this).val() != templateTranslationModel.language) {
+                        templateTranslationController.languageChanged($(this).val());
+                    }
+                });
+
+                $('#update_button').bind('click', function () {
+                    templateTranslationController.updateTranslationClick();
+                });
+
+            }
+
+        };
+
+        templateTranslationView.init();
+    }
+);
