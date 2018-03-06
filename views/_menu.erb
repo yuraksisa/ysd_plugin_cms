@@ -6,8 +6,11 @@
           <li id="menu-item-<%=menu_item.id%>" class="ui-state-default" rel="<%=menu_item.id%>">
             <span class="ui-icon ui-icon-arrowthick-2-n-s"></span><%=menu_item.title%>
             <div class="btn-group pull-right">
-              <button class="btn btn-xs btn-default edit_menu_item_button" rel="<%=menu_item.id%>" data-menu-id="<%=menu.name%>" type="button"><i class="fa fa-pencil"></i></button>
               <button class="btn btn-xs btn-default new_submenu_item_button" rel="<%=menu_item.id%>" data-menu-id="<%=menu.name%>" data-parent-id="<%=menu_item.id%>" type="button"><i class="fa fa-plus"></i></button>
+              <button class="btn btn-xs btn-default edit_menu_item_button" rel="<%=menu_item.id%>" data-menu-id="<%=menu.name%>" type="button"><i class="fa fa-pencil"></i></button>
+              <% if @translations %>
+                <button class="btn btn-xs btn-default translate_menu_item_button" rel="<%=menu_item.id%>" type="button" title="Traducir"><i class="fa fa-random"></i></button>
+              <% end %>
               <button class="btn btn-xs btn-default delete_menu_item_button" rel="<%=menu_item.id%>" data-menu-id="<%=menu.name%>" type="button"><i class="fa fa-times"></i></button>
             </div>
             <% if menu_item.children %>
@@ -17,6 +20,9 @@
                     <span class="ui-icon ui-icon-arrowthick-2-n-s"></span><%=menu_item_children.title%>
                     <div class="btn-group pull-right">
                       <button class="btn btn-xs btn-default edit_menu_item_button" rel="<%=menu_item_children.id%>" data-menu-id="<%=menu.name%>"  type="button"><i class="fa fa-pencil"></i></button>
+                      <% if @translations %>
+                        <button class="btn btn-xs btn-default translate_menu_item_button" rel="<%=menu_item_children.id%>" type="button" title="Traducir"><i class="fa fa-random"></i></button>
+                      <% end %>
                       <button class="btn btn-xs btn-default delete_menu_item_button" rel="<%=menu_item_children.id%>" data-menu-id="<%=menu.name%>" type="button"><i class="fa fa-times"></i></button>
                     </div>
                   </li>

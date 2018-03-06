@@ -19,10 +19,8 @@ module Sinatra
           language_code = if language = ::Model::Translation::TranslationLanguage.find_translatable_languages.first
                             language.code
                           end
-                          
-          #load_page 'translate_content', :locals => {:content_id => params[:content_id], :language => language_code}
-          locals = {:content_id => params[:content_id], :language => [:language_code]}
-          load_em_page(:translate_content, nil, false, :locals => locals)
+
+          load_page :translate_content, :locals => {:content_id => params[:content_id], :language => language_code}
 
         end
                 
@@ -47,9 +45,9 @@ module Sinatra
           language_code = if language = ::Model::Translation::TranslationLanguage.find_translatable_languages.first
                             language.code
                           end
-                          
-          load_page 'translate_menu_item', :locals => {:menu_item_id => params[:menu_item_id], :language => language_code}
-        
+
+          load_page :translate_menu_item, :locals => {:menu_item_id => params[:menu_item_id], :language => language_code}
+
         end
 
         #

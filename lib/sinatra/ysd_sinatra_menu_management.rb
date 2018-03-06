@@ -10,6 +10,7 @@ module Sinatra
         app.get "/admin/cms/menu/:menu_name", :allowed_usergroups => ['staff','webmaster']  do
 
           @menu = ::Site::Menu.get(params[:menu_name])
+          @translations = settings.multilanguage_site
           load_page(:cms_menu, layout: false)
 
         end

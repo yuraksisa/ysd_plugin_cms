@@ -5,7 +5,7 @@
       <th>Título</th>
       <th>Información</th>
       <th class="hidden-xs" style="width: 15%;">Estado</th>
-      <th class="text-center" style="width: 100px;">Acciones</th>
+      <th class="text-center" style="width: 160px;">Acciones</th>
     </tr>
     </thead>
     <tbody>
@@ -19,6 +19,9 @@
         <td class="text-center">
           <div class="btn-group">
             <button class="btn btn-xs btn-default edit_page_button" rel="<%=page.id%>" type="button"><i class="fa fa-pencil"></i></button>
+            <% if @translations %>
+              <button class="btn btn-xs btn-default translate_page_button" rel="<%=page.id%>" type="button" title="Traducir"><i class="fa fa-random"></i></button>
+            <% end %>
             <button class="btn btn-xs btn-default delete_page_button" rel="<%=page.id%>" type="button"><i class="fa fa-times"></i></button>
             <button class="btn btn-xs btn-default open_in_browser_button" rel="<%=page.alias%>" type="button"><i class="fa fa-external-link"></i></button>
           </div>

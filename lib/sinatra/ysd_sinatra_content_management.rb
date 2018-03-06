@@ -16,6 +16,7 @@ module Sinatra
         #
         app.get "/admin/cms/pages", :allowed_usergroups => ['staff','webmaster']  do
           @pages = ContentManagerSystem::Content.all(conditions: { type: 'page'}, order: [:title.asc])
+          @translations = settings.multilanguage_site
           load_page(:cms_pages, layout: false)
         end
 

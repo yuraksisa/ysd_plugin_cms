@@ -32,7 +32,11 @@ module Sinatra
             if content.can_read?(user) and (not content.is_banned?)
               @current_content = content
               last_modified content.last_update || content.creation_date if user and user.belongs_to?('anonymous') #Cache control
-              page_from_content(content)
+              if settings.multilanguage_site
+                page_from_content(content.translate(session[:locale]))
+              else
+                page_from_content(content)
+              end  
             else
               status 404
             end          

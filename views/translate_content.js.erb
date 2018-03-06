@@ -3,10 +3,10 @@ require(['jquery','ysdhtmleditor','ysdtemplate','YSDGui',
     function($,htmlEditor, tmpl, YSDGui, RemoteDataSource, SelectSelector) {
 
 
-        templateTranslationModel = { /** The model **/
+        contentTranslationModel = { /** The model **/
 
             language: '<%=language%>',
-            templateId: '<%=template_id%>',
+            contentId: '<%=content_id%>',
             firstLoad: true,
             data: null,
 
@@ -20,12 +20,12 @@ require(['jquery','ysdhtmleditor','ysdtemplate','YSDGui',
                 }
                 $.ajax({
                     type: 'GET',
-                    url: '/api/translation/' + this.language + '/template/' + this.templateId,
+                    url: '/api/translation/' + this.language + '/content/' + this.contentId,
                     contentType: 'application/json; charset=utf-8',
                     dataType: 'json',
                     success: function (data, textStatus, jqXHR) {
                         self.data = data;
-                        templateTranslationView.updateData('loaded');
+                        contentTranslationView.updateData('loaded');
                     },
                     error: function (data, textStatus, jqXHR) {
                         alert('Error cargando traducción');
@@ -47,13 +47,13 @@ require(['jquery','ysdhtmleditor','ysdtemplate','YSDGui',
                 }
                 $.ajax({
                     type: 'PUT',
-                    url: '/api/translation/template',
+                    url: '/api/translation/content',
                     contentType: 'application/json; charset=utf-8',
                     dataType: 'json',
                     data: the_data,
                     success: function (data, textStatus, jqXHR) {
                         self.data = data;
-                        templateTranslationView.updateData('updated');
+                        contentTranslationView.updateData('updated');
                     },
                     error: function (data, textStatus, jqXHR) {
                         alert('Error actualizando traducción');
@@ -69,27 +69,27 @@ require(['jquery','ysdhtmleditor','ysdtemplate','YSDGui',
 
         };
 
-        templateTranslationController = { /** The controller **/
+        contentTranslationController = { /** The controller **/
 
             languageChanged: function (language) {
-                templateTranslationModel.loadTranslation(language);
+                contentTranslationModel.loadTranslation(language);
             },
 
             updateTranslationClick: function () {
-                var data = $('#template_translation').formParams(true);
-                templateTranslationModel.updateTranslation(data);
+                var data = $('#content_translation').formParams(true);
+                contentTranslationModel.updateTranslation(data);
             }
 
         };
 
-        templateTranslationView = { /** The view **/
+        contentTranslationView = { /** The view **/
 
             dataSource: null,
 
             init: function () {
                 this.dataSource = new RemoteDataSource('/api/translationlanguages', {
                     id: 'code', description: 'description' });
-                templateTranslationModel.loadTranslation();
+                contentTranslationModel.loadTranslation();
             },
 
             updateData: function (event) {
@@ -97,19 +97,19 @@ require(['jquery','ysdhtmleditor','ysdtemplate','YSDGui',
                 switch (event) {
                     case 'loaded':
                         $('#language').unbind('change');
-                        var html = tmpl('template_translation_template_form',
+                        var html = tmpl('content_translation_template_form',
                             {
-                                entity: templateTranslationModel.data,
-                                templateId: templateTranslationModel.templateId,
-                                language: templateTranslationModel.language
+                                entity: contentTranslationModel.data,
+                                contentId: contentTranslationModel.contentId,
+                                language: contentTranslationModel.language
                             });
-                        $('#template_container').html(html);
+                        $('#content_container').html(html);
                         this.setupForm();
                         break;
                     case 'updated':
                         $.toast({
-                            heading: 'Plantilla',
-                            text: 'Plantilla traducida',
+                            heading: 'Contenido traducido',
+                            text: 'Contenido traducido con éxito',
                             position: 'top-right',
                             bgColor: 'rgb(56, 154, 56)',
                             textColor: 'white',
@@ -123,25 +123,30 @@ require(['jquery','ysdhtmleditor','ysdtemplate','YSDGui',
 
             setupForm: function() {
 
-                //htmlEditor('form[name=template_translation] .texteditor'); // HTML editor
+                htmlEditor('form[name=content_translation] .texteditor'); // HTML editor
+
+                $('[data-toggle="tabs"] a, .js-tabs a').click(function(e){
+                    e.preventDefault();
+                    $(this).tab('show');
+                });
 
                 var selector = new SelectSelector('language', this.dataSource,
-                    templateTranslationModel.language);
+                    contentTranslationModel.language);
 
                 $('#language').change(function (event) {
-                    if ($(this).val() != templateTranslationModel.language) {
-                        templateTranslationController.languageChanged($(this).val());
+                    if ($(this).val() != contentTranslationModel.language) {
+                        contentTranslationController.languageChanged($(this).val());
                     }
                 });
 
                 $('#update_button').bind('click', function () {
-                    templateTranslationController.updateTranslationClick();
+                    contentTranslationController.updateTranslationClick();
                 });
 
             }
 
         };
 
-        templateTranslationView.init();
+        contentTranslationView.init();
     }
 );
