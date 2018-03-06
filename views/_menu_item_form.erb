@@ -39,6 +39,13 @@
   </div>
 
   <div class="form-group">
+    <label class="col-xs-12" for="title">Enlace externo</label>
+    <div class="col-sm-12">
+      <input class="form-control" type="text" id="link_route" name="link_route" placeholder="Descripción" maxlength="128" <% if @menu_item %>value="<%=@menu_item.link_route%>"<%end%>>
+    </div>
+  </div>
+
+  <div class="form-group">
     <div class="col-xs-12">
       <button <% if @menu_item%>id="update_menu_item_button"<%else%>id="create_menu_item_button"<%end%>
         class="button btn btn-sm btn-primary pull-right" type="button"><i class="fa fa-save push-5-r"></i><% if @menu_item%>Actualizar<%else%>Crear<%end%></button>
