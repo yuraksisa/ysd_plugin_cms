@@ -34,18 +34,18 @@ module Adapters
         # Translate if necessary
         if @multilanguage_site and @default_locale != @locale
           menu_item = menu_item.translate(@locale)
-          if menu_item.content
-            content = menu_item.content.translate(@locale)
-            menu_item_link_route = content.alias
-          elsif menu_item.link_route
-            menu_item_link_route = menu_item.link_route || "/"
-          end
-          #menu_item.menu.language_in_routes
-          #if menu_item_link_route == "/"
-          #  menu_item_link_route = File.join('/', @locale)
-          #else
-          #  menu_item_link_route = File.join('/', @locale, menu_item_link_route)
+          #if menu_item.content
+          #  content = menu_item.content.translate(@locale)
+          #  menu_item_link_route = content.alias
+          #elsif menu_item.link_route
+          #  menu_item_link_route = menu_item.link_route || "/"
           #end
+          #menu_item.menu.language_in_routes
+          if menu_item_link_route == "/"
+            menu_item_link_route = File.join('/', @locale)
+          else
+            menu_item_link_route = File.join('/', @locale, menu_item_link_route)
+          end
         end
 
         adapted_item = {:id       => menu_item.id,
