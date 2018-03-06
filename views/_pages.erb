@@ -1,0 +1,31 @@
+<div id="pages_holder">
+  <table id="pages_table" class="table">
+    <thead>
+    <tr>
+      <th>Título</th>
+      <th>Información</th>
+      <th class="hidden-xs" style="width: 15%;">Estado</th>
+      <th class="text-center" style="width: 100px;">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @pages.each do |page| %>
+      <tr id="page-<%=page.id%>">
+        <td><%=page.title%></td>
+        <td><%=page.content_name%></td>
+        <td class="hidden-xs">
+          <span class="label <%if page.publishing_state_id == 'DRAFT'%>label-warning<%elsif page.publishing_state_id=='PUBLISHED'%>label-success<%end%>"><%if page.publishing_state_id == 'DRAFT'%>BORRADOR<%elsif page.publishing_state_id=='PUBLISHED'%>PUBLICADA<%end%></span>
+        </td>
+        <td class="text-center">
+          <div class="btn-group">
+            <button class="btn btn-xs btn-default edit_page_button" rel="<%=page.id%>" type="button"><i class="fa fa-pencil"></i></button>
+            <button class="btn btn-xs btn-default delete_page_button" rel="<%=page.id%>" type="button"><i class="fa fa-times"></i></button>
+            <button class="btn btn-xs btn-default open_in_browser_button" rel="<%=page.alias%>" type="button"><i class="fa fa-external-link"></i></button>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+  <br>
+</div>

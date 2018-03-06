@@ -1,0 +1,79 @@
+require(['jquery', 'YSDForms', 'jquery.ui', 'jquery.formparams', 'jquery.toast'], function($, YSDForms) {
+
+    newMenuItemModel = {
+
+        updateMenuItem: function() {
+
+            var data = $('form[name=menu_item_form]').formParams(false);
+            if (data.content_id == '') {
+                data.content_id = null;
+            }
+            var dataJSON = JSON.stringify(data);
+
+            $.ajax({
+                type: 'POST',
+                url : '/api/menu-item',
+                data: dataJSON,
+                dataType : 'json',
+                contentType : 'application/json; charset=utf-8',
+                crossDomain: true,
+                success: function(data, textStatus, jqXHR) {
+                    newMenuItemView.update('menu_item_created');
+                },
+                error: function(data, textStatus, jqXHR) {
+                    alert('Error creando item de menú');
+                },
+                complete: function(jqXHR, textStatus) {
+
+                }
+
+            });
+
+        }
+
+    };
+
+    newMenuItemController = {
+
+        createMenuItemButtonClick: function() {
+            newMenuItemModel.updateMenuItem();
+        }
+
+    };
+
+    newMenuItemView = {
+
+        init: function () {
+            YSDForms.improve();
+            this.setupControls();
+        },
+
+        setupControls: function() {
+            $('#create_menu_item_button').unbind('click');
+            $('#create_menu_item_button').bind('click', function(){
+                newMenuItemController.createMenuItemButtonClick();
+            })
+        },
+
+        update: function(action) {
+            switch (action) {
+                case 'menu_item_created':
+                    $.toast({
+                        heading: 'Item de menú creado',
+                        text: 'El item de menú se ha creado correctamente',
+                        position: 'top-right',
+                        bgColor: 'rgb(56, 154, 56)',
+                        textColor: 'white',
+                        loader: false,
+                        stack: false
+                    });
+                    $('#modal_container').modal('hide'); // Modal integration
+                    break;
+            }
+        }
+
+    };
+
+    newMenuItemView.init();
+
+});

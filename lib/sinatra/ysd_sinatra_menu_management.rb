@@ -3,7 +3,17 @@ module Sinatra
     module MenuManagement
        
       def self.registered(app)
-                   
+
+        #
+        # New menu item
+        #
+        app.get "/admin/cms/menu/:menu_name", :allowed_usergroups => ['staff','webmaster']  do
+
+          @menu = ::Site::Menu.get(params[:menu_name])
+          load_page(:cms_menu, layout: false)
+
+        end
+
         #
         # Taxonomies management page
         #        

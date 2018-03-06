@@ -12,14 +12,30 @@ module Sinatra
       def self.registered(app)
 
         #
-        # New menu item
+        # Get all pages
+        #
+        app.get "/admin/cms/pages", :allowed_usergroups => ['staff','webmaster']  do
+          @pages = ContentManagerSystem::Content.all(conditions: { type: 'page'}, order: [:title.asc])
+          load_page(:cms_pages, layout: false)
+        end
+
+        #
+        # Get all posts
+        #
+        app.get "/admin/cms/posts", :allowed_usergroups => ['staff','webmaster']  do
+          @pages = ContentManagerSystem::Content.all(conditions: { type: 'story'}, order: [:creation_date.desc])
+          load_page(:cms_posts, layout: false)
+        end
+
+        #
+        # New page
         # 
         app.get "/admin/cms/page-content/new", :allowed_usergroups => ['staff','webmaster']  do
            load_page(:basic_new_page)
         end
 
         #
-        # Edit menu item
+        # Edit page
         # 
         app.get "/admin/cms/page-content/:id/edit", :allowed_usergroups => ['staff','webmaster']  do
            @page = ContentManagerSystem::Content.first(type: 'page', id: params[:id])

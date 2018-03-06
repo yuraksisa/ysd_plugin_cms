@@ -15,6 +15,8 @@ module Sinatra
         app.get "/admin/cms/menu/:menu_id/menu-item/new", :allowed_usergroups => ['staff','webmaster']  do
 
           @menu = ::Site::Menu.get(params[:menu_id])
+          @pages = ContentManagerSystem::Content.all(conditions: {type: 'page'}, order: [:title.asc])
+          @parent_id = params[:parent_id]
           load_page(:basic_new_menu_item)
           
         end
@@ -25,6 +27,7 @@ module Sinatra
         app.get "/admin/cms/menu/:menu_id/menu-item/:id/edit", :allowed_usergroups => ['staff','webmaster']  do
 
           @menu_item = ::Site::MenuItem.get(params[:id])
+          @pages = ContentManagerSystem::Content.all(conditions: {type: 'page'}, order: [:title.asc])
           load_page(:basic_edit_menu_item)
           
         end

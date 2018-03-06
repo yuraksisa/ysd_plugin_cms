@@ -1,0 +1,32 @@
+<% if defined?menu and menu and menu.menu_items %>
+  <div id="menu_holder">
+    <ul id="menu_list" class="sortable" style="width: 100%">
+      <% menu.menu_items.each do |menu_item| %>
+        <% unless menu_item.parent %>
+          <li id="menu-item-<%=menu_item.id%>" class="ui-state-default" rel="<%=menu_item.id%>">
+            <span class="ui-icon ui-icon-arrowthick-2-n-s"></span><%=menu_item.title%>
+            <div class="btn-group pull-right">
+              <button class="btn btn-xs btn-default edit_menu_item_button" rel="<%=menu_item.id%>" data-menu-id="<%=menu.name%>" type="button"><i class="fa fa-pencil"></i></button>
+              <button class="btn btn-xs btn-default new_submenu_item_button" rel="<%=menu_item.id%>" data-menu-id="<%=menu.name%>" data-parent-id="<%=menu_item.id%>" type="button"><i class="fa fa-plus"></i></button>
+              <button class="btn btn-xs btn-default delete_menu_item_button" rel="<%=menu_item.id%>" data-menu-id="<%=menu.name%>" type="button"><i class="fa fa-times"></i></button>
+            </div>
+            <% if menu_item.children %>
+              <ul class="sortable">
+                <% menu_item.children.each do |menu_item_children| %>
+                  <li id="menu-item-<%=menu_item_children.id%>" class="ui-state-default" rel="<%=menu_item_children.id%>">
+                    <span class="ui-icon ui-icon-arrowthick-2-n-s"></span><%=menu_item_children.title%>
+                    <div class="btn-group pull-right">
+                      <button class="btn btn-xs btn-default edit_menu_item_button" rel="<%=menu_item_children.id%>" data-menu-id="<%=menu.name%>"  type="button"><i class="fa fa-pencil"></i></button>
+                      <button class="btn btn-xs btn-default delete_menu_item_button" rel="<%=menu_item_children.id%>" data-menu-id="<%=menu.name%>" type="button"><i class="fa fa-times"></i></button>
+                    </div>
+                  </li>
+                <% end %>
+              </ul>
+            <% end %>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+    <br>
+  </div>
+<% end %>

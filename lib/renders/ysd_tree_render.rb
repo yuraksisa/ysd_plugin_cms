@@ -23,15 +23,21 @@ class TreeRender
                  leaf_node,
                  end_branch_node,
                  end_tree,
-                 separator)
+                 separator,
+                 extra_end_tree=nil,
+                 selected_leaf_node=nil,
+                 request_path=nil)
                  
-    @start_tree        = ERB.new(start_tree) 
-    @start_branch_node = ERB.new(start_branch_node)
-    @leaf_node         = ERB.new(leaf_node)
-    @end_branch_node   = ERB.new(end_branch_node)
-    @end_tree          = ERB.new(end_tree)
-    @separator         = separator
-                 
+    @start_tree         = ERB.new(start_tree)
+    @start_branch_node  = ERB.new(start_branch_node)
+    @leaf_node          = ERB.new(leaf_node)
+    @end_branch_node    = ERB.new(end_branch_node)
+    @end_tree           = ERB.new(end_tree)
+    @separator          = separator
+    @extra_end_tree     = extra_end_tree
+    @selected_leaf_node = ERB.new(selected_leaf_node) if selected_leaf_node
+    @request_path       = request_path
+
   end
 
   # It renders a tree structure
@@ -56,7 +62,9 @@ class TreeRender
       end
       
     end
-    
+
+    output << @extra_end_tree if @extra_end_tree
+
     output << @end_tree.result(binding)   
     
     output
@@ -85,7 +93,11 @@ class TreeRender
       output << @start_branch_node.result(binding)
     else
       leaf = options
-      output << @leaf_node.result(binding)
+      if @selected_leaf_node and @request_path == options[:link_route]
+        output << @selected_leaf_node.result(binding)
+      else
+        output << @leaf_node.result(binding)
+      end
     end
         
     options[:children].each do |child| 
@@ -93,7 +105,11 @@ class TreeRender
         output << render_branch({:id => child[:id], :title => child[:title], :level => options[:level]+1, :link_route => child[:link_route], :children => child[:children]})
       else
         leaf = child
-        output << @leaf_node.result(binding)  
+        if @selected_leaf_node and @request_path == child[:link_route]
+          output << @selected_leaf_node.result(binding)
+        else
+          output << @leaf_node.result(binding)
+        end
       end
     end
     

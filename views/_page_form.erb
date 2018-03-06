@@ -1,5 +1,9 @@
-<form class="form-horizontal">
-  <input type="hidden" id="id" name="id" <% if @page %>value="<%=@page.id%>"<%end%>/>
+<form name="content_form" class="form-horizontal">
+  <% if @page %>
+  <input type="hidden" id="id" name="id" value="<%=@page.id%>"/>
+  <% else %>
+  <input type="hidden" id="type" name="type" value="page"/>
+  <%end%>
   <div class="block">
     <ul class="nav nav-tabs" data-toggle="tabs">
       <li class="active">
@@ -22,7 +26,7 @@
         <div class="form-group">
           <label class="col-xs-12" for="title">Título</label>
           <div class="col-sm-12">
-            <input class="form-control" type="text" id="title" name="title" placeholder="Título" <% if @page %>value="<%=@page.title%>"<%end%>>
+            <input class="form-control" type="text" id="title" name="title" placeholder="Título" maxlength="120" <% if @page %>value="<%=@page.title%>"<%end%>>
           </div>
         </div>
         <div class="form-group">
@@ -31,6 +35,13 @@
             <textarea class="form-control texteditor" id="body" name="body" rows="6" placeholder="Content.."><% if @page %><%=@page.body%><%end%></textarea>
           </div>
         </div>
+        <div class="form-group">
+          <label class="col-xs-12" for="title">Información</label>
+          <div class="col-sm-12">
+            <input class="form-control" type="text" id="content_name" name="content_name" placeholder="Descripción de la página" maxlength="120" <% if @page %>value="<%=@page.content_name%>"<%end%>>
+          </div>
+        </div>
+
       </div>
       <div class="tab-pane" id="btabs-static-seo">
         <div class="form-group">
@@ -81,7 +92,7 @@
 
   <div class="form-group">
     <div class="col-xs-12">
-      <button class="button btn btn-sm btn-primary pull-right" type="button"><i class="fa fa-save push-5-r"></i><% if @page%>Actualizar<%else%>Crear<%end%></button>
+      <button <% if @page%>id="update_page_button"<%else%>id="create_page_button"<%end%> class="button btn btn-sm btn-primary pull-right" type="button"><i class="fa fa-save push-5-r"></i><% if @page%>Actualizar<%else%>Crear<%end%></button>
     </div>
   </div>
 

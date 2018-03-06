@@ -1,0 +1,26 @@
+<table id="posts_table" class="table">
+  <thead>
+  <tr>
+    <th>Título</th>
+    <th class="hidden-xs" style="width: 15%;">Estado</th>
+    <th class="text-center" style="width: 100px;">Acciones</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @posts.each do |post| %>
+    <tr id="post-<%=post.id%>">
+      <td><%=post.title%></td>
+      <td class="hidden-xs">
+        <span class="label <%if post.publishing_state_id == 'DRAFT'%>label-warning<%elsif post.publishing_state_id=='PUBLISHED'%>label-success<%end%>"><%if post.publishing_state_id == 'DRAFT'%>BORRADOR<%elsif post.publishing_state_id=='PUBLISHED'%>PUBLICADA<%end%></span>
+      </td>
+      <td class="text-center">
+        <div class="btn-group">
+          <button class="btn btn-xs btn-default edit_page_button" rel="<%=post.id%>" type="button"><i class="fa fa-pencil"></i></button>
+          <button class="btn btn-xs btn-default delete_page_button" rel="<%=post.id%>" type="button"><i class="fa fa-times"></i></button>
+          <button class="btn btn-xs btn-default open_in_browser_button" rel="<%=post.alias%>" type="button"><i class="fa fa-external-link"></i></button>
+        </div>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

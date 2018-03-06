@@ -79,6 +79,7 @@ module Sinatra
           
           # Creates the new content
           menu_item = ::Site::MenuItem.new(menu_item_request)
+          p "errors: #{menu_item.errors.full_messages.inspect} errors: #{menu_item.errors.inspect} valid: #{menu_item.valid?} value: #{menu_item.inspect}"
           menu_item.save
           
           # Return          

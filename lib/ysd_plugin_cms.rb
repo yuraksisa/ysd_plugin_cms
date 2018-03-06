@@ -20,6 +20,8 @@ require 'guiblocks/ysd_guiblock_translation_menu_item'
 require 'guiblocks/ysd_guiblock_translation_template'
 require 'guiblocks/ysd_guiblock_translation_term'
 
+require 'adapters/ysd_menu_adapter'
+
 require 'renders/ysd_ui_cms_render_factory'
 require 'renders/ysd_content_renders'
 require 'renders/ysd_block_renders'
