@@ -100,7 +100,7 @@ require(['jquery','ysdhtmleditor','ysdtemplate','YSDGui',
                         var html = tmpl('menu_item_translation_template_form',
                             {
                                 entity: menuItemTranslationModel.data,
-                                menuItemId: menuItemTranslationModel.templateId,
+                                menuItemId: menuItemTranslationModel.menuItemId,
                                 language: menuItemTranslationModel.language
                             });
                         $('#menu_item_container').html(html);

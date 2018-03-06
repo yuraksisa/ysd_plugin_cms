@@ -168,7 +168,9 @@ module Sinatra
           
           language_code = translation_request.delete('language')
           menu_item_id = translation_request.delete('menu_item_id')
-          
+
+          p "language_code: #{language_code} menu_item_id: #{menu_item_id} translation_request: #{translation_request}"
+
           menu_item_translation = ::ContentManagerSystem::Translation::MenuItemTranslation.create_or_update(menu_item_id, language_code, translation_request)
           
           status 200
