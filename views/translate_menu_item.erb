@@ -26,21 +26,21 @@
     <div class="form-group">
       <label class="col-xs-12" for="title">Título</label>
       <div class="col-sm-12">
-        <input class="form-control" type="text" id="title" name="title" placeholder="Título" <%% if (entity) {%><%%=entity.title %><%% } %>>
+        <input class="form-control" type="text" id="title" name="title" placeholder="Título" <%% if (entity) {%>value="<%%=entity.title %>"<%% } %>>
       </div>
     </div>
 
     <div class="form-group">
       <label class="col-xs-12" for="title">Descripción</label>
       <div class="col-sm-12">
-        <input class="form-control" type="text" id="description" name="description" placeholder="Descripción" maxlength="256" <%% if (entity) {%><%%=entity.description %><%% } %>>
+        <input class="form-control" type="text" id="description" name="description" placeholder="Descripción" maxlength="256" <%% if (entity) {%>value="<%%=entity.description %>"<%% } %>>
       </div>
     </div>
 
     <div class="form-group">
       <label class="col-xs-12" for="title">Enlace externo</label>
       <div class="col-sm-12">
-        <input class="form-control" type="text" id="link_route" name="link_route" placeholder="Descripción" maxlength="128" <%% if (entity) {%><%%=entity.link_route %><%% } %>>
+        <input class="form-control" type="text" id="link_route" name="link_route" placeholder="Descripción" maxlength="128" <%% if (entity) {%>value="<%%=entity.link_route %>"<%% } %>>
       </div>
     </div>
 
