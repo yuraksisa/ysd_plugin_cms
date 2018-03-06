@@ -44,7 +44,11 @@ module Adapters
           if menu_item_link_route == "/"
             menu_item_link_route = File.join('/', @locale)
           else
-            menu_item_link_route = File.join('/', @locale, menu_item_link_route)
+            if menu_item.link_route
+              menu_item_link_route = menu_item.link_route
+            else
+              menu_item_link_route = File.join('/', @locale, menu_item_link_route)
+            end
           end
         end
 
