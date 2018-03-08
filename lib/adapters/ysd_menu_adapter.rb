@@ -38,7 +38,7 @@ module Adapters
             content_translation = menu_item.content.translate(@locale)
             # If the content translation alias is defined and it's different from the content alias
             if !content_translation.alias.nil? and !content_translation.alias.empty? and menu_item.content.alias != content_translation.alias
-              menu_item_link_route = content_translation.alias
+              menu_item_link_route = File.join('/', @locale, content_translation.alias)
             else
               menu_item_link_route = File.join('/', @locale, menu_item_link_route)
             end
