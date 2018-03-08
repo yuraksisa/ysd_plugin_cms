@@ -34,21 +34,16 @@ module Adapters
         # Translate if necessary
         if @multilanguage_site and @default_locale != @locale
           menu_item = menu_item.translate(@locale)
-          #if menu_item.content
-          #  content = menu_item.content.translate(@locale)
-          #  menu_item_link_route = content.alias
-          #elsif menu_item.link_route
-          #  menu_item_link_route = menu_item.link_route || "/"
-          #end
-          #menu_item.menu.language_in_routes
-          if menu_item_link_route == "/"
-            menu_item_link_route = File.join('/', @locale)
-          else
-            if menu_item.link_route
-              menu_item_link_route = menu_item.link_route
+          if menu_item.content
+            content_translation = menu_item.content.translate(@locale)
+            # If the content translation alias is defined and it's different from the content alias
+            if !content_translation.alias.nil? and !content_translation.alias.empty? and menu_item.content.alias != content_translation.alias
+              menu_item_link_route = content_translation.alias
             else
               menu_item_link_route = File.join('/', @locale, menu_item_link_route)
             end
+          elsif menu_item.link_route
+            menu_item_link_route = menu_item.link_route || File.join('/', @locale)
           end
         end
 
