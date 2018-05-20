@@ -34,7 +34,13 @@ module Sinatra
     #
     def render_template_editor(template_name, label, class_name='', rows=15)
 
-       template = ContentManagerSystem::Template.first({:name => template_name})
+      template = if template_name.to_i > 0
+                    ContentManagerSystem::Template.get(template_name)
+                 else
+                    ContentManagerSystem::Template.first({:name => template_name})
+                 end
+
+      template_name = template.name
 
        value = if template
                  template.text

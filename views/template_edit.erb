@@ -1,0 +1,28 @@
+<div class="admin_content_wrapper"  style="background-color: #f5f5f5; margin: 0">
+  <div id="page_wrapper">
+    <form name="templates" action="/api/templates" method="PUT"
+          data-remote="ajax" data-remote-method="PUT" class="all-space">
+      <%= render_template_editor @template.id,'','', 20 %>
+      <div class="form-group">
+        <div class="col-xs-12">
+          <button class="button btn btn-sm btn-primary pull-right" type="submit"><i class="fa fa-save push-5-r"></i> <%=t.entitymanagement.update%></button>
+        </div>
+      </div>
+    </form>
+    <% if @show_translations and @tmpl %>
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="block block-bordered">
+            <div class="block-header bg-gray-lighter">
+              <h3 class="block-title">Traducciones</h3>
+            </div>
+            <div class="block-content block-content-narrow">
+              <div id="template_translations_container">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

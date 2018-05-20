@@ -5,7 +5,19 @@ module Sinatra
   	#
   	module TemplateManagement
       def self.registered(app)
-        
+
+        #
+        # Edit a template
+        #
+        app.get '/admin/cms/templates/:id/edit', :allowed_usergroups => ['staff'] do
+
+          @template = ContentManagerSystem::Template.get(params[:id])
+          @show_translations = settings.multilanguage_site
+          load_page(:template_edit)
+
+        end
+
+
         #
         # Templates manager
         #
