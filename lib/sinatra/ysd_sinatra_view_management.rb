@@ -1,5 +1,4 @@
 require 'uri'
-require 'ui/ysd_yito_js_pager'
 
 module Sinatra
   module YSD

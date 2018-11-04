@@ -1,3 +1,4 @@
+require 'ui/ysd_yito_js_pager'
 require 'sinatra/ysd_sinatra_cms'
 require 'sinatra/ysd_sinatra_cms_css_theme'
 require 'sinatra/ysd_sinatra_cms_robots_sitemap'

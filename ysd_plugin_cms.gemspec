@@ -14,7 +14,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "ysd_core_plugins"             # The plugins system
   s.add_runtime_dependency "ysd_core_themes"              # The theme system 
   s.add_runtime_dependency "ysd_yito_core"                # Base component to create Web
-  s.add_runtime_dependency "ysd_yito_js"                  # Base component to create the Web front end
   s.add_runtime_dependency "ysd_plugin_aspects"           # Aspects management
   s.add_runtime_dependency "ysd_plugin_rca"
 
