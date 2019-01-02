@@ -122,6 +122,37 @@ module Huasi
          :block => true
         })
 
+        Media::Album.first_or_create({name: 'resources'},
+                                     {description: 'Album for common resources'})
+        Media::Album.first_or_create({name: 'content_resources'},
+                                      {description: 'Album for content resources'})
+
+        # Sitemap.xml and robots.txt templates
+        sitemap_xml = <<-SITEMAP
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  <url>
+    <loc>https://mysite.com/</loc>
+    <lastmod>2018-11-02T00:24:48+00:00</lastmod>
+    <priority>1.00</priority>
+  </url>
+</urlset>
+        SITEMAP
+
+        robots_txt = <<-ROBOTS
+# Rule
+User-agent: *
+Allow: /
+
+Sitemap: http://mysite.com/sitemap.xml        
+        ROBOTS
+
+        ContentManagerSystem::Template.first_or_create({:name => 'sitemap_xml'},
+            {description: 'Plantilla para sitemap.xml',
+             text: sitemap_xml })
+
+        ContentManagerSystem::Template.first_or_create({:name => 'robots_txt'},
+                  {description: 'Plantilla para robots.txt',
+                   text: robots_txt})
 
     end
     

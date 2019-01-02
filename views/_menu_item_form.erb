@@ -1,3 +1,7 @@
+<div class="alert alert-info">
+  <p>El contenido del menú puede estar vinculado con una <strong>página</strong>
+  o puede ser un enlace a una <strong>URL externa</strong>. En este caso, introduzca la URL completa.</p>
+</div>
 <form name="menu_item_form" class="form-horizontal">
 
   <% if defined?@menu_item and @menu_item %>
@@ -32,7 +36,7 @@
       <select class="form-control"  id="content_id" name="content_id" placeholder="Página">
         <option value="">No tiene página asociada</option>
         <% @pages.each do |page| %>
-          <option value="<%=page.id%>" <%if @menu_item and page.id == @menu_item.content_id%>selected<%end%>><%=page.title%><%if page.content_name != page.title%>&nbsp;-&nbsp;<%=page.content_name%><%end%></option>
+          <option value="<%=page.id%>" <%if @menu_item and page.id == @menu_item.content_id%>selected<%end%>><%=page.title%></option>
         <% end %>
       </select>
     </div>

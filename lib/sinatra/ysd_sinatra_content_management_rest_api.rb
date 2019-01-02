@@ -95,7 +95,11 @@ module Sinatra
           
           content_request = body_as_json(ContentManagerSystem::Content)
 
+          content_request.delete(:album_id) if content_request[:album_id].empty? 
+
           content = ContentManagerSystem::Content.new(content_request)
+
+          p "content: #{content.valid?} -- errors: #{content.errors.full_messages.inspect}"
 
           if options.has_key?(:params) and options[:params].has_key?('op')
             case options[:params]['op'] 
@@ -121,7 +125,8 @@ module Sinatra
         app.put "/api/content", :allowed_usergroups => ['staff','editor','webmaster'] do
           
           content_request = body_as_json(ContentManagerSystem::Content)
-                              
+          content_request.delete(:album_id) if content_request[:album_id].empty? 
+
           if content = ContentManagerSystem::Content.get(content_request.delete(:id))     
             content.attributes=(content_request)  
             content.save

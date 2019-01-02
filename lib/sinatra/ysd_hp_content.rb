@@ -12,7 +12,7 @@ module Sinatra
     #
     def page_from_content(content, display=nil, options={})
     
-       content_page = UI::Page.new(:title => content.page_title, 
+       content_page = UI::Page.new(:title => content.title, 
                                    :author => content.author, 
                                    :keywords => content.keywords, 
                                    :language => content.language, 
@@ -21,6 +21,7 @@ module Sinatra
                                    :type => (content.content_type.nil?)?nil:content.content_type.id,
                                    :scripts_source => content.script,
                                    :styles_source => content.style,
+                                   :canonical_url => File.join(SystemConfiguration::Variable.get_value('site.domain'), content.alias.gsub('/home','/')),
                                    :content => CMSRenders::ContentRender.new(content, self).render(options[:locals]))
       
        page(content_page, options)   

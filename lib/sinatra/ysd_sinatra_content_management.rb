@@ -32,6 +32,7 @@ module Sinatra
         # New page
         # 
         app.get "/admin/cms/page-content/new", :allowed_usergroups => ['staff','webmaster']  do
+           @resorces_album = ::Media::Album.first(name: 'content_resources')
            load_page(:basic_new_page)
         end
 
@@ -39,10 +40,25 @@ module Sinatra
         # Edit page
         # 
         app.get "/admin/cms/page-content/:id/edit", :allowed_usergroups => ['staff','webmaster']  do
+           @resorces_album = ::Media::Album.first(name: 'content_resources')
            @page = ContentManagerSystem::Content.first(type: 'page', id: params[:id])
            load_page(:basic_edit_page)
         end
         
+        #
+        # Resources for contents
+        #
+        app.get "/admin/media/album/content-resources", :allowed_usergroups => ['staff'] do
+
+          if @resources_album = ::Media::Album.first(name: 'content_resources')
+            @title = t.content_resources.title
+            load_page :album_edition
+          else
+            status 404
+          end    
+
+        end 
+
         #
         # CMS Console 
         #       

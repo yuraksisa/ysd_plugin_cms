@@ -27,6 +27,8 @@ console_cms:
   blocks: Bloques  
   views: Vistas
   menus: Menús
+content_resources:
+  title: Medios para contenidos  
 #
 # Block management
 #

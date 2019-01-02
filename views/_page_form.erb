@@ -1,14 +1,38 @@
+<style type="text/css">
+  .photo-container {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+  }
+  .photo-element {
+    margin: 0 auto;
+    display: block;
+  }
+</style>
+<div class="alert alert-info">
+  <p><b>Insertar foto</b> permite añadir una foto de la galería en el cuerpo
+    del contenido.</p>
+  <p>Si desea crear un <b>slide</b> con fotos, añada las fotos en el
+    apartado slide después de crear el contenido.</p>
+</div>
 <form name="content_form" class="form-horizontal">
   <% if @page %>
   <input type="hidden" id="id" name="id" value="<%=@page.id%>"/>
   <% else %>
   <input type="hidden" id="type" name="type" value="page"/>
   <%end%>
+  <input type="hidden" name="album_id" id="album_id" <% if @page and @page.album_id %>value="<%=@page.album_id%>"<%end%>/>
   <div class="block">
     <ul class="nav nav-tabs" data-toggle="tabs">
       <li class="active">
         <a href="#btabs-static-page">Página</a>
       </li>
+      <% if @page %>
+      <li class="">
+        <a href="#btabs-static-album">Slide</a>        
+      </li>  
+      <% end %>
       <li class="">
         <a href="#btabs-static-seo">SEO</a>
       </li>
@@ -17,9 +41,6 @@
         <a href="#btabs-static-programming">Programación</a>
       </li>
       <% end %>
-      <li class="">
-        <a href="#btabs-static-others">Otros</a>
-      </li>
     </ul>
     <div class="block-content tab-content">
       <div class="tab-pane active" id="btabs-static-page">
@@ -27,7 +48,21 @@
           <label class="col-xs-12" for="title">Título</label>
           <div class="col-sm-12">
             <input class="form-control" type="text" id="title" name="title" placeholder="Título" maxlength="120" <% if @page %>value="<%=@page.title%>"<%end%>>
+            <p class="text-muted">Tamaño máximo recomendado 70 caracteres</p>
           </div>
+        </div>
+        <div class="form-group">
+          <div class="col-xs-12">
+            <button id="insert_picture_btn" type="button" class="btn btn-default">Insertar foto</button>
+          </div>
+          <div id="choose_photo_container" style="display: none">
+            <div class="col-md-12">&nbsp;</div>
+            <% @resorces_album.photos.each do |photo| %>
+            <div class="photo-container col-md-3">
+               <img src="<%= photo.photo_url_small %>" class="box-shadow photo-element photo-selector" style="display:block" rel="<%=photo.id%>" data-info="<%=photo.description%>"/>          
+            </div>  
+            <% end %>
+          </div>            
         </div>
         <div class="form-group">
           <label class="col-xs-12" for="example-textarea-input">Contenido</label>
@@ -36,24 +71,37 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="col-xs-12" for="title">Información</label>
-          <div class="col-sm-12">
-            <input class="form-control" type="text" id="content_name" name="content_name" placeholder="Descripción de la página" maxlength="120" <% if @page %>value="<%=@page.content_name%>"<%end%>>
-          </div>
-        </div>
-
-      </div>
-      <div class="tab-pane" id="btabs-static-seo">
-        <div class="form-group">
-          <label class="col-xs-12" for="example-textarea-input">Título SEO</label>
+          <label class="col-xs-12" for="example-textarea-input">Slug (permalink)</label>
           <div class="col-xs-12">
-            <textarea class="form-control" id="page_title" name="page_title" rows="3" placeholder="Etiqueta title del head"><% if @page %><%=@page.page_title%><%end%></textarea>
+            <input class="form-control" type="text" id="alias" name="alias" placeholder="Enlace permanente" <% if @page %>value="<%=@page.alias%>"<%end%>>
           </div>
+        </div>        
+      </div>
+      <% if @page %>
+      <div class="tab-pane" id="btabs-static-album">
+        <div id="album_container" class="form-group">
+        <% if @page and @page.album %>
+            <% @page.album.photos.each do |photo| %>
+              <div class="photo-container col-md-3" data-id="<%=photo.id%>">
+                 <img src="<%= photo.photo_url_small %>" 
+                      class="box-shadow photo-element" style="display:block" 
+                      rel="<%=photo.id%>" data-info="<%=photo.description%>"/>     
+                 <span class="delete-photo fa fa-trash" rel="<%=photo.id%>"></span>               
+              </div>  
+            <% end %>
+        <% end %>
         </div>
+        <div class="form-group">
+          <button id="add_photo_button" type="button" class="btn btn-default">Añadir foto</button>
+        </div>  
+      </div>  
+      <% end %>
+      <div class="tab-pane" id="btabs-static-seo">
         <div class="form-group">
           <label class="col-xs-12" for="example-textarea-input">META descripción</label>
           <div class="col-xs-12">
             <textarea class="form-control" id="description" name="description" rows="3" placeholder="META description"><% if @page %><%=@page.description%><%end%></textarea>
+            <p class="text-muted">Tamaño máximo recomendado 160 caracteres</p>
           </div>
         </div>
         <div class="form-group">
@@ -79,14 +127,6 @@
         </div>
       </div>
       <% end %>
-      <div class="tab-pane" id="btabs-static-others">
-        <div class="form-group">
-          <label class="col-xs-12" for="title">Enlace permanente</label>
-          <div class="col-sm-12">
-            <input class="form-control" type="text" id="alias" name="alias" placeholder="Enlace permanente" <% if @page %>value="<%=@page.alias%>"<%end%>>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -96,5 +136,35 @@
     </div>
   </div>
 
-
 </form>
+
+<!-- Uploading template -->
+<script id="uploading_template" type="txt/template">
+  <div id="<%%=id%>" class="col-md-3">
+    <%%=description%>
+  </div>
+</script>
+
+<script id="photo_template" type="txt/template">
+  <div class="photo-container col-md-3" data-id="<%%=photo.id%>">
+     <img src="<%%= photo.photo_url_small %>" 
+          class="box-shadow photo-element" style="display:block" 
+          rel="<%%=photo.id%>" data-info="<%%=photo.description%>"/>  
+     <span class="delete-photo fa fa-trash" rel="<%%=photo.id%>"></span>                  
+  </div>  
+</script>
+
+<!-- Support form and iframe to upload the slide photo -->
+<form name="gallery_photo" target="gallery_photo_uploader" 
+      method="POST" 
+      enctype="multipart/form-data" 
+      action="/api/photo"
+      style="display:none">
+  <input type="file" name="photo_file" id="photo_file" accept="image/jpeg,image/gif,image/png,image/jpeg"/>
+  <input type="hidden" id="photo_album_prefix" name="photo_album_prefix" 
+         value="content"/>  
+  <input type="hidden" id="photo_album" name="photo_album" <%if @page and @page.album_id%>value="<%=@page.album_id%>"<%end%>/>       
+</form>
+<iframe id="gallery_photo_uploader" name="gallery_photo_uploader" style="display:none">
+    Your system does not support iframes
+</iframe>

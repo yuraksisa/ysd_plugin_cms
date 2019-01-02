@@ -1,6 +1,25 @@
-require(['jquery', 'YSDForms', 'jquery.ui', 'jquery.formparams', 'jquery.toast'], function($, YSDForms) {
+require(['jquery', 'YSDForms', 'YSDFileUploader', 'ysdtemplate',
+         'jquery.ui', 
+         'jquery.formparams', 'jquery.toast'], function($, YSDForms, FileUploader, tmpl) {
     editPageModel = {
+        fileUploader: null,
+        deletePhoto: function(id) {
+            $.ajax({
+                type: 'DELETE',
+                url : '/api/photo/'+id,
+                contentType : 'application/json; charset=utf-8',
+                success: function(data, textStatus, jqXHR) {
+                    editPageView.update('photo_deleted', id);
+                },
+                error: function(data, textStatus, jqXHR) {
+                    alert('Error creando página');
+                },
+                complete: function(jqXHR, textStatus) {
 
+                }
+
+            });
+        },
         updatePage: function() {
 
             var data = $('form[name=content_form]').formParams(false);
@@ -31,6 +50,35 @@ require(['jquery', 'YSDForms', 'jquery.ui', 'jquery.formparams', 'jquery.toast']
 
     editPageController = {
 
+        insertPictureClick : function() {
+        
+          if ($('#choose_photo_container').is(':visible')) {
+            $('#choose_photo_container').hide();
+          }  
+          else {
+            $('#choose_photo_container').show();  
+            $('.photo-selector').unbind('click');
+            $('.photo-selector').bind('click', function(){
+                  $('#body').wysiwyg('focus');
+                  var img = '/media/photo/'+$(this).attr('rel');
+                  var attrs = {alt: $(this).attr('data-info')};
+                  $('#body').wysiwyg('insertImage', img, attrs);
+            });
+          }        
+
+        },    
+
+        addPhotoToSlide: function() {
+            editPageModel.fileUploader.uploadFile();
+            editPageView.setupDeletePhotoEvent();
+        },  
+
+        deletePhotoClick: function(photoId) {
+            if (confirm('¿Desea eliminar la foto?')) {
+                editPageModel.deletePhoto(photoId);
+            }
+        },  
+
         updatePageButtonClick: function() {
             editPageModel.updatePage();
         }
@@ -48,10 +96,66 @@ require(['jquery', 'YSDForms', 'jquery.ui', 'jquery.formparams', 'jquery.toast']
             $('#update_page_button').unbind('click');
             $('#update_page_button').bind('click', function(){
                 editPageController.updatePageButtonClick();
-            })
+            });
+            $('#insert_picture_btn').bind('click',function() {
+                editPageController.insertPictureClick();
+            });     
+            this.setupUploader();
+            this.setupDeletePhotoEvent();        
         },
 
-        update: function(action) {
+        setupDeletePhotoEvent: function() {
+            $('.delete-photo').unbind('click');
+            $('.delete-photo').bind('click', function(){
+                var id= $(this).attr('rel');
+                editPageController.deletePhotoClick(id);
+            });
+        },
+
+        setupUploader: function() {
+
+            editPageModel.fileUploader = new FileUploader('gallery_photo', 
+                                                 'photo_file', 
+                                                 'gallery_photo_uploader');
+     
+            editPageModel.fileUploader.addListener('start_upload', function(event) {
+                console.log('start upload');
+                console.log(event.data);
+                var fileName = event.data.fileName.replace(/\\/g,'').replace(/:/g,'').replace(/\./g,'');
+                var data = {id:fileName, 
+                            description:'<div style="width:144px; height: 85px; display:inline-block; text-align: center; position: relative; top: -30px; border: 1px dashed #EEE; background:url(\'/img/ajax-loader_grande.gif\'); background-repeat: no-repeat; background-position: center"><span style="position: relative; top: 30px; color: rgb(33, 107, 10);"><%=t.uploader.uploading_message%></span></div>'};
+                var html = tmpl('uploading_template')(data);
+                $('#album_container').append(html);                            
+            });
+
+            editPageModel.fileUploader.addListener('file_uploaded', function(event) {
+                console.log('file uploaded');
+                console.log(event.data);
+                var data = event.data.file;
+                var fileName = event.data.fileName.replace(/\\/g,'').replace(/:/g,'').replace(/\./g,'');
+                console.log(fileName);
+                $('#album_id').val(data.album_id); // TODO Update the content with the album id
+                $('#'+fileName).remove();
+                var html = tmpl('photo_template')({photo: data});
+                $('#album_container').append(html);
+            });
+
+            editPageModel.fileUploader.addListener('file_uploaded_error', function(event) {
+                console.log('error uploading file');
+                var fileName = event.data.fileName.replace(/\\/g,'').replace(/:/g,'').replace(/\./g,'');
+                console.log(fileName);
+                var data = {id:fileName, description:'<div style="width:144px; height: 85px; display:inline-block; text-align: center; position: relative; top: -30px; border: 1px dashed #FBB;background: rgba(255,100,100,0.2)"><span style="position: relative; top: 30px; color: rgb(255, 0, 0);"><%=t.uploader.error_title%></span></div>'};                
+                var html = tmpl('uploading_template')(data);
+                $('#'+fileName).html(html);
+            });
+
+            $('#add_photo_button').bind('click', function(){
+                editPageController.addPhotoToSlide(); 
+            });
+
+        },
+
+        update: function(action, value) {
             switch (action) {
                 case 'page_updated':
                     $.toast({
@@ -65,6 +169,18 @@ require(['jquery', 'YSDForms', 'jquery.ui', 'jquery.formparams', 'jquery.toast']
                     });
                     $('#modal_container').modal('hide'); // Modal integration
                     break;
+                case 'photo_deleted':
+                    $.toast({
+                        heading: 'Foto eliminada',
+                        text: 'La foto se ha eliminado correctamente',
+                        position: 'top-right',
+                        bgColor: 'rgb(56, 154, 56)',
+                        textColor: 'white',
+                        loader: false,
+                        stack: false
+                    });  
+                    $('.photo-container[data-id='+value+']').remove();             
+                    break;    
             }
         }
 

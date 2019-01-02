@@ -71,6 +71,48 @@ module Sinatra
         end
         
         #
+        # Order menu items
+        #
+        app.post '/api/menu/:id/order', allowed_usergroups: ['staff', 'webmaster'] do
+          
+          if menu = ::Site::Menu.get(params[:id])
+            status 200
+            content_type :json
+            params['menu-item'].each_index do |idx|
+              if menu_item=::Site::MenuItem.get(params['menu-item'][idx])
+                menu_item.update(weight: idx)
+              end  
+            end  
+            menu.reload
+            menu.to_json
+          else
+            status 404
+          end  
+
+        end  
+
+        #
+        # Order submenu items
+        #
+        app.post '/api/submenu/:id/order', allowed_usergroups: ['staff', 'webmaster'] do
+          
+          if menu_item = ::Site::MenuItem.get(params[:id])
+            status 200
+            content_type :json
+            params['menu-item'].each_index do |idx|
+              if menu_item=::Site::MenuItem.get(params['menu-item'][idx])
+                menu_item.update(weight: idx)
+              end  
+            end  
+            menu_item.reload
+            menu_item.to_json
+          else
+            status 404
+          end 
+
+        end  
+
+        #
         # Updates a menu
         #
         app.put "/api/menu", :allowed_usergroups => ['staff','webmaster'] do

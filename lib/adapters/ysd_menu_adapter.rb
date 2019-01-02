@@ -9,7 +9,7 @@ module Adapters
       @multilanguage_site = multilanguage_site
       @adapted_menu = {:id       => menu.name,
                        :title    => menu.title,
-                       :children => adapt_children(menu.root_menu_items.sort{|x,y| y.weight<=>x.weight})}
+                       :children => adapt_children(menu.root_menu_items.sort{|x,y| x.weight<=>y.weight})}
     end
 
     protected
@@ -51,7 +51,7 @@ module Adapters
                         :title    => menu_item.title,
                         :description => menu_item.description,
                         :link_route => menu_item_link_route,
-                        :children => self.adapt_children(menu_item.children.sort{|x,y| y.weight<=>x.weight})}
+                        :children => self.adapt_children(menu_item.children.sort{|x,y| x.weight<=>y.weight})}
 
         result << adapted_item
 

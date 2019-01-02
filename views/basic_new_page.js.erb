@@ -1,4 +1,5 @@
-require(['jquery', 'YSDForms', 'jquery.ui', 'jquery.formparams', 'jquery.toast'], function($, YSDForms) {
+require(['jquery', 'YSDForms', 'YSDGui',
+         'jquery.ui', 'jquery.formparams', 'jquery.toast'], function($, YSDForms, YSDGui) {
 
 
     newPageModel = {
@@ -33,6 +34,22 @@ require(['jquery', 'YSDForms', 'jquery.ui', 'jquery.formparams', 'jquery.toast']
 
     newPageController = {
 
+        insertPictureClick : function() {
+          if ($('#choose_photo_container').is(':visible')) {
+            $('#choose_photo_container').hide();
+          }  
+          else {
+            $('#choose_photo_container').show();  
+            $('.photo-selector').unbind('click');
+            $('.photo-selector').bind('click', function(){
+                  $('#body').wysiwyg('focus');
+                  var img = '/media/photo/'+$(this).attr('rel');
+                  var attrs = {alt: $(this).attr('data-info')};
+                  $('#body').wysiwyg('insertImage', img, attrs);
+            });
+          } 
+        },
+
         createPageButtonClick: function() {
             newPageModel.createPage();
         }
@@ -43,14 +60,17 @@ require(['jquery', 'YSDForms', 'jquery.ui', 'jquery.formparams', 'jquery.toast']
 
         init: function () {
             YSDForms.improve();
-            this.setupControls();
+            this.setupControls();           
         },
 
         setupControls: function() {
             $('#create_page_button').unbind('click');
             $('#create_page_button').bind('click', function(){
                 newPageController.createPageButtonClick();
-            })
+            });
+            $('#insert_picture_btn').bind('click',function() {
+                newPageController.insertPictureClick();
+            });            
         },
 
         update: function(action) {

@@ -3,7 +3,7 @@
     <thead>
     <tr>
       <th>Título</th>
-      <th>Información</th>
+      <!--th>Información</th-->
       <th class="hidden-xs" style="width: 15%;">Estado</th>
       <th class="text-center" style="width: 160px;">Acciones</th>
     </tr>
@@ -12,7 +12,7 @@
     <% @pages.each do |page| %>
       <tr id="page-<%=page.id%>">
         <td><%=page.title%></td>
-        <td><%=page.content_name%></td>
+        <!--td><%=page.content_name%></td-->
         <td class="hidden-xs">
           <span class="label <%if page.publishing_state_id == 'DRAFT'%>label-warning<%elsif page.publishing_state_id=='PUBLISHED'%>label-success<%end%>"><%if page.publishing_state_id == 'DRAFT'%>BORRADOR<%elsif page.publishing_state_id=='PUBLISHED'%>PUBLICADA<%end%></span>
         </td>
