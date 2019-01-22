@@ -264,11 +264,13 @@ Sitemap: http://mysite.com/sitemap.xml
     # 
     def page_layout(context={}, layout_name)
       
-      if template = ContentManagerSystem::Template.find_by_name(layout_name)
-        [template.text]
-      else
-        ['']
-      end
+      # [NOTE 2019.01.22] Avoid load pages from the templates. Now all are defined in extensions
+      ['']
+      #if template = ContentManagerSystem::Template.find_by_name(layout_name)
+      #  [template.text]
+      #else
+      #  ['']
+      #end
 
     end
 
@@ -621,35 +623,41 @@ Sitemap: http://mysite.com/sitemap.xml
             
       result = {}
 
+      #p "BLOCKS-START"
+      #
       # Retrieve the theme blocks which are positionated in the page
-      
-      blocks = ContentManagerSystem::Block.all(
-        :region => Themes::ThemeManager.instance.selected_theme.regions, 
-        :theme => Themes::ThemeManager.instance.selected_theme.name)
-      
-      blocks.each do |block|
+      # 
+      # [NOTE 2019.01.22] Admin area new design does not use blocks
+      #
+      unless app.request.path_info.starts_with?('/admin')
+        blocks = ContentManagerSystem::Block.all(
+          :region => Themes::ThemeManager.instance.selected_theme.regions, 
+          :theme => Themes::ThemeManager.instance.selected_theme.name)
         
-        key = block.region.to_sym
-
-        if not result.has_key?(key)
-          result.store(key, [])      
-        end
-
-        if block.can_be_shown?(app.user, app.request.path_info, page.type) 
-
-          block_render = CMSRenders::BlockRender.new(block, app).render || ''
+        blocks.each do |block|
           
-          if String.method_defined?(:force_encoding)
-            block_render.force_encoding('utf-8')
+          key = block.region.to_sym
+
+          if not result.has_key?(key)
+            result.store(key, [])      
           end
 
-          result[key].push(UI::PageComponent.new({:component => block, 
-                                                  :weight => block.weight, 
-                                                  :render => block_render })) 
-        end
+          if block.can_be_shown?(app.user, app.request.path_info, page.type) 
 
+            block_render = CMSRenders::BlockRender.new(block, app).render || ''
+            
+            if String.method_defined?(:force_encoding)
+              block_render.force_encoding('utf-8')
+            end
+
+            result[key].push(UI::PageComponent.new({:component => block, 
+                                                    :weight => block.weight, 
+                                                    :render => block_render })) 
+          end
+
+        end
       end
-      
+      #p "BLOCKS-END"      
       
       return result
         
