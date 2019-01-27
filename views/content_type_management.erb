@@ -44,288 +44,123 @@
 <!-- Renders the form to edit an element -->
 
 <script type="text/tmpl" id="element_template_form">
-              
-     <form name="element" id="content_type_management_form">
         
-        <div class="form-fields">
-        
-          <div class="formrow">
-            <label for="id" class="fieldtitle"><%=t.content_type_management.form.id.label%> <span class="mandatoryfield">*</span></label>
-            <input type="text" maxlength="20" id="id" name="id" class="fieldcontrol" <%% if (entity) { %> value="<%%= entity.id %>" <%% } %> />
+        <div class="row">
+          <div class="col-sm-12 col-md-10 col-md-offset-1">
+            <div class="block block-content-full">
+              <div class="block-header bg-gray-lighter">
+                <h3 class="block-title">Datos de la vista</h3>
+              </div>
+              <div class="block-content">
+                
+                <form name="element" id="content_type_management_form">
+                  <div class="formrow">
+                    <label for="id" class="fieldtitle"><%=t.content_type_management.form.id.label%> <span class="mandatoryfield">*</span></label>
+                    <input type="text" maxlength="20" id="id" name="id" class="fieldcontrol" <%% if (entity) { %> value="<%%= entity.id %>" <%% } %> />
+                  </div>
+
+                  <ul class="nav nav-tabs" data-toggle="tabs">
+                    <li class="active">
+                      <a href="#btabs-static-ctype_description" data-toggle="tab"><%=t.content_type_management.form.description_block.label%></a>
+                    </li>
+                    <!--li>
+                      <a href="#btabs-static-ctype_messages" data-toggle="tab"><%=t.content_type_management.form.messages_block.label%></a>
+                    </li-->
+                    <li>
+                      <a href="#btabs-static-ctype_presentation" data-toggle="tab"><%=t.content_type_management.form.presentation_block.label%></a>
+                    </li>
+                    <li>
+                      <a href="#btabs-static-ctype_workflow" data-toggle="tab"><%=t.content_type_management.form.workflow_block.label%></a>
+                    </li>
+                    <li>
+                      <a href="#btabs-static-ctype_permissions" data-toggle="tab"><%=t.content_type_management.form.permissions_block.label%></a>
+                    </li>
+                    <li>
+                      <a href="#btabs-static-ctype_other" data-toggle="tab">Otros</a>
+                    </li>                                     
+                  </ul>
+                  <div class="tab-content clearfix">
+                    <div class="tab-pane active" id="btabs-static-ctype_description">
+                      <div class="formrow">
+                        <label for="name" class="fieldtitle"><%=t.content_type_management.form.name.label%> <span class="mandatoryfield">*</span></label>
+                        <input type="text" maxlength="50" id="name" name="name" class="fieldcontrol" <%% if (entity) { %> value="<%%= entity.name %>" <%% } %> />
+                      </div>
+
+                      <div class="formrow">
+                        <label for="description" class="fieldtitle"><%=t.content_type_management.form.description.label%></label>
+                        <textarea name="description" id="description" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.description%><%% } %></textarea>
+                      </div>
+                      <p style="text-align:right"> <span id="description_length"></span> <%= t.available_chars %> </p>                    
+                    </div>
+                    <!--div class="tab-pane" id="btabs-static-ctype_messages">
+                      <div class="formrow">
+                        <label for="message_on_new_content" class="fieldtitle"><%=t.content_type_management.form.message_on_new_content.label%></label>
+                        <textarea name="message_on_new_content" id="message_on_new_content" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.message_on_new_content%><%% } %></textarea>
+                      </div>
+                      <p style="text-align:right"> <span id="message_on_new_content_length"></span> <%= t.available_chars %> </p>
+
+                      <div class="formrow">
+                        <label for="message_on_edit_content" class="fieldtitle"><%=t.content_type_management.form.message_on_edit_content.label%></label>
+                        <textarea name="message_on_edit_content" id="message_on_edit_content" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.message_on_edit_content%><%% } %></textarea>
+                      </div>
+                      <p style="text-align:right"> <span id="message_on_edit_content_length"></span> <%= t.available_chars %> </p>                    
+                    </div-->
+                    <div class="tab-pane" id="btabs-static-ctype_presentation">
+                      <div class="formrow">
+                        <label for="display" class="fieldtitle"><%=t.content_type_management.form.display_prop.label%></label>
+                        <select name="display" id="display" class="fieldcontrol"/>
+                      </div>
+                      <!--div class="formrow">
+                        <label for="display_css_class" class="fieldtitle"><%=t.content_type_management.form.display_css_class.label%></label>
+                        <textarea name="display_css_class" id="display_css_class" 
+                          class="fieldcontrol" rows="3"><%% if (entity) { %><%%=entity.display_css_class%><%% } %></textarea>
+                      </div>
+                      <p style="text-align:right"> <span id="display_css_class_length"></span> <%= t.available_chars %> </p>              
+                      <div class="formrow">
+                        <label for="max_length" class="fieldtitle"><%=t.content_type_management.form.max_length.label%></label>
+                        <input type="text" name="max_length" id="max_length" maxlength="4" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.max_length%>" <%%}%> />
+                      </div>              
+                      <div class="formrow">
+                        <label for="template" class="fieldtitle"><%=t.content_type_management.form.template.label%></label>
+                        <textarea name="template" id="template" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.template%><%% } %></textarea> 
+                      </div-->                    
+                    </div>
+                    <div class="tab-pane" id="btabs-static-ctype_workflow">
+                      <div class="formrow">
+                        <label for="publishing_workflow_id" class="fieldtitle"><%=t.content_type_management.form.workflow.label%></label>
+                        <select name="publishing_workflow_id" id="publishing_workflow_id" class="fieldcontrol"/>
+                      </div>                    
+                    </div>
+                    <div class="tab-pane" id="btabs-static-ctype_permissions">
+                      <div class="formrow">
+                        <label class="fieldtitle"><%=t.content_type_management.form.usergroups.label%></label>
+                        <div id="content_type_usergroups"></div>
+                      </div>                    
+                    </div>
+                    <div class="tab-pane" id="btabs-static-ctype_other">
+                      <%% if (entity) { %>
+                        <%= edit_element_form %>
+                      <%% } else { %>
+                        <%= new_element_form %>
+                      <%% } %>                    
+                    </div>                    
+                  </div>
+                  <hr>
+                  <div class="form-group">
+                    <div class="col-md-12">
+                        <%% if (entity) { %>
+                        <input type="button" class="btn btn-sm btn-primary update-entity-button action-button entity-management-button pull-right" value="<%=t.entitymanagement.update%>"/>
+                        <%% } else { %>
+                        <input type="button" class="btn btn-sm btn-primary create-entity-button action-button entity-management-button pull-right" value="<%=t.entitymanagement.create%>"/>
+                        <%% } %>
+                    </div>
+                  </div>     
+                  <br><br><br>   
+                </form>
+              </div>
+            </div>
           </div>
-
-          <div id="tabs">
-
-            <ul>
-              <%= render_tab('ctype_description', t.content_type_management.form.description_block.label) %>
-              <%= render_tab('ctype_messages',  t.content_type_management.form.messages_block.label) %>
-              <%= render_tab('ctype_presentation', t.content_type_management.form.presentation_block.label) %>
-              <%= render_tab('ctype_workflow',  t.content_type_management.form.workflow_block.label) %>
-              <%= render_tab('ctype_permissions', t.content_type_management.form.permissions_block.label) %>
-            </ul>
-
-            <div id="ctype_description">
-              <div class="formrow">
-                <label for="name" class="fieldtitle"><%=t.content_type_management.form.name.label%> <span class="mandatoryfield">*</span></label>
-                <input type="text" maxlength="50" id="name" name="name" class="fieldcontrol" <%% if (entity) { %> value="<%%= entity.name %>" <%% } %> />
-              </div>
-
-              <div class="formrow">
-                <label for="description" class="fieldtitle"><%=t.content_type_management.form.description.label%></label>
-                <textarea name="description" id="description" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.description%><%% } %></textarea>
-              </div>
-              <p style="text-align:right"> <span id="description_length"></span> <%= t.available_chars %> </p>
-            </div>
-
-            <div id="ctype_messages">
-              <div class="formrow">
-                <label for="message_on_new_content" class="fieldtitle"><%=t.content_type_management.form.message_on_new_content.label%></label>
-                <textarea name="message_on_new_content" id="message_on_new_content" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.message_on_new_content%><%% } %></textarea>
-              </div>
-              <p style="text-align:right"> <span id="message_on_new_content_length"></span> <%= t.available_chars %> </p>
-
-              <div class="formrow">
-                <label for="message_on_edit_content" class="fieldtitle"><%=t.content_type_management.form.message_on_edit_content.label%></label>
-                <textarea name="message_on_edit_content" id="message_on_edit_content" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.message_on_edit_content%><%% } %></textarea>
-              </div>
-              <p style="text-align:right"> <span id="message_on_edit_content_length"></span> <%= t.available_chars %> </p>
-            </div>
-
-            <div id="ctype_presentation">
-              <div class="formrow">
-                <label for="display" class="fieldtitle"><%=t.content_type_management.form.display_prop.label%></label>
-                <select name="display" id="display" class="fieldcontrol"/>
-              </div>
-              <div class="formrow">
-                <label for="display_css_class" class="fieldtitle"><%=t.content_type_management.form.display_css_class.label%></label>
-                <textarea name="display_css_class" id="display_css_class" 
-                  class="fieldcontrol" rows="3"><%% if (entity) { %><%%=entity.display_css_class%><%% } %></textarea>
-              </div>
-              <p style="text-align:right"> <span id="display_css_class_length"></span> <%= t.available_chars %> </p>              
-              <div class="formrow">
-                <label for="max_length" class="fieldtitle"><%=t.content_type_management.form.max_length.label%></label>
-                <input type="text" name="max_length" id="max_length" maxlength="4" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.max_length%>" <%%}%> />
-              </div>              
-              <div class="formrow">
-                <label for="template" class="fieldtitle"><%=t.content_type_management.form.template.label%></label>
-                <textarea name="template" id="template" class="fieldcontrol" rows="5"><%% if (entity) { %><%%=entity.template%><%% } %></textarea> 
-              </div>
-            </div>
-
-            <div id="ctype_workflow">
-              <div class="formrow">
-                <label for="publishing_workflow_id" class="fieldtitle"><%=t.content_type_management.form.workflow.label%></label>
-                <select name="publishing_workflow_id" id="publishing_workflow_id" class="fieldcontrol"/>
-              </div>
-            </div>
-
-            <div id="ctype_permissions">
-              <div class="formrow">
-                <label class="fieldtitle"><%=t.content_type_management.form.usergroups.label%></label>
-                <div id="content_type_usergroups"></div>
-              </div>
-            </div>
-
-          </div>
-            
-          <%% if (entity) { %>
-            <%= edit_element_form %>
-          <%% } else { %>
-            <%= new_element_form %>
-          <%% } %> 
-
-        <div class="bottom-navigation-bar navigation-bar">
-             <div class="navigation-bar-crud-buttons">
-                <%% if (entity) { %>
-                  <input type="submit" class="update-entity-button action-button entity-management-button" value="<%= t.entitymanagement.update%>"/>
-                <%% } 
-                   else { %>
-                  <input type="submit" class="create-entity-button action-button entity-management-button" value="<%= t.entitymanagement.create%>"/>
-                <%% } %>
-             </div>
-        </div>
-     
-     </form>
      
 </script>
 
 <%= element_form_extension %>
-
-<script type="text/javascript">
- 
- require(['jquery', 'YSDEntityManagement', 'YSDEntityManagementComplementHooks', 'YSDRemoteDataSource', 'YSDListSelector', 'YSDForms', 'YSDSelectSelector'], function($, EntityManagement, EntityManagementComplementHooks, RemoteDataSource, ListSelector, YSDForms, SelectSelector) {
- 
-  function ContentTypeHook() {
- 	   
-    this.entityKey = function(entity) {
-      return entity.id;
-    }
-
-    this.onEdit = function(entity) {
-      $('#id').attr('readonly', true);
-      $('#name').focus();  	
-      this.configForm(entity);
-    };
-  
-    this.onNew = function() {
-  	  $('#id').focus();
-  	  this.configForm(null);
-    }
-
-    this.adaptFormData = function(data) {
-      
-      data.aspects    = this.adaptAspects(data.aspects, data.id);
-      data.usergroups = this.adaptUsergroups(data.usergroups); 
-      
-      if (data.display == '') {
-        data.display = null;
-      }
-
-      return data;	
-    	
-    }
-
-    this.adaptAspects = function(aspects, contentTypeId) { /* It converts from an array of string (each is an aspect) to an array of ContentTypeAspect */
-      
-      if (!(aspects instanceof Array)) {
-        aspects = [aspects];
-      }
-
-      return aspects.map(function(value, index, array) {
-
-         return { aspect : value,
-                  content_type : { id: contentTypeId }
-                };   
-
-      });
-
-    }
-
-    this.adaptUsergroups = function(usergroups) { /* It converts from an array of string (each is an usergroup group) to an array of ContentTypeUserGroup */
-      
-      var adaptedUsergroups = [];
-
-      for (idx in usergroups) {
-        adaptedUsergroups.push({'group': usergroups[idx]});
-      }
-
-      return adaptedUsergroups;
-
-    }
-
-    
-    this.configForm = function(entity) {
-
-         $('#tabs').tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
-         $('#tabs li').removeClass("ui-corner-top").addClass("ui-corner-left");
-         $('#tabs').tabs();
-
-         // Configure the usergroups
-         var ugDataSource = new RemoteDataSource('/api/usergroups',{id:'group', description:'name'});
-         var ugValue = (entity&&entity.usergroups)?entity.usergroups.map(function(item){return item.group;}):[]; 
-         var ugSelector = new ListSelector('content_type_usergroups', 'usergroups[]', ugDataSource, ugValue );
-        
-         // Configure the workflows
-         var wfDataSource = new RemoteDataSource('/api/publishing/workflows');
-         var wfValue = (entity && entity.publishing_workflow_id)?entity.publishing_workflow_id:null;
-         var wfSelector = new SelectSelector('publishing_workflow_id', wfDataSource, wfValue); 
-
-         // Configure displays
-         var displayDataSource = new RemoteDataSource('/api/displays/content');
-         var displayValue = (entity && entity.display)?entity.display:null;
-         var displaySelector = new SelectSelector('display', displayDataSource, displayValue, true, ''); 
-
-         // Limit the text area length
-         YSDForms.limit_text_area_content_size(document.getElementById('description'), 256, 
-            function (content_remain) {
-              document.getElementById('description_length').innerHTML = '<strong>' + content_remain + '</strong>';
-            }
-         );    
-
-         // Limit the text area length
-         YSDForms.limit_text_area_content_size(document.getElementById('message_on_new_content'), 1024, 
-            function (content_remain) {
-              document.getElementById('message_on_new_content_length').innerHTML = '<strong>' + content_remain + '</strong>';
-            }
-         );  
-
-
-         // Limit the text area length
-         YSDForms.limit_text_area_content_size(document.getElementById('message_on_edit_content'), 1024, 
-            function (content_remain) {
-              document.getElementById('message_on_edit_content_length').innerHTML = '<strong>' + content_remain + '</strong>';
-            }
-         );      	
-
-         // Limit the text area length
-         YSDForms.limit_text_area_content_size(document.getElementById('display_css_class'), 256, 
-            function (content_remain) {
-              document.getElementById('display_css_class_length').innerHTML = '<strong>' + content_remain + '</strong>';
-            }
-         ); 
-
-    }
-
-    this.configValidation = function() {
-
-         $('#content_type_management_form').validate({
-            
-            submitHandler: function(form) 
-            {
-               return false;
-            },
-                               
-            rules : { // rules
-               'id' : {
-                 required: true
-               },
-               'name': {
-                 required: true 
-               }
-            },
-            
-            messages : { // messages
-               'id' : {
-                required: '<%= t.content_type_management.form.id.required%>'
-               },
-               'name': {
-                 required : '<%=t.variable_management.form.name.required%>'
-               }
-            }
-            
-          }
-         );
-
-    }
-  	
-    this.formatUserGroups = function(entity) { /* Format the usergroups for the representation */
-      
-      var usergroups = entity.usergroups.map(function(value, index, array) {
-        return value.usergroup_group;
-      });
-      
-      return usergroups; 
-    }  
-
-  };
-  
-  var urls = { 
-  	           query_url  : '/api/content-types',
-    	         create_url : '/api/content-type',
-  	           update_url : '/api/content-type',
-  	           delete_url : '/api/content-type',
-  	           get_url    : '/api/content-type'
-  	         };
-
-  var contentTypeHook = new ContentTypeHook();
-
-  var hooks = [contentTypeHook];
-  
-  // Add the complement hooks
-  hooks = hooks.concat(EntityManagementComplementHooks.complements);
-
-  var contentsTypeManager = new EntityManagement(urls, 'content type', 12, hooks, {prefix:'/admin/cms'});
-  
- });
-  
-</script>

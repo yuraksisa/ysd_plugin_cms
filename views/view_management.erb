@@ -25,9 +25,9 @@
      </tbody>
   </table>
   
-  <button id="import_button" class="form-button">Importar</button>
+  <!--button id="import_button" class="form-button">Importar</button-->
 
-  <%= import_form %>
+  <%#= import_form %>
 
 </script>
 
@@ -70,235 +70,260 @@
 
 <script type="text/tmpl" id="element_template_form">
               
-     <form name="element">
-        <div class="form-fields">
-        
-          <div class="formrow">
-            <label for="view_name" class="fieldtitle"><%=t.view_management.form.name.label%><span class="mandatoryfield">*</span></label>
-            <input type="text" maxlength="32" id="view_name" name="view_name" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.view_name%>" <%% } %> />
-            <div class="fielddescription"><%=t.view_management.form.name.description%></div>
-          </div>
 
-          <div id="tabs">
-            <ul>
-              <%= render_tab('view_description', t.view_management.form.description_block.label) %>
-              <%= render_tab('view_style', t.view_management.form.style_block.label) %>
-              <%= render_tab('view_query', t.view_management.form.query_block.label) %>
-              <%= render_tab('view_result', t.view_management.form.result_block.label) %>
-              <%= render_tab('view_page', t.view_management.form.page_block.label) %>
-              <%= render_tab('view_meta', t.view_management.form.meta_block.label) %>
-              <%= render_tab('view_extras', t.view_management.form.extras_block.label) %>
-            </ul>
-
-            <div id="view_description">
-              <div class="formrow">
-                <label for="description" class="fieldtitle"><%=t.view_management.form.description.label%></label>
-                <textarea name="description" id="description" class="fieldcontrol"><%% if (entity) { %><%%=entity.description%><%% } %></textarea>
-                <div class="fielddescription"><%=t.view_management.form.description.description%></div>
+        <div class="row">
+          <div class="col-sm-12 col-md-10 col-md-offset-1">
+            <div class="block block-content-full">
+              <div class="block-header bg-gray-lighter">
+                <h3 class="block-title">Datos de la vista</h3>
               </div>
-              <p style="text-align:right"> <span id="description_length"></span> <%= t.available_chars %> </p>
-            </div>
-
-            <div id="view_style">
-              <div class="formrow">
-                <label for="style" class="fieldtitle"><%=t.view_management.form.style.label%></label>
-                <select name="style" id="style" class="fieldcontrol"></select>
-                <div class="fielddescription"><%=t.view_management.form.style.description%></div>
-              </div>
-              <div id="view_fields_row" class="formrow">
-                <label for="v_fields" class="fieldtitle"><%=t.view_management.form.fields.label%></label>
-                <textarea id="v_fields" name="v_fields" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.v_fields)%><%% } %></textarea>  
-                <div class="fielddescription"><%=t.view_management.form.fields.description%></div>
-              </div>
-              <div class="formrow">
-                <label for="render" class="fieldtitle"><%=t.view_management.form.render.label%></label>
-                <select name="render" id="render" class="fieldcontrol"></select>
-                <div class="fielddescription"><%=t.view_management.form.render.label%></div>
-              </div>
-              <div class="formrow">
-                <label for="render_options" class="fieldtitle"><%=t.view_management.form.render_options.label%></label>
-                <textarea id="render_options" name="render_options" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.render_options)%><%% } %></textarea>
-                <div class="fielddescription"><%=t.view_management.form.render_options.description%></div>
-              </div>                            
-            </div>
-
-            <div id="view_query">
-              <div class="formrow">
-                <label for="model_name" class="fieldtitle"><%=t.view_management.form.model.label%></label>
-                <select id="model_name" name="model_name" class="fieldcontrol"></select>
-                <div class="fielddescription"><%=t.view_management.form.model.description%></div> 
-              </div>
-              <div class="formrow">
-                <label for="query_conditions" class="fieldtitle"><%=t.view_management.form.conditions.label%></label>
-                <textarea id="query_conditions" name="query_conditions" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.query_conditions)%><%% } %></textarea>
-                <div class="fielddescription"><%=t.view_management.form.conditions.description%></div>
-              </div>
-              <div class="formrow">
-                <label for="query_order" class="fieldtitle"><%=t.view_management.form.order.label%></label>
-                <textarea id="query_order" name="query_order" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.query_order)%><%% } %></textarea>
-                <div class="fielddescription"><%=t.view_management.form.order.description%></div>  
-              </div>                    
-              <div class="formrow">
-                <label for="query_arguments" class="fieldtitle"><%=t.view_management.form.arguments.label%></label>
-                <textarea id="query_arguments" name="query_arguments" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.query_arguments)%><%% } %></textarea>
-                <div class="fielddescription"><%=t.view_management.form.arguments.description%></div>  
-              </div> 
-            </div>
-
-            <div id="view_result">
-              <div class="formrow">
-                 <label for="query_limit" class="fieldtitle"><%=t.view_management.form.limit.label%></label>
-                 <input type="text" maxlength="3" id="view_limit" name="view_limit" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.view_limit%>" <%% } else { %> value="0" <%% } %> />
-                 <div class="fielddescription"><%=t.view_management.form.limit.description%></div> 
-              </div>
-              <div class="formrow">
-                <label for="pagination" class="fieldtitle"><%=t.view_management.form.pagination.label%></label>
-                <input type="radio" name="pagination" id="pagination_true" value="true" <%%if (entity && entity.pagination) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_yes.label%>
-                <input type="radio" name="pagination" id="pagination_false" value="false" <%%if (entity && !entity.pagination) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_no.label%>
-              </div>  
-              <div class="formrow">
-                <label for="ajax_pagination" class="fieldtitle"><%=t.view_management.form.ajax_pagination.label%></label>
-                <input type="radio" name="ajax_pagination" id="ajax_pagination_true" value="true" <%%if (entity && entity.ajax_pagination) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_yes.label%>
-                <input type="radio" name="ajax_pagination" id="ajax_pagination_false" value="false" <%%if (entity && !entity.ajax_pagination) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_no.label%>
-              </div>                            
-              <div class="formrow" id="page_size_row">
-                 <label for="page_size" class="fieldtitle"><%=t.view_management.form.page_size.label%></label>
-                 <input type="text" maxlength="3" id="page_size" name="page_size" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.page_size%>" <%% } else { %> value="0" <%% } %> />
-                 <div class="fielddescription"><%=t.view_management.form.page_size.description%></div> 
-              </div>   
-              <div class="formrow">
-                 <label for="pagination" class="fieldtitle"><%=t.view_management.form.pager.label%></label>
-                 <select name="pager" id="pager" class="fieldcontrol"></select>
-                 <div class="fielddescription"><%=t.view_management.form.pager.description%></div>
-              </div>
-            </div>
-
-            <div id="view_page">
-              <div class="formrow">
-                <label for="title" class="fieldtitle"><%=t.view_management.form.title.label%></label>
-                <input type="text" maxlength="80" id="title" name="title" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.title%>" <%% } %> />
-                <div class="fielddescription"><%=t.view_management.form.title.description%>.</div>
-              </div>
-              <div class="formrow">
-                <label for="header" class="fieldtitle"><%=t.view_management.form.header.label%></label>
-                <textarea name="header" id="view_header" class="fieldcontrol editable_text" rows="5"><%% if (entity) { %><%%=entity.header%><%% } %></textarea>
-                <div class="fielddescription"><%=t.view_management.form.header.description%></div>
-              </div>
-              <div class="formrow">
-                <label for="footer" class="fieldtitle"><%=t.view_management.form.footer.label%></label>
-                <textarea name="footer" id="description" class="fieldcontrol editable_text" rows="5"><%% if (entity) { %><%%=entity.footer%><%% } %></textarea>
-                <div class="fielddescription"><%=t.view_management.form.footer.description%></div>
-              </div>               
-              <div class="formrow">
-                <label for="script" class="fieldtitle"><%=t.view_management.form.script.label%></label>
-                <textarea name="script" id="script" class="fieldcontrol editable_text" rows="5"><%% if (entity) { %><%%=entity.script%><%% } %></textarea>
-                <div class="fielddescription"><%=t.view_management.form.script.description%></div>
-              </div>              
-              <div class="formrow">
-                <label for="page_style" class="fieldtitle"><%=t.view_management.form.style.label%></label>
-                <textarea name="page_style" id="page_style" class="fieldcontrol editable_text" rows="5"><%% if (entity) { %><%%=entity.page_style%><%% } %></textarea>
-                <div class="fielddescription"><%=t.view_management.form.style.description%></div>
-              </div>                                                                      
-              <div class="formrow">
-                <label for="url" class="fieldtitle"><%=t.view_management.form.url.label%></label>
-                <input type="text" maxlength="256" id="url" name="url" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.url%>" <%% } %> />
-                <div class="fielddescription"><%=t.view_management.form.url.description%></div>
-              </div>
-              <div class="formrow">
-                <label for="cache_life" class="fieldtitle"><%=t.view_management.form.cache_life.label%></label>
-                <input type="text" maxlength="10" id="cache_life" name="cache_life" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.cache_life%>" <%% } else { %> value="180" <%% } %> />
-                <div class="fielddescription"><%=t.view_management.form.cache_life.description%></div>
-              </div>
-            </div>
-
-            <div id="view_meta">
-              <div class="formrow">
-                <label for="page_author" class="fieldtitle"><%=t.view_management.form.page_author.label%></label>
-                <input type="text" maxlength="256" id="page_author" name="page_author" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.page_author%>" <%% } %> />
-              </div>              
-              <div class="formrow">
-                <label for="page_description" class="fieldtitle"><%=t.view_management.form.page_description.label%></label>
-                <textarea rows="4" id="page_description" name="page_description" class="fieldcontrol"><%% if(entity) {%><%%=entity.page_description %> <%% } %></textarea>
-              </div>
-              <div class="formrow">
-                <label for="page_summary" class="fieldtitle"><%=t.view_management.form.page_summary.label%></label>
-                <textarea rows="3" id="page_summary" name="page_summary" class="fieldcontrol"><%% if (entity) {%><%%=entity.page_summary %> <%% } %></textarea>
-              </div>              
-              <div class="formrow">
-                <label for="page_keywords" class="fieldtitle"><%=t.view_management.form.page_keywords.label%></label>
-                <textarea rows="3" id="page_keywords" name="page_keywords" class="fieldcontrol"><%% if (entity) {%><%%=entity.page_keywords %> <%% } %></textarea>
-              </div>
-              <div class="formrow">
-                <label for="page_language" class="fieldtitle"><%=t.view_management.form.page_language.label%></label>
-                <input type="text" maxlength="3" id="page_language" name="page_language" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.page_language %>"<%% } %>/>
-              </div>
-            </div>
-
-            <div id="view_extras">
-              <div class="formrow">
-                <label for="block" class="fieldtitle"><%=t.view_management.form.block.label%></label>
-                <input type="radio" name="block" id="block_true" value="true" <%%if (entity && entity.block) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_yes.label%>
-                <input type="radio" name="block" id="block_false" value="false" <%%if (entity && !entity.block) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_no.label%>
-              </div>
-              <div class="formrow">
-                <label for="show_number_of_results" class="fieldtitle"><%=t.view_management.form.show_number_of_results.label%></label>
-                <input type="radio" name="show_number_of_results" id="show_number_of_results_true" value="true" <%%if (entity && entity.show_number_of_results) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_yes.label%>
-                <input type="radio" name="show_number_of_results" id="show_number_of_results_false" value="false" <%%if (entity && !entity.show_number_of_results) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_no.label%>
-                <div class="fielddescription"><%=t.view_management.form.show_number_of_results.description%></div>
-              </div>               
-              <div class="formrow">
-                <label for="num_of_results_no_data_text" class="fieldtitle"><%=t.view_management.form.num_of_results_no_data_text.label%></label>
-                <input type="text" maxlength="80" id="num_of_results_no_data_text" name="num_of_results_no_data_text" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.num_of_results_no_data_text%>" <%% } %> />
-                <div class="fielddescription"><%=t.view_management.form.num_of_results_no_data_text.description%></div>
-              </div>
-              <div class="formrow">
-                <label for="num_of_results_1_data_text" class="fieldtitle"><%=t.view_management.form.num_of_results_1_data_text.label%></label>
-                <input type="text" maxlength="80" id="num_of_results_1_data_text" name="num_of_results_1_data_text" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.num_of_results_1_data_text%>" <%% } %> />
-                <div class="fielddescription"><%=t.view_management.form.num_of_results_1_data_text.description%></div>
-              </div>  
-              <div class="formrow">
-                <label for="num_of_results_text" class="fieldtitle"><%=t.view_management.form.num_of_results_text.label%></label>
-                <input type="text" maxlength="80" id="num_of_results_text" name="num_of_results_text" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.num_of_results_text%>" <%% } %> />
-                <div class="fielddescription"><%=t.view_management.form.num_of_results_text.description%></div>
-              </div>                 
-            </div>
-
-          </div>
+              <div class="block-content">
                 
-        </div>
-        
-        <div class="bottom-navigation-bar navigation-bar">
-             <div class="navigation-bar-crud-buttons">
-                <%% if (entity) { %>
-                  <input type="submit" class="update-entity-button action-button entity-management-button" value="<%=t.entitymanagement.update%>"/>
-                <%% } 
-                   else { %>
-                  <input type="submit" class="create-entity-button action-button entity-management-button" value="<%=t.entitymanagement.create%>"/>
-                <%% } %>
-             </div>
-        </div>
-     
-     </form>
-     
-     <div class="guiblock" style="margin:5px">
-       <div class="guiblock-title">
-         <%=t.view_management.view_preview.title%>
-       </div>     
-       <form name="view-preview">
-         <div class="formrow">
-           <label for="arguments" class="fieldtitle"><%=t.view_management.view_preview.arguments%></label>
-           <input type="text" name="arguments" id="arguments" maxlength="80" size="80" class="fieldcontrol"/>
-         </div>
-         <div class="formrow">
-           <input type="button" name="view-preview" id="view-preview" class="view-preview" value="Preview"/>
-         </div>
-       </form>
-       <div id="view-preview-result">
-       </div>  
-     </div>
+                <form name="element">
 
+                  <div class="formrow">
+                    <label for="view_name" class="fieldtitle"><%=t.view_management.form.name.label%><span class="mandatoryfield">*</span></label>
+                    <input type="text" maxlength="32" id="view_name" name="view_name" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.view_name%>" <%% } %> />
+                    <div class="fielddescription"><%=t.view_management.form.name.description%></div>
+                  </div>
+
+                  <ul class="nav nav-tabs" data-toggle="tabs">
+                    <li class="active">
+                      <a href="#btabs-static-view-description" data-toggle="tab"><%=t.view_management.form.description_block.label%></a>
+                    </li>
+                    <li>
+                      <a href="#btabs-static-view-style" data-toggle="tab"><%=t.view_management.form.style_block.label%></a>
+                    </li>
+                    <li>
+                      <a href="#btabs-static-view-query" data-toggle="tab"><%=t.view_management.form.query_block.label%></a>
+                    </li>
+                    <li>
+                      <a href="#btabs-static-view-result" data-toggle="tab"><%=t.view_management.form.result_block.label%></a>
+                    </li>
+                    <li>
+                      <a href="#btabs-static-view-page" data-toggle="tab"><%=t.view_management.form.page_block.label%></a>
+                    </li>
+                    <li>
+                      <a href="#btabs-static-view-meta" data-toggle="tab"><%=t.view_management.form.meta_block.label%></a>
+                    </li>
+                    <li>
+                      <a href="#btabs-static-view-extras" data-toggle="tab"><%=t.view_management.form.extras_block.label%></a>
+                    </li>                  
+                  </ul>
+                  <div class="tab-content clearfix">
+                    <!-- Description -->
+                    <div class="tab-pane active" id="btabs-static-view-description">
+                      <div class="formrow">
+                        <label for="description" class="fieldtitle"><%=t.view_management.form.description.label%></label>
+                        <textarea name="description" id="description" class="form-control" rows="10"><%% if (entity) { %><%%=entity.description%><%% } %></textarea>
+                        <div class="fielddescription"><%=t.view_management.form.description.description%></div>
+                      </div>
+                      <p style="text-align:right"> <span id="description_length"></span> <%= t.available_chars %> </p>                
+                    </div>
+                    <div class="tab-pane" id="btabs-static-view-style">
+                      <!--div class="formrow">
+                        <label for="style" class="fieldtitle"><%=t.view_management.form.style.label%></label>
+                        <select name="style" id="style" class="fieldcontrol"></select>
+                        <div class="fielddescription"><%=t.view_management.form.style.description%></div>
+                      </div-->
+                      <!--div id="view_fields_row" class="formrow">
+                        <label for="v_fields" class="fieldtitle"><%=t.view_management.form.fields.label%></label>
+                        <textarea id="v_fields" name="v_fields" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.v_fields)%><%% } %></textarea>  
+                        <div class="fielddescription"><%=t.view_management.form.fields.description%></div>
+                      </div-->
+                      <div class="formrow">
+                        <label for="render" class="fieldtitle"><%=t.view_management.form.render.label%></label>
+                        <select name="render" id="render" class="fieldcontrol"></select>
+                        <div class="fielddescription"><%=t.view_management.form.render.label%></div>
+                      </div>
+                      <!--div class="formrow">
+                        <label for="render_options" class="fieldtitle"><%=t.view_management.form.render_options.label%></label>
+                        <textarea id="render_options" name="render_options" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.render_options)%><%% } %></textarea>
+                        <div class="fielddescription"><%=t.view_management.form.render_options.description%></div>
+                      </div-->                 
+                    </div>
+                    <div class="tab-pane" id="btabs-static-view-query">
+                      <div class="formrow">
+                        <label for="model_name" class="fieldtitle"><%=t.view_management.form.model.label%></label>
+                        <select id="model_name" name="model_name" class="fieldcontrol"></select>
+                        <div class="fielddescription"><%=t.view_management.form.model.description%></div> 
+                      </div>
+                      <div class="formrow">
+                        <label for="query_conditions" class="fieldtitle"><%=t.view_management.form.conditions.label%></label>
+                        <textarea id="query_conditions" name="query_conditions" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.query_conditions)%><%% } %></textarea>
+                        <div class="fielddescription"><%=t.view_management.form.conditions.description%></div>
+                      </div>
+                      <div class="formrow">
+                        <label for="query_order" class="fieldtitle"><%=t.view_management.form.order.label%></label>
+                        <textarea id="query_order" name="query_order" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.query_order)%><%% } %></textarea>
+                        <div class="fielddescription"><%=t.view_management.form.order.description%></div>  
+                      </div>                    
+                      <div class="formrow">
+                        <label for="query_arguments" class="fieldtitle"><%=t.view_management.form.arguments.label%></label>
+                        <textarea id="query_arguments" name="query_arguments" rows="5" class="fieldcontrol"><%% if (entity) { %><%%=JSON.stringify(entity.query_arguments)%><%% } %></textarea>
+                        <div class="fielddescription"><%=t.view_management.form.arguments.description%></div>  
+                      </div>                 
+                    </div>
+                    <div class="tab-pane" id="btabs-static-view-result">
+                      <div class="formrow">
+                         <label for="query_limit" class="fieldtitle"><%=t.view_management.form.limit.label%></label>
+                         <input type="text" maxlength="3" id="view_limit" name="view_limit" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.view_limit%>" <%% } else { %> value="0" <%% } %> />
+                         <div class="fielddescription"><%=t.view_management.form.limit.description%></div> 
+                      </div>
+                      <div class="formrow">
+                        <label for="pagination" class="fieldtitle"><%=t.view_management.form.pagination.label%></label>
+                        <input type="radio" name="pagination" id="pagination_true" value="true" <%%if (entity && entity.pagination) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_yes.label%>
+                        <input type="radio" name="pagination" id="pagination_false" value="false" <%%if (entity && !entity.pagination) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_no.label%>
+                      </div>  
+                      <div class="formrow">
+                        <label for="ajax_pagination" class="fieldtitle"><%=t.view_management.form.ajax_pagination.label%></label>
+                        <input type="radio" name="ajax_pagination" id="ajax_pagination_true" value="true" <%%if (entity && entity.ajax_pagination) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_yes.label%>
+                        <input type="radio" name="ajax_pagination" id="ajax_pagination_false" value="false" <%%if (entity && !entity.ajax_pagination) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_no.label%>
+                      </div>                            
+                      <div class="formrow" id="page_size_row">
+                         <label for="page_size" class="fieldtitle"><%=t.view_management.form.page_size.label%></label>
+                         <input type="text" maxlength="3" id="page_size" name="page_size" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.page_size%>" <%% } else { %> value="0" <%% } %> />
+                         <div class="fielddescription"><%=t.view_management.form.page_size.description%></div> 
+                      </div>   
+                      <div class="formrow">
+                         <label for="pagination" class="fieldtitle"><%=t.view_management.form.pager.label%></label>
+                         <select name="pager" id="pager" class="fieldcontrol"></select>
+                         <div class="fielddescription"><%=t.view_management.form.pager.description%></div>
+                      </div>              
+                    </div>
+                    <div class="tab-pane" id="btabs-static-view-page">
+                      <div class="formrow">
+                        <label for="title" class="fieldtitle"><%=t.view_management.form.title.label%></label>
+                        <input type="text" maxlength="80" id="title" name="title" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.title%>" <%% } %> />
+                        <div class="fielddescription"><%=t.view_management.form.title.description%>.</div>
+                      </div>
+                      <div class="formrow">
+                        <label for="header" class="fieldtitle"><%=t.view_management.form.header.label%></label>
+                        <textarea name="header" id="view_header" class="fieldcontrol editable_text" rows="5"><%% if (entity) { %><%%=entity.header%><%% } %></textarea>
+                        <div class="fielddescription"><%=t.view_management.form.header.description%></div>
+                      </div>
+                      <div class="formrow">
+                        <label for="footer" class="fieldtitle"><%=t.view_management.form.footer.label%></label>
+                        <textarea name="footer" id="description" class="fieldcontrol editable_text" rows="5"><%% if (entity) { %><%%=entity.footer%><%% } %></textarea>
+                        <div class="fielddescription"><%=t.view_management.form.footer.description%></div>
+                      </div>               
+                      <div class="formrow">
+                        <label for="script" class="fieldtitle"><%=t.view_management.form.script.label%></label>
+                        <textarea name="script" id="script" class="fieldcontrol editable_text" rows="5"><%% if (entity) { %><%%=entity.script%><%% } %></textarea>
+                        <div class="fielddescription"><%=t.view_management.form.script.description%></div>
+                      </div>              
+                      <div class="formrow">
+                        <label for="page_style" class="fieldtitle"><%=t.view_management.form.style.label%></label>
+                        <textarea name="page_style" id="page_style" class="fieldcontrol editable_text" rows="5"><%% if (entity) { %><%%=entity.page_style%><%% } %></textarea>
+                        <div class="fielddescription"><%=t.view_management.form.style.description%></div>
+                      </div>                                                                      
+                      <div class="formrow">
+                        <label for="url" class="fieldtitle"><%=t.view_management.form.url.label%></label>
+                        <input type="text" maxlength="256" id="url" name="url" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.url%>" <%% } %> />
+                        <div class="fielddescription"><%=t.view_management.form.url.description%></div>
+                      </div>
+                      <div class="formrow">
+                        <label for="cache_life" class="fieldtitle"><%=t.view_management.form.cache_life.label%></label>
+                        <input type="text" maxlength="10" id="cache_life" name="cache_life" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.cache_life%>" <%% } else { %> value="180" <%% } %> />
+                        <div class="fielddescription"><%=t.view_management.form.cache_life.description%></div>
+                      </div>                  
+                    </div>
+                    <div class="tab-pane" id="btabs-static-view-meta">
+                      <div class="formrow">
+                        <label for="page_author" class="fieldtitle"><%=t.view_management.form.page_author.label%></label>
+                        <input type="text" maxlength="256" id="page_author" name="page_author" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.page_author%>" <%% } %> />
+                      </div>              
+                      <div class="formrow">
+                        <label for="page_description" class="fieldtitle"><%=t.view_management.form.page_description.label%></label>
+                        <textarea rows="4" id="page_description" name="page_description" class="fieldcontrol"><%% if(entity) {%><%%=entity.page_description %> <%% } %></textarea>
+                      </div>
+                      <div class="formrow">
+                        <label for="page_summary" class="fieldtitle"><%=t.view_management.form.page_summary.label%></label>
+                        <textarea rows="3" id="page_summary" name="page_summary" class="fieldcontrol"><%% if (entity) {%><%%=entity.page_summary %> <%% } %></textarea>
+                      </div>              
+                      <div class="formrow">
+                        <label for="page_keywords" class="fieldtitle"><%=t.view_management.form.page_keywords.label%></label>
+                        <textarea rows="3" id="page_keywords" name="page_keywords" class="fieldcontrol"><%% if (entity) {%><%%=entity.page_keywords %> <%% } %></textarea>
+                      </div>
+                      <div class="formrow">
+                        <label for="page_language" class="fieldtitle"><%=t.view_management.form.page_language.label%></label>
+                        <input type="text" maxlength="3" id="page_language" name="page_language" class="fieldcontrol" <%% if (entity) {%> value="<%%=entity.page_language %>"<%% } %>/>
+                      </div>  
+                    </div>
+                    <div class="tab-pane" id="btabs-static-view-extras">
+                      <div class="formrow">
+                        <label for="block" class="fieldtitle"><%=t.view_management.form.block.label%></label>
+                        <input type="radio" name="block" id="block_true" value="true" <%%if (entity && entity.block) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_yes.label%>
+                        <input type="radio" name="block" id="block_false" value="false" <%%if (entity && !entity.block) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_no.label%>
+                      </div>
+                      <div class="formrow">
+                        <label for="show_number_of_results" class="fieldtitle"><%=t.view_management.form.show_number_of_results.label%></label>
+                        <input type="radio" name="show_number_of_results" id="show_number_of_results_true" value="true" <%%if (entity && entity.show_number_of_results) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_yes.label%>
+                        <input type="radio" name="show_number_of_results" id="show_number_of_results_false" value="false" <%%if (entity && !entity.show_number_of_results) { %>checked="checked"<%%}%>/><%= t.view_management.form.rb_no.label%>
+                        <div class="fielddescription"><%=t.view_management.form.show_number_of_results.description%></div>
+                      </div>               
+                      <div class="formrow">
+                        <label for="num_of_results_no_data_text" class="fieldtitle"><%=t.view_management.form.num_of_results_no_data_text.label%></label>
+                        <input type="text" maxlength="80" id="num_of_results_no_data_text" name="num_of_results_no_data_text" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.num_of_results_no_data_text%>" <%% } %> />
+                        <div class="fielddescription"><%=t.view_management.form.num_of_results_no_data_text.description%></div>
+                      </div>
+                      <div class="formrow">
+                        <label for="num_of_results_1_data_text" class="fieldtitle"><%=t.view_management.form.num_of_results_1_data_text.label%></label>
+                        <input type="text" maxlength="80" id="num_of_results_1_data_text" name="num_of_results_1_data_text" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.num_of_results_1_data_text%>" <%% } %> />
+                        <div class="fielddescription"><%=t.view_management.form.num_of_results_1_data_text.description%></div>
+                      </div>  
+                      <div class="formrow">
+                        <label for="num_of_results_text" class="fieldtitle"><%=t.view_management.form.num_of_results_text.label%></label>
+                        <input type="text" maxlength="80" id="num_of_results_text" name="num_of_results_text" class="fieldcontrol" <%% if (entity) { %> value="<%%=entity.num_of_results_text%>" <%% } %> />
+                        <div class="fielddescription"><%=t.view_management.form.num_of_results_text.description%></div>
+                      </div>               
+                    </div>
+                  </div>  
+                  <hr>
+                  <div class="form-group">
+                    <div class="col-md-12">
+                        <%% if (entity) { %>
+                        <input type="button" class="btn btn-sm btn-primary update-entity-button action-button entity-management-button pull-right" value="<%=t.entitymanagement.update%>"/>
+                        <%% } else { %>
+                        <input type="button" class="btn btn-sm btn-primary create-entity-button action-button entity-management-button pull-right" value="<%=t.entitymanagement.create%>"/>
+                        <%% } %>
+                    </div>
+                  </div>     
+                  <br><br><br>             
+                </form>  
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12 col-md-10 col-md-offset-1">
+            <div class="block block-content-full">
+              <div class="block-header bg-gray-lighter">
+                <h3 class="block-title">Resultado</h3>
+              </div>
+              <div class="block-content">
+                <form name="view-preview" class="form-horizontal">            
+                   <div class="formrow">
+                     <label for="arguments" class="fieldtitle"><%=t.view_management.view_preview.arguments%></label>
+                     <input type="text" name="arguments" id="arguments" maxlength="80" size="80" class="fieldcontrol"/>
+                   </div>
+                   <div class="formrow">
+                     <input type="button" name="view-preview" id="view-preview" class="btn btn-primary view-preview" value="Preview"/>
+                   </div>
+                </form>
+                <div id="view-preview-result">
+                </div>      
+                <br>
+                <br>         
+              </div>
+            </div>
+          </div>
+        </div>    
+
+                  
      <%% if (entity) { %>
-     <div id="export_clone_view" class="guiblock" style="margin:5px">
+     <!--div id="export_clone_view" class="guiblock" style="margin:5px">
         <div class="guiblock-title">
           <%= t.view_management.export_clone.title %>
         </div>
@@ -307,257 +332,9 @@
              <a href="/api/view/export/<%%=entity.view_name%>"><%=t.view_management.export_clone.export.title%></a>
            </div>
         </div>
-    </div>     
+    </div-->     
     <%% } %>
 
 </script>
 
 <%= import_form_extension %>
-
-<script type="text/javascript">
- 
- require(['jquery','YSDEntityManagement','YSDEntityManagementComplementHooks','YSDRemoteDataSource','YSDSelectSelector', 'YSDMemoryDataSource', 'YSDForms'],
-         function($, EntityManagement, EntityManagementComplementHooks, RemoteDataSource, SelectSelector, MemoryDataSource, YSDForms) {
- 
-  function ViewHook() {
- 	   
-    this.manager = null;
- 	  this.entity = null;
- 	  this.pagers = JSON.parse('<%=pagers%>');
-
-    this.entityKey = function(entity) {
-      return entity.view_name;
-    }
-
-    this.onEdit = function(entity) {
-      this.entity = entity;	
-      $('#view_name').attr('readonly', true);
-      $('#model_name').focus();  	
-      this.configForm(entity);
-      this.buildViewRenders(entity.style);
-    };
-  
-    this.onNew = function() {
-      this.entity = null;
-      $('#model_name').val('content');
-      $('#data_repository').val('default');
-  	  $('#view_name').focus();
-  	  this.configForm(null);
-    }
-    
-    this.onRender = function(entity) {
-     this.configPreview(entity);
-    }
-                
-    this.adaptFormData = function(data) {
-    
-      var send = {};
-      
-      for (idx in data) {
-
-        var value = null;
-        
-        switch (idx) {
-
-          case 'v_fields':
-            if (data.viewStyle == 'teaser') {
-              value = []; 
-            }
-            else {
-              value = (data[idx] == '' || data[idx] == 'null')?[]:JSON.parse(data[idx]);
-            }
-            break;
-
-          case 'query_conditions':
-            value = (data[idx] == '' || data[idx] == 'null')?{}:JSON.parse(data[idx]); 
-            break;
-
-          case 'query_order':
-            value = (data[idx] == '' || data[idx] == 'null')?[]:JSON.parse(data[idx]); 
-            break;
-
-          case 'query_arguments':
-            value = (data[idx] == '' || data[idx] == 'null')?[]:JSON.parse(data[idx]);
-            break;
-
-          case 'render_options':
-            value = (data[idx] == '' || data[idx] == 'null')?{}:JSON.parse(data[idx]);
-            break;
-
-          default:
-            value = data[idx];
-        }
-        
-        send[idx] = value;  
-        
-      }
- 
-      return send;
-      
-    }
-
-    this.configForm = function(entity) {
-        
-       $('#tabs').tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
-       $('#tabs li').removeClass("ui-corner-top").addClass( "ui-corner-left" );
-
-       // Configure the models
-       var dataSourceModel = new RemoteDataSource('/api/view-models',{'id':'view_entity_model','description':'view_entity_description'});
-       var valueModel = (entity && entity.model_name)?entity.model_name:null; 
-       var selectorModel = new SelectSelector('model_name', dataSourceModel, valueModel, false );             
-
-       // Configure the styles
-       var dataSourceStyles = new RemoteDataSource('/api/view-styles',{'id':'id','description':'description'});
-       var valueStyles = (entity && entity.style)?entity.style:null; 
-       var selectorStyles = new SelectSelector('style', dataSourceStyles, valueStyles, false );             
-       var self = this;
-       
-       if (entity == null) 
-       {
-          dataSourceStyles.addListener('data_available', function(event) {
-             if (event.data && event.data.length > 0) {
-               self.configViewStyle(event.data[0].style);
-             }
-           });
-       }
-       else {
-        self.configViewStyle(entity.style);
-        self.configPagination();
-       }
-
-       $('#style').change(function(event) { 
-         self.changeViewStyle(event);
-       });
-
-       // Configure pagination      	   
-     	 $("input[name=pagination]").change(function(event) {
-     	   self.changePagination(event);
-     	 });
-        
-       // Configure pagers
-       var pagerDataSource = new MemoryDataSource(this.pagers);
-       var pagerValue = (entity && entity.pager)?entity.pager:null;
-       var selectPager = new SelectSelector('pager', pagerDataSource, pagerValue);       
-
-       // Limit the text area length
-       YSDForms.limit_text_area_content_size(document.getElementById('description'), 256, 
-           function (content_remain) {
-             document.getElementById('description_length').innerHTML = '<strong>' + content_remain + '</strong>';
-           }
-       );    
-
-       // Configure preview
-       this.configPreview(entity);
-    	
-    }
-    
-    /* ----- View style ------- */
-
-  	this.changeViewStyle = function(event) {
-  	
-  	  var viewStyle = $('#style option:selected').val();
-
-      this.configViewStyle(viewStyle); 
-  	    		
-  	}
-  	
-    this.configViewStyle = function(viewStyle) {
-
-      if (viewStyle == 'teaser') {
-        $('#view_fields_row').hide();  
-      }
-      else {
-        $('#view_fields_row').show();
-      }  
-
-      this.buildViewRenders(viewStyle);
-
-    }
-
-    this.buildViewRenders = function(viewStyle) {
-
-      var dataSourceRenders = new RemoteDataSource('/api/view-renders/'+viewStyle,{'id':'id','description':'description'});
-      var valueRenders = (this.entity && this.entity.render)?this.entity.render:null; 
-      var selectorRenders = new SelectSelector('render', dataSourceRenders, valueRenders, false );     
-               
-    }
-    
-    /* ------ Pagination ------ */
-
-  	this.changePagination = function(event) {
-  	
-  	  this.configPagination();
-
-  	}
-        
-    this.configPagination = function() {
-
-      var pagination = ($(document.forms["element"].pagination).val() == "true");  
-  
-      if (pagination) {
-        $('#page_size_row').show(); 
-      }
-      else {
-        $('#page_size_row').hide();
-      }  
-
-    }
-
-    /* ------- Preview ------- */
-
-    this.configPreview = function(entity) {
-
-      this.entity = entity;
-      var self = this;  
-      $('.view-preview').bind('click', 
-           function event(event) {
-             self.preview(entity, $('#arguments').val()); 
-           });
-
-    }
-
-    this.preview = function(entity, args) { /* preview the view */
-
-      var doPreview = function() {
-
-        var view = entity;  
-        var url = '/admin/cms/view/preview/'+view.view_name;
-      
-        if (args.length > 0) {
-          url += '/' + args;
-        }
-      
-        $("#view-preview-result").load(url);
-
-      };
-
-      if (this.manager.view.isFormElementMode()) {
-        this.manager.model.update(null, doPreview);
-      }
-      else {
-        doPreview();
-      }
-      	     
-    }
-  	
-
-  };
-  
-  var urls = { 
-  	      query_url  : '/api/views',
-    	    create_url : '/api/view',
-  	      update_url : '/api/view',
-  	      delete_url : '/api/view',
-  	      get_url    : '/api/view'
-  	     };
-  
-  var viewHook = new ViewHook();
-  var hooks = [viewHook];
-  hooks = hooks.concat(EntityManagementComplementHooks.complements);  
-
-  var viewsManager = new EntityManagement(urls, 'view', 12, hooks, {hold_form_after_action:true, prefix:'/admin/cms'});
-   
-  viewHook.manager = viewsManager;
-
-});
-</script>

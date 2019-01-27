@@ -1,0 +1,77 @@
+<div id="<%="view_#{view.view_name}"%>" class="view">
+  
+  <% if view.header and (view.header.strip.length > 0) %>
+    <div class="view_header">
+      <%=view.header%>	
+    </div>
+  <% end %>
+  
+  <% if view_body and (view_body.strip.length > 0) %>
+    <div id="<%="view_body_#{view.view_name}"%>" class="view_body">
+    <%= view_body %>
+    </div>
+  <% end %>
+  
+  <% if view.show_number_of_results %>
+    <div class="view_results">
+      <% case view_data[:summary][:total_records] 
+           when 0 %>
+          <%= view.num_of_results_no_data_text % view_data[:summary][:total_records] %>
+        <% when 1 %>
+          <%= view.num_of_results_1_data_text % view_data[:summary][:total_records] %>
+        <% else %>
+          <%= view.num_of_results_text % view_data[:summary][:total_records] %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if view.pagination and view_data[:summary][:total_pages] > 1 %>
+    <div id="<%="view_#{view.view_name}_pagination"%>" class="view_pagination top-margin-1line bottom-margin-1line">
+      <% unless view.ajax_pagination %>
+        <% if view.pagination and view_data[:summary][:total_pages] > 1 %>
+
+           <% if view_data[:summary][:current_page] > 1 %>
+
+             <a class="form-button" href="<%=format_url_with_language("#{view_url}/page/#{view_data[:summary][:current_page]-1}")%><%=view_arguments and !view_arguments.empty? ? "/#{view_arguments}" : ''%>"><%=t.view.back_page%></a>
+           <% end %>
+
+           <% if view_data[:summary][:current_page] < view_data[:summary][:total_pages] %>
+             <a class="form-button" href="<%=format_url_with_language("#{view_url}/page/#{view_data[:summary][:current_page]+1}")%><%=view_arguments and !view_arguments.empty? ? "/#{view_arguments}" : ''%>"><%=t.view.next_page%></a>
+           <% end %>
+
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if view.footer and (view.footer.strip.length > 0) %>
+    <div class="view_footer">
+      <%= view.footer %>
+    </div>
+  <% end %>
+
+</div>
+
+
+<% if view.ajax_pagination and view.pagination and view_data[:summary][:total_pages] > 1 %>
+
+  <script type="text/javascript">
+
+    require(['jquery','YSDPager','YSDPagerFactory'], function($, Pager, PagerFactory) {
+      
+      controller_class = PagerFactory.getPagerController('<%=view.pager%>');
+      view_class = PagerFactory.getPagerView('<%=view.pager%>'); 
+
+      controller = new controller_class();
+      view       = new view_class('<%="view_#{view.view_name}_pagination"%>');
+      pager      = new Pager(<%=view.page_size%>, <%=view_data[:summary][:current_page]%>, <%=view_data[:summary][:total_records]%>, controller, view);
+      pager.model.setTotal(<%=view_data[:summary][:total_records]%>);
+      pager.addListener('navigate', function(data) {
+          $('#<%="view_#{view.view_name}"%>').load('<%=view_url%>/page/' + data.page + '<%=view_arguments and !view_arguments.empty? ? "/#{view_arguments}" : ''%>');
+      });
+
+    });
+
+  </script>
+
+<% end %>

@@ -40,7 +40,7 @@ module CMSRenders
         else
           view_url << '/'
           view_url << view.view_name
-        end
+        end 
 
         template_path = find_view_holder
         template = Tilt.new(template_path)
@@ -117,10 +117,10 @@ module CMSRenders
       #
       def find_view_holder
 
-        view_holder_path = Themes::ThemeManager.instance.selected_theme.resource_path("view-holder.erb")
-
+        view_holder_path =  Themes::ThemeManager.instance.selected_theme.resource_path("#{frontend_skin_preffix}render-viewholder-#{view.render}.erb",'template','cms') 
+                                  
         if not view_holder_path
-          path = context.get_path("view-holder")
+          path = context.get_path("#{frontend_skin_preffix}render-viewholder-#{view.model_name}-#{view.render}")
           view_holder_path = path if not path.nil? and File.exists?(path)
         end
 
@@ -137,17 +137,29 @@ module CMSRenders
       #      
       def find_view_render_template(view)
         
-        view_template_path = Themes::ThemeManager.instance.selected_theme.resource_path("render-view-#{view.view_name}.erb","template","cms") ||
-                             Themes::ThemeManager.instance.selected_theme.resource_path("render-view-#{view.render}.erb","template","cms")
-                             
+        view_template_path = Themes::ThemeManager.instance.selected_theme.resource_path("#{frontend_skin_preffix}render-view-#{view.render}.erb",'template','cms')
+        
         if not view_template_path
-          path = context.get_path("render-view-#{view.render}")
+          path = context.get_path("#{frontend_skin_preffix}render-view-#{view.model_name}-#{view.render}")
           view_template_path = path if not path.nil? and File.exist?(path)
         end
 
         return view_template_path    
       
       end
+
+      private
+
+      def frontend_skin_preffix
+
+        frontend_skin = SystemConfiguration::Variable.get_value('frontend.skin','')
+        if frontend_skin.empty?
+           ''
+        else 
+           "#{frontend_skin}-"
+        end   
+
+      end      
     
     end #ViewRender
   

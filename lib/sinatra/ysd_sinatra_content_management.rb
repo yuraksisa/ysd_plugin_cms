@@ -11,40 +11,68 @@ module Sinatra
    
       def self.registered(app)
 
+        # ----------------- Content management ----------------------------
+
         #
-        # Get all pages
+        # Get all contents
         #
-        app.get "/admin/cms/pages", :allowed_usergroups => ['staff','webmaster']  do
-          @pages = ContentManagerSystem::Content.all(conditions: { type: 'page'}, order: [:title.asc])
+        app.get "/admin/cms/:content_type", :allowed_usergroups => ['staff','webmaster']  do
+          content_type_id = params[:content_type][0,params[:content_type].size-1]
+          p "content_type_id:#{content_type_id}"
+          @content_type = ContentManagerSystem::ContentType.get(content_type_id)
+          pass unless @content_type
+          @pages = ContentManagerSystem::Content.all(conditions: { type: @content_type.id}, order: [:title.asc])
           @translations = settings.multilanguage_site
-          load_page(:cms_pages, layout: false)
+          load_page(:cms_contents, layout: false)
         end
 
         #
-        # Get all posts
-        #
-        app.get "/admin/cms/posts", :allowed_usergroups => ['staff','webmaster']  do
-          @pages = ContentManagerSystem::Content.all(conditions: { type: 'story'}, order: [:creation_date.desc])
-          load_page(:cms_posts, layout: false)
-        end
-
-        #
-        # New page
+        # New content
         # 
-        app.get "/admin/cms/page-content/new", :allowed_usergroups => ['staff','webmaster']  do
+        app.get "/admin/cms/:content_type-content/new", :allowed_usergroups => ['staff','webmaster']  do
+           @content_type = ContentManagerSystem::ContentType.get(params[:content_type])
            @resorces_album = ::Media::Album.first(name: 'content_resources')
-           load_page(:basic_new_page)
+           load_page(:basic_new_content)
         end
 
         #
         # Edit page
         # 
-        app.get "/admin/cms/page-content/:id/edit", :allowed_usergroups => ['staff','webmaster']  do
+        app.get "/admin/cms/:content_type-content/:id/edit", :allowed_usergroups => ['staff','webmaster']  do
+          @content_type = ContentManagerSystem::ContentType.get(params[:content_type])
            @resorces_album = ::Media::Album.first(name: 'content_resources')
-           @page = ContentManagerSystem::Content.first(type: 'page', id: params[:id])
-           load_page(:basic_edit_page)
+           @page = ContentManagerSystem::Content.first(type: params[:content_type], id: params[:id])
+           load_page(:basic_edit_content)
         end
+
+        #
+        # Get all pages
+        #
+        #app.get "/admin/cms/pages", :allowed_usergroups => ['staff','webmaster']  do
+        #  @pages = ContentManagerSystem::Content.all(conditions: { type: 'page'}, order: [:title.asc])
+        #  @translations = settings.multilanguage_site
+        #  load_page(:cms_pages, layout: false)
+        #end
+
+        #
+        # New page
+        # 
+        #app.get "/admin/cms/page-content/new", :allowed_usergroups => ['staff','webmaster']  do
+        #   @resorces_album = ::Media::Album.first(name: 'content_resources')
+        #   load_page(:basic_new_page)
+        #end
+
+        #
+        # Edit page
+        # 
+        #app.get "/admin/cms/page-content/:id/edit", :allowed_usergroups => ['staff','webmaster']  do
+        #   @resorces_album = ::Media::Album.first(name: 'content_resources')
+        #   @page = ContentManagerSystem::Content.first(type: 'page', id: params[:id])
+        #   load_page(:basic_edit_page)
+        #end
         
+        # ------------------ Content resources -------------------------
+
         #
         # Resources for contents
         #

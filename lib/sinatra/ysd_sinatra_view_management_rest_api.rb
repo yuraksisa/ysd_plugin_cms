@@ -29,14 +29,19 @@ module Sinatra
         # Retrieve the view styles
         # 
         app.get "/api/view-styles/?", :allowed_usergroups => ['staff','webmaster'] do
-          
-          context = {:app => self}
-          
-          view_types = ::Model::ViewStyle.all
-                  
-          status 200
+
+          resources = find_resources(/^render-view-.+\.erb/).map do |item|
+            {:id => (value=item[12..-5]), :description => value}
+          end
+
           content_type :json
-          view_types.to_json        
+          resources.to_json
+          
+          #context = {:app => self}
+          #view_types = ::Model::ViewStyle.all       
+          #status 200
+          #content_type :json
+          #view_types.to_json        
                   
         end
 
@@ -48,18 +53,25 @@ module Sinatra
           
           app.get path, :allowed_usergroups => ['staff','webmaster'] do
             
-            view_style = ::Model::ViewStyle.get(params[:view_style].to_sym)
-            view_model = if params[:view_model]
-                           ::Model::ViewModel.get(params[:view_model].to_sym)
-                         else
-                            nil
-                         end
+            resources = find_resources(/^render-view-.+\.erb/).map do |item|
+              {:id => (value=item[12..-5].split('-').last), :description => value}
+            end
 
-            view_renders = ::Model::ViewRender.all(view_style, view_model)
-            
-            status 200
             content_type :json
-            view_renders.to_json
+            resources.to_json
+            
+            #view_style = ::Model::ViewStyle.get(params[:view_style].to_sym)
+            #view_model = if params[:view_model]
+            #               ::Model::ViewModel.get(params[:view_model].to_sym)
+            #             else
+            #                nil
+            #             end
+
+            #view_renders = ::Model::ViewRender.all(view_style, view_model)
+            
+            #status 200
+            #content_type :json
+            #view_renders.to_json
           end
         
         end
@@ -132,6 +144,7 @@ module Sinatra
           # Updates the view
           view = ContentManagerSystem::View.get(view_request['view_name'])         
           view.attributes=(view_request)
+          p "view: valid:#{view.valid?} errors:#{view.errors.full_messages.inspect}"
           view.save
 
           # Return          

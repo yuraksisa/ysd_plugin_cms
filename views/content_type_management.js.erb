@@ -1,0 +1,175 @@
+ require(['jquery', 'YSDEntityManagement', 'YSDEntityManagementComplementHooks', 'YSDRemoteDataSource', 'YSDListSelector', 'YSDForms', 'YSDSelectSelector'], function($, EntityManagement, EntityManagementComplementHooks, RemoteDataSource, ListSelector, YSDForms, SelectSelector) {
+ 
+  function ContentTypeHook() {
+ 	   
+    this.entityKey = function(entity) {
+      return entity.id;
+    }
+
+    this.onEdit = function(entity) {
+      $('#id').attr('readonly', true);
+      $('#name').focus();  	
+      this.configForm(entity);
+    };
+  
+    this.onNew = function() {
+  	  $('#id').focus();
+  	  this.configForm(null);
+    }
+
+    this.adaptFormData = function(data) {
+      
+      data.aspects    = this.adaptAspects(data.aspects, data.id);
+      data.usergroups = this.adaptUsergroups(data.usergroups); 
+      
+      if (data.display == '') {
+        data.display = null;
+      }
+
+      return data;	
+    	
+    }
+
+    this.adaptAspects = function(aspects, contentTypeId) { /* It converts from an array of string (each is an aspect) to an array of ContentTypeAspect */
+      
+      if (!(aspects instanceof Array)) {
+        aspects = [aspects];
+      }
+
+      return aspects.map(function(value, index, array) {
+
+         return { aspect : value,
+                  content_type : { id: contentTypeId }
+                };   
+
+      });
+
+    }
+
+    this.adaptUsergroups = function(usergroups) { /* It converts from an array of string (each is an usergroup group) to an array of ContentTypeUserGroup */
+      
+      var adaptedUsergroups = [];
+
+      for (idx in usergroups) {
+        adaptedUsergroups.push({'group': usergroups[idx]});
+      }
+
+      return adaptedUsergroups;
+
+    }
+
+    
+    this.configForm = function(entity) {
+
+         $('#tabs').tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
+         $('#tabs li').removeClass("ui-corner-top").addClass("ui-corner-left");
+         $('#tabs').tabs();
+
+         // Configure the usergroups
+         var ugDataSource = new RemoteDataSource('/api/usergroups',{id:'group', description:'name'});
+         var ugValue = (entity&&entity.usergroups)?entity.usergroups.map(function(item){return item.group;}):[]; 
+         var ugSelector = new ListSelector('content_type_usergroups', 'usergroups[]', ugDataSource, ugValue );
+        
+         // Configure the workflows
+         var wfDataSource = new RemoteDataSource('/api/publishing/workflows');
+         var wfValue = (entity && entity.publishing_workflow_id)?entity.publishing_workflow_id:null;
+         var wfSelector = new SelectSelector('publishing_workflow_id', wfDataSource, wfValue); 
+
+         // Configure displays
+         var displayDataSource = new RemoteDataSource('/api/displays/content');
+         var displayValue = (entity && entity.display)?entity.display:null;
+         var displaySelector = new SelectSelector('display', displayDataSource, displayValue, true, ''); 
+
+         // Limit the text area length
+         YSDForms.limit_text_area_content_size(document.getElementById('description'), 256, 
+            function (content_remain) {
+              document.getElementById('description_length').innerHTML = '<strong>' + content_remain + '</strong>';
+            }
+         );    
+
+/*
+         // Limit the text area length
+         YSDForms.limit_text_area_content_size(document.getElementById('message_on_new_content'), 1024, 
+            function (content_remain) {
+              document.getElementById('message_on_new_content_length').innerHTML = '<strong>' + content_remain + '</strong>';
+            }
+         );  
+
+
+         // Limit the text area length
+         YSDForms.limit_text_area_content_size(document.getElementById('message_on_edit_content'), 1024, 
+            function (content_remain) {
+              document.getElementById('message_on_edit_content_length').innerHTML = '<strong>' + content_remain + '</strong>';
+            }
+         );      	
+
+         // Limit the text area length
+         YSDForms.limit_text_area_content_size(document.getElementById('display_css_class'), 256, 
+            function (content_remain) {
+              document.getElementById('display_css_class_length').innerHTML = '<strong>' + content_remain + '</strong>';
+            }
+         ); 
+*/
+    }
+
+    this.configValidation = function() {
+
+         $('#content_type_management_form').validate({
+            
+            submitHandler: function(form) 
+            {
+               return false;
+            },
+                               
+            rules : { // rules
+               'id' : {
+                 required: true
+               },
+               'name': {
+                 required: true 
+               }
+            },
+            
+            messages : { // messages
+               'id' : {
+                required: '<%= t.content_type_management.form.id.required%>'
+               },
+               'name': {
+                 required : '<%=t.variable_management.form.name.required%>'
+               }
+            }
+            
+          }
+         );
+
+    }
+  	
+    this.formatUserGroups = function(entity) { /* Format the usergroups for the representation */
+      
+      var usergroups = entity.usergroups.map(function(value, index, array) {
+        return value.usergroup_group;
+      });
+      
+      return usergroups; 
+    }  
+
+  };
+  
+  var urls = { 
+  	           query_url  : '/api/content-types',
+    	         create_url : '/api/content-type',
+  	           update_url : '/api/content-type',
+  	           delete_url : '/api/content-type',
+  	           get_url    : '/api/content-type'
+  	         };
+
+  var contentTypeHook = new ContentTypeHook();
+
+  var hooks = [contentTypeHook];
+  
+  // Add the complement hooks
+  hooks = hooks.concat(EntityManagementComplementHooks.complements);
+
+  var contentsTypeManager = new EntityManagement(urls, 'content type', 12, hooks, {prefix:'/admin/cms'});
+  
+ });

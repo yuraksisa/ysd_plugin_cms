@@ -20,13 +20,13 @@
   <% if @page %>
   <input type="hidden" id="id" name="id" value="<%=@page.id%>"/>
   <% else %>
-  <input type="hidden" id="type" name="type" value="page"/>
+  <input type="hidden" id="type" name="type" value="<%=@content_type.id%>"/>
   <%end%>
   <input type="hidden" name="album_id" id="album_id" <% if @page and @page.album_id %>value="<%=@page.album_id%>"<%end%>/>
   <div class="block">
     <ul class="nav nav-tabs" data-toggle="tabs">
       <li class="active">
-        <a href="#btabs-static-page">Página</a>
+        <a href="#btabs-static-page">Datos básicos</a>
       </li>
       <% if @page %>
       <li class="">

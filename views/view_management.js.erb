@@ -1,0 +1,244 @@
+ require(['jquery','YSDEntityManagement','YSDEntityManagementComplementHooks','YSDRemoteDataSource','YSDSelectSelector', 'YSDMemoryDataSource', 'YSDForms'],
+         function($, EntityManagement, EntityManagementComplementHooks, RemoteDataSource, SelectSelector, MemoryDataSource, YSDForms) {
+ 
+  function ViewHook() {
+ 	   
+    this.manager = null;
+ 	  this.entity = null;
+ 	  this.pagers = JSON.parse('<%=pagers%>');
+
+    this.entityKey = function(entity) {
+      return entity.view_name;
+    }
+
+    this.onEdit = function(entity) {
+      this.entity = entity;	
+      $('#view_name').attr('readonly', true);
+      $('#model_name').focus();  	
+      this.configForm(entity);
+      this.buildViewRenders(entity.style);
+    };
+  
+    this.onNew = function() {
+      this.entity = null;
+      $('#model_name').val('content');
+      $('#data_repository').val('default');
+  	  $('#view_name').focus();
+  	  this.configForm(null);
+    }
+    
+    this.onRender = function(entity) {
+     this.configPreview(entity);
+    }
+                
+    this.adaptFormData = function(data) {
+    
+      var send = {};
+      
+      for (idx in data) {
+
+        var value = null;
+        
+        switch (idx) {
+
+          case 'v_fields':
+            if (data.viewStyle == 'teaser') {
+              value = []; 
+            }
+            else {
+              value = (data[idx] == '' || data[idx] == 'null')?[]:JSON.parse(data[idx]);
+            }
+            break;
+
+          case 'query_conditions':
+            value = (data[idx] == '' || data[idx] == 'null')?{}:JSON.parse(data[idx]); 
+            break;
+
+          case 'query_order':
+            value = (data[idx] == '' || data[idx] == 'null')?[]:JSON.parse(data[idx]); 
+            break;
+
+          case 'query_arguments':
+            value = (data[idx] == '' || data[idx] == 'null')?[]:JSON.parse(data[idx]);
+            break;
+
+          case 'render_options':
+            value = (data[idx] == '' || data[idx] == 'null')?{}:JSON.parse(data[idx]);
+            break;
+
+          default:
+            value = data[idx];
+        }
+        
+        send[idx] = value;  
+        
+      }
+ 
+      return send;
+      
+    }
+
+    this.configForm = function(entity) {
+        
+       $('#tabs').tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
+       $('#tabs li').removeClass("ui-corner-top").addClass( "ui-corner-left" );
+
+       // Configure the models
+       var dataSourceModel = new RemoteDataSource('/api/view-models',{'id':'view_entity_model','description':'view_entity_description'});
+       var valueModel = (entity && entity.model_name)?entity.model_name:null; 
+       var selectorModel = new SelectSelector('model_name', dataSourceModel, valueModel, false );             
+
+       // Configure the styles
+       var dataSourceStyles = new RemoteDataSource('/api/view-styles',{'id':'id','description':'description'});
+       var valueStyles = (entity && entity.style)?entity.style:null; 
+       var selectorStyles = new SelectSelector('style', dataSourceStyles, valueStyles, false );             
+       var self = this;
+       
+       if (entity == null) 
+       {
+          dataSourceStyles.addListener('data_available', function(event) {
+             if (event.data && event.data.length > 0) {
+               self.configViewStyle(event.data[0].style);
+             }
+           });
+       }
+       else {
+        self.configViewStyle(entity.style);
+        self.configPagination();
+       }
+
+       $('#style').change(function(event) { 
+         self.changeViewStyle(event);
+       });
+
+       // Configure pagination      	   
+     	 $("input[name=pagination]").change(function(event) {
+     	   self.changePagination(event);
+     	 });
+        
+       // Configure pagers
+       var pagerDataSource = new MemoryDataSource(this.pagers);
+       var pagerValue = (entity && entity.pager)?entity.pager:null;
+       var selectPager = new SelectSelector('pager', pagerDataSource, pagerValue);       
+
+       // Limit the text area length
+       YSDForms.limit_text_area_content_size(document.getElementById('description'), 256, 
+           function (content_remain) {
+             document.getElementById('description_length').innerHTML = '<strong>' + content_remain + '</strong>';
+           }
+       );    
+
+       // Configure preview
+       this.configPreview(entity);
+    	
+    }
+    
+    /* ----- View style ------- */
+
+  	this.changeViewStyle = function(event) {
+  	
+  	  var viewStyle = $('#style option:selected').val();
+
+      this.configViewStyle(viewStyle); 
+  	    		
+  	}
+  	
+    this.configViewStyle = function(viewStyle) {
+
+      if (viewStyle == 'teaser') {
+        $('#view_fields_row').hide();  
+      }
+      else {
+        $('#view_fields_row').show();
+      }  
+
+      this.buildViewRenders(viewStyle);
+
+    }
+
+    this.buildViewRenders = function(viewStyle) {
+
+      var dataSourceRenders = new RemoteDataSource('/api/view-renders/'+viewStyle,{'id':'id','description':'description'});
+      var valueRenders = (this.entity && this.entity.render)?this.entity.render:null; 
+      var selectorRenders = new SelectSelector('render', dataSourceRenders, valueRenders, false );     
+               
+    }
+    
+    /* ------ Pagination ------ */
+
+  	this.changePagination = function(event) {
+  	
+  	  this.configPagination();
+
+  	}
+        
+    this.configPagination = function() {
+
+      var pagination = ($(document.forms["element"].pagination).val() == "true");  
+  
+      if (pagination) {
+        $('#page_size_row').show(); 
+      }
+      else {
+        $('#page_size_row').hide();
+      }  
+
+    }
+
+    /* ------- Preview ------- */
+
+    this.configPreview = function(entity) {
+
+      this.entity = entity;
+      var self = this;  
+      $('.view-preview').bind('click', 
+           function event(event) {
+             self.preview(entity, $('#arguments').val()); 
+           });
+
+    }
+
+    this.preview = function(entity, args) { /* preview the view */
+
+      var doPreview = function() {
+
+        var view = entity;  
+        var url = '/admin/cms/view/preview/'+view.view_name;
+      
+        if (args.length > 0) {
+          url += '/' + args;
+        }
+      
+        $("#view-preview-result").load(url);
+
+      };
+
+      if (this.manager.view.isFormElementMode()) {
+        this.manager.model.update(null, doPreview);
+      }
+      else {
+        doPreview();
+      }
+      	     
+    }
+  	
+
+  };
+  
+  var urls = { 
+  	      query_url  : '/api/views',
+    	    create_url : '/api/view',
+  	      update_url : '/api/view',
+  	      delete_url : '/api/view',
+  	      get_url    : '/api/view'
+  	     };
+  
+  var viewHook = new ViewHook();
+  var hooks = [viewHook];
+  hooks = hooks.concat(EntityManagementComplementHooks.complements);  
+
+  var viewsManager = new EntityManagement(urls, 'view', 12, hooks, {hold_form_after_action:true, prefix:'/admin/cms'});
+   
+  viewHook.manager = viewsManager;
+
+});

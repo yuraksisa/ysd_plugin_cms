@@ -76,7 +76,7 @@ module CMSRenders
        content_type_template = nil
 
        if content.type         
-         content_type_template_name = "render-content-#{content.type}"
+         content_type_template_name = "#{frontend_skin_preffix}render-content-#{content.type}"
          content_type_template_name << "-#{display}" if (not display.nil?) and (not display.empty?)
          content_type_template = find_template(content_type_template_name)
        end
@@ -90,7 +90,7 @@ module CMSRenders
      #
      def content_template
        
-       content_template_name = "render-content"
+       content_template_name = "#{frontend_skin_preffix}render-content"
        content_template_name << "-#{display}" if (not display.nil?) and (not display.empty?)
        content_template = find_template(content_template_name)        
 
@@ -225,7 +225,7 @@ module CMSRenders
      #
      # Creates the content edit link
      #
-     def content_edit_link()
+     def content_edit_link
                        
        result = if content and content.publishing_state and content.can_write?(context.user)   #(not content.new?)  
 
@@ -242,6 +242,20 @@ module CMSRenders
                end    
     
      end    
+
+     private 
+
+     def frontend_skin_preffix
+
+       frontend_skin = SystemConfiguration::Variable.get_value('frontend.skin','')
+       if frontend_skin.empty?
+          ''
+       else 
+          "#{frontend_skin}-"
+       end   
+
+     end
+
      
       
     end #ContentRender

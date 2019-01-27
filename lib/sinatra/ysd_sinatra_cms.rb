@@ -45,7 +45,6 @@ module Sinatra
              if view = ContentManagerSystem::View.first(:url => path)
                page, arguments = extract_view_path_arguments(view)
                begin
-                 result = CMSRenders::ViewRender.new(view, self).render(page, arguments)
                  page_from_view(view, page, arguments)
                rescue ContentManagerSystem::ViewArgumentNotSupplied
                  status 404
