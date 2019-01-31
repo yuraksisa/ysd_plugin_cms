@@ -89,8 +89,10 @@ module Sinatra
           
           data_request = body_as_json(ContentManagerSystem::Redirect)
                               
+          p "data_request:#{data_request.inspect}"                    
           if data = ContentManagerSystem::Redirect.get(data_request.delete(:id).to_i)     
             data.attributes=data_request  
+            p "data:#{data.valid?}"
             data.save
           end
       

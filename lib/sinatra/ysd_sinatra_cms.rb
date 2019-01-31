@@ -86,7 +86,14 @@ module Sinatra
                  status 404                   
                end                
              else
-               if http_redir = ContentManagerSystem::Redirect.first(:source => request.path_info)
+               if @force_trailing_slash
+                 conditions = Conditions::JoinComparison.new('$or', 
+                                       [Conditions::Comparison.new(:source, '$eq', URI.unescape(request_path)),
+                                        Conditions::Comparison.new(:source, '$eq', "#{URI.unescape(request_path)}/")])
+               else
+                 conditions = Conditions::Comparison.new(:source, '$eq', URI.unescape(request_path))
+               end                
+               if http_redir = conditions.build_datamapper(ContentManagerSystem::Redirect).first
                  redirect http_redir.destination, http_redir.redirection_type
                else
                  pass
