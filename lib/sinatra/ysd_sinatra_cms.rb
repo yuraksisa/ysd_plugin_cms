@@ -28,6 +28,8 @@ module Sinatra
             pass
           end
 
+          p "request.path_info:#{request.path_info}"
+
           if @force_trailing_slash
             # Request path = request.path_info without last slash
             request_path = request.path_info.end_with?('/') ? request.path_info[0,request.path_info.size-1] : request.path_info
@@ -46,7 +48,8 @@ module Sinatra
           if content              
             if content.can_read?(user) and (not content.is_banned?)
               # Trailing slash compatability with WordPress migration
-              if @force_trailing_slash and !request.path_info.end_with?('/') 
+              front_page = SystemConfiguration::Variable.get_value('site.anonymous_front_page', nil)
+              if @force_trailing_slash and !request.path_info.end_with?('/') and content.alias != front_page
                 redirect "#{request_path}/", 301
               end  
               @current_content = content
