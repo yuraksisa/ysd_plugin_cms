@@ -8,12 +8,11 @@ module Sinatra
         
         app.helpers do
 
-          def extract_view_path_arguments(view)
-            path = request.path_info
-            if !view.url.nil? or !view.url.empty?
-              if path.start_with?(view.url)
-                length = path.length-1
-                arguments = path[view.url.length, length]
+          def extract_view_path_arguments(view_path, request_path)
+            if !view_path.nil? or !view_path.empty?
+              if request_path.start_with?(view_path)
+                length = request_path.length-1
+                arguments = request_path[view_path.length, length]
                 # No arguments
                 if arguments.nil?
                   return [1, '']
@@ -77,6 +76,8 @@ module Sinatra
                 CMSRenders::ViewRender.new(view, self).render(page, arguments)
               rescue ContentManagerSystem::ViewArgumentNotSupplied
                 status 404
+              rescue ContentManagerSystem::ViewPageNotFound
+                status 404                  
               end              
             else
               status 404          
@@ -101,6 +102,8 @@ module Sinatra
                 CMSRenders::ViewRender.new(view, self).render(1, arguments)
               rescue ContentManagerSystem::ViewArgumentNotSupplied
                 status 404
+              rescue ContentManagerSystem::ViewPageNotFound
+                status 404                  
               end
             else
               "Sorry, the views #{params[:view_name]} does not exist"

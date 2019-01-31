@@ -43,6 +43,8 @@ module Huasi
         ContentManagerSystem::ContentType.first_or_create({:id => 'fragment'},
                                                            {:name => 'Fragmento', :description => 'Representan bloques de información que se pueden mostrar en diferentes páginas. Banners son creados como fragmentos.'})
 
+        SystemConfiguration::Variable.first_or_create({:name => 'cms.force_trailing_slash'},
+                                                      {:value => 'false', :description => 'Force trailing slash in urls', :module => :cms})
     
         Site::Menu.first_or_create({:name => 'primary_links'},
                                    {:title => 'Primary links menus', :description => 'Primary links menu'})

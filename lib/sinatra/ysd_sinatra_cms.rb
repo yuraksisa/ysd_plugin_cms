@@ -13,9 +13,13 @@ module Sinatra
         # Configuration 
         app.set :cms_views_repository, :default
         app.set :cms_author_url, '' # It represents the author url
-        
+      
+        app.before method: :get do
+          @force_trailing_slash = SystemConfiguration::Variable.get_value('cms.force_trailing_slash','false').to_bool
+        end
+
         #
-        # Load a content, view (by its alias) or redirect
+        # Try to load a content, view (by its alias) or redirect
         #
         app.get /^[^.]*$/ do
           
@@ -24,14 +28,29 @@ module Sinatra
             pass
           end
 
-          # Query content or view
-          content = ContentManagerSystem::Content.first(:alias => request.path_info)
-          content = ContentManagerSystem::Content.content_by_translation_alias(request.path_info) if content.nil?
+          if @force_trailing_slash
+            # Request path = request.path_info without last slash
+            request_path = request.path_info.end_with?('/') ? request.path_info[0,request.path_info.size-1] : request.path_info
+            # Query content or view
+            content_conditions = Conditions::JoinComparison.new('$or', 
+                                   [Conditions::Comparison.new(:alias, '$eq', URI.unescape(request_path)),
+                                    Conditions::Comparison.new(:alias, '$eq', "#{URI.unescape(request_path)}/")])
+          else
+            request_path = request.path_info
+            content_conditions = Conditions::Comparison.new(:alias, '$eq', URI.unescape(request_path))
+          end                                
+
+          content = content_conditions.build_datamapper(ContentManagerSystem::Content).first
+          content = ContentManagerSystem::Content.content_by_translation_alias(request_path, @force_trailing_slash) if settings.multilanguage_site and content.nil?
 
           if content              
             if content.can_read?(user) and (not content.is_banned?)
+              # Trailing slash compatability with WordPress migration
+              if @force_trailing_slash and !request.path_info.end_with?('/') 
+                redirect "#{request_path}/", 301
+              end  
               @current_content = content
-              last_modified content.last_update || content.creation_date if user and user.belongs_to?('anonymous') #Cache control
+              last_modified (content.last_update || content.creation_date) if user and user.belongs_to?('anonymous') #Cache control
               if settings.multilanguage_site
                 page_from_content(content.translate(session[:locale]))
               else
@@ -41,13 +60,27 @@ module Sinatra
               status 404
             end          
           else
-             path = request.path_info.sub(/\/page\/\d+/, '').sub(/\/\d+$/,'')
-             if view = ContentManagerSystem::View.first(:url => path)
-               page, arguments = extract_view_path_arguments(view)
+             view_path = request.path_info.sub(/\/page\/\d+/, '').sub(/\/\d+$/,'')
+             if @force_trailing_slash
+               view_path = view_path.end_with?('/') ? view_path[0, view_path.size-1] : view_path
+               conditions = Conditions::JoinComparison.new('$or', 
+                                     [Conditions::Comparison.new(:url, '$eq', view_path),
+                                      Conditions::Comparison.new(:url, '$eq', "#{view_path}/")])
+             else
+               conditions = Conditions::Comparison.new(:url, '$eq', view_path)
+             end  
+             if view = conditions.build_datamapper(ContentManagerSystem::View).first
+               # Trailing slash compatibility with WordPress migration
+               if @force_trailing_slash and !request.path_info.end_with?('/')
+                 redirect "#{request_path}/", 301
+               end                
+               page, arguments = extract_view_path_arguments(view_path, request_path)
                begin
                  page_from_view(view, page, arguments)
                rescue ContentManagerSystem::ViewArgumentNotSupplied
                  status 404
+               rescue ContentManagerSystem::ViewPageNotFound
+                 status 404                   
                end                
              else
                if http_redir = ContentManagerSystem::Redirect.first(:source => request.path_info)

@@ -59,6 +59,8 @@ module Sinatra
 
       rescue ContentManagerSystem::ViewArgumentNotSupplied
         status 404
+      rescue ContentManagerSystem::ViewPageNotFound
+        status 404  
       end
 
     end
